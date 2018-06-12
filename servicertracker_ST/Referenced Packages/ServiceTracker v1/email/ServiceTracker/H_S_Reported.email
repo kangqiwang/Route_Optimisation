@@ -1,9 +1,0 @@
-This is an automated email to inform you that {!Visit__c.Resource__c} has highlighted a health and safety requirement whilst on site at {!Visit__c.Account_lkp__c}.
-
-The details of the requirement are as follows;
-
-H&S Requirement: {!Visit__c.Heath_And_Safety__c} 
-Risk Assessment Notes: {!Visit__c.Risk_Assessment__c}
-Direct Link: {!Visit__c.Link}
-
-Please follow up with the correct H&S procedures
