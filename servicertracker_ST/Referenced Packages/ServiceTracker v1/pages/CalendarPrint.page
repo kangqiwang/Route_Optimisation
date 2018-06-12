@@ -1,0 +1,133 @@
+<apex:page standardController="User" extensions="STKR.Calendar_Controller"  recordSetvar="users" showHeader="false" sidebar="false" >
+
+    <link href="{!$Resource.Timelinefullcalendarcss}" rel="stylesheet" />
+    <link href="{!$Resource.fullCalendarPrintCSS}" rel="stylesheet" media="print" />
+    <link href="{!$Resource.Timelinecss}" rel="stylesheet"/>
+    
+    <script src="{!$Resource.TimelinemomentMin}"/>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"/>-->
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"/>
+     
+    <!--<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>-->
+    
+    <apex:includeScript value="https://code.jquery.com/ui/1.10.3/jquery-ui.js" />
+    <apex:includeScript value="{!$Resource.STKR__FullcalenderTimepick}"/>
+    <apex:stylesheet value="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"  />
+    
+    <!--<script src="{!$Resource.TimelineJqueryMIn}"/>-->
+    <script src="{!$Resource.STKR__TimelineFullCalendarMin}"/>
+    <script src="{!$Resource.STKR__TimelineMin}"/>
+      
+    <script>
+     
+     $(document).ready(function() {
+        
+        
+        onLoadFunction();
+        // SHOW VIEW ON A SPECIFIC DATE
+        if('{!$CurrentPage.parameters.md}' != ''){
+            var local  = $.fullCalendar.moment('{!$CurrentPage.parameters.md}');
+            $('#calendar').fullCalendar( 'gotoDate',local);
+            window.print();
+        }
+    });
+    function onLoadFunction(){
+         $('#calendar').fullCalendar({
+            
+            editable: true,
+            startEditable: true,
+            durationEditable: true,
+            aspectRatio: 1.8,
+            scrollTime: '00:00',
+            header: {
+                left: 'today prev,next',
+                center: 'title',
+                
+            },
+            defaultView: 'timelineDay',
+            timeFormat: 'H(:mm)',
+            resourceAreaWidth: '15%',
+            resourceLabelText: 'Users',
+            resources: [
+            <apex:repeat value="{!users}" var="u">
+                {
+                    id:'{!u.id}',
+                    title:'{!u.name}' 
+                    
+                },
+            </apex:repeat>
+                
+            ],
+            events:[
+                //At run time, this APEX Repeat will reneder the array elements for the events array
+                
+                <apex:variable value="{!0}" var="cnt"/>
+                
+                <apex:repeat value="{!events}" var="e" id="eventListpnl">
+                    {
+                        title: "{!e.title}",
+                        start: '{!e.startString}',
+                        end: '{!e.endString}',
+                        url: '{!e.url}',
+                        allDay: {!e.allDay},
+                        className: '{!e.className} target1',
+                        ev_index:'{!cnt}',
+                        resname : '{!e.resource}',
+                        visit_num:'{!e.name}',
+                        visit_type : '{!e.visitType}',
+                        visit_note : '{!e.visitNotes}',
+                        visit_custate : '{!e.custate}' ,
+                        rating:'{!e.rating}',
+                        resourceId:'{!e.relatedUser}',
+                       
+                        
+                        
+                    },
+                    <apex:variable value="{!cnt+1}" var="cnt"/>
+                     
+                </apex:repeat>
+                
+            ]      
+            
+        
+        });
+        
+        var vname ='month';
+        if('{!$CurrentPage.Parameters.view}' !='')
+            vname = '{!$CurrentPage.Parameters.view}';
+        
+        $('#calendar').fullCalendar( 'changeView', vname );
+    }
+    
+    </script>
+    <style>
+        .event-birthday {background:#56458c;border-color:#56458c;}
+        .event-campaign {background:#cc9933;border-color:#cc9933;}
+        .event-job {background:#0A7CB2;border-color:#0A7CB2;}
+        .event-routine {background:green;border-color:green;}
+        .event-personal {background:purple;border-color:purple;}
+        #calendar {margin-top:20px;width:100%}
+        @page {
+          
+          margin-left: 7px;
+           margin-right: 7px;
+           top:5px;
+           bottom:5px;
+        }
+        @media print {
+          html, body {
+            width: 100%;
+             height: 127mm;
+          }
+          #calendar{
+              border: 1px solid black;
+          }
+          /* ... the rest of the rules ... */
+        }
+    </style>
+    <div id="calendar"></div>
+    
+    
+    
+   
+</apex:page>

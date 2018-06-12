@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>Hierarchy</customSettingsType>
+    <description>The default radius for the nearest tech search. (Blue ring radius) in miles.</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Availability_Forecast_days__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The number of days you wish the system to look forward to find availability. THe greater the number the more API calls will be made)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of days you wish the system to look forward to find availability. THe greater the number the more API calls will be made)</inlineHelpText>
+        <label>Availability Forecast (days)</label>
+        <precision>2</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Availability_Search_Radius__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Only include availability for techs who have a job within this radius of the postcode. A wider radius uses more API calls.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Only include availability for techs who have a job within this radius of the postcode. A wider radius uses more API calls.</inlineHelpText>
+        <label>Availability Search Radius (Miles)</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Mapquest_API_Key__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The Mapquest API Key for your connection to mapping data</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Mapquest API Key for your connection to mapping data</inlineHelpText>
+        <label>Mapquest API Key</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>blueRingRadius__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The default radius for the nearest tech search (blue rings) in miles.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The default radius for the nearest tech search (blue rings) in miles.</inlineHelpText>
+        <label>Blue Ring Radius</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>techRadius__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Only drop markers on the map for technicians that fall within this radius</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Only drop markers on the map for technicians that fall within this radius</inlineHelpText>
+        <label>Technician Radius</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>Nearest Tech Settings</label>
+    <visibility>Public</visibility>
+</CustomObject>

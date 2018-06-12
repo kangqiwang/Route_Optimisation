@@ -1,0 +1,56 @@
+<apex:page controller="STKR.customSettingsController" showHeader="false" sidebar="false" standardStylesheets="true">
+<script>
+function colorPageBlock(pageblock, color) {
+if (pageblock != null) 
+pageblock.firstChild.style.cssText = "background-color: " + color + ";";
+}
+</script>
+
+    <apex:pageblock title="ServiceTracker Configuration">
+    <apex:pagemessages id="messages"/>
+        <apex:form >
+        <center>
+          <apex:commandButton action="{!updateSettings}" value="Save Custom Settings"/><br/><br/>
+        </center>
+            <apex:pageBlockSection id="Xero" title="Xero Configuration" collapsible="true">
+
+                <apex:repeat id="xeroSettings" var="xero" value="{!xeroSettings}">
+                    <apex:inputField id="xeroConsumerKey" label="Consumer Key"  value="{!xero.STKR__Consumer_Key__c}"/><br/>
+                    <apex:inputField id="xeroEndpoint" label="Endpoint" value="{!xero.STKR__Endpoint__c}"/>                
+                </apex:repeat>
+<script>colorPageBlock(document.getElementById("{!$Component.Xero}"), "#0A7CB2");</script>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection id="NT" title="Nearest Technician Configuration" collapsible="true">
+
+                <apex:repeat id="nearestTechSettings" var="nearestTech" value="{!nearestTechSettings}">
+                    <apex:inputField id="availabilityForecast" label="Availability Forecast (days)"  value="{!nearestTech.STKR__Availability_Forecast_days__c}"/><br/>
+                    <apex:inputField id="availabilityRadius" label="Availability Search Radius (Miles)"  value="{!nearestTech.STKR__Availability_Search_Radius__c}"/><br/>
+                    <apex:inputField id="blueRingRadius" label="Blue Ring Radius (Miles)"  value="{!nearestTech.STKR__blueRingRadius__c}"/><br/>
+                    <apex:inputField id="techRadius" label="Technician Radius (Miles)" value="{!nearestTech.STKR__techRadius__c}"/><br/>
+                    <apex:inputField id="mapQuestAPIKey" label="MapQuest Api Key"  value="{!nearestTech.STKR__Mapquest_API_Key__c}"/><br/>
+                </apex:repeat>
+<script>colorPageBlock(document.getElementById("{!$Component.NT}"), "#0A7CB2");</script>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection id="CA" title="Client Attachment Configuration" collapsible="true">
+             <apex:repeat id="clientAttachmentSettings" var="clientatt" value="{!ClientAttachmentSettings}">
+              <apex:inputCheckbox id="clientAttachments" label="Copy Service Reports to Client Attachments" value="{!clientatt.STKR__Copy_Service_Reports_to_Client_Att__c}"/>
+            </apex:repeat>
+            <script>colorPageBlock(document.getElementById("{!$Component.CA}"), "#0A7CB2");</script>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection id="Images" title="Mobile Image Settings" collapsible="true">
+ Coming soon           <script>colorPageBlock(document.getElementById("{!$Component.Images}"), "#0A7CB2");</script>
+            </apex:pageBlockSection>            
+            <center>
+             <apex:commandButton action="{!updateSettings}" value="Save Custom Settings"/><br/><br/>
+             </center>
+        </apex:form>
+    </apex:pageblock>   
+<apex:pageBlock title="Other features">
+ In addition to the important setup actions, you can also configure Territories, Skills, Resource Categories, Maps, Email templates, Reports, Dashboards, Customer Portal access and much more.  
+<br/><br/>
+<b>Default Company Location</b> - When accessing the ServiceTracker mapping features, you can set the default focus to your office location. This can only be done via data loading tools and involves updating the organization fields "Longitude" and "Latitude" with your chosen location.  Find the geolocation of your office using mapping tools such as Google Maps then use the Salesforce.com dataloader to import your geolocation lat and lon into the organisation object.  ServiceTracker can assist you with this if requried<br/><br/>
+<b><a href="/0rp">Remote site Settings</a></b> - This is used to allow field users to access the webservices that send the reports when they are using the mobile to complete visits.  You can give the remote site a name (e.g. ServiceTrackerReport) and the path will be the URL you see at the top of your screen ending in ".com". For example "https://servicetracker-9453.cloudforce.com"<br/><br/>
+Please get in touch with us if you would like to know more.
+</apex:pageblock>
+</apex:page>

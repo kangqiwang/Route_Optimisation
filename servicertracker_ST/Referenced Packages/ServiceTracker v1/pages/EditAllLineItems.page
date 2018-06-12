@@ -1,0 +1,127 @@
+<apex:page standardController="STKR__Billing__c" recordSetVar="stkr__billing_items__r" extensions="STKR.LineItemExtension" sidebar="false">
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"/>   
+    <apex:includeScript value="https://code.jquery.com/ui/1.10.3/jquery-ui.js" />
+    <apex:stylesheet value="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"  />
+    
+    <script >
+$(document).ready(function() {
+
+  $("[id$='salesPrice']").change(function() {
+    updateLineTotal($(this));
+    updateTotal();
+  });
+  $("[id$='qty']").change(function() {
+    updateLineTotal($(this));
+    updateTotal();
+  });
+  $("[id$='discount']").change(function() {
+    updateLineTotal($(this));
+    updateTotal();
+  });
+
+  updateTotal();
+});
+
+function updateLineTotal(obj) {
+
+  var discount = 0;
+  var qty = 0;
+  var salesPrice = 0;
+
+  var tblRow = obj.attr("id").substr(obj.attr("id").indexOf("table"), 8);
+
+if ($.isNumeric($("[id$='" + tblRow + "qty']").val().replace(/[^0-9\.-]+/g, ""))) {
+    qty = Number($("[id$='" + tblRow + "qty']").val().replace(/[^0-9\.-]+/g, ""));
+  } else {
+    alert("Qty must be a number");
+    return;
+  }
+  if ($.isNumeric($("[id$='" + tblRow + "salesPrice']").val().replace(/[^0-9\.-]+/g, ""))) {
+    salesPrice = Number($("[id$='" + tblRow + "salesPrice']").val().replace(/[^0-9\.-]+/g, ""));
+  } else {
+    alert("Sales Price must be a number");
+    return;
+  }
+if ($.isNumeric($("[id$='" + tblRow + "discount']").val().replace(/[^0-9\.-]+/g, ""))) {
+    discount = 1 - Number($("[id$='" + tblRow + "discount']").val().replace(/[^0-9\.-]+/g, "")) / 100;
+  } else {
+    discount = 1;
+  }
+
+  var lineTotal = formatCurrency((qty * salesPrice) * discount);
+
+  $("[id$='" + tblRow + "totalLineValue']").text(lineTotal);
+
+}
+
+function updateTotal() {
+
+  var total = 0;
+
+  $("[id$='totalLineValue']").each(function() {
+
+    total = total + Number($(this).text().replace(/[^0-9\.-]+/g, ""));
+  });
+
+  var tot = formatCurrency(total);
+
+  $("#quoteTotal").text(tot);
+
+}
+
+function formatCurrency(total) {
+
+  var neg = false;
+  if (total < 0) {
+    neg = true;
+    total = Math.abs(total);
+  }
+  return Number(total).toLocaleString("en", {
+    style: "currency",
+    currency: "GBP",
+    minimumFractionDigits: 2
+  });
+
+
+}
+
+   </script>    
+    
+<apex:form >
+<apex:pageBlock title=" Edit {!$ObjectType.STKR__Billing_Items__c.labelplural} (Step 2)">
+<apex:pageMessages />
+<apex:pageBlockButtons >
+<apex:commandButton value="Save" action="{!Save}"/>
+<apex:commandButton value="Cancel" action="{!Cancel}"/>
+</apex:pageBlockButtons>
+
+<apex:pageBlockTable value="{!lst}" var="itr" id="table" style="background-color:#F5FAFF; font-family:'vag-round', sans-serif; font-size:12px; border-radius:10px;">
+          <apex:column headerValue="Ref"><apex:inputfield value="{!itr.STKR__Reference__c}" style="width:40px;align:left" id="Ref"/></apex:column>
+          <apex:column headerValue="Item"><apex:outputfield value="{!itr.STKR__Product__c}" style="width:40px;align:left" id="Type"/></apex:column>
+          <apex:column headerValue="Line Description"><apex:inputfield value="{!itr.STKR__Line_Description_Long__c}" style="width:400px;align:left" id="ItemType"/></apex:column>
+          <apex:column headerValue="QTY"><apex:inputfield value="{!itr.STKR__Quantity__c}" style="width:40px;align:left" required="true" id="qty"></apex:inputfield></apex:column>
+          <apex:column headerValue="Sales Price"><apex:inputfield value="{!itr.STKR__Sales_Price__c}" style="width:100px;align:left" id="salesPrice"  required="true"></apex:inputfield></apex:column>
+          <apex:column headerValue="Discount %"><apex:inputfield value="{!itr.STKR__Discount__c}" style="width:100px;align:left" id="discount"></apex:inputfield></apex:column>
+          <apex:column headerValue="Cost"><apex:inputfield value="{!itr.STKR__Cost__c}" style="width:100px;align:left" id="Cost"></apex:inputfield></apex:column> 
+          <apex:column headerValue="Total Line Value"><apex:outputfield value="{!itr.STKR__Line_Value__c}" style="width:100px;align:left" id="totalLineValue"></apex:outputfield></apex:column>
+          <apex:column headerValue="Optional?"><apex:inputfield value="{!itr.STKR__Optional__c}" style="width:20px;align:left" id="Optional"></apex:inputfield></apex:column> 
+
+</apex:pageBlockTable>
+
+<apex:PageBlockTable value="{!$user}" var="test">
+
+  <apex:column style="width:40px;"> </apex:column>
+  <apex:column > </apex:column>
+  <apex:column > </apex:column>
+  <apex:column style="width:40px;"> </apex:column>
+  <apex:column style="width:100px;"> </apex:column>
+  <apex:column style="width:100px;"> </apex:column>        
+  <apex:column style="width:100px;" headerValue="Total">
+     <div id="quoteTotal"></div>
+  </apex:column>
+
+</apex:PageBlockTable>
+
+</apex:pageBlock>
+</apex:form>
+</apex:page>

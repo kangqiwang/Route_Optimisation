@@ -1,0 +1,191 @@
+<messaging:emailTemplate subject="{!relatedTo.STKR__Type__c} {!relatedTo.Name} for {!relatedTo.STKR__Account__r.Name}" recipientType="Contact" relatedToType="STKR__Billing__c">
+<messaging:plainTextEmailBody >
+Dear {!recipient.FirstName},
+
+{!if(relatedTo.STKR__Type__c = 'Quote','Thank you for your valued enquiry. Please find our quotation attached.','Please find your invoice attached')}
+
+{!if(relatedTo.STKR__Type__c = 'Quote','I look forward to hearing from you in due course...','')}
+
+Yours Sincerely 
+
+{!if(relatedTo.STKR__Type__c = 'Quote',relatedTo.STKR__Owner__r.FirstName,'Finance Department')} {!if(relatedTo.STKR__Type__c = 'Quote',relatedTo.STKR__Owner__r.LastName,'')}
+
+{!if(relatedTo.STKR__Type__c = 'Quote',relatedTo.STKR__Owner__r.Title,'')}
+
+</messaging:plainTextEmailBody>
+
+<messaging:attachment filename="{!relatedTo.STKR__Type__c} {!relatedTo.Name} for {!relatedTo.STKR__Account__r.Name}.pdf" renderAs="PDF">
+<head>
+<style>
+.ct{
+text-align:right;
+}
+</style>
+<style type="text/css" media="print">
+@page {
+@top-center {
+content: element(header);
+}
+@bottom-right {
+ content: element(footer);
+}
+}
+ 
+div.header {
+padding: 10px;
+position: running(header);
+}
+div.footer {
+display: block;
+padding: 5px;
+position: running(footer);
+}
+ 
+</style>
+</head>
+  
+ <div class="header">
+</div>
+ 
+<div class="footer">
+<div>
+  <table width="100%">
+  <tr>
+   <td align="center" style="font-size:10px">Some Name and Address<br/>
+Telephone: 000000000 E-mail: enquiries@somecustomer.com</td>
+  </tr>
+  </table>
+</div>
+</div>
+<div class="content" style="font-family: Arial, Helvetica Neue, Helvetica, sans-serif;font-size:11px">
+
+  <table width="100%">
+  <tr>
+  <td width="70%" valign="top">
+  <Div align="left">
+    <apex:image id="theImage" value="{!$Resource.STKR__Logo}" height="100"/>
+  </Div>
+  <br/>
+  <br/>
+    <h1>{!If(relatedTo.STKR__Type__c = 'Invoice','INVOICE',If(relatedTo.STKR__Type__c = 'Quote','QUOTATION','WORK ORDER'))}<br/></h1>
+  <br/>
+  <br/>
+  </td>
+  <td>
+  <b>
+  Customer Name<br/>
+  Address<br/>
+  Tel : 00000 000000<br/>  
+  {!relatedTo.Owner__r.Email} <br/>
+  <br/>
+  {!If(relatedTo.STKR__Type__c = 'Invoice','Inv No.','Ref No.')}</b> {!relatedTo.Name}<br/>
+  Dated &nbsp;<apex:outputfield value="{!relatedTo.STKR__Date__c}"/><br/>
+  {!If(relatedTo.STKR__Requested_By__r.LastName = '','','Contact '+relatedTo.STKR__Requested_By__r.FirstName+' '+relatedTo.STKR__Requested_By__r.LastName)}<br/>
+  {!If(relatedTo.STKR__Requested_By__r.Phone = '','','Tel '+relatedTo.STKR__Requested_By__r.Phone)}<br/>
+  {!If(relatedTo.STKR__Requested_By__r.Email = '','','Email '+relatedTo.STKR__Requested_By__r.Email)}<br/> 
+  VAT Registration No. 776761872<br/>
+  {!If(relatedTo.STKR__Account_Ref__c = '','','Client Ref '+relatedTo.STKR__Account_Ref__c)}<br/>
+  {!If(relatedTo.STKR__Type__c = 'Quote','','Purchase Order No. '+relatedTo.STKR__P_O_Number__c)}<br/>
+  </td>
+</tr>
+</table>
+<br/>
+<table width="100%">
+<tr>
+<td>
+<b>Billing Address</b><br/>
+  {!IF(ISBLANK(relatedTo.STKR__Account__r.ParentId),relatedTo.STKR__Account__r.Name,relatedTo.STKR__Account__r.Parent.Name)}<br/>
+  {!IF(ISBLANK(relatedTo.STKR__Account__r.BillingStreet),'',relatedTo.STKR__Account__r.BillingStreet)}<br/>
+  {!IF(ISBLANK(relatedTo.STKR__Account__r.BillingCity),'',relatedTo.STKR__Account__r.BillingCity)}<br/>
+  {!IF(ISBLANK(relatedTo.STKR__Account__r.BillingState),'',relatedTo.STKR__Account__r.BillingState)}<br/>
+  {!IF(ISBLANK(relatedTo.STKR__Account__r.BillingPostalCode),'',relatedTo.STKR__Account__r.BillingPostalCode)}<br/>
+</td>
+<td>
+<b>Site Address</b><br/>
+{!relatedTo.STKR__Account__r.Name}<br/>
+  {!IF(ISBLANK(relatedTo.STKR__Account__r.ShippingStreet),'',relatedTo.STKR__Account__r.ShippingStreet)}<br/>
+  {!IF(ISBLANK(relatedTo.STKR__Account__r.ShippingCity),'',relatedTo.STKR__Account__r.ShippingCity)}<br/>
+  {!IF(ISBLANK(relatedTo.STKR__Account__r.ShippingState),'',relatedTo.STKR__Account__r.ShippingState)}<br/>
+  {!IF(ISBLANK(relatedTo.STKR__Account__r.ShippingPostalCode),'',relatedTo.STKR__Account__r.ShippingPostalCode)}<br/>
+</td>
+</tr>
+</table>
+<br/>
+<br/>
+<div style="font-size:12px" class="content">
+{!if(relatedTo.STKR__Type__c = 'Quote','Thank you for your valued enquiry. Please find our quotation detailed below…','')}
+{!if(relatedTo.STKR__Type__c = 'Invoice','Please find your Invoice detailed below…','')}
+<br/>
+<br/>
+<b>{!if(relatedTo.STKR__Type__c = 'Quote','Re : '+relatedTo.STKR__Introduction__c,'')}</b>
+<br/>
+<br/>
+<div>
+ <table width="100%">
+<tr>
+
+<td width="10%" style="height:30px;{!If(relatedTo.STKR__Type__c = 'Quote','','display:none')};"><b>Reference</b></td>
+<td width="10%" style="height:30px"><b>QTY</b></td>
+<td width="60%" style="height:30px"><b>Description</b></td>
+<td width="10%" style="text-align:right;height:30px"><b>Unit Price</b></td>
+<td width="10%" style="text-align:right;height:30px"><b>Total</b></td>
+
+</tr>
+<apex:repeat var="cx" value="{!relatedTo.STKR__billing_items__r}">
+<tr>
+<td width="10%" style="height:30px;{!If(relatedTo.STKR__Type__c = 'Quote','','display:none')};">{!cx.STKR__Reference__c}</td>
+<td width="10%" style="height:30px">{!cx.STKR__Quantity__c}</td>
+<td width="60%" style="height:30px">{!cx.STKR__Line_Description_Long__c}</td>
+<td width="10%" style="text-align:right;height:30px"><apex:outputfield value="{!cx.STKR__Sales_Price__c}"/></td>
+<td width="10%" style="text-align:right;height:30px"><apex:outputfield value="{!cx.STKR__Line_Value__c}"/></td>
+</tr>
+</apex:repeat>
+</table>   
+</div>
+<br/>
+<hr/>
+<br/>
+
+<table width="100%">
+  <tr align="right">
+  <td width="89%"><Strong>Sub Total</strong></td> 
+  <td>£<apex:outputText value="{0, number,###,###,##0.00}"><apex:param value="{!relatedTo.STKR__Total_Billing_Value__c}" /></apex:outputText>
+  </td></tr>
+  <tr align="right">
+  <td><Strong>VAT</strong></td> 
+  <td align="right">£<apex:outputText value="{0, number,###,###,##0.00}"><apex:param value="{!relatedTo.STKR__Total_Billing_Value__c * 0.2}" /></apex:outputText>
+  </td></tr>  
+  <tr align="right">
+  <td><Strong>Total</strong></td> 
+  <td>£<apex:outputText value="{0, number,###,###,##0.00}"><apex:param value="{!relatedTo.STKR__Total_Billing_Value__c + (relatedTo.STKR__Total_Billing_Value__c * 0.2)}" /></apex:outputText>
+  </td></tr>
+  </table>
+</div>
+<br/>
+<br/>
+  <b>
+  {!If(relatedTo.STKR__Type__c = 'Quote','Payment Terms: 30 days from completion of works','Payment Terms: 30 days from Invoice')}.  <br/>
+  {!if(relatedTo.STKR__Type__c = 'Quote','This quotation is valid for 30 days from the date of original quotation','')}
+  </b>  
+  <br/>
+  <br/>
+  {!if(relatedTo.STKR__Type__c = 'Quote','I look forward to hearing from you in due course…','')} 
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  {!If(relatedTo.STKR__Type__c = 'Quote','Yours Sincerely','')}
+  <br/>
+  <br/>
+  <br/>  
+  {!If(relatedTo.STKR__Type__c = 'Quote',relatedTo.STKR__Owner__r.FirstName,'')} {!If(relatedTo.STKR__Type__c = 'Quote',relatedTo.STKR__Owner__r.LastName,'')}<br/>
+  {!If(relatedTo.STKR__Type__c = 'Invoice',relatedTo.STKR__Owner__r.Title,'')}
+  <b>
+  {!if(relatedTo.STKR__Type__c != 'Invoice','','Please pay - Some Bank')}<br/>
+    {!if(relatedTo.STKR__Type__c != 'Invoice','','Sort Code: 00-00-00')}<br/>
+      {!if(relatedTo.STKR__Type__c != 'Invoice','','Acount No. 0000000')}<br/><br/>
+        {!if(relatedTo.STKR__Type__c != 'Invoice','','Remittance should be sent to bacs.rems@bankcom or fax 00000000000')}<br/>  
+  </b>
+   </div>
+    </messaging:attachment>
+</messaging:emailTemplate>

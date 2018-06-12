@@ -1,0 +1,25 @@
+<apex:page extensions="STKR.APIMessageController" standardController="STKR__Billing__c">
+      <apex:form > 
+   
+      <apex:pageBlock id="invoiceDetail">
+      <apex:pagemessages id="messages"/>
+
+          <apex:pageBlock id="invLink" rendered="{!invoiceLink!= null}">
+                <b>Xero Invoice</b> &nbsp; <apex:outputLink target="_blank" value="{!invoiceLink}">{!externalInvoiceNumber}</apex:outputLink>
+          </apex:pageBlock>
+            
+          <apex:variable id="msgCount" var="msgCount" value="{!messages.size}"/>
+           
+              <apex:pageBlockTable value="{!messages}" var="msg" rendered="{!msgCount > 0}">
+                  <apex:column width="10%" headerValue="Message Type" value="{!msg.STKR__messageType__c}"/>
+                  <apex:column width="55%" headerValue="Message">
+                      {!msg.STKR__message__c}
+                      <apex:outputText rendered="{!msg.STKR__Resolution_Field__c != ''}">, to resolve this error update the field <a href="{!msg.STKR__messageUrl__c}">{!msg.STKR__Resolution_Field__c}</a></apex:outputText>  
+                  </apex:column>
+                  <apex:column width="35%" headerValue="Related Invoice" value="{!msg.STKR__relatedInvoice__c}"/>
+        
+          </apex:pageblockTable>   
+      </apex:pageBlock>       
+      <apex:actionPoller rerender="invoiceDetail" interval="5" status="counterStatus" action="{!checkForInvoice}"  enabled="{!stopPoll == false}"/>
+   </apex:form> 
+</apex:page>

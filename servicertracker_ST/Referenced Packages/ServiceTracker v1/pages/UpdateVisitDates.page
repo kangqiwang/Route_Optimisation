@@ -1,0 +1,25 @@
+<apex:page Controller="STKR.UpdateVisit" sidebar="false" showHeader="false">
+<apex:form >
+<apex:pageBlock title=" Update {!$ObjectType.STKR__Visit__c.labelplural} Dates">
+<apex:pageMessages />
+
+<apex:pageBlockButtons >
+<apex:commandButton value="Save" action="{!Save}"/>
+</apex:pageBlockButtons>
+<apex:pageBlockTable value="{!Visits}" var="v" id="table" style="background-color:#F5FAFF; font-family:'vag-round', sans-serif; font-size:12px; border-radius:10px;width:100%;">
+          <apex:column style="vertical-align: text-top" headerValue="Number" width="20px"><apex:outputlabel value="{!v.Name}" id="Name"/></apex:column>
+          <apex:column style="vertical-align: text-top" headerValue="Client" width="100px"><apex:outputlabel value="{!v.STKR__Account__c}" id="Client"/></apex:column>
+          <apex:column style="vertical-align: text-top" headerValue="Address" width="170px"><apex:outputlabel value="{!v.STKR__Address__c}" id="Add"/></apex:column>
+          <apex:column style="vertical-align: text-top" headerValue="Type" width="80px"><apex:outputlabel value="{!v.STKR__Visit_Type__c}" id="T"/></apex:column>
+          <apex:column style="vertical-align: text-top" headerValue="Description" width="200px"><apex:outputlabel value="{!v.STKR__Notes_Long__c}" id="Desc"/></apex:column>
+          <apex:column style="vertical-align: text-top" headerValue="Due Date" width="40px"><apex:inputfield value="{!v.STKR__Due_Date__c}" id="date"/></apex:column>
+          
+</apex:pageBlockTable>
+
+</apex:pageBlock>
+
+
+
+</apex:form>
+
+</apex:page>

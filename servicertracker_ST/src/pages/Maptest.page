@@ -1,0 +1,46 @@
+<apex:page controller="MapControllertest" showHeader="false" sidebar="false">
+<html>
+    <head>    
+        <title>Nearest Tech</title>
+        <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.1/mapquest.js"></script>
+        <link rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.1/mapquest.css"/>
+
+    <script type="text/javascript">
+      window.onload = function() {
+        L.mapquest.key = 'XFI9f8gkExRTk58rq7jyxDSMgkgt06KV';
+
+        var map = L.mapquest.map('map', {
+          center: [40.7128, -74.0059],
+          layers: L.mapquest.tileLayer('map'),
+          zoom: 13
+        });
+        map.addControl(L.mapquest.control());
+        L.mapquest.directions().route({
+          start: '350 5th Ave, New York, NY 10118',
+          end: 'One Liberty Plaza, New York, NY 10006'
+        });
+      }
+    </script>
+
+    </head>
+    <body>
+        <apex:pageBlock title="Find Nearest Resource">
+        <h1>Please enter a postcode to search</h1>
+        <form action="https://www.mapquestapi.com/directions/v2/routematrix?key=XFI9f8gkExRTk58rq7jyxDSMgkgt06KV" method="POST" id="matrixForm">
+            <b>Post Code:</b>
+            <input type="text" name="location" id="location" value="{!$CurrentPage.parameters.postcode}" /> <input type="submit" name="submit" value="Find Nearest Tech" />        
+        </form>         
+        <div id="result">
+        </div>
+        <br/>
+        <div id="map" style="width: 100%; height: 530px;"></div>
+        <div id="availability">
+            <div id="toggleBox">View Tech Availability (Click to toggle)</div>
+            <table id="availablityResults">
+    
+            </table>
+        </div>
+        </apex:pageBlock>
+        </body>
+</html>
+</apex:page>

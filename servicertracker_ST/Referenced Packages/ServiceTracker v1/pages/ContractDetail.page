@@ -1,0 +1,172 @@
+<apex:page standardController="STKR__Service_Contract__c" showHeader="true" tabStyle="STKR__Service_Contract__c" extensions="STKR.ScheduleDetailsExt">
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+<apex:includeScript value="{!URLFOR($Resource.STKR__tablesorter, 'jquery.tablesorter.min.js')}"/>
+   <script type="text/javascript">
+    $(function(){
+        document.getElementById('Inactive').style.display = 'none';
+    });
+    function hideActive(){
+        document.getElementById('Active').style.display = 'none';
+        document.getElementById('Inactive').style.display = 'inline';
+     }
+    function showActive(){
+        document.getElementById('Active').style.display = 'inline';
+        document.getElementById('Inactive').style.display = 'none';
+     }
+
+    </script>
+<script type="text/javascript">
+    $j = jQuery.noConflict();    
+    $j(document).ready(function () { 
+    $j("[id$=h]").tablesorter( {sortList: [[0,1]],dateFormat: "uk"} ); 
+    
+    });
+  </script>
+
+   <style>
+   .activeTab {background-color:#015A83; font-weight:600; color:white; background-image:none;font-size:14px;border: none;}
+   .inactiveTab {background-color:#0A7CB2; font-weight:600; color:white; background-image:none;font-size:14px;border: none;}
+   .rich-tabhdr-side-border { background-image:none;border: none; }
+   .rich-tabhdr-side-cell { background-image:none;border: none; }
+   .rich-tabhdr-cell-active {background-image:none;background-color:#015A83;border: none; }
+   .rich-tabhdr-cell-inactive {background-image:none;background-color:#0A7CB2;border: none; }
+   .rich-tabpanel {background-image:none;background-color:#0A7CB2;}
+   .panel { background-color:#F5FAFF; font-family:"vag-round", sans-serif; font-size:12px;}
+   .link{ text-decoration: underline; cursor:pointer; }
+
+   </style>   <p style="{!IF(AND(STKR__Service_Contract__c.STKR__Contract_Expired__c = TRUE,STKR__Service_Contract__c.STKR__Status__c = 'Active'), '', 'display:none')};background-color:red;color:white;text-align:center;font-size:16px">
+    <br/>
+     This Contract has expired. No further visits will be created.
+    <br/>
+    <br/> 
+   </p>
+   <p style="{!IF(STKR__Service_Contract__c.STKR__Status__c = 'Inactive', '', 'display:none')};background-color:red;color:white;text-align:center;font-size:16px">
+    <br/>
+     This Contract is Inactive.
+    <br/>
+    <br/> 
+   </p>
+   <p style="{!IF(OR(STKR__Service_Contract__c.Account__r.STKR__Status__c = 'Inactive',STKR__Service_Contract__c.Account__r.STKR__Status__c = 'On Stop',STKR__Service_Contract__c.Account__r.STKR__Status__c = 'On Hold'), '', 'display:none')};background-color:red;color:white;text-align:center;font-size:16px">
+    <br/>
+     This Client is {!STKR__Service_Contract__c.Account__r.STKR__Status__c}
+    <br/>
+    <br/> 
+   </p>
+<apex:tabPanel switchType="client" selectedTab="tabdetails" id="ContractTabPanel" tabClass="activeTab" inactiveTabClass="inactiveTab" contentClass="panel" >
+<apex:tab label="Details" name="ContDetails" id="tabdetails">
+<apex:detail inlineEdit="True" relatedList="false" title="true" oncomplete="window.location.reload();"/>
+</apex:tab>
+<apex:tab label="{!$ObjectType.STKR__Service__c.labelPlural}" name="Schedules" id="tabSvc">
+<!-- <apex:relatedList subject="{!STKR__Service_Contract__c}" list="STKR__Preventative_Maintenance__r" pageSize="0" />-->
+<apex:form >
+<div id="Active">
+<apex:pageBlock id="AS" title="Active Schedules">            
+<apex:commandbutton rerender="false" value="Show Complete/Inactive" onclick="hideActive();"/><br/><br/> 
+<apex:pageBlockButtons >
+<apex:variable value="{!STKR__Service_Contract__c.STKR__Account__c}" var="acc"/>
+<apex:variable value="{!STKR__Service_Contract__c.STKR__Price_Book__c}" var="pb"/>
+<apex:variable value="{!STKR__Service_Contract__c.STKR__Account__c}" var="acc"/>
+<apex:variable value="{!STKR__Service_Contract__c.STKR__Type__c}" var="CT"/>
+<apex:commandButton action="{!URLFOR('/apex/STKR__NewJobSchedule?Contract='+Service_contract__c.id+'&Account='+acc+'&RType=Job Schedule&PBook='+pb)}" value="New Job Schedule" immediate="true" rendered="{!if(CT = 'Job',TRUE,FALSE)}"/>
+<apex:commandButton action="{!URLFOR('/apex/STKR__NewJobSchedule?Contract='+Service_contract__c.id+'&Account='+acc+'&RType=Call Out&PBook='+pb)}" value="New Call Out" immediate="true" rendered="{!if(CT != 'Job',TRUE,FALSE)}"/>
+<apex:commandButton action="{!URLFOR('/apex/STKR__NewService?Contract='+Service_contract__c.id+'&Account='+acc+'&RType=Contract Schedule&PBook='+pb)}" value="New Contract Schedule" immediate="true" rendered="{!if(CT != 'Job',TRUE,FALSE)}"/>
+
+</apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!ASlst}" var="as" id="as">
+        <apex:column >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   Action
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!as.id}/e?retURL={!STKR__Service_Contract__c.Id}">Edit</apex:outputLink>  |           
+        <apex:outputLink value="{!URLFOR($Action.Service__c.Delete, as.id,[retURL=STKR__Service_Contract__c.Id],true)}" onclick="return window.confirm('Are you sure you want to delete this record?');"> Del
+        </apex:outputLink>                 
+        </apex:column>            
+                <apex:column headerValue="Number"><apex:outputLink value="/{!as.id}?retURL={!STKR__Service_Contract__c.Id}">{!as.Name}</apex:outputLink></apex:column>           
+                <apex:column headerValue="Site" value="{!as.STKR__Account__c}"/>
+                <apex:column headerValue="Product" value="{!as.STKR__Product__c}"/>
+                <apex:column headerValue="Type" value="{!as.STKR__Service_Type__c}"/>
+                <apex:column headerValue="Notes"  value="{!as.STKR__Notes__c}"/>
+                <apex:column headerValue="Number of Visits"  value="{!as.STKR__Number_of_Visit_Per_Year__c}"/>
+                <apex:column headerValue="Frequency"   value="{!as.STKR__Frequency__c}"/>
+                <apex:column headerValue="Last Visit"  value="{!as.STKR__Last_Visit__c}"/>
+                <apex:column headerValue="Last Open Visit"  value="{!as.STKR__Next_Visit__c}"/>
+                <apex:column value="{!as.STKR__Service_Owner__c}"/>
+                <apex:column headerValue="Status"  value="{!as.STKR__Status__c}"/>                
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+</div>
+<div id="Inactive">
+        <apex:pageBlock id="IAS" title="Inactive/Complete Schedules">            
+<apex:commandbutton rerender="false" value="Hide Complete/Inactive" onclick="showActive();" /><br/><br/> 
+<apex:pageBlockButtons >
+<apex:variable value="{!STKR__Service_Contract__c.STKR__Account__c}" var="acc"/>
+<apex:variable value="{!STKR__Service_Contract__c.STKR__Price_Book__c}" var="pb"/>
+<apex:variable value="{!STKR__Service_Contract__c.STKR__Account__c}" var="acc"/>
+<apex:variable value="{!STKR__Service_Contract__c.STKR__Type__c}" var="CT"/>
+<apex:commandButton action="{!URLFOR('/apex/STKR__NewJobSchedule?Contract='+Service_contract__c.id+'&Account='+acc+'&RType=Job Schedule&PBook='+pb)}" value="New Job Schedule" immediate="true" rendered="{!if(CT = 'Job',TRUE,FALSE)}"/>
+<apex:commandButton action="{!URLFOR('/apex/STKR__NewJobSchedule?Contract='+Service_contract__c.id+'&Account='+acc+'&RType=Call Out&PBook='+pb)}" value="New Call Out" immediate="true" rendered="{!if(CT != 'Job',TRUE,FALSE)}"/>
+<apex:commandButton action="{!URLFOR('/apex/STKR__NewService?Contract='+Service_contract__c.id+'&Account='+acc+'&RType=Contract Schedule&PBook='+pb)}" value="New Contract Schedule" immediate="true" rendered="{!if(CT != 'Job',TRUE,FALSE)}"/>
+
+</apex:pageBlockButtons>
+
+            <apex:pageBlockTable value="{!ISlst}" var="ias" id="ias">
+                <apex:column headerValue="Number"><apex:outputLink value="/{!ias.id}?retURL={!STKR__Service_Contract__c.Id}">{!ias.Name}</apex:outputLink></apex:column>           
+                <apex:column headerValue="Site" value="{!ias.STKR__Account__c}"/>
+                <apex:column headerValue="Product" value="{!ias.STKR__Product__c}"/>
+                <apex:column headerValue="Type" value="{!ias.STKR__Service_Type__c}"/>
+                <apex:column headerValue="Notes"  value="{!ias.STKR__Notes__c}"/>
+                <apex:column headerValue="Number of Visits"  value="{!ias.STKR__Number_of_Visit_Per_Year__c}"/>
+                <apex:column headerValue="Frequency"   value="{!ias.STKR__Frequency__c}"/>
+                <apex:column headerValue="Last Visit"  value="{!ias.STKR__Last_Visit__c}"/>
+                <apex:column value="{!ias.STKR__Service_Owner__c}"/>            
+                <apex:column headerValue="Status"  value="{!ias.STKR__Status__c}"/>            
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+</div>
+</apex:form>
+</apex:tab>
+
+
+
+
+<apex:tab label="{!$ObjectType.STKR__Contract_Consumables__c.labelPlural}" name="Contract_Consumables" id="tabcc">
+
+    <apex:relatedList subject="{!STKR__Service_Contract__c}" list="Covered_Consumables__r"/>
+
+</apex:tab>
+<apex:tab label="{!$ObjectType.STKR__Billing__c.labelPlural}" name="Billing" id="tabBill">
+<apex:relatedList subject="{!STKR__Service_Contract__c}" list="Billing__r" />
+</apex:tab>
+<apex:tab label="{!$ObjectType.NoteAndAttachment.labelPlural}" name="Notes_Attachments" id="tabAtt">
+<apex:relatedList subject="{!STKR__Service_Contract__c}" list="CombinedAttachments" />
+</apex:tab>
+<apex:tab label="{!$ObjectType.STKR__Alerts__c.labelPlural}" name="Alerts" id="tabAlert">
+<apex:relatedList subject="{!STKR__Service_Contract__c}" list="Alerts__r" title="Alerts on this Contract" /><br/><br/>
+Please click on the associated billing account &nbsp;<apex:outputfield value="{!STKR__Service_Contract__c.STKR__Account__c}"/>&nbsp; to view all alerts.<br/><br/>
+</apex:tab>
+
+<apex:tab label="History" name="History" id="tabHist">
+        <apex:pageBlock id="Histories" title="History">            
+            <apex:pageBlockTable value="{!STKR__Service_Contract__c.Histories}" var="h" id="h">
+                <apex:column headerValue="Date"  value="{!h.createddate}"/>
+                <apex:column headerValue="What" value="{!h.field}"/>
+                <apex:column headerValue="From" value="{!h.oldvalue}"/>
+                <apex:column headerValue="To"   value="{!h.newvalue}"/>
+                <apex:column headerValue="Who"  value="{!h.createdbyId}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+</apex:tab>
+<apex:tab label="Summary" name="Summary" id="tabSum">
+        <apex:pageBlock id="Summary" title="Summary">            
+            <apex:pageBlockTable value="{!STKR__Service_Contract__c}" var="s">
+                <apex:column headerValue="Last Service Date"><apex:outputField value="{!s.STKR__Last_Scheduled_Visit__c}"/></apex:column>
+                <apex:column headerValue="No. Visits"  value="{!s.STKR__Scheduled_Visits__c}"/>
+                
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+</apex:tab>
+</apex:tabPanel>
+</apex:page>

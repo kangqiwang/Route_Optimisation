@@ -1,0 +1,44 @@
+<apex:page Controller="STKR.createContractRecord" tabStyle="STKR__Service_Contract__c" showHeader="true" sidebar="true">  
+  <style>
+
+           background-color:#AAAAAA;
+      </style>
+
+       <apex:form >
+        <apex:pageBlock title="New {!$ObjectType.STKR__Service_Contract__c.label}" tabStyle="Service_Contract__c">
+        <apex:pagemessages />
+<div align="center">
+<apex:commandButton action="{!saving}" value="Save" />
+        <apex:commandButton action="{!close}" value="Cancel" />
+</div> 
+            <apex:pageBlockSection id="RecordType" columns="2">
+             <apex:inputField value="{!Header.RecordTypeId}" required="true">
+             <apex:actionSupport event="onchange" rerender="PageErrors, Headerinfo"/>
+            </apex:inputField>
+            </apex:pageblocksection>
+           <apex:pageBlockSection columns="2" id="Headerinfo">
+            <apex:inputField value="{!Header.STKR__Account__c}" required="true"/>
+            <apex:inputField value="{!Header.STKR__Customer_Reference__c}"/>
+            <apex:inputField value="{!Header.STKR__Type__c}" required="true"/>
+            <apex:inputField value="{!Header.STKR__Start_Date__c}" required="true"/>
+            <apex:inputField value="{!Header.STKR__Status__c}" required="true"/>
+            <apex:inputField value="{!Header.STKR__End_Date__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1" >
+            <apex:inputField value="{!Header.STKR__Special_Instructions__c}" style="height:100px; width:600px;"  />
+            </apex:pageBlockSection>
+           
+            <apex:pageBlockSection >
+            <apex:inputField value="{!Header.STKR__Signed_by__c}"/>
+            <apex:inputField value="{!Header.STKR__Signed_Date__c}"/>
+            <apex:inputField value="{!Header.STKR__Review_Date__c}" required="true"/>
+            <apex:inputField value="{!Header.STKR__Cancellation_Notice__c}" required="true"/>
+           </apex:pageBlockSection>
+        </apex:pageBlock>
+
+<div align="center">
+<apex:commandButton action="{!saving}" value="Save" />
+<apex:commandButton action="{!close}" value="Cancel" />
+</div>        
+</apex:form>
+</apex:page>

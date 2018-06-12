@@ -1,0 +1,15 @@
+<apex:page sidebar="false" tabStyle="STKR__Billing__c" standardController="STKR__Billing__c">
+<style>
+.labelCol {
+    text-align:left !important;
+}
+.bPageBlock .pbBottomButtons .pbButtonb .btn { 
+  display: inline;
+  float: left;
+
+}
+</style>
+<apex:sectionHeader title="Convert Quote"/>
+    <flow:interview name="Convert_Quote_Invoice" finishLocation="/{!$CurrentPage.parameters.varBillingID}" buttonLocation="bottom"/>
+
+</apex:page>

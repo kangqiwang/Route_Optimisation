@@ -1,0 +1,78 @@
+<apex:page standardController="STKR__Billing__c" showHeader="true" tabStyle="STKR__Billing__c">
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+<apex:includeScript value="{!URLFOR($Resource.STKR__tablesorter, 'jquery.tablesorter.min.js')}"/>
+
+<script type="text/javascript">
+    $j = jQuery.noConflict();    
+    $j(document).ready(function () { 
+    $j("[id$=h]").tablesorter( {sortList: [[0,1]],dateFormat: "uk"} ); 
+    
+    });
+  </script>
+   <style>
+   .activeTab {background-color:#015A83; font-weight:600; color:white; background-image:none;font-size:14px;border: none;}
+   .inactiveTab {background-color:#0A7CB2; font-weight:600; color:white; background-image:none;font-size:14px;border: none;}
+   .rich-tabhdr-side-border { background-image:none;border: none; }
+   .rich-tabhdr-side-cell { background-image:none;border: none; }
+   .rich-tabhdr-cell-active {background-image:none;background-color:#015A83;border: none; }
+   .rich-tabhdr-cell-inactive {background-image:none;background-color:#0A7CB2;border: none; }
+   .rich-tabpanel {background-image:none;background-color:#0A7CB2;}
+   .panel { background-color:#F5FAFF; font-family:"vag-round", sans-serif; font-size:12px;}
+   .link{ text-decoration: underline; cursor:pointer; }
+
+   </style>   
+    <apex:include id="thirdPartyInvoice" pageName="STKR__externalInvoiceDetails" rendered="{!$Setup.STKR__Xero_Integration__c.STKR__Consumer_Key__c != ''}"/>
+<apex:tabPanel switchType="client" selectedTab="tabdetails" id="VisitTabPanel" tabClass="activeTab" inactiveTabClass="inactiveTab" contentClass="panel">
+<apex:tab label="Details" name="VisitDetails" id="tabdetails">
+<apex:detail inlineEdit="True" relatedList="false" title="true" oncomplete="window.location.reload();"/>
+</apex:tab>
+<apex:tab label="{!$ObjectType.STKR__Billing_Items__c.labelPlural}" name="LineItems" id="tabItem">
+<apex:relatedList subject="{!STKR__Billing__c}" list="Billing_Items__r" />
+</apex:tab>
+<apex:tab label="Recurrence" name="Recurrence" id="tabRes" rendered="{!If(STKR__Billing__c.STKR__Type__c = 'Invoice',TRUE,FALSE)}">
+            <apex:form >
+        <apex:pageBlock id="Recurrence" title="Recurrence Information">            
+    <apex:pageBlockButtons >
+        <apex:commandButton action="{!save}" id="saveButton" value="Save" style="display:none"/>
+        <apex:commandButton action="{!cancel}" id="cancelButton" value="Cancel" style="display:none"/>
+    </apex:pageBlockButtons>
+            <apex:pageBlockSection >
+            <apex:outputField value="{!STKR__Billing__c.STKR__Recurring__c}"><apex:inlineEditSupport showOnEdit="saveButton,cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Billing__c.STKR__Next_Billing_Date__c}"><apex:inlineEditSupport showOnEdit="saveButton,cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Billing__c.STKR__Billing_Interval__c}"><apex:inlineEditSupport showOnEdit="saveButton,cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Billing__c.STKR__Billing_Frequency__c}"><apex:inlineEditSupport showOnEdit="saveButton,cancelButton" event="ondblclick"/></apex:outputField>
+            </apex:pageBlockSection>
+        </apex:pageBlock></apex:form></apex:tab>
+
+<apex:tab label="{!$ObjectType.OpenActivity.labelPlural}" name="Open_Activities" id="tabOAct">
+<apex:relatedList subject="{!STKR__Billing__c}" list="OpenActivities" />
+</apex:tab>
+
+<apex:tab label="{!$ObjectType.ActivityHistory.labelPlural}" name="Activity_History" id="tabActHist">
+<apex:relatedList subject="{!STKR__Billing__c}" list="ActivityHistories" />
+</apex:tab>
+
+
+<apex:tab label="{!$ObjectType.NoteAndAttachment.labelPlural}" name="Notes_Attachments" id="tabAtt">
+<apex:relatedList subject="{!STKR__Billing__c}" list="CombinedAttachments" />
+</apex:tab>
+
+
+<apex:tab label="Revision History" name="Revision History" id="tabRev">
+
+<apex:include id="revHistory" pageName="STKR__quoteRevision"/>
+</apex:tab>
+
+<apex:tab label="History" name="History" id="tabHist">
+        <apex:pageBlock id="Histories" title="History">                 
+            <apex:pageBlockTable value="{!STKR__Billing__c.Histories}" var="h" id="h">
+                <apex:column headerValue="Date"  value="{!h.createddate}"/>
+                <apex:column headerValue="What" value="{!h.field}"/>
+                <apex:column headerValue="From" value="{!h.oldvalue}"/>
+                <apex:column headerValue="To"   value="{!h.newvalue}"/>
+                <apex:column headerValue="Who"  value="{!h.createdbyId}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+</apex:tab>
+</apex:tabPanel>
+</apex:page>

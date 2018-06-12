@@ -1,0 +1,352 @@
+<apex:page showHeader="false" showchat="false" sidebar="false" applyHtmlTag="false" standardController="STKR__Visit__c" renderAs="PDF">
+
+ <head>       
+        <style type="text/css"  media="print">           
+            @page {                                                     
+                @top-center {                   
+                    content: element(header);    
+                }
+                size: 210mm 297mm;
+                margin: 15mm;
+                margin-right:0mm;
+                
+                margin-top: 4.215cm;
+                margin-bottom: 2.80cm;
+                margin-left: 1.27cm;
+                margin-right:1cm;
+                @bottom-left {
+                    content: element(footer);
+                }           
+            }                                 
+
+            div.header {                
+                        padding: 10px;              
+                        position: running(header);
+                               
+                        height: 80px;
+                        margin-bottom: 15px;
+                                
+            }           
+            div.footer {                
+                display: block;             
+                padding: 5px;               
+                position: running(footer);  
+                
+                clear: both;
+                margin-top: 15px;
+                        
+            }                 
+                                  
+            
+        </style>            
+    </head>   
+ 
+<apex:repeat var="i" value="{!STKR__Visit__c.Inspections__r}">
+<apex:repeat var="i" value="{!i}" rendered="{!IF(i.RecordType.Name = "Water Cooling Tower", TRUE, FALSE)}">
+
+<div style="font-family: Arial, Helvetica Neue, Helvetica, sans-serif; font-size:13px;">
+
+<apex:form >
+
+<div class="header">
+  <table border="0" width="100%">
+   <tr><td align="left"><apex:image id="theLogo" value="{!$Resource.STKR__Logo}" width="120" height="100"/></td>
+       <td align="Center"><H1>Water Cooling Tower Inspection</H1></td>
+   </tr>
+  </table>     
+</div>
+
+<div class="footer">
+  <table width="100%" style="color: #fff; background: blue;border: 1px solid black">
+  <tr>
+   <td align="center">Western Environmental Limited Western House, Britonwood Trading Estate, Knowsley, Merseyside L33 7YP<br/>
+Telephone 0151 546 1000   Facsimile 0151 546 5777/8870   E-mail:  info@westerngroup.co.uk</td>
+  </tr>
+  </table>
+</div>
+</apex:form>
+<div class = "content" style="page-break-after:always;">  
+   <table border="0" width="100%">
+   <tr>
+   <td align="left" valign="top">
+    Client:<br/>
+   </td>
+   <td> 
+    {!Visit__c.Service__r.Account__r.Name}<br/>
+    {!IF(ISBLANK(Visit__c.Service__r.Account__r.BillingStreet),'',Visit__c.Service__r.Account__r.BillingStreet)}<br/>
+    {!IF(ISBLANK(Visit__c.Service__r.Account__r.BillingCity),'',Visit__c.Service__r.Account__r.BillingCity)}<br/>
+    {!IF(ISBLANK(Visit__c.Service__r.Account__r.BillingState),'',Visit__c.Service__r.Account__r.BillingState)}<br/>
+    {!IF(ISBLANK(Visit__c.Service__r.Account__r.BillingPostalCode),'',Visit__c.Service__r.Account__r.BillingPostalCode)}<br/>
+   </td>
+   <td align="left">
+   </td>
+  </tr>
+  <tr></tr>
+  <tr></tr>
+  <tr>
+   <td align="left">
+    Recorded by:<br/>
+   </td>
+   <td> 
+    {!Visit__c.Resource_Name__c}
+   </td>
+   <td align="left">
+    Date: <apex:outputText value="{0,date, dd/MM/yyyy}"><apex:param value="{!STKR__Visit__c.STKR__Completion_Time__c}"/></apex:outputText>
+   </td>
+  </tr> 
+  <tr>
+   <td>Contact: {!Visit__c.Service__r.Contact_Name__r.Name}</td>
+  </tr> 
+  </table>
+  <br/>
+ <br/><br/>
+  <table width="100%" style="color: #fff; background: blue; border: 1px solid black;">
+  <tr><td align="left">Site:</td> 
+   <td align="left">{!Visit__c.Service__r.Account__r.Name}</td>
+   <td align="left"></td>
+  </tr>
+  <tr>
+  <td align="left">Site Address:</td>
+  <td align="left">{!IF(ISBLANK(Visit__c.Service__r.Account__r.ShippingStreet),'',Visit__c.Service__r.Account__r.ShippingStreet)+","}
+  {!IF(ISBLANK(Visit__c.Service__r.Account__r.ShippingCity),'',Visit__c.Service__r.Account__r.ShippingCity)+","}
+  {!IF(ISBLANK(Visit__c.Service__r.Account__r.ShippingState),'',Visit__c.Service__r.Account__r.ShippingState)+","}
+  {!IF(ISBLANK(Visit__c.Service__r.Account__r.ShippingPostalCode),'',Visit__c.Service__r.Account__r.ShippingPostalCode)}
+  </td>
+  <td align="left"></td>
+  </tr>
+  </table>
+  
+  <br/>
+
+ <table width="100%" columns="3" style="border: 0px solid blacks;">
+
+  <tr style="border: 0px">
+    <td style="border: 0px solid">Cooling Tower Location: {!i.Service_Item__r.Location__c}</td>
+    <td style="border: 0px solid">&nbsp;</td>
+    <td style="border: 0px solid">&nbsp;</td>
+  </tr>
+  <tr style="border: 0px">
+    <td style="border: 0px solid"> Asset Reference: {!i.Service_Item__r.Reference__c}</td>
+    <td style="border: 0px solid">&nbsp;</td>
+    <td style="border: 0px solid">&nbsp;</td>
+  </tr>
+  <tr style="border: 0px">
+    <td style="border: 0px solid">&nbsp;</td>
+    <td style="border: 0px solid">&nbsp;</td>
+    <td style="border: 0px solid">&nbsp;</td>
+  </tr>
+  <tr style="border: 0px">
+   <td style="border: 0px solid"><b>General Conditions</b></td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   </tr>
+  <tr style="border: 0px">
+    <td style="border: 0px solid">&nbsp;</td>
+    <td style="border: 0px solid">&nbsp;</td>
+    <td style="border: 0px solid">&nbsp;</td>
+  </tr>
+  <tr style="border: 0px">
+   <td style="border: 0px solid"><b>1. Drift Eliminatirs</b></td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   </tr>   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">1.1 Are Eliminators free of corrosion and scale?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Drift_Eliminators__c,"Free from corrosion and scale"),'Yes','No')}</td>
+   </tr>
+   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">1.2 Are Eliminators fitted well, with no visible gaps?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Drift_Eliminators__c,"Fitted well, with no visible gaps"),'Yes','No')}</td>
+   </tr>   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">1.3 Are Eliminators free from wooden parts?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Drift_Eliminators__c,"Free from wooden parts"),'Yes','No')}</td>
+   </tr>   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">1.4 Are Eliminators intact and unbroken?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Drift_Eliminators__c,"Intact and unbroken"),'Yes','No')}</td>
+   </tr>
+  <tr style="border: 0px">
+   <td style="border: 0px solid">1.5 Are Eliminators debris free AFTER cleaning?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Drift_Eliminators__c,"Debris free AFTER cleaning"),'Yes','No')}</td>
+   </tr>
+  <tr style="border: 0px">
+   <td style="border: 0px solid">1.6 Any visible signs of drift carry over when unit running?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Drift_Eliminators__c,"Drift carry over when running"),'Yes','No')}</td>
+   </tr>   
+   
+     <tr style="border: 0px">
+    <td style="border: 0px solid">&nbsp;</td>
+    <td style="border: 0px solid">&nbsp;</td>
+    <td style="border: 0px solid">&nbsp;</td>
+  </tr>
+  <tr style="border: 0px">
+   <td style="border: 0px solid"><b>2. Distribution</b></td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   </tr>   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">2.1 Is the water pattern even?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Distribution__c,"Water pattern even"),'Yes','No')}</td>
+   </tr>
+  <tr style="border: 0px">
+   <td style="border: 0px solid">2.2 Are the channels easily cleaner?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Distribution__c,"Channels easily cleaned"),'Yes','No')}</td>
+   </tr>   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">2.3 Are they debris free after cleaning?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Distribution__c,"Debris free after cleaning"),'Yes','No')}</td>
+   </tr>   
+ 
+  <tr style="border: 0px">
+    <td style="border: 0px solid">&nbsp;</td>
+    <td style="border: 0px solid">&nbsp;</td>
+    <td style="border: 0px solid">&nbsp;</td>
+  </tr>
+  <tr style="border: 0px">
+   <td style="border: 0px solid"><b>3. Pack / Fill</b></td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   </tr>   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">3.1 Plastic?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Pack_Fill__c,"Plastic"),'Yes','No')}</td>
+   </tr>
+  <tr style="border: 0px">
+   <td style="border: 0px solid">3.2 Wood?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Pack_Fill__c,"Wood"),'Yes','No')}</td>   </tr>   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">3.3 Film Packing?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Pack_Fill__c,"Film Packing"),'Yes','No')}</td>   
+   </tr>   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">3.4 Splash Packing?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Pack_Fill__c,"Splash Packing"),'Yes','No')}</td>   
+   </tr>
+  <tr style="border: 0px">
+   <td style="border: 0px solid">3.5 Removable?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Pack_Fill__c,"Removable Packing"),'Yes','No')}</td>
+   </tr>
+  <tr style="border: 0px">
+   <td style="border: 0px solid">3.6 Non-Removable?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Pack_Fill__c,"Non-Removable Packing"),'Yes','No')}</td>
+   </tr>                       
+  <tr style="border: 0px">
+   <td style="border: 0px solid">3.7 Easy to clean?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Pack_Fill__c,"Easy to Clean"),'Yes','No')}</td>
+   </tr>                       
+  <tr style="border: 0px">
+   <td style="border: 0px solid">3.8 Is pack in satisfactory condition?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Pack_Fill__c,"Satisfactory Condition"),'Yes','No')}</td>
+   </tr>   
+      
+  <tr style="border: 0px">
+    <td style="border: 0px solid">&nbsp;</td>
+    <td style="border: 0px solid">&nbsp;</td>
+    <td style="border: 0px solid">&nbsp;</td>
+  </tr>
+  <tr style="border: 0px">
+   <td style="border: 0px solid"><b>4. Internal Surfaces</b></td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   </tr>   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">4.1 AEasily cleaned?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Internal_Surfaces__c,"Easily Cleaned"),'Yes','No')}</td>
+   </tr>
+  <tr style="border: 0px">
+   <td style="border: 0px solid">4.2 Free fromcorrosion?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Internal_Surfaces__c,"Free from corrosion"),'Yes','No')}</td>
+   </tr>   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">4.3 Free from scale?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Internal_Surfaces__c,"Free from scale"),'Yes','No')}</td>
+   </tr>   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">4.4 All louvers in place?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Internal_Surfaces__c,"All louvers in place"),'Yes','No')}</td>
+   </tr>
+   
+  <tr style="border: 0px">
+    <td style="border: 0px solid">&nbsp;</td>
+    <td style="border: 0px solid">&nbsp;</td>
+    <td style="border: 0px solid">&nbsp;</td>
+  </tr>
+  <tr style="border: 0px">
+   <td style="border: 0px solid"><b>5. Sump</b></td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   </tr>   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">5.1 Is the drain valve at the lowest point?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Sump__c,"Drain valve at lowest point"),'Yes','No')}</td>
+   </tr>
+  <tr style="border: 0px">
+   <td style="border: 0px solid">5.2 Is the drain valve functioning?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Sump__c,"Drain valve functioning"),'Yes','No')}</td>
+   </tr>   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">5.3 Is the water inlet valve/controller working?</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid;text-align:right;">{!if(contains(i.Sump__c,"Water inlet valve/controller working"),'Yes','No')}</td>
+   </tr>   
+  <tr style="border: 0px">
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   <td style="border: 0px solid">&nbsp;</td>
+   </tr>   
+
+ </table>
+ 
+ 
+
+ <table width="100%" columns="3" style="border: 1px solid black;">
+ 
+   <tr style="border: 1px solid black">
+   <td colspan="3" style="border: 0px solid black"> Recommendations: {!Visit__c.Field_Notes__c}<br/><br/></td>
+   </tr>
+   <tr style="border: 1px solid black">
+   <td align="left" width="40%" style="border: 1px solid black">
+    Signature of Engineer:<br/>
+   </td>
+   <td width="30%" style="border: 1px solid black"> {!Visit__c.Resource_Name__c}
+   </td>
+   <td width="30%" style="border: 1px solid black">
+    <apex:repeat value="{!STKR__Visit__c.Attachments}" var="s">
+     <apex:image height="100px"
+       value="{!URLFOR($Action.Attachment.Download, s.Id)}"/>
+   </apex:repeat>
+   </td>
+  </tr>
+
+</table>
+</div>
+</div>
+
+</apex:repeat> 
+</apex:repeat> 
+</apex:page>

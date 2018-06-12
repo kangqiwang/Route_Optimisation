@@ -1,0 +1,26 @@
+<apex:page Controller="STKR.createLineItems" tabStyle="STKR__Billing__c">  
+            <apex:form >
+         <div style="background-color:#F5FAFF; font-family:'vag-round', sans-serif; font-size:12px; border-radius:10px;">           
+
+        <apex:pageBlock title="Insert New {!$ObjectType.STKR__Billing_Items__c.labelplural} (Step 1)">
+        <apex:pageMessage severity="high" detail="You can enter 10 line items at a time."></apex:pageMessage>
+
+<div align="center">
+<apex:commandButton action="{!saving}" value="Save" />
+        <apex:commandButton action="{!close}" value="Cancel" immediate="true" />
+</div>  
+           <apex:pageBlockTable value="{!Billing}" var="li" id="table" style="background-color:#F5FAFF; font-family:'vag-round', sans-serif; font-size:12px; border-radius:10px;">
+          <apex:column headerValue="Reference"><apex:inputField style="width:40px;align:left" value="{!li.STKR__Reference__c}"/></apex:column>
+          <apex:column width="200px" headerValue="Line Item"><apex:inputField value="{!li.STKR__Product__c}" style="width:200px;align:left" required="false"/></apex:column>
+          <apex:column headerValue="QTY"><apex:inputField style="width:40px;align:left" value="{!li.STKR__Quantity__c}"/></apex:column>
+          <apex:column headerValue="Help"><apex:outputText >Pricing and Descriptions will be taken from the associated pricebook. You can change these on the next page</apex:outputText></apex:column>
+        <!--  <apex:facet name="footer"><apex:commandLink value="+ add row" action="{!addrow}" reRender="table,error"/></apex:facet>  -->
+</apex:pageBlockTable>
+</apex:pageBlock>
+           </div>
+<div align="center">
+<apex:commandButton action="{!saving}" value="Save" />
+        <apex:commandButton action="{!close}" value="Cancel" />
+</div>         
+</apex:form>
+</apex:page>

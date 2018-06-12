@@ -1,0 +1,40 @@
+<apex:page controller="STKR.multiple_Service_Items" sidebar="false">
+    <script>
+      function setFocusOnLoad(){ mass.focus();} 
+    </script> 
+                                             
+<apex:form >
+<apex:pageBlock title="New {!$ObjectType.STKR__Service_Item__c.labelplural}">
+<apex:outputPanel id="hiddenblock"><apex:pagemessages /></apex:outputPanel>
+<div style="color:red"><B>* Please ensure that the location, Interval and Frequency are entered to save the record.</b></div>
+<br/><br/>
+<apex:pageblockbuttons >
+<apex:commandButton action="{!saving}" value="Save" />
+<apex:commandButton action="{!close}" value="Cancel" immediate="true" />
+</apex:pageblockbuttons>
+<apex:pageBlockTable value="{!Service_Item}" var="itr" id="table" style="background-color:#F5FAFF; font-family:'vag-round', sans-serif; font-size:12px; border-radius:10px;width:100%;">
+          <apex:inputHidden value="{!itr.STKR__Account__c}"/>
+          <apex:column style="width:10px" headerValue="Sort"><apex:inputfield style="width:30px" value="{!itr.STKR__Sort_Order__c}" id="Sort"/></apex:column>       
+
+          <apex:column headerValue="Record Type"><apex:inputfield value="{!itr.RecordTypeId}">
+          <apex:actionSupport event="onchange" rerender="PageErrors, table"/>
+          </apex:inputField>
+           
+          </apex:column>
+          <apex:column headerValue="Type"><apex:inputfield value="{!itr.STKR__Type__c}" id="Type"/></apex:column>       
+          <apex:column headerValue="Item Type"><apex:inputfield value="{!itr.STKR__Item_Type__c}" id="ItemType"/></apex:column>
+          <apex:column headerValue="{!$ObjectType.STKR__Service_Item__c.fields.STKR__Reference__c.label}"><apex:inputfield style="width:50px" value="{!itr.STKR__Reference__c}" id="Ref"/></apex:column>
+          <apex:column headerValue="Location *"><apex:inputfield value="{!itr.STKR__Location__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="Interval *"><apex:inputfield style="width:30px" value="{!itr.STKR__Inspection_Interval__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="Frequency *"><apex:inputfield value="{!itr.STKR__Inspection_Frequency__c}" ></apex:inputfield></apex:column>
+          <apex:column headerValue="Inspection Start Date"><apex:inputfield style="width:110px;" value="{!itr.STKR__Inspection_Start_Date__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="{!$ObjectType.STKR__Service_Item__c.fields.STKR__Year__c.label}"><apex:inputfield style="width:30px" value="{!itr.STKR__Year__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="Grace Days"><apex:inputfield style="width:30px" value="{!itr.STKR__Grace_Days__c}"></apex:inputfield></apex:column>
+          <apex:facet name="footer"><apex:commandLink value="+ add row" action="{!addrow}" rerender="table,error"/></apex:facet>  
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:form>
+<script>  
+   var mass=document.getElementById('{$!Type}');
+</script>
+</apex:page>

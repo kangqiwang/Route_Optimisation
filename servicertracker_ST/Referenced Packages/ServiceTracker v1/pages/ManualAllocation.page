@@ -1,0 +1,22 @@
+<apex:page standardController="STKR__Visit__c" recordSetVar="unused" sidebar="false">
+<apex:form >
+<apex:pageBlock > 
+<apex:pageBlockTable value="{!selected}" var="itr" id="table" style="background-color:#F5FAFF; font-family:'vag-round', sans-serif; font-size:12px; border-radius:10px;">
+          <apex:column headerValue="Number"><apex:outputfield value="{!itr.Name}" id="Name"/></apex:column>
+          <apex:column headerValue="Resource"><apex:inputfield value="{!itr.STKR__Resource__c}" id="Res"/></apex:column>
+          <apex:column headerValue="Due Start"><apex:inputfield value="{!itr.STKR__Due_Date__c}" id="SDate"/></apex:column>
+          <!--<apex:column headerValue="Due Finish"><apex:inputfield value="{!itr.Due_Finish__c}" id="FDate"/></apex:column>-->
+          <apex:column headerValue="Fixed Visit"><apex:inputfield value="{!itr.STKR__Fixed_Visit__c}" id="FV"/></apex:column>       
+
+          <apex:column headerValue="Account"><apex:Outputfield value="{!itr.Service__r.STKR__Account__c}" id="Account"/></apex:column>       
+          <apex:column headerValue="Product"><apex:Outputfield value="{!itr.Service__r.STKR__Product__c}" id="Product"/></apex:column>
+          <apex:column headerValue="Skill Required"><apex:Outputfield value="{!itr.STKR__Skill_Required__c}" id="Skill"/></apex:column>         
+          <apex:column headerValue="Type"><apex:inputfield value="{!itr.STKR__Visit_Type__c}" id="Type"/></apex:column>
+          <apex:column headerValue="Nearest Resource"><apex:outputLink value="/apex/STKR__ResourceMap?Accid={!itr.STKR__Account_lkp__c}" target="Map">Show On Map</apex:outputLink></apex:column>          
+</apex:pageBlockTable>
+<apex:commandButton value="Save" action="{!save}"/>
+<apex:commandButton value="Cancel" action="{!cancel}"/>
+</apex:pageBlock>
+<apex:iframe id="Map" height="400px" width="100%" src="apex/STKR__ResourceMap"/>
+</apex:form>
+</apex:page>

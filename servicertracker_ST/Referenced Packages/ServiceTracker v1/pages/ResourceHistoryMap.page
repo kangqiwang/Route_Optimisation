@@ -1,0 +1,58 @@
+<apex:page docType="html-5.0" standardController="STKR__Resource__c" extensions="STKR.GeoHistory" sidebar="true" showHeader="true">
+<script type="text/javascript">
+  function Search(id)
+   {
+   var URL = window.location.href;
+   var dt = document.getElementById(id).value;
+   URL = URL.split("&dt",1);
+   URL = URL+"&dt="+dt;
+   location.href = URL;
+   }
+   </script>
+   <apex:form >
+        <apex:pageMessages />
+        
+         <apex:pageBlock id="block" title="Location history for {!STKR__Resource__c.Name}">
+<table width="100%">
+<tr>
+<td width="80%" valign="top">
+  <apex:variable value="{!1}" var="Lat"/>
+  <apex:variable value="{!1}" var="Lon"/>
+  <apex:repeat value="{!llk}" var="m" rows="1">
+        <apex:variable var="Lat" value="{!masterGeo[m].Lat__c}"/>
+        <apex:variable var="Lon" value="{!masterGeo[m].Lon__c}"/>
+    </apex:repeat>
+         <apex:iframe src="https://maps.google.com/maps?q={!Lat},{!Lon}&z=13&output=embed" id="Map" scrolling="true"/>
+</td>
+<td valign="top">
+        <b>Date: </b>&nbsp;&nbsp;<apex:input value="{!d}" type="auto" id="d" onchange="Search('{!$Component.d}');"/>
+
+<br/><br/>
+<b>Locations:</b>
+<apex:outputPanel id="panel">
+                <apex:pageblockTable id="results" value="{!llk}" var="l">
+                    <apex:column >
+                            <apex:facet name="header">Date</apex:facet>
+                            <apex:outputfield value="{!masterGeo[l].Date_Time__c}"/>
+                    </apex:column>
+                  <!--
+                    <apex:column >
+                            <apex:facet name="header">Lat/Long</apex:facet>
+                            <apex:outputtext value="{!masterGeo[l].Lon__c},{!masterGeo[l].Lat__c}"/>
+                    </apex:column>
+                  -->
+                    <apex:column >
+                            <apex:facet name="header">Location</apex:facet>
+                            <a href="https://maps.google.com/maps?q={!masterGeo[l].Lat__c},{!masterGeo[l].Lon__c}&z=13&output=embed" target="Map">View on Map</a>
+                    </apex:column> 
+             
+                 </apex:pageblockTable>
+ </apex:outputPanel>
+ </td>
+ </tr>       
+ </table>
+        </apex:pageBlock>
+
+   </apex:form>           
+
+</apex:page>

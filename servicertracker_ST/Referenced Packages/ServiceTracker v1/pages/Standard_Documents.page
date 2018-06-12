@@ -1,0 +1,5 @@
+<apex:page sidebar="false" lightningStylesheets="true">
+<apex:slds />
+<apex:listViews type="document" />
+
+</apex:page>

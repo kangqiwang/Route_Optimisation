@@ -1,0 +1,100 @@
+<apex:page Controller="STKR.ServiceItems">
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+<apex:includeScript value="{!URLFOR($Resource.STKR__tablesorter, 'jquery.tablesorter.min.js')}"/>
+<script type="text/javascript">
+    $j = jQuery.noConflict();    
+    $j(document).ready(function () {
+    $j("[id$=table]").tablesorter( {sortList: [[3,0]],dateFormat: "uk"} ); 
+    });
+  </script>
+    <script type="text/javascript">
+        function selectAllCheckboxes(obj,receivedInputID){
+            var inputCheckBox = document.getElementsByTagName("input");                  
+            for(var i=0; i<inputCheckBox.length; i++){          
+                if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1){                                     
+                    inputCheckBox[i].checked = obj.checked;
+                }
+            }
+        }
+    </script>
+ 
+<apex:form >  
+
+<apex:pageBlock title="Items to Insert">
+<apex:pageMessage severity="Warning" detail="Please select up to 10 records at a time"></apex:pageMessage>
+            <apex:pageMessages />
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Insert Selected" action="{!processSelected}"/>
+                <apex:commandButton value="Close" action="{!close}" rerender="table"/>
+            </apex:pageBlockButtons>
+            <!-- In our table we are displaying the cItem records -->
+            <apex:pageBlockTable value="{!items}" var="c" id="table">
+            
+                            <apex:column >
+                    <apex:facet name="header">
+                        <apex:inputCheckbox onclick="selectAllCheckboxes(this,'inputId')"/>
+                    </apex:facet>
+                    <apex:inputCheckbox value="{!c.selected}" id="inputId"/>
+                </apex:column>
+                     
+
+                <!-- This is how we access the Item values within our cItem container/wrapper -->
+         <apex:column style="width:10px;text-align:center" headerValue="Order" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="Order "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+            <apex:outputtext value="{!c.itm.STKR__Order__c}"/>
+          </apex:column>  
+         <apex:column headerValue="Master Type" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="Master Type "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+            <apex:outputtext value="{!c.itm.STKR__Type__c}"/>
+          </apex:column>    
+         <apex:column headerValue="Type" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="Item Type "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+            <apex:outputtext value="{!c.itm.STKR__Item_Type__c}"/>
+          </apex:column>              
+                <apex:column value="{!c.itm.STKR__Reference__c}"/>
+         <apex:column headerValue="Location" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="Location "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+            <apex:outputtext value="{!c.itm.STKR__Location__c}"/>
+          </apex:column>
+                <apex:column value="{!c.itm.STKR__Inspection_Interval__c}"/>
+                <apex:column value="{!c.itm.STKR__Inspection_Frequency__c}"/>
+         <apex:column headerValue="Date">
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="Next Inspection Date "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+            <apex:outputfield value="{!c.itm.STKR__Next_Inspection_Date__c}"/>
+          </apex:column>    
+                <apex:column value="{!c.itm.STKR__Status__c}"/>
+                <apex:column value="{!c.itm.STKR__Current_State__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

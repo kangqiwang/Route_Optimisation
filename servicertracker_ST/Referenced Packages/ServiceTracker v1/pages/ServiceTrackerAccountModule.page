@@ -1,0 +1,796 @@
+<apex:page standardController="Account" extensions="STKR.ClientAlerts" showHeader="false" tabStyle="Account">
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+<apex:includeScript value="{!URLFOR($Resource.STKR__tablesorter, 'jquery.tablesorter.min.js')}"/>
+  
+<script type="text/javascript">
+    $j = jQuery.noConflict();    
+    $j(document).ready(function () {
+    $j("[id$=servicecontracts]").tablesorter( {sortList: [[5,0]],dateFormat: "uk"} );     
+    $j("[id$=servicecontractsJ]").tablesorter( {sortList: [[5,0]],dateFormat: "uk"} );     
+    $j("[id$=schedules]").tablesorter( {sortList: [[4,0]],dateFormat: "uk"} );     
+    $j("[id$=visits]").tablesorter( {sortList: [[6,0]],dateFormat: "uk"} ); 
+    $j("[id$=visith]").tablesorter( {sortList: [[6,1]],dateFormat: "uk"} ); 
+    $j("[id$=Actions]").tablesorter( {sortList: [[4,0]],dateFormat: "uk"} ); 
+    $j("[id$=CActions]").tablesorter( {sortList: [[4,1]],dateFormat: "uk"} ); 
+
+    });
+  </script>
+
+<script>
+function colorPageBlock(pageblock,color) {
+if (pageblock != null) pageblock.firstChild.style.cssText = "background-color: "+ color + ";";
+}
+
+function exportServiceReports(){
+var accountId = '{!Account.Id}'; 
+var status = sforce.apex.execute("clientAttachments","chkAtt",{accId:accountId}); 
+
+if(status == 'false'){ 
+alert('No Attachments for this Client!'); 
+} 
+else{ 
+window.location.href='/apex/clientAttachmentPage?recID='+"{!Account.Id}"+'&AccName='+"{!Account.Name}"+'&serviceId='+""; 
+}
+}
+
+</script>
+<script>
+    jQuery(document).ready(function() {
+        jQuery('.openInPopup a').click(function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            window.open(jQuery(this).attr('href'), '_top');
+       });
+    });    
+</script>
+
+<script>
+ function boolFunction(variable)
+    {
+    var bool = variable.value;      
+switch (bool)
+{
+  case 'Contracts': document.getElementById('Jobs').style.display = 'none';
+                    document.getElementById('Contracts').style.display = 'block';
+                    document.getElementById('Inactive').style.display = 'none';
+                                        
+            break;
+  case 'Jobs':      document.getElementById('Jobs').style.display = 'block';
+                    document.getElementById('Contracts').style.display = 'none';
+                    document.getElementById('Inactive').style.display = 'none';
+            break;
+
+  case 'Inactive':  document.getElementById('Jobs').style.display = 'none';
+                    document.getElementById('Contracts').style.display = 'none';
+                    document.getElementById('Inactive').style.display = 'block';                    
+            break;  
+            
+  case 'ActiveS':   document.getElementById('ASched').style.display = 'block'; 
+                    document.getElementById('ISched').style.display = 'none';
+                    
+            break;                     
+  case 'InactiveS': document.getElementById('ASched').style.display = 'none'; 
+                    document.getElementById('ISched').style.display = 'block';
+                    
+            break;           
+  case 'ActiveV':   document.getElementById('AVis').style.display = 'block'; 
+                    document.getElementById('IVis').style.display = 'none';
+                    
+            break;
+  case 'InactiveV': document.getElementById('AVis').style.display = 'none'; 
+                    document.getElementById('IVis').style.display = 'block';
+                    
+            break;                          
+  case 'ActiveA':   document.getElementById('OActions').style.display = 'block'; 
+                    document.getElementById('CActions').style.display = 'none';
+                    
+            break;
+  case 'InactiveA': document.getElementById('OActions').style.display = 'none'; 
+                    document.getElementById('CActions').style.display = 'block';
+                    
+            break;                          
+
+  default:  alert(bool); 
+}
+}
+                
+</script>
+   <style>
+   .activeTab {background-color:#015A83; font-weight:600; color:white; background-image:none;font-size:14px;border: none;}
+   .inactiveTab {background-color:#0A7CB2; font-weight:600; color:white; background-image:none;font-size:14px;border: none;}
+   .rich-tabhdr-side-border { background-image:none;border: none; }
+   .rich-tabhdr-side-cell { background-image:none;border: none; }
+   .rich-tabhdr-cell-active {background-image:none;background-color:#015A83;border: none; }
+   .rich-tabhdr-cell-inactive {background-image:none;background-color:#0A7CB2;border: none; }
+   .rich-tabpanel {background-image:none;background-color:#0A7CB2;}
+   .panel { background-color:#F5FAFF; font-family:"vag-round", sans-serif; font-size:12px;}
+   .link{ text-decoration: underline; cursor:pointer; }
+
+   </style>
+ <style>    
+        #map {
+            font-family: Arial;
+            font-size:12px;
+            line-height:normal !important;
+            height:600px;        
+            padding: 20px;
+        }       
+        .roundCornerCss{ 
+            /* outer shadows  (note the rgba is red, green, blue, alpha) */
+            -webkit-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.4); 
+            -moz-box-shadow: 0px 1px 6px rgba(23, 69, 88, .5);
+            
+            /* rounded corners */
+            -webkit-border-radius: 12px;
+            -moz-border-radius: 7px; 
+            border-radius: 7px;
+            
+            /* gradients */
+            background: -webkit-gradient(linear, left top, left bottom, 
+            color-stop(0%, white), color-stop(15%, white), color-stop(100%, #D7E9F5)); 
+            background: -moz-linear-gradient(top, white 0%, white 55%, #D5E4F3 130%); 
+        }   
+    </style>
+<style>
+
+.loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 70%;
+    z-index: 9999;
+    background: url('/img/loading32.gif') 50% 50% no-repeat rgb(249,249,249);
+}
+</style>
+<body>
+<base target="_top">  
+<apex:form >
+<div align="center">
+<!--
+<apex:commandButton value="New Contract/Job" onclick="window.open('/apex/NewContract?Account={!Account.Id}')"/>
+<apex:commandButton value="New Action" onclick="window.open('{!URLFOR($Action.Actions__c.New, $ObjectType.Actions__c)}')"/>
+<apex:commandButton value="New Alert" onclick="window.open('/apex/SiteAlert?Account={!Account.Id}&Parent={!Account.ParentId}')"/>
+<apex:commandButton value="Open Record in Calendar" onclick="window.open('/apex/Calendar?Acc={!Account.Name}')"/>
+<apex:commandButton value="View on Map" onclick="window.open('/apex/ResourceMap?Accid={!Account.Id}')"/>
+<apex:commandButton value="Test"  onclick="window.open('/apex/ResourceMap?Accid={!Account.Id}',target='_top')"/>
+<apex:commandButton value="Export Service Reports" onclick="exportServiceReports()"/>
+-->
+
+<apex:outputlink value="/apex/NewContract?Account={!Account.Id}"><button type="button">New Contract / Job</button></apex:outputlink>
+<apex:outputLink value="{!URLFOR($Action.Actions__c.New, $ObjectType.Actions__c)}"><button type="button">New Action</button></apex:outputLink> 
+<apex:outputLink value="/apex/multiple_actions?Account={!Account.Id}"><button type="button">Add Multiple Actions</button></apex:outputLink> 
+<apex:outputlink value="/apex/SiteAlert?Account={!Account.Id}&Parent={!Account.ParentId}"><button type="button">New Alert</button></apex:outputlink>
+<apex:outputlink value="/apex/UploadAttachment?Id={!Account.Id}"><button type="button">New Client Attachment</button></apex:outputlink>
+<apex:outputlink value="/apex/Calendar?Acc={!Account.Name}"><button type="button">View in Calendar</button></apex:outputlink>
+<apex:outputlink value="/apex/ResourceMap?Accid={!Account.Id}"><button type="button">View on Map</button></apex:outputlink> 
+<apex:outputlink value="/apex/STKR__clientAttachmentPage?recID={!Account.Id}&AccName={!Account.Name}&serviceId="><button type="button">Export Service Reports</button></apex:outputlink> 
+
+<br/>
+<hr/>
+</div>
+<apex:tabPanel switchType="client" selectedTab="tabdetails" id="ServiceTrackerTabPanel" tabClass="activeTab" inactiveTabClass="inactiveTab" contentClass="panel" style="overflow:auto">
+<apex:tab label="{!$ObjectType.STKR__Service_Contract__c.labelPlural}" name="Active_Contracts" id="tabCont" rendered="{!IF(AND(OR(conlst.size > 0,jconlst.size > 0,iclst.size > 0), $ObjectType.STKR__Service_Contract__c.fields.Name.Accessible),TRUE, FALSE)}" >
+
+<apex:pageBlock id="pgBlock">  
+        <apex:pageBlockSection columns="1" id="pgBlockSection" collapsible="false">
+            <apex:pageBlockSectionItem id="pgBlockSectionitem">
+                <apex:selectRadio id="idRadio1" onclick="boolFunction(this);" rendered="{!IF(OR(conlst.size > 0,jconlst.size > 0,iclst.size > 0),TRUE, FALSE)}" >
+                    <apex:selectOption itemValue="Contracts" itemLabel="Active Contracts" rendered="{!IF(conlst.size > 0, TRUE, FALSE)}"/>
+                    <apex:selectOption itemValue="Jobs" itemLabel="Active Jobs" rendered="{!IF(jconlst.size > 0, TRUE, FALSE)}"/>
+                    <apex:selectOption itemValue="Inactive" itemLabel="Show All Inactive" rendered="{!IF(iclst.size > 0, TRUE, FALSE)}"/>
+                </apex:selectRadio>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+</apex:pageBlock>
+<span id="Contracts" style = "{!IF(conlst.size > 0,'','display:none')}"> 
+<div style="overflow:auto; height: 400px;">
+<apex:pageblock id="AContracts" title="Active Contracts" rendered="{!IF(conlst.size > 0,TRUE,FALSE)}">
+        <apex:pageBlockTable value="{!conlst}" id="servicecontracts" var="c" styleClass="tablesorter" headerClass="header">
+        <apex:column style="vertical-align:top">
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   Action
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!c.id}/e?retURL={!Account.id}">Edit </apex:outputLink> |           
+        <apex:outputLink value="{!URLFOR($Action.Service_Contract__c.Delete, c.id,[retURL=Account.Id],true)}" onclick="return window.confirm('Are you sure you want to delete this record?');"> Del
+        </apex:outputLink> 
+        </apex:column>
+        <apex:column style="vertical-align:top">
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   {!$ObjectType.STKR__Service_Contract__c.Fields.Name.Label}
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!c.id}">{!c.Name}</apex:outputLink>            
+        </apex:column>
+        <apex:column style="vertical-align:top" headerValue="Reference" value="{!c.STKR__Customer_Reference__c}"/> 
+        <apex:column style="vertical-align:top" headerValue="Site and Schedule Notes  (Previewing up to 3 Sites)">
+        <apex:repeat value="{!c.Preventative_Maintenance__r}" var="s" rows="5">
+        <apex:outputLink value="/{!s.Id}">{!s.Name} - {!s.Account__r.STKR__Site_Name_and_Street__c} </apex:outputLink><br/>
+        {!IF(s.STKR__Notes__c = '',null, 'Notes: '+ Left(s.STKR__Notes__c,50) +' ')+If(s.STKR__Items_Covered__c = '','','Coverage: '&s.STKR__Items_Covered__c)}<br/><br/>
+        </apex:repeat>
+        </apex:column>        
+        <apex:column style="vertical-align:top" headerValue="Special Instructions" value="{!c.STKR__Special_Instructions__c}"/>
+        <apex:column style="vertical-align:top" headerValue="Type" value="{!c.STKR__Type__c}"/>
+        <apex:column style="vertical-align:top" headerValue="Value" value="{!c.STKR__Total_Service_Value__c}"/>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="{!$ObjectType.STKR__Service_Contract__c.Fields.STKR__Start_Date__c.Label} "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{0,date, dd/MM/yyyy}">
+           <apex:param value="{!c.STKR__Start_Date__c}"/>
+        </apex:outputText>            
+        </apex:column>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="{!$ObjectType.STKR__Service_Contract__c.Fields.STKR__End_Date__c.Label} "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{0,date, dd/MM/yyyy HH:mm}">
+           <apex:param value="{!c.STKR__End_Date__c}"/>
+        </apex:outputText>            
+        </apex:column>        
+          <apex:column style="vertical-align:top" headerValue="Invoiced?" value="{!c.STKR__Invoiced__c}"/>
+   </apex:pageBlockTable>
+ </apex:pageblock>
+ </div>
+ </span>
+<span id="Jobs" style = "{!IF(AND(conlst.size = 0,jconlst.size > 0),'','display:none')}"> 
+<div style="overflow:auto; height: 400px;">
+<apex:pageblock id="AJobs" title="Active Jobs"  rendered="{!IF(jconlst.size > 0,TRUE,FALSE)}">
+        <apex:pageBlockTable value="{!jconlst}" id="servicecontractsJ" var="c" styleClass="tablesorter" headerClass="header">
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   Action
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!c.id}/e?retURL={!Account.id}">Edit </apex:outputLink> |           
+        <apex:outputLink value="{!URLFOR($Action.Service_Contract__c.Delete, c.Id,[retURL=Account.Id],true)}" onclick="return window.confirm('Are you sure you want to delete this record?');"> Del
+        </apex:outputLink> 
+        </apex:column>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   {!$ObjectType.STKR__Service_Contract__c.Fields.Name.Label}
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!c.id}">{!c.Name}</apex:outputLink>            
+        </apex:column>                                
+        <apex:column style="vertical-align:top" headerValue="Reference" value="{!c.STKR__Customer_Reference__c}"/>
+        <apex:column style="vertical-align:top" headerValue="Site and Schedule Notes  (Previewing up to 3 Sites)">
+        <apex:repeat value="{!c.Preventative_Maintenance__r}" var="s" rows="5">
+        <apex:outputLink value="/{!s.Id}">{!s.Name} - {!s.Account__r.STKR__Site_Name_and_Street__c} </apex:outputLink><br/>
+        {!IF(s.STKR__Notes__c = '',null, 'Notes: '+ Left(s.STKR__Notes__c,50) +' ')+If(s.STKR__Items_Covered__c = '','','Coverage: '&s.STKR__Items_Covered__c)}<br/><br/>
+        </apex:repeat>
+        </apex:column>        
+        <apex:column style="vertical-align:top" headerValue="Special Instructions" value="{!c.STKR__Special_Instructions__c}"/>
+        <apex:column style="vertical-align:top" headerValue="Type" value="{!c.STKR__Type__c}"/>
+        <apex:column style="vertical-align:top" headerValue="Value" value="{!c.STKR__Total_Service_Value__c}"/>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="{!$ObjectType.STKR__Service_Contract__c.Fields.STKR__Start_Date__c.Label} "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{0,date, dd/MM/yyyy}">
+           <apex:param value="{!c.STKR__Start_Date__c}"/>
+        </apex:outputText>            
+        </apex:column>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="{!$ObjectType.STKR__Service_Contract__c.Fields.STKR__End_Date__c.Label} "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{0,date, dd/MM/yyyy}">
+           <apex:param value="{!c.STKR__End_Date__c}"/>
+        </apex:outputText>            
+        </apex:column>        
+          <apex:column style="vertical-align:top" headerValue="Invoiced?" value="{!c.STKR__Invoiced__c}"/>
+   </apex:pageBlockTable>
+ </apex:pageblock>
+ </div>
+ </span>
+
+ <span id="Inactive" style = "{!IF(AND(conlst.size = 0,jconlst.size = 0, iclst.size > 0),'','display:none')}">  
+<div style="overflow:auto; height: 400px;">
+<apex:pageblock id="Inactive" title="Inactive / Completed {!$ObjectType.STKR__Service_Contract__c.labelPlural}" rendered="{!IF(iclst.size > 0,TRUE,FALSE)}">
+        <apex:pageBlockTable value="{!iclst}" id="servicecontracts" var="c" styleClass="tablesorter" headerClass="header">
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   Action
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!c.id}/e?retURL={!Account.id}">Edit </apex:outputLink> |           
+        <apex:outputLink value="{!URLFOR($Action.Service_Contract__c.Delete, c.id,[retURL=Account.Id],true)}" onclick="return window.confirm('Are you sure you want to delete this record?');"> Del
+        </apex:outputLink> 
+        </apex:column>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   {!$ObjectType.STKR__Service_Contract__c.Fields.Name.Label}
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!c.id}">{!c.Name}</apex:outputLink>            
+        </apex:column>
+        <apex:column style="vertical-align:top" headerValue="Reference" value="{!c.STKR__Customer_Reference__c}"/>
+        <apex:column style="vertical-align:top" headerValue="Site and Schedule Notes  (Previewing up to 3 Sites)">
+        <apex:repeat value="{!c.Preventative_Maintenance__r}" var="s" rows="5">
+        <apex:outputLink value="/{!s.Id}">{!s.Name} - {!s.Account__r.STKR__Site_Name_and_Street__c} </apex:outputLink><br/>
+        {!IF(s.STKR__Notes__c = '',null, 'Notes: '+ Left(s.STKR__Notes__c,50) +' ')+If(s.STKR__Items_Covered__c = '','','Coverage: '&s.STKR__Items_Covered__c)}<br/><br/>
+        </apex:repeat>
+        </apex:column>
+        <apex:column style="vertical-align:top" headerValue="Special Instructions" value="{!c.STKR__Special_Instructions__c}"/>
+        <apex:column style="vertical-align:top" headerValue="Type" value="{!c.STKR__Type__c}"/>
+        <apex:column style="vertical-align:top" headerValue="Value" value="{!c.STKR__Total_Service_Value__c}"/>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="{!$ObjectType.STKR__Service_Contract__c.Fields.STKR__Start_Date__c.Label} "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{0,date, dd/MM/yyyy}">
+           <apex:param value="{!c.STKR__Start_Date__c}"/>
+        </apex:outputText>            
+        </apex:column>
+        <apex:column style="vertical-align:top">
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="{!$ObjectType.STKR__Service_Contract__c.Fields.STKR__End_Date__c.Label} "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{0,date, dd/MM/yyyy}">
+           <apex:param value="{!c.STKR__End_Date__c}"/>
+        </apex:outputText>            
+        </apex:column>        
+          <apex:column style="vertical-align:top" headerValue="Invoiced?" value="{!c.STKR__Invoiced__c}"/>
+   </apex:pageBlockTable>
+ </apex:pageblock>
+</div>
+ </span>
+</apex:tab>
+
+<!-- SCHEDULES -->
+
+<apex:tab label="{!$ObjectType.STKR__Service__c.labelPlural}" name="Active_Schedules" id="tabSched" rendered="{!IF(AND(OR(islst.size > 0,slst.size > 0), $ObjectType.STKR__Service__c.fields.Name.Accessible),TRUE, FALSE)}">
+<apex:pageBlock id="pgBlock2">   
+        <apex:pageBlockSection columns="1" id="pgBlockSection2" collapsible="false">
+            <apex:pageBlockSectionItem id="pgBlockSectionitem2">
+                <apex:selectRadio id="idRadio2" onclick="boolFunction(this);" rendered="{!IF(OR(islst.size > 0,slst.size > 0),TRUE, FALSE)}">
+                    <apex:selectOption itemValue="ActiveS" itemLabel="All Active" rendered="{!IF(slst.size > 0,TRUE, FALSE)}"/>
+                    <apex:selectOption itemValue="InactiveS" itemLabel="All Inactive" rendered="{!IF(islst.size > 0,TRUE, FALSE)}"/>
+                </apex:selectRadio>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+</apex:pageBlock>
+<span id="ASched" style = "{!IF(slst.size > 0,'','display:none')}">
+<div style="overflow:auto; height: 400px;">
+<apex:pageblock id="ActiveSchedules" title="Active {!$ObjectType.STKR__Service__c.labelPlural}"  rendered="{!IF(slst.size > 0,TRUE,FALSE)}">
+        <apex:pageBlockTable value="{!slst}" id="schedules" var="s" styleClass="tablesorter" headerClass="header">
+        <apex:column style="vertical-align:top">
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   Action
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!s.id}/e?retURL={!Account.id}">Edit </apex:outputLink> |           
+        <apex:outputLink value="{!URLFOR($Action.Service__c.Delete, s.id,[retURL=Account.Id],true)}" onclick="return window.confirm('Are you sure you want to delete this record?');"> Del
+        </apex:outputLink> 
+        </apex:column>
+        <apex:column style="vertical-align:top">
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   Number
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!s.id}">{!s.Name}</apex:outputLink>            
+        </apex:column>
+        <apex:column style="vertical-align:top" headerValue="Contract" value="{!s.STKR__Service_Contract__c}"/>        
+        <apex:column style="vertical-align:top" headerValue="Type" value="{!s.STKR__Service_Type__c}"/>
+         <apex:column style="vertical-align:top">
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="{!$ObjectType.STKR__Service__c.Fields.STKR__Start_Date__c.Label} "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{0,date, dd/MM/yyyy HH:mm}">
+           <apex:param value="{!s.STKR__Start_Date__c}"/>
+        </apex:outputText>            
+        </apex:column>
+       <apex:column style="vertical-align:top" headerValue="Notes" value="{!s.STKR__Notes__c}"/>
+       <apex:column style="vertical-align:top" headerValue="{!$ObjectType.STKR__Service__c.Fields.STKR__Items_Covered__c.Label}" value="{!s.STKR__Items_Covered__c}"/>
+        <apex:column style="vertical-align:top" headerValue="Number of Visits" value="{!s.STKR__Number_of_Visit_Per_Year__c}"/>        
+        <apex:column style="vertical-align:top" headervalue="Frequency"> <apex:outputfield value="{!s.STKR__Service_Interval__c}"/> {!s.STKR__Service_Frequency__c}</apex:column>        
+        <apex:column style="vertical-align:top" headerValue="Owner" value="{!s.Service_Owner__r.Name}"/>
+          <apex:column style="vertical-align:top" headerValue="Last Visit" value="{!s.STKR__Last_Visit__c}"/>        
+          <apex:column style="vertical-align:top" headerValue="Value" value="{!s.STKR__Service_Value_PA__c}"/>
+          <apex:column style="vertical-align:top" headerValue="Invoiced?" value="{!s.STKR__Invoiced__c}"/>          
+   </apex:pageBlockTable>
+ </apex:pageblock>
+ </div>
+</span>
+<span id="ISched" style = "{!IF(AND(slst.size = 0,islst.size > 0),'','display:none')}"> 
+<div style="overflow:auto; height: 400px;">
+<apex:pageblock id="InactiveSchedules" title="Inactive / Completed {!$ObjectType.STKR__Service__c.labelPlural}" rendered="{!IF(islst.size > 0,TRUE,FALSE)}" >
+        <apex:pageBlockTable value="{!islst}" id="schedules" var="s" styleClass="tablesorter" headerClass="header">
+        <apex:column style="{!IF(NOT(s.STKR__Status__c != 'Active'), 'display:none', '')};vertical-align:top">
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   Action
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!s.id}/e?retURL={!Account.id}">Edit </apex:outputLink> |           
+        <apex:outputLink value="{!URLFOR($Action.Service__c.Delete, s.id,[retURL=Account.Id],true)}" onclick="return window.confirm('Are you sure you want to delete this record?');"> Del
+        </apex:outputLink> 
+        </apex:column>
+        <apex:column style="vertical-align:top">
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   Number
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!s.id}">{!s.Name}</apex:outputLink>            
+        </apex:column>
+        <apex:column style="vertical-align:top" headerValue="Contract" value="{!s.STKR__Service_Contract__c}"/>        
+        <apex:column style="vertical-align:top" headerValue="Type" value="{!s.STKR__Service_Type__c}"/>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="{!$ObjectType.STKR__Service__c.Fields.STKR__Start_Date__c.Label} "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{0,date, dd/MM/yyyy HH:mm}">
+           <apex:param value="{!s.STKR__Start_Date__c}"/>
+        </apex:outputText>            
+        </apex:column>
+        <apex:column style="vertical-align:top" headerValue="Notes" value="{!s.STKR__Notes__c}"/>
+        <apex:column style="vertical-align:top" headerValue="{!$ObjectType.STKR__Service__c.Fields.STKR__Items_Covered__c.Label}" value="{!s.STKR__Items_Covered__c}"/>
+        <apex:column style="vertical-align:top" headerValue="Number of Visits" value="{!s.STKR__Number_of_Visit_Per_Year__c}"/>        
+        <apex:column style="vertical-align:top" headervalue="Frequency"> <apex:outputfield value="{!s.STKR__Service_Interval__c}"/> {!s.STKR__Service_Frequency__c}</apex:column>        
+        <apex:column style="vertical-align:top" headerValue="Owner" value="{!s.Service_Owner__r.Name}"/>
+          <apex:column style="vertical-align:top" headerValue="Last Visit" value="{!s.STKR__Last_Visit__c}"/>        
+          <apex:column style="vertical-align:top" headerValue="Value" value="{!s.STKR__Service_Value_PA__c}"/>
+          <apex:column style="vertical-align:top" headerValue="Invoiced?" value="{!s.STKR__Invoiced__c}"/>          
+   </apex:pageBlockTable>
+ </apex:pageblock>
+</div>
+ </span>
+</apex:tab>
+
+<!-- VISITS -->
+
+<apex:tab label="{!$ObjectType.STKR__Visit__c.labelPlural}" name="Next_Visit" id="tabVst" rendered="{!IF(AND(OR(vlst.size > 0,vhlst.size > 0), $ObjectType.STKR__Visit__c.fields.Name.Accessible),TRUE, FALSE)}">
+<apex:pageBlock id="pgBlock3">   
+        <apex:pageBlockSection columns="1" id="pgBlockSection3" collapsible="false">
+            <apex:pageBlockSectionItem id="pgBlockSectionitem3">
+                <apex:selectRadio id="idRadio3" onclick="boolFunction(this);" rendered="{!IF(OR(vlst.size > 0,vhlst.size > 0),TRUE, FALSE)}">
+                    <apex:selectOption itemValue="ActiveV" itemLabel="Open / In Progress" rendered="{!IF(vlst.size > 0,TRUE, FALSE)}"/>
+                    <apex:selectOption itemValue="InactiveV" itemLabel="Complete" rendered="{!IF(vhlst.size > 0,TRUE, FALSE)}"/>
+                </apex:selectRadio>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+</apex:pageBlock>
+<span id="AVis">
+<div style="overflow:auto; height: 400px;{!IF(vlst.size > 0,'','display:none')}">
+<apex:pageblock id="OpenVisits" title="Open {!$ObjectType.STKR__Visit__c.labelPlural}" rendered="{!IF(vlst.size > 0,TRUE,FALSE)}">
+        <apex:pageBlockTable value="{!vlst}" id="visits" var="o" styleClass="tablesorter" headerClass="header">
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   Action
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!o.id}/e?retURL={!Account.id}">Edit </apex:outputLink> |           
+        <apex:outputLink value="{!URLFOR($Action.Visit__c.Delete, o.id,[retURL=Account.Id],true)}" onclick="return window.confirm('Are you sure you want to delete this record?');"> Del
+        </apex:outputLink> 
+        </apex:column>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   {!$ObjectType.STKR__Visit__c.Fields.Name.Label}
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!o.id}">{!o.Name}</apex:outputLink>            
+        </apex:column>
+        <apex:column style="vertical-align:top" value="{!o.STKR__Visit_Type__c}"/>
+        <apex:column style="vertical-align:top" value="{!o.STKR__Product__c}"/>    
+        <apex:column style="vertical-align:top;width:20px;" value="{!o.STKR__Notes__c}"/>         
+        <apex:column style="vertical-align:top" value="{!o.STKR__Resource__c}"/>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="{!$ObjectType.STKR__Visit__c.Fields.STKR__Due_Date__c.Label} "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{0,date, dd/MM/yyyy HH:mm}">
+           <apex:param value="{!o.STKR__Due_Date__c}"/>
+        </apex:outputText>            
+        </apex:column>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="Day "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{0,date, EE}">
+           <apex:param value="{!o.STKR__Due_Date__c}"/>
+        </apex:outputText>            
+        </apex:column>        
+        <apex:column style="vertical-align:top" value="{!o.STKR__Items_to_inspect__c}"/>     
+        <apex:column style="vertical-align:top" value="{!o.STKR__Status__c}"/>  
+        <apex:column style="vertical-align:top" value="{!o.STKR__Current_State__c}"/>               
+   </apex:pageBlockTable>
+ </apex:pageblock>
+</div>
+</span>
+<span id="IVis" style = "{!IF(AND(vlst.size = 0,vhlst.size > 0),'','display:none')}">
+<div style="overflow:auto; height: 400px;">
+<apex:pageblock id="VisitHistory" title="Completed {!$ObjectType.STKR__Visit__c.labelPlural}" rendered="{!IF(vhlst.size > 0,TRUE,FALSE)}">
+        <apex:pageBlockTable value="{!vhlst}" id="visith" var="o" styleClass="tablesorter" headerClass="header" rows="365">
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   Action
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!o.id}/e?retURL={!Account.Id}">Edit</apex:outputLink>           
+        </apex:column>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   {!$ObjectType.STKR__Visit__c.Fields.Name.Label}
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!o.id}">{!o.Name}</apex:outputLink>            
+        </apex:column>
+        <apex:column style="vertical-align:top" value="{!o.STKR__Visit_Type__c}"/>
+        <apex:column style="vertical-align:top" value="{!o.STKR__Product__c}"/>    
+        <apex:column style="vertical-align:top" value="{!o.STKR__Notes__c}"/>         
+        <apex:column style="vertical-align:top" value="{!o.STKR__Resource__c}"/>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="{!$ObjectType.STKR__Visit__c.Fields.STKR__Completion_Time__c.Label} "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{0,date, dd/MM/yyyy HH:mm}">
+           <apex:param value="{!o.STKR__Completion_Time__c}"/>
+        </apex:outputText>            
+        </apex:column>      
+        <apex:column style="vertical-align:top" value="{!o.STKR__Items_Inspected__c}"/>      
+        <apex:column style="vertical-align:top" value="{!o.STKR__Time_On_Site__c}"/>
+        <apex:column style="vertical-align:top" value="{!o.STKR__Current_State__c}"/>     
+        <apex:column style="vertical-align:top" value="{!o.STKR__Aborted_Visit__c}"/>     
+        
+        <apex:column style="vertical-align:top" value="{!o.STKR__View_Report__c}"/>    
+   </apex:pageBlockTable>
+ </apex:pageblock>
+ </div>
+ </span>
+</apex:tab>
+
+<!-- ACTIONS -->
+<apex:tab label="{!$ObjectType.STKR__Actions__c.labelPlural}" name="Actions" id="tabAction" rendered="{!$ObjectType.STKR__Actions__c.fields.Name.Accessible}">
+<apex:pageBlock id="pgBlock4">   
+        <apex:pageBlockSection columns="1" id="pgBlockSection4" collapsible="false">
+            <apex:pageBlockSectionItem id="pgBlockSectionitem4">
+                <apex:selectRadio id="idRadio4" onclick="boolFunction(this);" >
+                    <apex:selectOption itemValue="ActiveA" itemLabel="Open / In Progress" />
+                    <apex:selectOption itemValue="InactiveA" itemLabel="Complete" />
+                </apex:selectRadio>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+</apex:pageBlock>
+<span id="OActions">
+<div style="overflow:auto; height: 400px;">
+<apex:pageblock id="OpenActions" title="Open {!$ObjectType.STKR__Actions__c.labelPlural}">
+        <apex:pageBlockTable value="{!alst}" id="Actions" var="a" styleClass="tablesorter" headerClass="header">
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   Action
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!a.id}/e?retURL={!Account.id}">Edit </apex:outputLink> |           
+        <apex:outputLink value="{!URLFOR($Action.Visit__c.Delete, a.id,[retURL=Account.Id],true)}" onclick="return window.confirm('Are you sure you want to delete this record?');"> Del
+        </apex:outputLink> 
+        </apex:column>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   {!$ObjectType.STKR__Actions__c.Fields.Name.Label}
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!a.id}">{!a.Name}</apex:outputLink>            
+        </apex:column>
+        <apex:column style="vertical-align:top;width:20px;" value="{!a.STKR__Action__c}"/>         
+        <apex:column style="vertical-align:top" value="{!a.STKR__Assigned_To__c}"/>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="Date"/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{0,date, dd/MM/yyyy}">
+           <apex:param value="{!a.STKR__Date_for_Completion__c}"/>
+        </apex:outputText>            
+        </apex:column>
+        <apex:column style="vertical-align:top" value="{!a.STKR__Item_Detail__c}"/>     
+        <apex:column style="vertical-align:top" value="{!a.STKR__Client_Action__c}"/>               
+        <apex:column style="vertical-align:top" value="{!a.STKR__Rating__c}"/>               
+   </apex:pageBlockTable>
+ </apex:pageblock>
+</div>
+</span>
+<span id="CActions" style="display:none">
+<div style="overflow:auto; height: 400px;">
+<apex:pageblock id="CompletedActions" title="Completed {!$ObjectType.STKR__Actions__c.labelPlural}">
+        <apex:pageBlockTable value="{!ialst}" id="CActions" var="a" styleClass="tablesorter" headerClass="header">
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   Action
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!a.id}/e?retURL={!Account.id}">Edit </apex:outputLink> |           
+        <apex:outputLink value="{!URLFOR($Action.Visit__c.Delete, a.id,[retURL=Account.Id],true)}" onclick="return window.confirm('Are you sure you want to delete this record?');"> Del
+        </apex:outputLink> 
+        </apex:column>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   {!$ObjectType.STKR__Actions__c.Fields.Name.Label}
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!a.id}">{!a.Name}</apex:outputLink>            
+        </apex:column>
+        <apex:column style="vertical-align:top;width:20px;" value="{!a.STKR__Action__c}"/>         
+        <apex:column style="vertical-align:top" value="{!a.STKR__Assigned_To__c}"/>
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="{!$ObjectType.STKR__Actions__c.Fields.STKR__Actual_Completion__c.Label} "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{0,date, dd/MM/yyyy}">
+           <apex:param value="{!a.STKR__Actual_Completion__c}"/>
+        </apex:outputText>            
+        </apex:column>
+        <apex:column style="vertical-align:top" value="{!a.STKR__Item_Detail__c}"/>     
+        <apex:column style="vertical-align:top" value="{!a.STKR__Client_Action__c}"/>               
+        <apex:column style="vertical-align:top" value="{!a.STKR__Rating__c}"/>               
+   </apex:pageBlockTable>
+ </apex:pageblock>
+</div>
+</span>
+</apex:tab>
+
+<!-- ALERTS -->
+
+<apex:tab label="{!$ObjectType.STKR__Alerts__c.labelPlural}" name="Alerts" id="tabAlerts" rendered="{!$ObjectType.STKR__Alerts__c.fields.Name.Accessible}">
+<div style="overflow:auto; height: 400px;">
+<apex:pageblock id="Alerts" title="Alerts related to this {!$ObjectType.Account.label}"  >
+     <apex:pageBlockTable border="1" style="font: normal 12px/150% Arial, Helvetica, sans-serif;" value="{!lst}" var="in" width="100%">
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header"/>
+                   Action
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!in.id}">View </apex:outputLink> |           
+        <apex:outputLink value="/{!in.id}/e?retURL={!Account.id}">Edit </apex:outputLink> |           
+        <apex:outputLink value="{!URLFOR($Action.Alerts__c.Delete, in.id,[retURL=Account.Id],true)}" onclick="return window.confirm('Are you sure you want to delete this record?');"> Del
+        </apex:outputLink> 
+        </apex:column>
+      <apex:column style="vertical-align:top" value="{!in.Name}"/>
+      <apex:column style="vertical-align:top" value="{!in.STKR__Contact__c}"/>      
+      <apex:column style="vertical-align:top" value="{!in.STKR__Email__c}"/>
+      <apex:column style="vertical-align:top" value="{!in.STKR__Alert_Summary__c}"/>
+      <apex:column style="vertical-align:top" headerValue="Related To"  value=" {!if(in.STKR__Account__c != null,in.Account__r.Name,if(in.STKR__Service__c != null,in.Service__r.Name,in.Service_Contract__r.Name))}"/>   
+     </apex:pageBlockTable>
+    </apex:pageblock> 
+</div>
+</apex:tab>
+
+<!-- CLIENT ATTACHMENTS -->
+<apex:tab label="{!$ObjectType.STKR__Client_Attachment__c.labelPlural}" name="Client Attachments" id="tabCA" rendered="{!$ObjectType.STKR__Client_Attachment__c.fields.Name.Accessible}">
+
+<apex:pageBlock id="pgBlockCA">  
+      <apex:outputLabel value="Filter by: " for="type"/>
+
+      <apex:inputField value="{!CAttObj.STKR__Type__c}" id="type"/>
+&nbsp;
+<apex:actionStatus id="go">
+                        <apex:facet name="stop">                 
+                            <apex:commandButton value="Search" status="go" disabled="false" rerender="ClientAttachments" />
+                        </apex:facet>
+                        <apex:facet name="start">
+                           <apex:commandButton status="go" value="Please Wait..." disabled="true" />
+                        </apex:facet>
+                    </apex:actionStatus>
+</apex:pageBlock>
+<apex:outputpanel id="ClientAttachments"> 
+<div style="overflow:auto; height: 400px;{!If(CAttlst.size = 0,'display:none','')}">
+<apex:pageblock id="Client_Attachments" title="Client Attachments"  >
+     <apex:pageBlockTable border="1" style="font: normal 12px/150% Arial, Helvetica, sans-serif;" value="{!CAttlst}" var="CA" width="100%">
+        <apex:column style="vertical-align:top" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">                <apex:outputText styleClass="header"/>
+                   Action
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputLink value="/{!CA.id}">View </apex:outputLink> |           
+        <apex:outputLink value="/{!CA.id}/e?retURL={!Account.id}">Edit </apex:outputLink> |           
+        <apex:outputLink value="{!URLFOR($Action.Client_Attachment__c.Delete, CA.id,[retURL=Account.Id],true)}" onclick="return window.confirm('Are you sure you want to delete this record?');"> Del
+        </apex:outputLink> 
+        </apex:column>
+      <apex:column style="vertical-align:top" value="{!CA.Name}"/>
+      <apex:column style="vertical-align:top" value="{!CA.STKR__Type__c}"/>      
+      <apex:column style="vertical-align:top" value="{!CA.STKR__Description__c}"/>      
+      <apex:column style="vertical-align:top" headerValue="View"><apex:outputLink value="/servlet/servlet.FileDownload?file={!CA.STKR__Attachment__c}">View</apex:outputLink></apex:column>
+     </apex:pageBlockTable>
+    </apex:pageblock> 
+    
+    
+    
+</div>
+<div align="center" style="{!If(CAttlst.size = 0,'','display:none')}"><br/><br/>There are no records matching your filter<br/><br/><br/><br/></div>
+</apex:outputpanel>
+</apex:tab>
+</apex:tabPanel>
+</apex:form>
+</base>
+</body>
+</apex:page>

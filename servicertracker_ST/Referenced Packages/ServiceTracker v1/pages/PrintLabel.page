@@ -1,0 +1,9 @@
+<apex:page standardController="STKR__Service_Item__c" showHeader="false" sidebar="false">
+   <apex:form >
+    <DL>
+     <DD>Item Number: {!STKR__Service_Item__c.Name}</DD>
+     <DD><apex:outputField value="{!STKR__Service_Item__c.STKR__Bar_Code__c}"/></DD>
+     <DD>{!STKR__Service_Item__c.STKR__Item_Type__c}, {!STKR__Service_Item__c.STKR__Location__c}</DD>
+    </DL>
+    </apex:form>
+</apex:page>

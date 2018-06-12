@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>Billing_Reference_Mapped__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Billing Reference Mapped?</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Billing_Reference__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Customer Billing System Reference</inlineHelpText>
+        <label>Billing Reference</label>
+        <length>64</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Client_Photo__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Client Photo</label>
+        <length>32768</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Html</type>
+        <visibleLines>25</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Log_Book__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>HYPERLINK(&apos;apex/LogBook?Id=&apos;+Id, &apos;Open&apos;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Log Book</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Mapping_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Mapping Status</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Located</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Not Located Yet,</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Google Exhausted</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Problem With Address</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Notification_Text__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>This will appear in the notification banner</inlineHelpText>
+        <label>Notification Text</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Open_Actions__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>All open actions for this site</inlineHelpText>
+        <label>Open Actions</label>
+        <summaryFilterItems>
+            <field>Actions__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Open</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Actions__c.Account__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>ParentId__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(LEN(ParentId) &lt; 1,CASESAFEID(Id),CASESAFEID(ParentId))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>ParentId</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Portal_Ref__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>This is the postal reference that will be used with Sharing Rules in the setup menu</inlineHelpText>
+        <label>Portal Ref</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Portal_Sharing_Rules__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>How will related records (Contracts, Schedules and Visits be shared via the portal)</inlineHelpText>
+        <label>Portal Sharing Rules</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Manual Sharing</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Automatic Sharing</fullName>
+                    <default>true</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Postcode_Prefix__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(
+ISBLANK(ShippingPostalCode),
+&apos;No Postcode&apos;,
+LEFT(ShippingPostalCode,FIND(&quot; &quot;,ShippingPostalCode)-1)
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Postcode Prefix</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Price_Book__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Price Book</label>
+        <referenceTo>Pricebook2</referenceTo>
+        <relationshipLabel>Accounts</relationshipLabel>
+        <relationshipName>Accounts</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Responsible_Person__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The responsible person for the site</inlineHelpText>
+        <label>Responsible Person</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Site Responsibility</relationshipLabel>
+        <relationshipName>Site_Responsibility</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Site_Name_and_Street__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Name+&apos; (&apos;+ShippingStreet+&apos;, &apos;+ShippingCity+&apos;, &apos;+ShippingPostalCode+&apos;) &apos;+AccountNumber</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Name and Address</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>StandardCompliance__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Do you want Technicians to complete standard compliance questions on the mobile?</inlineHelpText>
+        <label>Standard Compliance</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Status</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Active</fullName>
+                    <default>true</default>
+                </value>
+                <value>
+                    <fullName>Inactive</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>On Stop</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>On Hold</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Territory__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Service Territory</label>
+        <referenceTo>Service_Territory__c</referenceTo>
+        <relationshipLabel>Accounts</relationshipLabel>
+        <relationshipName>Accounts</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Total_Service_Items__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Total number of Active Service Items</inlineHelpText>
+        <label>Total Service Items</label>
+        <summaryFilterItems>
+            <field>Service_Item__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Active</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Service_Item__c.Account__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>location__c</fullName>
+        <deprecated>false</deprecated>
+        <displayLocationInDecimal>true</displayLocationInDecimal>
+        <externalId>false</externalId>
+        <label>Geolocation</label>
+        <required>false</required>
+        <scale>6</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Location</type>
+    </fields>
+    <fields>
+        <fullName>subcategories__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>subcategories</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <controllingField>Industry</controllingField>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Apple Farms</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Cable</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Corn Fields</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Internet</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Radio</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Television</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Winery</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+            <valueSettings>
+                <controllingFieldValue>Agriculture</controllingFieldValue>
+                <valueName>Apple Farms</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Agriculture</controllingFieldValue>
+                <valueName>Corn Fields</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Agriculture</controllingFieldValue>
+                <valueName>Winery</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Communications</controllingFieldValue>
+                <valueName>Cable</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Communications</controllingFieldValue>
+                <valueName>Internet</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Communications</controllingFieldValue>
+                <valueName>Radio</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Communications</controllingFieldValue>
+                <valueName>Television</valueName>
+            </valueSettings>
+        </valueSet>
+    </fields>
+    <webLinks>
+        <fullName>Clone</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Clone</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/{!Account.Id}/e?clone=1</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Export_Service_Reports</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Export Service Reports</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/34.0/connection.js&quot;)} 
+{!REQUIRESCRIPT(&quot;/soap/ajax/34.0/apex.js&quot;)} 
+var accountId = &apos;{!Account.Id}&apos;; 
+var status = sforce.apex.execute(&quot;clientAttachments&quot;,&quot;chkAtt&quot;,{accId:accountId}); 
+
+if(status == &apos;false&apos;){ 
+alert(&apos;No Attachments for this Client!&apos;); 
+} 
+else{ 
+window.location.href=&apos;/apex/clientAttachmentPage?recID=&apos;+&quot;{!Account.Id}&quot;+&apos;&amp;AccName=&apos;+&quot;{!Account.Name}&quot;+&apos;&amp;serviceId=&apos;+&quot;{!Service__c.Id}&quot;; 
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Nearest_Resource</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>Nearest Resource</masterLabel>
+        <openType>newWindow</openType>
+        <position>fullScreen</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>/apex/ResourceMap?Accid={!Account.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Open_In_Calendar</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>Open In Calendar</masterLabel>
+        <openType>newWindow</openType>
+        <position>fullScreen</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>/apex/STKR__Calendar?Acc={!Account.Name}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Print_Schedule</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Print Schedule</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/24.0/connection.js&quot;)}
+var answer=confirm(&apos;This will print an estimated Visit Schedule based on the intervals and frequencies of Schedules associated with this site\n\nPlease enter a date range to start&apos;);
+if (answer) { // If user Clicks OK
+var Sdate = prompt(&quot;Enter a Start Date?&quot;,&quot;dd/mm/yyyy&quot;);
+if(Sdate.length != 10){
+ alert(&quot;Invalid date&quot;); 
+} else {
+  var Edate = prompt(&quot;Enter an End Date?&quot;,&quot;dd/mm/yyyy&quot;);
+  if(Edate.length != 10){
+  alert(&quot;Invalid date&quot;);  
+ } else {
+   window.open(&quot;/apex/PrintVisitList?id={!Account.Id}&amp;start=&quot;+decodeURIComponent(Sdate)+&quot;&amp;end=&quot;+decodeURIComponent(Edate)+&quot;&quot;);
+}
+}}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Update_Billing_Address_from_Parent</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Update Billing Address from Parent</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/20.0/connection.js&quot;)}; 
+var updateRecords = []; 
+AccountIds = {!GetRecordIds($ObjectType.Account)}; 
+
+if(AccountIds.length &lt; 1) 
+{ alert(&apos;Please select at least one record&apos;) 
+} 
+else{ 
+
+var answer=confirm(&quot;WARNING: This will update the billing address of all selected records. Are you sure?&quot;); 
+if (answer) { 
+
+for (var a=0; a&lt;AccountIds.length; a++) { //for all records 
+
+var update_account = new sforce.SObject(&quot;Account&quot;); 
+update_account.Id = AccountIds[a];
+update_account.BillingStreet = null;
+update_account.BillingCity = null;
+update_account.BillingState = null;
+update_account.BillingPostalCode = null;
+update_account.BillingCountry = null; 
+
+updateRecords.push(update_account); //add the updated record to our array 
+} 
+result = sforce.connection.update(updateRecords); //Insert records back to Salesforce 
+
+document.location.reload(true); //refresh the page 
+} 
+}</url>
+    </webLinks>
+</CustomObject>

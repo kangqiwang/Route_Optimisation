@@ -1,0 +1,260 @@
+<apex:page docType="html-5.0" manifest="/apex/CacheManifest" standardController="Account" sidebar="false" showHeader="false" cache="true" standardStylesheets="false">
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+<apex:includeScript value="{!URLFOR($Resource.STKR__tablesorter, 'jquery.tablesorter.min.js')}"/>
+ <head>
+<script type="text/javascript">
+    $j = jQuery.noConflict();    
+    $j(document).ready(function () {
+    $j("[id$=table]").tablesorter( {sortList: [[1,1]],dateFormat: "uk"} ); 
+    });
+  </script>
+
+<meta http-equiv="x-ua-compatible" content="ie=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+</head>
+   <style>
+   
+@font-face {
+    font-family: "Arial", Helvetica, sans-serif;
+}   
+   
+   .link{ text-decoration:none;cursor:pointer; 
+   text-align:left;
+   font-family: "", Gadget, sans-serif;
+   font-size: 20px;
+   }
+   .tabletext{ text-decoration:none; 
+   text-align:left;
+   font-family: "", Gadget, sans-serif;
+   font-size: 20px;
+   }
+
+.sf1List {
+margin: 0;
+display: list-item;
+padding: 14px;
+border-bottom: solid 1px #cfd4d9;
+list-style: none;
+font-size: 16px;
+-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+color: rgb(60, 61, 62);
+}
+ 
+.sf1List:first-child {
+border-radius:4px 4px 0px 0px;
+}
+ 
+.sf1List:last-child {
+border-radius:0px 0px 4px 4px;
+border-bottom:none;
+}
+ 
+ol {
+background-color:rgb(230, 230, 230);
+list-style: none;
+margin: 0;
+padding: 0;
+margin-top:5px;
+border-radius:4px;
+border:solid 1px #cfd4d9;
+}
+ 
+.sf1List a {
+text-decoration: none;
+color: rgb(60, 61, 62);
+}
+
+.sf1label {
+font-family:"Arial", Helvetica, sans-serif;
+font-size: 42px;
+color: #696e71;
+margin: 0;
+padding-bottom: 8px;
+display: block;
+min-width: 100px;
+}
+
+.Header {
+font-family: "Arial Black", Gadget, sans-serif;
+font-size: 42px;
+text-align:Left;
+color: #00396B;
+margin: 0;
+padding-bottom: 8px;
+display: block;
+min-width: 100px;
+}
+
+.styled-select select {
+   text-decoration:none;
+   cursor:pointer;
+   background: transparent;
+   width: 100%;
+   font-size: 35px;
+   line-height: 10;
+   border: 0;
+   background-color:rgb(230, 230, 230);
+   height: 500px;
+   padding: 14px;
+   border-bottom: solid 1px #cfd4d9;
+   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+   color: #696e71;   
+   margin: 0;
+   padding: 0;
+   margin-top:5px;
+   border-radius:4px;
+   border:solid 1px #cfd4d9;
+   }
+   </style>
+<script language="JavaScript1.2" src="/js/functions.js"></script>
+<script src="/soap/ajax/9.0/connection.js" type="text/javascript"></script>
+<script id="clientEventHandlersJS" language="javascript">
+initPage();
+
+function getID(sel) {
+    var value = sel.value;
+    window.open("/servlet/servlet.FileDownload?file="+value);  
+}
+
+function initPage() {
+var __sfdcSessionId = '{!GETSESSIONID()}';
+var existingSel = document.getElementById('select_0');
+sforce.connection.sessionId = '{!$Api.Session_ID}';
+ 
+try
+    {
+    var qr = sforce.connection.query("Select Id, Name from Document Where Keywords like '%Technician%' order by Name ASC");  
+    var records = qr.getArray("records");
+    }
+catch (error)
+    {
+    }
+
+if (records.length > 0)
+    {
+
+    for (var i=0;i< records.length;i++)
+        {
+         existingSel.options[i] = new Option(records[i].get("Name"), records[i].get("Id"));
+         }
+    }
+    else
+    {
+       // alert("Query to populate picklist failed. No Rows.");
+    }
+// End Init Page with the bracket below.
+}
+</script>
+<table style="background-color:#EEF1F6" width="100%">
+<tr>
+<td>
+<div class="Header">
+  <table border="0" width="100%">
+   <tr><td align="center"><apex:image id="theLogo" value="{!$Resource.STKR__Logo}" width="150" height="130"/></td></tr>
+    <tr><td align="Center"><b>Attachments for <br/>{!Account.Name}</b></td>
+   </tr>
+  </table>     
+</div>
+
+<br/>
+<br/>
+   <div class="sf1label">
+     <b>Visit Reports</b>
+   </div>
+
+<ol>
+
+<apex:pageblock id="VisitHistory">
+<div class="tabletext">
+        <apex:pageBlockTable value="{!Account.Visits__r}" id="table" var="o" styleClass="tablesorter" headerClass="header" width="100%" rows="365">
+      <div class="link">
+        <apex:column style="{!IF(NOT(o.STKR__Status__c = 'Complete'), 'display:none', '')}" headerValue="Action" value="{!o.STKR__View_Report__c}"/>
+      </div>
+        <apex:column headerValue="Number  " style="{!IF(NOT(o.STKR__Status__c = 'Complete'), 'display:none', '')}">     
+                <b>{!o.Name}&nbsp;&nbsp;</b>
+        </apex:column> 
+        <!--
+        <apex:column headerValue="Resource  " style="{!IF(NOT(o.STKR__Status__c = 'Complete'), 'display:none', '')}"><apex:outputText value="{!o.Resource__r.Name}  "/></apex:column>
+        -->
+        <apex:column style="{!IF(NOT(o.STKR__Status__c = 'Complete'), 'display:none', '')}">
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="Date"/>
+                
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+               
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{0,date, dd/MM/yyyy}  ">
+           <apex:param value="{!o.STKR__Completion_Time__c}"/>
+        </apex:outputText>            
+        </apex:column>
+        <apex:column headerValue="Type  " style="{!IF(NOT(o.STKR__Status__c = 'Complete'), 'display:none', '')}" value="{!o.STKR__Visit_Type__c}  "/> 
+        <apex:column headerValue="Inspections" style="{!IF(NOT(o.STKR__Status__c = 'Complete'), 'display:none', '')};text-align:center" value="{!o.STKR__Items_Inspected__c}"/>     
+   </apex:pageBlockTable>
+ </div>  
+ </apex:pageblock>
+
+<!--
+<apex:pageBlock>
+<apex:pageBlockTable value="{!Account.STKR__Visits__r}" var="v">
+<apex:column>
+           <a>
+            <div class="link" width="100%" onclick="window.open('/apex/ServiceReport?id={!v.Id}','_parent')">
+                <b>{!v.Name}</b> - <apex:outputfield value="{!v.Completion_Time__c}"/>
+             </div> 
+            </a>
+</apex:column>            
+
+</apex:pageBlockTable>
+
+
+
+</apex:pageBlock>
+-->
+</ol>
+<br/>
+<br/>
+<br/>
+
+   <div class="sf1label">
+     <b>Site Attachments</b>
+   </div>
+
+<ol>
+      <apex:repeat value="{!Account.STKR__Client_Attachments__r}" var="a">
+         <li class="sf1List">
+           <a>
+            <div class="link" width="100%" onclick="window.open('/servlet/servlet.FileDownload?file={!a.Attachment__c}','_parent')">
+                {!a.Name}
+             </div> 
+            </a>
+         </li>
+         </apex:repeat>
+</ol>
+<br/>
+<br/>
+<br/>
+   <div class="sf1label">
+     <b>Standard Documents</b>
+   </div>
+
+<body onload="initPage();">
+<div class="styled-select">
+  <ol> 
+<select onchange="getID(this)" name="select_0" id="select_0" MULTIPLE="multiple" size="10" style="width: 100%;font-size:42px;border:1">
+
+<option value="">--None--</option>
+
+</select>
+</ol>
+</div>
+</body> 
+
+</td>
+</tr>
+</table>
+<br/>
+<div align="center" Style="font-family:arial;font-size:12px">Copyright&copy; 2015/2016 ServiceTracker&trade; Related Files</div> 
+</apex:page>

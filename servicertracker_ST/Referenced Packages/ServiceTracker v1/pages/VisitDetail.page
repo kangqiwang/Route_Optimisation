@@ -1,0 +1,212 @@
+<apex:page standardController="STKR__Visit__c" showHeader="true" tabStyle="STKR__Visit__c">
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+<apex:includeScript value="{!URLFOR($Resource.STKR__tablesorter, 'jquery.tablesorter.min.js')}"/>
+
+<script type="text/javascript">
+    $j = jQuery.noConflict();    
+    $j(document).ready(function () { 
+    $j("[id$=h]").tablesorter( {sortList: [[0,1]],dateFormat: "uk"} ); 
+    
+    });
+  </script>
+
+<script>
+function colorPageBlock(pageblock,color) {
+if (pageblock != null) pageblock.firstChild.style.cssText = "background-color: "+ color + ";";
+}
+</script>
+   <style>
+   .activeTab {background-color:#015A83; font-weight:600; color:white; background-image:none;font-size:14px;border: none;}
+   .inactiveTab {background-color:#0A7CB2; font-weight:600; color:white; background-image:none;font-size:14px;border: none;}
+   .rich-tabhdr-side-border { background-image:none;border: none; }
+   .rich-tabhdr-side-cell { background-image:none;border: none; }
+   .rich-tabhdr-cell-active {background-image:none;background-color:#015A83;border: none; }
+   .rich-tabhdr-cell-inactive {background-image:none;background-color:#0A7CB2;border: none; }
+   .rich-tabpanel {background-image:none;background-color:#0A7CB2;}
+   .panel { background-color:#F5FAFF; font-family:"vag-round", sans-serif; font-size:12px;}
+   </style>
+   <p style="{!IF(OR(STKR__Visit__c.Service__r.Service_Contract__r.Account__r.STKR__Status__c = 'Inactive',STKR__Visit__c.Service__r.Service_Contract__r.Account__r.STKR__Status__c = 'On Stop',STKR__Visit__c.Service__r.Service_Contract__r.Account__r.STKR__Status__c = 'On Hold'), '', 'display:none')};background-color:red;color:white;text-align:center;font-size:16px">
+    <br/>
+     This Client is {!STKR__Visit__c.Service__r.Service_Contract__r.Account__r.STKR__Status__c}
+    <br/>
+    <br/> 
+   </p>   
+   
+  
+    <p style="{!IF(OR(STKR__Visit__c.STKR__Service__r.STKR__Status__c = 'Inactive',STKR__Visit__c.STKR__Service__r.STKR__Service_Contract__r.STKR__Status__c = 'Inactive'), '', 'display:none')};background-color:red;color:white;text-align:center;font-size:16px">
+    <br/>
+     The associated Schedule or Contract is Inactive.
+    <br/>
+    <br/> 
+   </p>
+   <p style="{!IF(AND(STKR__Visit__c.STKR__Status__c = 'Open',STKR__Visit__c.STKR__Aborted_Visit__c = FALSE), '', 'display:none')};background-color:#015A83;color:white;text-align:center;font-size:16px">
+    <br/>
+     Visit Open
+    <br/>
+    <br/> 
+   </p>
+
+   <p style="{!IF(AND(STKR__Visit__c.STKR__Status__c = 'Accepted',STKR__Visit__c.STKR__Aborted_Visit__c = FALSE), '', 'display:none')};background-color:#0A7CB2;color:white;text-align:center;font-size:16px">
+    <br/>
+     Visit Accepted
+    <br/>
+    <br/> 
+   </p>
+   <p style="{!IF(AND(STKR__Visit__c.STKR__Status__c = 'Journey Started',STKR__Visit__c.STKR__Aborted_Visit__c = FALSE), '', 'display:none')};background-color:grey;color:white;text-align:center;font-size:16px">
+    <br/>
+     Journey Started
+    <br/>
+    <br/> 
+   </p>   
+   <p style="{!IF(AND(OR(STKR__Visit__c.STKR__Status__c = 'In Progress',STKR__Visit__c.STKR__Status__c = 'Arrived'),STKR__Visit__c.STKR__Aborted_Visit__c = FALSE), '', 'display:none')};background-color:orange;color:white;text-align:center;font-size:16px">
+    <br/>
+     Visit In Progress
+    <br/>
+    <br/> 
+   </p>
+   <p style="{!IF(AND(STKR__Visit__c.STKR__Status__c = 'Complete',STKR__Visit__c.STKR__Aborted_Visit__c = FALSE), '', 'display:none')};background-color:green;color:white;text-align:center;font-size:16px">
+    <br/>
+     Visit Complete
+    <br/>
+    <br/> 
+   </p>
+   <p style="{!IF(STKR__Visit__c.STKR__Aborted_Visit__c = TRUE, '', 'display:none')};background-color:red;color:white;text-align:center;font-size:16px">
+    <br/>
+     Aborted Visit
+    <br/>
+    <br/> 
+   </p>
+
+  
+<apex:tabPanel switchType="client" selectedTab="tabdetails" id="VisitTabPanel" tabClass="activeTab" inactiveTabClass="inactiveTab" contentClass="panel">
+<apex:tab label="Details" name="VisitDetails" id="tabdetails">
+<apex:detail inlineEdit="True" relatedList="false" title="true" oncomplete="window.location.reload();"/>
+</apex:tab>
+<apex:tab label="Results" name="Results" id="tabRes">
+            <apex:form >
+        <apex:pageBlock id="Results" title="Visit Results">            
+    <apex:pageBlockButtons >
+        <apex:commandButton action="{!Save}" id="saveButton" value="Save" style="display:none"/>
+        <apex:commandButton action="{!Cancel}" id="cancelButton" value="Cancel" style="display:none"/>
+    </apex:pageBlockButtons>
+            <apex:pageBlockSection id="VisitTimes" title="Visit Times" >                   
+            <apex:outputField value="{!STKR__Visit__c.STKR__Accepted__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Travel_Time__c}"/>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Journey_Start__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Time_On_Site__c}"/>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Arrival_Time__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Items_to_inspect__c}"/>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Completion_Time__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Items_Inspected__c}"/>
+            <script>colorPageBlock(document.getElementById("{!$Component.VisitTimes}"), "#0A7CB2");</script>                  
+            </apex:pageblocksection>
+            <apex:pageBlockSection columns="2" id="RiskAssessment" title="Risk Assessment / Health & Safety">
+           <apex:outputField value="{!STKR__Visit__c.STKR__Risk_Assessment__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Heath_And_Safety__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Risk_Assessment_Questions__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>          
+            <script>colorPageBlock(document.getElementById("{!$Component.RiskAssessment}"), "#0A7CB2");</script>   
+            </apex:pageBlockSection>
+            <apex:pageblocksection id="VisitResults" title="Visit Results">
+            <apex:outputField value="{!STKR__Visit__c.STKR__Follow_Up__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Field_Notes__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Risk__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Recommendations__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <script>colorPageBlock(document.getElementById("{!$Component.VisitResults}"), "#0A7CB2");</script>   
+            </apex:pageBlockSection>  
+                      
+            <apex:outputPanel layout="block" style="{!IF(STKR__Visit__c.Service__r.STKR__Business_Type__c = 'Pest', '', 'display:none')}">
+            <apex:pageBlockSection id="Summary" title="Inspection Summary"> 
+            <apex:outputField value="{!STKR__Visit__c.STKR__Pests_Found__c}" ><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Other_Pests_Found__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Hygiene__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Proofing__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>            
+            <script>colorPageBlock(document.getElementById("{!$Component.Summary}"), "#0A7CB2");</script>    
+            </apex:pageBlockSection>  
+            </apex:outputPanel>           
+</apex:pageBlock></apex:form></apex:tab>
+<apex:tab label="{!$ObjectType.STKR__Prep_Waste_Management__c.labelPlural}" name="Prep/Waste" id="tabPW">
+<apex:relatedList subject="{!STKR__Visit__c}" list="Prep_Waste_Management__r" rendered="{!$ObjectType.STKR__Prep_Waste_Management__c.fields.Name.Accessible}" />
+</apex:tab>
+<apex:tab label="{!$ObjectType.STKR__Inspection__c.labelPlural}" name="Service Items" id="tabAss">
+<apex:relatedList subject="{!STKR__Visit__c}" list="Inspections__r" />
+</apex:tab>
+<apex:tab label="{!$ObjectType.STKR__Actions__c.labelPlural}" name="Actions" id="tabAct">
+<apex:relatedList subject="{!STKR__Visit__c}" list="Actions__r" />
+</apex:tab>
+<apex:tab label="{!$ObjectType.NoteAndAttachment.labelPlural}" name="Notes_Attachments" id="tabAtt">
+<apex:relatedList subject="{!STKR__Visit__c}" list="CombinedAttachments" />
+</apex:tab>
+<apex:tab label="{!$ObjectType.STKR__Billing__c.labelPlural}" name="Billing" id="tabBill">
+<apex:relatedList subject="{!STKR__Visit__c}" list="Billing__r" />
+</apex:tab>
+<apex:tab label="History" name="History" id="tabHist">
+        <apex:pageBlock id="Histories" title="History">            
+            <apex:pageBlockTable value="{!STKR__Visit__c.Histories}" var="h" id="h">
+                <apex:column headerValue="Date"  value="{!h.createddate}"/>
+                <apex:column headerValue="What" value="{!h.field}"/>
+                <apex:column headerValue="From" value="{!h.oldvalue}"/>
+                <apex:column headerValue="To"   value="{!h.newvalue}"/>
+                <apex:column headerValue="Who"  value="{!h.createdbyId}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+</apex:tab>
+<apex:tab label="Summary" name="Summary" id="tabSum">
+      
+      <apex:pageBlock id="Summary" title="Visit Summary">      
+            <apex:pageBlockTable value="{!STKR__Visit__c}" var="s">
+                <apex:column headerValue="RecordType"  value="{!s.RecordTypeId}"/>            
+                <apex:column headerValue="Skill Required"  value="{!s.STKR__Skill_Required__c}"/>                
+                <apex:column headerValue="Next Visit Date"  value="{!s.STKR__Estimated_Next_Visit_Date__c}"/>
+                <apex:column headerValue="Next Weekday Visit" value="{!s.STKR__Automated_Next_Visit_Date__c}"/>
+                <apex:column headerValue="Items Serviced" value="{!s.STKR__Items_Inspected__c}"/>
+                <apex:column headerValue="Items Not Serviced"   value="{!s.STKR__Items_to_inspect__c}"/>
+                <apex:column headerValue="Actions Created"   value="{!s.STKR__No_Actions_Created__c}"/>
+                <apex:column headerValue="Risk Rating"   value="{!s.STKR__Risk_Rating__c}"/>
+                <apex:column headerValue="Visit Summary"   value="{!s.STKR__Visit_Summary__c}"/>
+                <apex:column headerValue="Current State" value="{!s.STKR__Current_State__c}"/>
+            </apex:pageBlockTable>     
+
+          </apex:pageBlock>
+              <apex:form >
+        <apex:pageBlock id="Admin" title="Admin Only" mode="maindetail">
+            <apex:pageBlockButtons >
+        <apex:commandButton action="{!Save}" id="saveButton" value="Save" style="display:none"/>
+        <apex:commandButton action="{!Cancel}" id="cancelButton" value="Cancel" style="display:none"/>
+    </apex:pageBlockButtons>
+
+            <apex:pageblocksection id="Admin">
+                        <b><br/>Visit Types</b>
+            <apex:outputtext value=""/>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Fixed_Visit__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>            
+            <apex:outputField value="{!STKR__Visit__c.STKR__Quick_Call_Out__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__IsFollowUp__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Assisted_Visit__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Setup_Installation__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>                       
+            <apex:outputField value="{!STKR__Visit__c.STKR__Uplift_Removal_Visit__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Dummy_Visit__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputtext value=""/>
+
+            <b><br/>Visit Information</b>
+            <apex:outputtext value=""/>
+            <apex:outputField value="{!STKR__Visit__c.STKR__included_in_Calendar__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Open_This_Period__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Copy_Inspections_to_Next_Visit__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputtext value=""/>
+            <b><br/>Audit</b>
+            <apex:outputtext value=""/>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Follow_Up_from_Visit__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>           
+            <apex:outputField value="{!STKR__Visit__c.STKR__Planned_Date__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <br/><b>Service Report</b>
+            <apex:outputtext value=""/>
+
+            <apex:outputField value="{!STKR__Visit__c.STKR__isOKToRunReport__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+            <apex:outputField value="{!STKR__Visit__c.STKR__Alert_Sent__c}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputField>
+
+
+            </apex:pageBlockSection> 
+            
+                 </apex:pageBlock>
+                 </apex:form> 
+</apex:tab>
+</apex:tabPanel>
+</apex:page>

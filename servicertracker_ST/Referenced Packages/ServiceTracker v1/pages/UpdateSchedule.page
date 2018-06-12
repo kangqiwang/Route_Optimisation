@@ -1,0 +1,71 @@
+<apex:page standardController="STKR__Service__c"
+           showChat="false" 
+           sidebar="false" 
+           showHeader="false" 
+           standardStylesheets="false">
+           
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"/>
+    <script src="/soap/ajax/27.0/connection.js" type="text/javascript"/>
+    <script src="/soap/ajax/27.0/apex.js" type="text/javascript"/>
+    
+    <script type="text/javascript">
+    var Service = {};
+    function authorize()
+    { sforce.connection.sessionId = '{!GETSESSIONID()}'; }      
+  
+    function getScheduleID() 
+    {
+    // Define the variables used within the Script
+    var url = parent.location.href; //string for the URL of the current page
+    var updateRecords = []; //array for holding records that this code will ultimately update
+    var ActiveFlag = '{!STKR__Service__c.STKR__Status__c}';
+    
+    // Get Service ID
+
+    Service.ID = '{!STKR__Service__c.Id}';
+    
+    // Get Visit Records
+
+    var Vid=sforce.connection.query("Select Id from STKR__Visit__c  where STKR__Service__r.Id = '"+ Service.ID + "' AND STKR__Status__c = 'Open' limit 200");
+    var Vrecords = Vid.getArray("records"); //add all the Visit ids to an Array
+  
+    // Start Master Update Script
+    if ((ActiveFlag == "Inactive" && (Vrecords.length > 0)) {
+
+     var answer=confirm("WARNING: This Record is Inactive. Do you want to remove any open visits? (Maximum is 200 visits at a time)");
+
+     if (answer) { // If User Clicks OK
+
+    try{ 
+
+    //Start Delete Visits Script
+    var idsForDeletion = [];
+    if (Vrecords.length <  0) { alert("No Visits Found");
+    } else { //otherwise, there was a record selection
+    for (var b=0; b<Vrecords.length; b++) { //for all records  
+     idsForDeletion.push(Vrecords[b].Id); //add the updated record to our array
+    } //End Loop
+    
+    sforce.connection.deleteIds(idsForDeletion);
+
+    } //End If
+      
+
+    } catch(e) { }
+
+
+    parent.location.href = url; //refresh the page
+     } // If user clicks Cancel 
+    } // Not an inactive Schedule    
+    
+    }
+     
+    $(document).ready(
+     function()
+    {
+     authorize();
+     getScheduleID();
+    });
+   </script>
+            
+ </apex:page>

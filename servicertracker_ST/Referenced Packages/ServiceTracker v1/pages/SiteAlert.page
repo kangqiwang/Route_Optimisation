@@ -1,0 +1,57 @@
+<apex:page Controller="STKR.NewClientAlert" sidebar="false">
+    <script>
+      function setFocusOnLoad(){ mass.focus();} 
+    </script> 
+                                    
+<apex:form >
+<apex:pageBlock title="New {!$ObjectType.STKR__Alerts__c.label}">
+     <apex:pagemessages />   
+     <b>Notes on Alerts:</b><br/><br/>  
+<li>Please ensure that you select a Contact and a Contract to save the record.</li>
+<li>The Contacts displayed are related to this site or its parent site.</li>
+<li>Creating a Site Alert will also create an alert for all Child sites in the hierarchy one level down.</li>
+<li>Selecting both "Add to All existing Contact/Jobs" AND "Create Site Alert" will create the Alert at the Site level.</li>
+<li>The default setting for new alerts is "Completed Visits". This can be amended later.</li>
+<br/><br/>
+<apex:pageblockbuttons >
+<apex:commandButton action="{!saving}" value="Save" />
+<apex:commandButton action="{!saveNew}" value="Save & New Alert" />
+<apex:commandButton action="{!close}" value="Cancel" immediate="true" />
+</apex:pageblockbuttons>
+<apex:pageBlockTable value="{!Alerts}" var="itr" id="table" style="background-color:#F5FAFF; font-family:'vag-round', sans-serif; font-size:12px; border-radius:10px;width:100%;">
+          <apex:inputHidden value="{!itr.STKR__Visits__c}"/>
+                
+          <apex:column headerValue="Select Contact" width="80px">
+          
+            <apex:selectList style="width:200px" value="{!lookupId2}" title="Select" multiselect="false" size="1" >
+            <apex:selectOptions value="{!selectCValues}"/>
+            </apex:selectList>
+          
+          </apex:column>       
+
+          <apex:column headerValue="Select Contract/Job">
+
+            <apex:selectList style="width:600px" value="{!lookupId}" title="Select" multiselect="false" size="1">
+            <apex:selectOptions value="{!selectValues}"/>
+            </apex:selectList>
+
+          </apex:column>
+          
+        
+          <apex:column headerValue="Add to All existing Contract/Jobs">
+            <apex:inputCheckbox value="{!allC}"/>
+          </apex:column>
+
+          <apex:column headerValue="Create Site Alert">
+            <apex:inputCheckbox value="{!all}"/>
+          </apex:column>
+      <!--
+          <apex:facet name="footer"><apex:commandLink value="+ add row" action="{!addrow}" rerender="table,error"/></apex:facet>  
+      -->   
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:form>
+<script>  
+   var mass=document.getElementById('{$!Type}');
+</script>
+</apex:page>

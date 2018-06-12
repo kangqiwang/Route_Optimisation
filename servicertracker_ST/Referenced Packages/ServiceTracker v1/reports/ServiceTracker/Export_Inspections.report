@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Service_Item__c.Visits__r$Visit__c.Name</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c.Visits__r$Visit__c.Due_Date__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c.Visits__r$Name</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c$Item_Type__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c$Reference__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c$Location__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c$Inspection_Interval__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c$Inspection_Frequency__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c$Last_Inspection_Date__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c.Visits__r$Status__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c.Visits__r$Result__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c.Visits__r$Inspection_Date_Time__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c.Visits__r$Visit__c.Status__c</field>
+    </columns>
+    <description>Export Inspections Report for use with the Inspection list</description>
+    <format>Tabular</format>
+    <name>Export Inspections</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Inspections__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Service_Item__c$Anniversary_Date__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

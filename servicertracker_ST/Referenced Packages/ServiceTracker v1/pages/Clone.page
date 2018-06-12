@@ -1,0 +1,5 @@
+<apex:page standardController="STKR__Billing__c"  
+     extensions="STKR.cloneAndReparent"
+     action="{!ReparentRecords}">
+     <apex:pageMessages />
+</apex:page>

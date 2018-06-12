@@ -1,0 +1,84 @@
+<apex:page Controller="STKR.createBillingRecord" tabStyle="STKR__Billing__c">  
+<style>  
+    .hideDropdown select{
+        visibility: hidden !important;
+        display: none !important;
+    }
+</style>
+            <apex:form >
+
+         <div style="background-color:#F5FAFF; font-family:'vag-round', sans-serif; font-size:12px; border-radius:10px;">           
+        <apex:pageBlock title="New {!$ObjectType.STKR__Billing__c.label}">
+<apex:pageMessages id="error" />
+<div align="center">
+
+<apex:actionStatus id="go">
+                        <apex:facet name="stop">                 
+                            <apex:commandButton action="{!saving}" value="Save" status="go" disabled="false" rerender="error" />
+                        </apex:facet>
+                        <apex:facet name="start">
+                           <apex:commandButton status="go" value="Saving..." disabled="true" />
+                        </apex:facet>
+                    </apex:actionStatus>
+
+<apex:commandButton action="{!close}" value="Cancel" immediate="true"/>
+</div>  
+            <apex:pageBlockSection id="RecordType">
+             <apex:inputField value="{!Headerinfo.RecordTypeId}" required="True">
+             <apex:actionSupport event="onchange" rerender="PageErrors, Headerinfo"/>
+            </apex:inputField>
+            <apex:inputField value="{!Headerinfo.STKR__Contract_or_Job__c}" required="true"/>  
+            </apex:pageblocksection>
+            <apex:pageBlockSection id="Headerinfo">
+            <apex:inputField value="{!Headerinfo.STKR__Account__c}" id="Account"/>
+            <apex:inputField value="{!Headerinfo.STKR__Date__c}" required="true"/>
+            <apex:inputField styleClass="hideDropdown" value="{!Headerinfo.STKR__Owner__c}" />            
+            <apex:inputField value="{!Headerinfo.STKR__Requested_By__c}" required="false"/>
+            <apex:inputField style="width:180px" value="{!Headerinfo.STKR__Site_Address__c}" required="false"/> 
+            <apex:inputField style="width:180px" value="{!Headerinfo.STKR__Site_Contact__c}" required="false"/> 
+            <apex:inputField value="{!Headerinfo.STKR__Bill_To_Site__c}"/>
+            </apex:pageBlocksection>
+            <apex:pageBlockSection columns="1">           
+            <apex:inputField style="width:81%" value="{!Headerinfo.STKR__Introduction__c}"/>
+            </apex:pageBlocksection>
+            <apex:pageBlockSection >                 
+            <apex:inputField value="{!Headerinfo.STKR__Account_Ref__c}" required="false"/>
+            <apex:inputField value="{!Headerinfo.STKR__P_O_Number__c}"/>
+           </apex:pageBlockSection>
+            <apex:pageBlockSection id="Relatedinfo" rendered="false"> 
+             <apex:outputLabel value="Related To (Optional)" style="font-weight:700"></apex:outputLabel>
+            </apex:pageBlockSection> 
+           </apex:pageBlock>
+         <apex:pageBlock title="Related Records">
+             <apex:pageBlockSection columns="4">
+             <apex:pageBlockSectionItem ><apex:outputLabel value="{!$ObjectType.STKR__Billing__c.fields.STKR__Service_Contract__c.label}"/><apex:inputField value="{!Headerinfo.STKR__Service_Contract__c}" required="false"/> </apex:pageBlockSectionItem>          
+             <apex:pageBlockSectionItem ><apex:outputLabel value="{!$ObjectType.STKR__Billing__c.fields.STKR__Schedule__c.label}"/><apex:inputField value="{!Headerinfo.STKR__Schedule__c}" required="false"/></apex:pageBlockSectionItem>
+             <apex:pageBlockSectionItem ><apex:outputLabel value="{!$ObjectType.STKR__Billing__c.fields.STKR__Visit__c.label}"/><apex:inputField value="{!Headerinfo.STKR__Visit__c}" required="false" />   </apex:pageBlockSectionItem>      
+             <apex:pageBlockSectionItem ><apex:outputLabel value="{!$ObjectType.STKR__Billing__c.fields.STKR__Action__c.label}"/><apex:inputField value="{!Headerinfo.STKR__Action__c}"  /></apex:pageBlockSectionItem>
+            </apex:pageBlockSection> 
+          <br/><br/>      
+        </apex:pageBlock>
+         <apex:pageBlock title="{!$ObjectType.STKR__Billing_Items__c.labelplural}" id="Items">
+          <apex:pageMessage severity="high" detail="You can enter 10 line items at a time. More items can be added after the record has been created"></apex:pageMessage>
+          <apex:pageBlockTable value="{!Billing}" var="li" id="itemtable" style="background-color:#F5FAFF; font-family:'vag-round', sans-serif; font-size:12px; border-radius:10px;">
+          <apex:column width="200px" headerValue="Line Item"><apex:inputField value="{!li.STKR__Product__c}" style="width:200px;align:left" required="false"/></apex:column>
+          <apex:column headerValue="QTY"><apex:inputField style="width:40px;align:left" value="{!li.STKR__Quantity__c}"/></apex:column>
+          <apex:column headerValue="Help"><apex:outputText >Pricing and Descriptions will be taken from the associated pricebook. You can change these on the next page</apex:outputText></apex:column>
+         <!-- <apex:facet name="footer"><apex:commandLink value="+ add row" action="{!addrow}" reRender="table,error"/></apex:facet>  -->
+</apex:pageBlockTable>
+</apex:pageBlock>
+           </div>
+<div align="center">
+
+<apex:actionStatus id="go">
+                        <apex:facet name="stop">                 
+                            <apex:commandButton action="{!saving}" value="Save" status="go" disabled="false" rerender="error" />
+                        </apex:facet>
+                        <apex:facet name="start">
+                           <apex:commandButton status="go" value="Saving..." disabled="true" />
+                        </apex:facet>
+                    </apex:actionStatus>
+        <apex:commandButton action="{!close}" value="Cancel" immediate="true"/>
+</div>         
+</apex:form>
+</apex:page>

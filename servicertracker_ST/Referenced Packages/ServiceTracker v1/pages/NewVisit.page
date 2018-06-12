@@ -1,0 +1,36 @@
+<apex:page StandardController="STKR__Visit__c" Extensions="STKR.NewVisit" tabStyle="STKR__Visit__c" cache="true" >  
+       <apex:form >
+        <apex:pagemessages />
+        <div align="center">
+         <apex:commandButton action="{!saving}" id="submit" value="Save" />
+         <apex:commandButton action="{!close}" value="Cancel" immediate="true" />
+        </div> 
+        
+        <apex:pageBlock title="New Visit">             
+               <apex:outputPanel id="Interval" layout="block">
+              <apex:pageBlockSection columns="2" >
+               <apex:inputField value="{!Headerinfo.STKR__Resource__c}" required="true" />
+               <apex:inputField value="{!STKR__Visit__c.STKR__Priority__c}" required="true" />
+               <apex:inputField value="{!Headerinfo.STKR__Due_Date__c}" required="true" />
+            </apex:pageBlockSection>  
+            <apex:pageBlockSection columns="1" >
+               <apex:inputField value="{!Headerinfo.STKR__Notes_Long__c}" style="width:700px" required="true"/>   
+            </apex:pageBlockSection>    
+            <apex:pageBlockSection columns="2">
+               <apex:inputField value="{!STKR__Visit__c.STKR__Fixed_Visit__c}" required="false" />   
+               <apex:inputField value="{!STKR__Visit__c.STKR__Quick_Call_Out__c}" required="false" />   
+               <apex:inputField value="{!STKR__Visit__c.STKR__IsFollowUp__c}" required="false" />   
+               <apex:inputField value="{!STKR__Visit__c.STKR__Setup_Installation__c}" required="false" />     
+               <apex:inputField value="{!STKR__Visit__c.STKR__Uplift_Removal_Visit__c}" required="false" />   
+               <apex:inputField value="{!STKR__Visit__c.STKR__Dummy_Visit__c}" required="false" />   
+             </apex:pageBlockSection>           
+            </apex:outputpanel>           
+        </apex:pageBlock>
+       
+
+<div align="center">
+<apex:commandButton action="{!saving}" value="Save" onclick="validate();"/>
+<apex:commandButton action="{!close}" value="Cancel" immediate="true" />
+</div>        
+</apex:form>
+</apex:page>

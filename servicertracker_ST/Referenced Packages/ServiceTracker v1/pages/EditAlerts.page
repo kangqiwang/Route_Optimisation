@@ -1,0 +1,40 @@
+<apex:page standardController="STKR__Alerts__c" recordSetVar="unused" sidebar="false">
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+<apex:includeScript value="{!URLFOR($Resource.STKR__tablesorter, 'jquery.tablesorter.min.js')}"/>
+<script type="text/javascript">
+    $j = jQuery.noConflict();    
+    $j(document).ready(function () {
+    $j("[id$=table]").tablesorter(); 
+    });
+  </script>
+
+<apex:form >
+<apex:pageBlock title=" Edit {!$ObjectType.STKR__Alerts__c.labelplural}">
+<apex:pageMessages />
+<apex:pageBlockButtons >
+<apex:commandButton value="Save" action="{!Save}"/>
+<apex:commandButton value="Cancel" action="{!Cancel}"/>
+</apex:pageBlockButtons>
+<apex:pageBlockTable value="{!selected}" var="itr" id="table" style="background-color:#F5FAFF; font-family:'vag-round', sans-serif; font-size:12px; border-radius:10px;width:100%;">
+         <apex:column headerValue="Number">
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="Number "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{!itr.Name}"/>          
+        </apex:column>           
+          <apex:column headerValue="First Name"><apex:outputText value="{!itr.STKR__Contact__r.FirstName}"/></apex:column>
+          <apex:column headerValue="Last Name"><apex:outputText value="{!itr.STKR__Contact__r.LastName}"/></apex:column>
+          <apex:column headerValue="Email"><apex:outputText value="{!itr.STKR__Contact__r.Email}"/></apex:column>
+          <apex:column headerValue="Site"><apex:outputText value="{!itr.STKR__Contact__r.Account.Name}"/></apex:column>
+          <apex:column headerValue="Completed Visits"><apex:inputfield style="width:30px" value="{!itr.STKR__Visits__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="Recommendations"><apex:inputfield style="width:30px" value="{!itr.STKR__Recommendations__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="Actions"><apex:inputfield style="width:30px" value="{!itr.STKR__Actions__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="Escalations"><apex:inputfield style="width:30px" value="{!itr.STKR__Escalations__c}"></apex:inputfield></apex:column>                   
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

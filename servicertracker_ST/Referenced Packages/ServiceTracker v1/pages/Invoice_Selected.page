@@ -1,0 +1,52 @@
+<apex:page standardController="STKR__Billing_Items__c" recordSetVar="unused" sidebar="false">
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"/>   
+    <apex:includeScript value="https://code.jquery.com/ui/1.10.3/jquery-ui.js" />
+    <apex:stylesheet value="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"  />
+    <script src="/soap/ajax/27.0/connection.js" type="text/javascript"/>
+    <script src="/soap/ajax/27.0/apex.js" type="text/javascript"/>
+
+<script type="text/javascript">
+function setDefaults() {
+  $("[id$='invStatus']").each(function() {
+    $(this).val("To Be Invoiced");
+  });
+  $("[id$='inValueInput']").each(function() {
+    var tblRow = $(this).attr("id").substr($(this).attr("id").indexOf("inValueInput") -2, 2);
+
+    var defaultInVal = $("[id$='" + tblRow + "inValueRemaining']").text();
+    $(this).val(defaultInVal);
+  });
+}
+
+
+$(document).ready(function() {
+  setDefaults();
+});
+
+</script>
+
+<apex:form >
+<apex:pageBlock title=" Invoice {!$ObjectType.STKR__Billing_Items__c.labelplural}">
+<apex:pageMessages />
+<apex:pageBlockButtons >
+<apex:commandButton value="Save" action="{!Save}"/>
+<apex:commandButton value="Cancel" action="{!Cancel}"/>
+</apex:pageBlockButtons>
+<apex:pageBlockTable value="{!selected}" var="itr" style="background-color:#F5FAFF; font-family:'vag-round', sans-serif; font-size:12px; border-radius:10px;">
+          <apex:column headerValue="Reference"><apex:outputfield value="{!itr.STKR__Reference__c}" style="width:40px;align:left"></apex:outputfield></apex:column>
+          <apex:column headerValue="Item"><apex:outputfield value="{!itr.STKR__Product__c}" style="width:40px;align:left" id="Type"/></apex:column>
+          <apex:column headerValue="Line Description"><apex:inputfield value="{!itr.STKR__Line_Description_Long__c}" style="width:400px;align:left" id="ItemType"/></apex:column>
+          <apex:column headerValue="QTY"><apex:outputfield value="{!itr.STKR__Quantity__c}" style="width:40px;align:left"></apex:outputfield></apex:column>
+          <apex:column headerValue="Sales Price"><apex:outputfield value="{!itr.STKR__Sales_Price__c}" style="width:100px;align:left"></apex:outputfield></apex:column>
+          <apex:column headerValue="Discount %"><apex:outputfield value="{!itr.STKR__Discount__c}" style="width:100px;align:left"></apex:outputfield></apex:column>
+          <apex:column headerValue="Total Line Value"><apex:outputfield value="{!itr.STKR__Line_Value__c}" style="width:100px;align:left"></apex:outputfield></apex:column>
+          <apex:column headerValue="Invoice Value Remaining"><apex:inputfield id="inValueRemaining" value="{!itr.STKR__Invoice_Value_Remaining__c}" style="width:100px;align:left"></apex:inputfield></apex:column>
+          <apex:column headerValue="Invoice Value"><apex:inputfield id="inValueInput" value="{!itr.STKR__Invoice_Value__c}" style="width:100px;align:left" required="true" ></apex:inputfield></apex:column>
+          <apex:column headerValue="Status"><apex:outputfield value="{!itr.STKR__Invoice_Status__c}" style="width:100px;align:left"></apex:outputfield></apex:column>
+          <apex:column headerValue="Status"><apex:inputfield id="invStatus" value="{!itr.STKR__Status__c}" style="width:100px;align:left"/></apex:column>
+
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:form>
+
+</apex:page>

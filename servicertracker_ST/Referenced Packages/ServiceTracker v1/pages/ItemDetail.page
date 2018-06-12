@@ -1,0 +1,60 @@
+<apex:page standardController="STKR__Service_Item__c" showHeader="true" tabStyle="STKR__Service_Item__c">
+   <style>
+   .activeTab {background-color:#015A83; font-weight:600; color:white; background-image:none;font-size:14px;border: none;}
+   .inactiveTab {background-color:#0A7CB2; font-weight:600; color:white; background-image:none;font-size:14px;border: none;}
+   .rich-tabhdr-side-border { background-image:none;border: none; }
+   .rich-tabhdr-side-cell { background-image:none;border: none; }
+   .rich-tabhdr-cell-active {background-image:none;background-color:#015A83;border: none; }
+   .rich-tabhdr-cell-inactive {background-image:none;background-color:#0A7CB2;border: none; }
+   .rich-tabpanel {background-image:none;background-color:#0A7CB2;}
+   .panel { background-color:#F5FAFF; font-family:"vag-round", sans-serif; font-size:12px;}
+   .link{ text-decoration: underline; cursor:pointer; }
+
+   </style>
+<apex:tabPanel switchType="client" selectedTab="tabdetails" id="VisitTabPanel" tabClass="activeTab" inactiveTabClass="inactiveTab" contentClass="panel">
+<apex:tab label="Details" name="VisitDetails" id="tabdetails">
+<apex:detail inlineEdit="True" relatedList="false" title="true" oncomplete="window.location.reload();"/>
+</apex:tab>
+
+<apex:tab label="Label" name="Label" id="tabLab">
+            <apex:form >
+        <apex:pageBlock id="Label" title="Item Label">            
+            <apex:pageBlockSection >
+            <apex:outputField value="{!STKR__Service_Item__c.Name}"/>
+            <apex:outputField value="{!STKR__Service_Item__c.STKR__Location__c}"/>
+            <apex:outputField value="{!STKR__Service_Item__c.STKR__Bar_Code__c}"/>
+            <apex:outputField value="{!STKR__Service_Item__c.STKR__Item_Type__c}"/>
+           </apex:pageBlockSection>
+        </apex:pageBlock></apex:form></apex:tab>
+<apex:tab label="{!$ObjectType.STKR__Visit__c.labelPlural}" name="Services" id="tabSvc">
+<apex:relatedList subject="{!STKR__Service_Item__c}" list="Visits__r" />
+</apex:tab>
+<apex:tab label="{!$ObjectType.STKR__Actions__c.labelPlural}" name="Actions" id="tabAct">
+<apex:relatedList subject="{!STKR__Service_Item__c}" list="Actions__r" />
+</apex:tab>
+<apex:tab label="{!$ObjectType.NoteAndAttachment.labelPlural}" name="Notes_Attachments" id="tabAtt">
+<apex:relatedList subject="{!STKR__Service_Item__c}" list="CombinedAttachments" />
+</apex:tab>
+<apex:tab label="History" name="History" id="tabHist">
+        <apex:pageBlock id="Histories" title="History">            
+            <apex:pageBlockTable value="{!STKR__Service_Item__c.Histories}" var="h">
+                <apex:column headerValue="Date"  value="{!h.createddate}"/>
+                <apex:column headerValue="What" value="{!h.field}"/>
+                <apex:column headerValue="From" value="{!h.oldvalue}"/>
+                <apex:column headerValue="To"   value="{!h.newvalue}"/>
+                <apex:column headerValue="Who"  value="{!h.createdbyId}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+</apex:tab>
+<apex:tab label="Summary" name="Summary" id="tabSum">
+            <apex:form >
+        <apex:pageBlock id="Summary" title="Summary">            
+            <apex:pageBlockSection >
+            <apex:outputField value="{!STKR__Service_Item__c.STKR__Install_Date__c}"/>
+            <apex:outputField value="{!STKR__Service_Item__c.STKR__Last_Inspection_Date__c}"/>
+            <apex:outputField value="{!STKR__Service_Item__c.STKR__Next_Inspection_Date__c}"/>
+            <apex:outputField value="{!STKR__Service_Item__c.STKR__Anniversary_Date__c}"/>          
+            </apex:pageBlockSection>
+        </apex:pageBlock></apex:form></apex:tab>
+</apex:tabPanel>
+</apex:page>

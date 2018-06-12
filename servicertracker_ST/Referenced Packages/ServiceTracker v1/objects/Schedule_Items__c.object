@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Items that can be attributed to a schedule</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Earliest_Inspection_Date_Next_Year__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Inspection_Item__r.Earliest_Inspection_Date_Next_Year__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Earliest Inspection Date Next Year</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Inspection_Frequency__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>TEXT(Inspection_Item__r.Inspection_Frequency__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Inspection Frequency</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Inspection_Interval__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Inspection_Item__r.Inspection_Interval__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Inspection Interval</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Inspection_Item__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The inspection item</inlineHelpText>
+        <label>Inspection Item</label>
+        <referenceTo>Service_Item__c</referenceTo>
+        <relationshipLabel>Schedules</relationshipLabel>
+        <relationshipName>Schedule_Items</relationshipName>
+        <relationshipOrder>1</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Latest_Inspection_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Inspection_Item__r.Latest_Inspection_Date__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Latest Inspection Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Order__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Inspection_Item__r.Order__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Order</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Record_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Inspection_Item__r.RecordType.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Record Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Schedule__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The schedule number</inlineHelpText>
+        <label>Schedule</label>
+        <referenceTo>Service__c</referenceTo>
+        <relationshipLabel>Schedule Items</relationshipLabel>
+        <relationshipName>Schedule_Items</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>TEXT(Inspection_Item__r.Status__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Status</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>UniqueId__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>true</externalId>
+        <label>UniqueId</label>
+        <length>64</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Schedule Item</label>
+    <nameField>
+        <displayFormat>{000000}</displayFormat>
+        <label>Schedule Items Name</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Schedule Items</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <webLinks>
+        <fullName>Add_Inspections_to_Visits</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Add Items to Visits</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/20.0/connection.js&quot;)} 
+
+alert(&quot;Please wait whilst all Inspections are added to visits.  This may take a few minutes to process. Please do not move away from this page&quot;);
+
+//Set Variables
+var url = parent.location.href;
+var updateRecords = [];
+var interval = 0;
+var ninterval = 0;
+var frequency = null;
+var insint = null;
+
+//Get Inspections
+var srec = sforce.connection.query(&quot;Select id,STKR__Record_Type__c,STKR__Inspection_Item__c,STKR__Inspection_Interval__c,STKR__Inspection_Frequency__c,STKR__Latest_Inspection_Date__c FROM STKR__Schedule_Items__c WHERE STKR__Schedule__c = &apos;{!Service__c.Id}&apos; AND STKR__Status__c = &apos;Active&apos; order by STKR__order__c Asc&quot;);
+
+var Items = srec.getArray(&quot;records&quot;);
+
+// Get Visits
+var vrec = sforce.connection.query(&quot;Select id,STKR__Due_Date__c from STKR__Visit__c where STKR__Service__c = &apos;{!Service__c.Id}&apos; AND STKR__Status__c &lt;&gt; &apos;Complete&apos;&quot;);
+
+var Visits = vrec.getArray(&quot;records&quot;);
+
+//Loop all items
+for(var i=0; i&lt;Items.length; i++) {
+frequency = Items[i].STKR__Inspection_Frequency__c;
+insint = Items[i].STKR__Inspection_Interval__c;
+
+var lidate = new Date(Items[i].STKR__Latest_Inspection_Date__c);
+var nidate = new Date(lidate.getFullYear(),lidate.getMonth(),01);
+
+if(frequency == &apos;Daily&apos;){ interval = insint ; }
+else if(frequency == &apos;Weekly&apos;){ interval = insint * 7; }
+else if(frequency == &apos;Monthly&apos;){ interval = insint * 31;}
+else if(frequency == &apos;Yearly&apos;){ interval = insint * 365.2425;}
+
+// Loop the number of visits
+for(var l=0; l&lt;Visits.length; l++) {
+// Loop each visit individually
+for(var v=0; v&lt;Visits.length; v++) {
+
+var visitdate = new Date(Visits[v].STKR__Due_Date__c);
+if ((nidate.getMonth() == visitdate.getMonth()) &amp;&amp; (nidate.getFullYear() == visitdate.getFullYear())){
+var R = sforce.connection.query(&quot;SELECT Id from RecordType where name = &apos;&quot;+Items[i].STKR__Record_Type__c+&quot;&apos; AND SobjectType=&apos;STKR__Inspection__c&apos;&quot;);
+
+var RType = R.getArray(&quot;records&quot;);
+
+var upsert_records = new sforce.SObject(&quot;STKR__Inspection__c&quot;); 
+
+upsert_records.STKR__Service_Item__c = Items[i].STKR__Inspection_Item__c;
+upsert_records.STKR__UniqueId__c = Visits[v].Id+&apos;_&apos;+Items[i].STKR__Inspection_Item__c;
+upsert_records.RecordTypeId = RType[0].Id;
+upsert_records.STKR__Visit__c = Visits[v].Id;
+
+var result = sforce.connection.upsert(&quot;STKR__UniqueId__c&quot;,[upsert_records]);
+
+upsert_records = [];
+updateRecords = [];
+
+} // End if
+
+} // End Loop individual visits
+
+var nextinspectiondate = nidate;
+
+nidate.setDate(nextinspectiondate.getDate() + interval); 
+
+
+} // End Loop number of visits
+interval = 0
+ninterval = 0
+frequency = null;
+insint = null;
+lidate = null
+nidate = null;
+nextinspectiondate = null;
+} // End Loop items
+alert(&quot;Processing Complete.&quot;);
+parent.location.href = url;</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Item_List</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Item List</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/apex/STKR__SiteItems?Schedule={!CASESAFEID( Service__c.Id )}&amp;Accid={!CASESAFEID( Service__c.AccountId__c )}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Remove_Selected</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Remove Selected</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>// Include and initialize the AJAX Toolkit javascript {!REQUIRESCRIPT(&quot;/soap/ajax/10.0/connection.js&quot;)} 
+
+// Get the list of accounts that should be deleted. 
+
+var idsToDelete = {!GETRECORDIDS( $ObjectType.Schedule_Items__c )}; 
+
+var deleteWarning = &apos;Are you sure you wish to delete &apos; +idsToDelete.length + &apos; records?&apos;; 
+
+if (idsToDelete.length &amp;&amp; (window.confirm(deleteWarning))) 
+
+{ 
+
+// Delete the records, and pass a function into the call// so that the toolkit refreshes the current page// asynchronously when the call succeeds.// 
+
+sforce.connection.deleteIds(idsToDelete,function() {navigateToUrl(window.location.href);});} 
+
+else if (idsToDelete.length == 0) {alert(&quot;Please select the records you wish to delete.&quot;);}</url>
+    </webLinks>
+</CustomObject>

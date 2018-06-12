@@ -1,0 +1,699 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <content>ActionDetail</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Account__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Account Name</inlineHelpText>
+        <label>Site</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Actions</relationshipLabel>
+        <relationshipName>Actions</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Action__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Summary of Action Details</inlineHelpText>
+        <label>Action</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Actual_Completion__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date of Action Completion</inlineHelpText>
+        <label>Actual Completion</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Assigned_To__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the person the Action is assigned to</inlineHelpText>
+        <label>Assigned To</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Actions</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Client_Action__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Is this a client action</inlineHelpText>
+        <label>Client Action</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Comments__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Comments made following Action investigation</inlineHelpText>
+        <label>Completion Comments</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Date_for_Completion__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date the Action needs to be completed by</inlineHelpText>
+        <label>Date for Completion</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Email_Action__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the address to email</inlineHelpText>
+        <label>Email Action</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Item_Detail__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>If(Service_Item__r.Reference__c = &apos;&apos;,&apos;&apos;, Service_Item__r.Reference__c+&apos;, &apos;)
++ 
+If(TEXT(Service_Item__r.Item_Type__c) = &apos;&apos;,&apos;&apos;,Text(Service_Item__r.Item_Type__c)+&apos;, &apos;)
++ 
+If(Service_Item__r.Location__c = &apos;&apos;,&apos;&apos;,Service_Item__r.Location__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Item Detail</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Mobile_Unique_Id__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <deprecated>false</deprecated>
+        <externalId>true</externalId>
+        <label>Mobile Unique Id</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>OwnedbyCurrentUser__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF( Assigned_To__c = $User.Id,TRUE,FALSE)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>OwnedbyCurrentUser</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Priority__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The priority level for this Action</inlineHelpText>
+        <label>Priority</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>High</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Medium</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Low</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Quoted__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Has a quotation been created against this Action</inlineHelpText>
+        <label>Quoted</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Rating__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>CASE(TEXT(Priority__c), 
+&quot;High&quot;, IMAGE(&quot;/img/samples/color_red.gif&quot;,&quot;High&quot;,20,20), 
+&quot;Medium&quot;, IMAGE(&quot;/img/samples/color_yellow.gif&quot;,&quot;Medium&quot;,20,20) , 
+&quot;Low&quot;, IMAGE(&quot;/img/samples/color_green.gif&quot;,&quot;Low&quot;,20,20), 
+IMAGE(&quot;/img/samples/color_green.gif&quot;,&quot;Low&quot;,20,20)
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Rating</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Item__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the inspection item this Action relates to</inlineHelpText>
+        <label>Inspection Item</label>
+        <referenceTo>Service_Item__c</referenceTo>
+        <relationshipLabel>Actions</relationshipLabel>
+        <relationshipName>Actions</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The status of the Action</inlineHelpText>
+        <label>Status</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Open</fullName>
+                    <default>true</default>
+                </value>
+                <value>
+                    <fullName>Complete</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Inspection Action</fullName>
+                    <default>true</default>
+                </value>
+                <value>
+                    <fullName>Visit Action</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Complaint</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Quote Request</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Customer Action</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Account Manager Request</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Visit__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The Visit number this Action relates to</inlineHelpText>
+        <label>Visit</label>
+        <referenceTo>Visit__c</referenceTo>
+        <relationshipLabel>Actions</relationshipLabel>
+        <relationshipName>Actions</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <label>Action</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>CREATED_DATE</columns>
+        <columns>NAME</columns>
+        <columns>Account__c</columns>
+        <columns>Action__c</columns>
+        <columns>Assigned_To__c</columns>
+        <columns>Date_for_Completion__c</columns>
+        <columns>Priority__c</columns>
+        <columns>Service_Item__c</columns>
+        <columns>Status__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>All_Actions</fullName>
+        <columns>NAME</columns>
+        <columns>Action__c</columns>
+        <columns>Assigned_To__c</columns>
+        <columns>Date_for_Completion__c</columns>
+        <columns>Priority__c</columns>
+        <columns>Account__c</columns>
+        <columns>Status__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <label>All Actions</label>
+        <language>en_US</language>
+    </listViews>
+    <listViews>
+        <fullName>My_Actions</fullName>
+        <columns>NAME</columns>
+        <columns>Account__c</columns>
+        <columns>Action__c</columns>
+        <columns>Status__c</columns>
+        <columns>Assigned_To__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>OwnedbyCurrentUser__c</field>
+            <operation>equals</operation>
+            <value>1</value>
+        </filters>
+        <label>My Actions</label>
+    </listViews>
+    <listViews>
+        <fullName>My_Open_Actions</fullName>
+        <columns>NAME</columns>
+        <columns>Action__c</columns>
+        <columns>Visit__c</columns>
+        <columns>Service_Item__c</columns>
+        <columns>Date_for_Completion__c</columns>
+        <filterScope>Mine</filterScope>
+        <filters>
+            <field>Status__c</field>
+            <operation>notEqual</operation>
+            <value>Complete</value>
+        </filters>
+        <label>My Open Actions</label>
+    </listViews>
+    <nameField>
+        <displayFormat>{000000}</displayFormat>
+        <label>Action No.</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Actions</pluralLabel>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Action</fullName>
+        <active>true</active>
+        <description>An Action related to an Account, Visit or Inspection</description>
+        <label>Action</label>
+        <picklistValues>
+            <picklist>Priority__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Complete</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Complaint</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Inspection Action</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Visit Action</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Customer_Action</fullName>
+        <active>true</active>
+        <label>Customer Action</label>
+        <picklistValues>
+            <picklist>Priority__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Complete</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Account Manager Request</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Complaint</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Customer Action</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Quotation_Request</fullName>
+        <active>true</active>
+        <description>Quotation Request</description>
+        <label>Quotation Request</label>
+        <picklistValues>
+            <picklist>Priority__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Complete</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Quote Request</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts>
+        <customTabListAdditionalFields>Account__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Action__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Assigned_To__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Priority__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Date_for_Completion__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Status__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Account__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Action__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Assigned_To__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Date_for_Completion__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Priority__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Status__c</lookupDialogsAdditionalFields>
+        <searchFilterFields>Account__c</searchFilterFields>
+        <searchFilterFields>Status__c</searchFilterFields>
+        <searchFilterFields>Priority__c</searchFilterFields>
+        <searchFilterFields>Date_for_Completion__c</searchFilterFields>
+        <searchResultsAdditionalFields>Account__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Action__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Priority__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Assigned_To__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Date_for_Completion__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Status__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+    <webLinks>
+        <fullName>Add_Multiple</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Add Multiple</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/apex/STKR__multiple_actions?Account={!Account.Id}&amp;Visit={!Visit__c.Id}&amp;Inspection={!Service_Item__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Quote_Selected</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Quote Selected</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>// Include and initialize the AJAX Toolkit javascript {!REQUIRESCRIPT(&quot;/soap/ajax/10.0/connection.js&quot;)} 
+var InsertBRecord = []; //array for holding records that this code will ultimately 
+var InsertLIRecords = []; //array for holding records that this code will ultimately update 
+var UpdateARecord = []; //array for holding actions
+var url = parent.location.href; //string for the URL of the current page
+var ids = {!GETRECORDIDS( $ObjectType.Actions__c )}; 
+
+
+var visID = &apos;{!Visit__c.Id}&apos;;
+var Vid;
+
+if (ids.length == 0) { 
+alert(&quot;Please select the records you wish to convert.&quot;); 
+} else { 
+
+var Warning = &apos;Are you sure you wish convert these selected records to a Quote?\n\nPlease ensure that there is a MISC product in the associated pricebook before you begin&apos;; 
+
+if (window.confirm(Warning)) { 
+
+// Get the header detail
+if (visID != &apos;&apos;){
+  Vid = sforce.connection.query(&quot;Select Id,STKR__Account_lkp__c,STKR__Account_lkp__r.STKR__Price_Book__c,STKR__Service__r.STKR__Service_Contract__c,STKR__Service__c from STKR__Visit__c where Id = &apos;{!Visit__c.Id}&apos; Limit 1&quot;); 
+}else{
+  Vid = sforce.connection.query(&quot;Select Id,STKR__Account__c,STKR__Account__r.STKR__Price_Book__c from STKR__Actions__c where Id = &apos;&quot; + ids[0] + &quot;&apos; Limit 1&quot;); 
+}
+
+var Vrecords = Vid.getArray(&quot;records&quot;); //add all the Account id&apos;s to an Array 
+
+//Get the pricing and create the line item
+var pbook 
+if (visID != &apos;&apos;){
+  pbook = Vrecords[0].STKR__Account_lkp__r.STKR__Price_Book__c;
+}else{
+  pbook = Vrecords[0].STKR__Account__r.STKR__Price_Book__c;
+}
+
+if(pbook == null){
+alert(&apos;Please add a price book to the site record&apos;);
+} else {
+
+//Create the Billing Record
+var insert_billing = new sforce.SObject(&quot;STKR__Billing__c&quot;); //create a new sObject
+
+
+
+if(visID != &apos;&apos;){
+  insert_billing.STKR__Account__c = Vrecords[0].STKR__Account_lkp__c; 
+  insert_billing.STKR__Visit__c = Vrecords[0].Id; 
+  insert_billing.STKR__Schedule__c = Vrecords[0].STKR__Service__c; 
+  insert_billing.STKR__Service_Contract__c = 
+  Vrecords[0].STKR__Service__r.STKR__Service_Contract__c; 
+}else{
+  insert_billing.STKR__Account__c = Vrecords[0].STKR__Account__c; 
+}
+
+insert_billing.STKR__Status__c = &apos;New&apos;; 
+insert_billing.STKR__Date__c = new Date().toISOString(); 
+
+InsertBRecord.push(insert_billing); //add the updated record to our array 
+var Bresult = sforce.connection.create(InsertBRecord); //create the records 
+
+for (var a=0; a&lt;ids.length; a++) {
+
+var Pid = sforce.connection.query(&quot;Select id,Name,STKR__Item_Detail__c,STKR__Action__c from STKR__Actions__c where id = &apos;&quot;+ids[a]+&quot;&apos;&quot;)
+
+var price = sforce.connection.query(&quot;select UnitPrice,product2Id from PriceBookEntry where product2.Name = &apos;MISC&apos; AND PriceBook2Id = &apos;&quot;+ pbook +&quot;&apos;&quot;);
+
+var unitPrice = price.getArray(&quot;records&quot;);
+
+if(unitPrice.length &gt; 0){
+
+var insert_line = new sforce.SObject(&quot;STKR__Billing_items__c&quot;); //create a new sObject
+
+insert_line.STKR__Billing_Number__c = Bresult[0].id; 
+insert_line.STKR__Product__c = unitPrice[0].product2Id; 
+insert_line.STKR__Sales_Price__c = unitPrice[0].UnitPrice; 
+insert_line.STKR__Quantity__c = 1;
+insert_line.STKR__Line_Description_Long__c = Pid.records.STKR__Action__c+&apos; (Item Detail: &apos;+Pid.records.STKR__Item_Detail__c+&apos;)&apos;; 
+
+InsertLIRecords.push(insert_line); //add the updated record to our array 
+
+var update_action = new sforce.SObject(&quot;STKR__Actions__c&quot;); //create a new sObject
+
+update_action.Id = Pid.records.Id;
+console.log(&apos;I made it to here!!!!&apos;); 
+update_action.STKR__Quoted__c = &apos;TRUE&apos;;
+console.log(&apos;I made it to here 1 !!!!&apos;); 
+update_action.STKR__Action__c = Pid.records.STKR__Action__c +&apos; - &apos;+&apos;Quoted&apos;;
+console.log(&apos;I made it to here 2 !!!!&apos;); 
+
+// Add current action to array
+UpdateARecord.push(update_action); //add the updated record to our array 
+
+console.log(&apos;but probably not  to here!!!!&apos;); 
+
+} // end if
+} //end for
+
+if(InsertLIRecords.length &gt; 0){
+var Lresult = sforce.connection.create(InsertLIRecords); //create the records 
+var Aresult = sforce.connection.update(UpdateARecord); //update actions
+}
+parent.location.href = url; //refresh the page 
+} // end if
+} 
+}</url>
+    </webLinks>
+</CustomObject>

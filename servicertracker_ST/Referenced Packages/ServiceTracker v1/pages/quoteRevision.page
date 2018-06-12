@@ -1,0 +1,15 @@
+<apex:page controller="STKR.quoteRevisionController" >
+
+    <apex:PageBlock id="revisionHistory" title="Quote Revision History">
+    <apex:PageBlockTable id="revisionTable" value="{!revisions}" var="revision">
+
+    <apex:column headerValue="Quote ID">
+        <apex:outputLink value="/{!revision.id}">{!revision.name}</apex:outputLink>
+    </apex:column>
+    <apex:column value="{!revision.STKR__Version__c}"/>
+    <apex:column value="{!revision.STKR__Date__c}"/>
+    <apex:column value="{!revision.createdDate}" headerValue="Created On"/>
+    <apex:column value="{!revision.STKR__Total_Billing_Value__c}"/>
+    </apex:PageBlockTable>
+    </apex:PageBlock>
+</apex:page>

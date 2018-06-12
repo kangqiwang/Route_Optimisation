@@ -1,0 +1,43 @@
+<apex:page standardController="STKR__Resource__c" showHeader="false" sidebar="false">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<!--    <script src="https://maps.googleapis.com/maps/api/js?key={!$Setup.STKR__GoogleMapsAPI__c.STKR__API_Key__c}&callback=loader" type="text/javascript"></script> -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjd7vLmWWHTtSfH_d5JNujUUSc5VIeqvM&callback=loader" type="text/javascript"></script>
+
+  </head>
+  <body>
+    <div id="map" style="height:300px;"/>
+
+    <script type="text/javascript">   
+      var infowindow = new google.maps.InfoWindow();
+      var AccLat = "{!STKR__Resource__c.STKR__Location__Latitude__s}";
+      var AccLon = "{!STKR__Resource__c.STKR__Location__Longitude__s}";
+      var IC= "{!$Resource.pin}";      
+      var latlng = new google.maps.LatLng(AccLat,AccLon);     
+      var mapOptions = {
+        zoom: 17,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      }
+      var geo = new google.maps.Geocoder(); 
+      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      var bounds = new google.maps.LatLngBounds();
+      var cen = new google.maps.Marker({
+         position: latlng,
+         map: map,
+         url: "/",
+         animation: google.maps.Animation.DROP,
+         icon: IC,          
+         title: "{!STKR__Resource__c.Name}"
+      });
+
+    </script>
+
+  </body>
+
+</html>
+
+
+
+</apex:page>

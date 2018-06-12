@@ -1,0 +1,11 @@
+<apex:page standardController="Account" showHeader="true" tabStyle="Account">
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+ <div style="background-color:red;color:white;text-align:center;font-size:14px">
+   <p style="{!IF(OR(Account.STKR__Status__c = 'Inactive',Account.STKR__Status__c = 'On Stop',Account.STKR__Status__c = 'On Hold'), '', 'display:none')};">
+    <b>This Account is {!Account.STKR__Status__c}, no visits will be sent to the mobile. Please check any related contracts and schedules.</b>
+   </p>
+   <p style="{!IF(Account.STKR__Notification_Text__c != '', '', 'display:none')};">
+    {!Account.STKR__Notification_Text__c}
+   </p>
+ </div>
+</apex:page>

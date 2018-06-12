@@ -1,0 +1,19 @@
+<apex:page standardcontroller="STKR__Visit__c" extensions="STKR.SortInspections">
+<apex:pageBlock >
+ <apex:pageblockTable value="{!lst}" var="a">
+  <apex:column value="{!a.id}"/>
+  <apex:column value="{!a.Name}"/>
+  <apex:column value="{!a.CreatedDate}"/>
+  <apex:column value="{!a.STKR__Service_Item__r.STKR__Order__c}"/>
+  <apex:column value="{!a.STKR__Service_Item__r.STKR__Item_Type__c}"/>
+ </apex:pageblockTable>
+
+<apex:pageblocktable value="{!outStandingActions}" var="b">
+</apex:pageblocktable>
+   
+<apex:pageblocktable value="{!lst2}" var="c">
+  <apex:column value="{!c.Id}"/>
+</apex:pageblocktable>
+ 
+</apex:pageBlock>
+</apex:page>

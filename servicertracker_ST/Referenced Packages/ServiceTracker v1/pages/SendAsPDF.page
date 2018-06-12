@@ -1,0 +1,75 @@
+<apex:page controller="STKR.PdfEmailController" tabStyle="STKR__Visit__c" sidebar="false">  
+<script src="/jquery/jquery.js"></script>
+<script src="/jquery/jquery.validate.js"></script>
+
+  <apex:sectionHeader title="PDF Reports" subtitle="Preview / Email PDF Reports" 
+    description="Please check the available PDF Reports below and enter recipient details to send an email with the selected PDF Report(s)."/>
+
+  <apex:form id="theForm">
+    <apex:pageMessages />
+            <apex:commandButton action="{!Cancel}" value="Return to Visit Detail"/> 
+    <apex:pageBlock title="Step 1. Preview Report">
+
+<b>Available PDF Reports</b>
+<br/> <br/> 
+<apex:pageblockTable value="{!attachments}" var="a" id="table"> 
+<apex:column headerValue="Action" >
+ <apex:outputLink value="{!URLFOR($Action.Attachment.Download,a.id)}" target="_blank">Preview</apex:outputLink> | 
+ <a href="javascript:if (window.confirm('Are you sure?')) DeleteA('{!a.Id}');">Remove</a>
+     </apex:column>
+ <apex:column value="{!a.Name}"/> 
+</apex:pageblockTable>  
+<apex:actionFunction action="{!DeleteA}" name="DeleteA" reRender="table" >
+   <apex:param name="attachid" value="" assignTo="{!SelectedAttachId}"/>
+</apex:actionFunction> 
+<br/>
+            <apex:outputLabel value="Add Attachment " for="reports"/>
+            <apex:selectList value="{!reportname}" id="report" size="1">
+                 <apex:selectOptions value="{!reports}" id="reports"/>
+            </apex:selectList>
+               <apex:commandButton action="{!savePdf}" value="Save Attachment"/>    
+
+</apex:pageblock>                     
+    <apex:pageBlock title="Step 2. Email Details">
+Enter the name of the recipients from the available list of Alerts (if these have been setup against the contract) or Enter an email address in the cc box.  Alternatively you can bcc yourself.
+        <apex:pageBlockSection >  
+        <apex:pageBlockSectionItem >
+        </apex:pageBlockSectionItem>      
+        <apex:pageBlockSectionItem >
+        </apex:pageBlockSectionItem>   
+
+      <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Recipient (to address)" for="email"/>
+            <apex:selectList value="{!email}" id="emaillist" size="1">
+                 <apex:selectOptions value="{!emails}" id="email"/>
+            </apex:selectList>
+        </apex:pageBlockSectionItem> 
+      <apex:pageBlockSectionItem />  
+      <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Email address (cc address)" for="memail"/>
+            <apex:inputText value="{!memail}" id="memail"/>
+        </apex:pageBlockSectionItem> 
+
+      <apex:pageBlockSectionItem />   
+
+         <apex:pageBlockSectionItem >   
+            <apex:outputLabel value="Send me a copy (bcc address)" for="bcc"/>
+            <apex:inputCheckbox value="{!bcc}" id="bcc"/>
+      </apex:pageBlockSectionItem>        
+       </apex:pageBlockSection>
+<apex:pageblocksection >
+<apex:pageblocksectionItem datastyle="width:50%">
+<apex:outputLabel >Additional Notes</apex:outputLabel>
+      <apex:inputtextarea cols="80" rows="15" value="{!notes}"/>
+
+</apex:pageblocksectionItem>
+</apex:pageblocksection>
+
+       <center> 
+               <apex:commandButton action="{!sendPdf}" value="Send Report(s)"/>
+        <apex:commandButton action="{!Cancel}" value="Cancel"/>  
+       </center>  
+    </apex:pageBlock>
+  </apex:form>
+
+</apex:page>

@@ -1,0 +1,83 @@
+<apex:page showheader="false" sidebar="false" standardController="STKR__Service_Contract__c">
+<html>
+    <body>
+        <table border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+            <tbody>
+                <tr>
+                    <td style="background-color: rgb(10, 124, 178);">
+                        <span style="font-family:verdana,geneva,sans-serif;"><img src="/servlet/servlet.ImageServer?id=015b00000007lGM&oid=00Db0000000atAG"/></span></td>
+                    <td style="background-color: rgb(10, 124, 178);">
+                        <span style="font-family:verdana,geneva,sans-serif;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; search</span></td>
+                    <td colspan="3" style="background-color: rgb(10, 124, 178);">
+                        <p>
+                            &nbsp;</p>
+                        <p>
+                            <span style="font-family:verdana,geneva,sans-serif;">&nbsp; name / date</span></p>
+                        <p>
+                            &nbsp;</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span style="font-family:verdana,geneva,sans-serif;">servicetracker contract detail</span></td>
+                    <td>
+                        <span style="font-family:verdana,geneva,sans-serif;">alert</span></td>
+                    <td>
+                        <span style="font-family:verdana,geneva,sans-serif;">help yourself</span></td>
+                    <td>
+                        <span style="font-family:verdana,geneva,sans-serif;">settings</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        Contract Number: <apex:outputfield value="{!STKR__Service_Contract__c.name}"/><br/>
+        Start Date: <apex:outputfield value="{!STKR__Service_Contract__c.STKR__Start_Date__c}"/><br/>
+        End Date: <apex:outputfield value="{!STKR__Service_Contract__c.STKR__End_Date__c}"/><br/><br/>
+        
+        <apex:form >
+                       
+
+        
+        
+        <apex:pageblock id="ScheduledVisits" title="Scheduled Visits"  >
+        <apex:pageBlockTable value="{!STKR__Service_Contract__c.Preventative_Maintenance__r}" var="o">
+        <apex:column style="{!IF(NOT(o.STKR__Service_Type__c = 'Scheduled'), 'display:none', '')}" onclick="window.open('/{!o.id}','_new')" value="{!o.name}"/>
+        <apex:column style="{!IF(NOT(o.STKR__Service_Type__c = 'Scheduled'), 'display:none', '')}" value="{!o.STKR__Last_Visit__c}"/>
+        <apex:column style="{!IF(NOT(o.STKR__Service_Type__c = 'Scheduled'), 'display:none', '')}" value="{!o.STKR__Next_Visit__c}"/>
+        </apex:pageBlockTable>
+        </apex:pageblock>
+        
+                        
+                <apex:pageblock id="UnsheduledVisits" title="Unscheduled Visits"  >
+        <apex:pageBlockTable value="{!STKR__Service_Contract__c.Preventative_Maintenance__r}" var="u">
+        <apex:column style="{!IF(NOT(u.STKR__Service_Type__c = 'UnScheduled'), 'display:none', '')}" onclick="window.open('/{!u.id}','_new')" value="{!u.name}"/>
+        <apex:column style="{!IF(NOT(u.STKR__Service_Type__c = 'UnScheduled'), 'display:none', '')}" value="{!u.STKR__Last_Visit__c}"/>
+        <apex:column style="{!IF(NOT(u.STKR__Service_Type__c = 'UnScheduled'), 'display:none', '')}" value="{!u.STKR__Next_Visit__c}"/>
+        </apex:pageBlockTable>
+        </apex:pageblock>
+        
+                <apex:pageblock id="Quotes" title="Quotes"  >
+        <apex:pageBlockTable value="{!STKR__Service_Contract__c.Billing__r}" var="q">
+        <apex:column style="{!IF(NOT(q.STKR__Type__c = 'Quote'), 'display:none', '')}" onclick="window.open('/{!q.id}','_new')" value="{!q.name}"/>
+        <apex:column style="{!IF(NOT(q.STKR__Type__c = 'Quote'), 'display:none', '')}" value="{!q.STKR__Date__c}"/>
+        <apex:column style="{!IF(NOT(q.STKR__Type__c = 'UnScheduled'), 'display:none', '')}" value="{!q.STKR__Total_Billing_Value__c}"/>
+        </apex:pageBlockTable>
+        </apex:pageblock>
+        
+                        <apex:pageblock id="Invoices" title="Invoices"  >
+        <apex:pageBlockTable value="{!STKR__Service_Contract__c.Billing__r}" var="i">
+        <apex:column style="{!IF(NOT(i.STKR__Type__c = 'Invoice'), 'display:none', '')}" onclick="window.open('/{!i.id}','_new')" value="{!i.name}"/>
+        <apex:column style="{!IF(NOT(i.STKR__Type__c = 'Invoice'), 'display:none', '')}" value="{!i.STKR__Date__c}"/>
+        <apex:column style="{!IF(NOT(i.STKR__Type__c = 'Invoice'), 'display:none', '')}" value="{!i.STKR__Total_Billing_Value__c}"/>
+        </apex:pageBlockTable>
+        </apex:pageblock>
+        
+
+        </apex:form>
+        
+                
+
+        
+      </body>
+</html>
+</apex:page>

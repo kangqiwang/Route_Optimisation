@@ -1,0 +1,2702 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <content>ServiceDetail</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>true</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>AccountId__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Account__r.Id</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>AccountId</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Account__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Related Account Name</inlineHelpText>
+        <label>Site</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Schedules</relationshipLabel>
+        <relationshipName>Services</relationshipName>
+        <required>true</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Add_Inspection_Items__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Add all Inspection items from the related Account to the schedule</inlineHelpText>
+        <label>Add Inspection Items to Schedule</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Address__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>&quot;&apos;&quot;+ 
+
+SUBSTITUTE( 
+
+IF(Account__r.ShippingStreet &lt;&gt; &apos;&apos;,Account__r.ShippingStreet,&apos;&apos;) 
++&quot; &quot;+ 
+IF(Account__r.ShippingCity &lt;&gt; &apos;&apos;,Account__r.ShippingCity,&apos;&apos;) 
++&quot; &quot;+ 
+IF(Account__r.ShippingState &lt;&gt; &apos;&apos;,Account__r.ShippingState,&apos;&apos;) 
++&quot; &quot;+ 
+IF(Account__r.ShippingPostalCode &lt;&gt; &apos;&apos;,Account__r.ShippingPostalCode,&apos;&apos;) 
++&quot; &quot;+ 
+IF(Account__r.ShippingCountry &lt;&gt; &apos;&apos;,Account__r.ShippingCountry,&apos;&apos;) 
+
+,&quot;,&quot;,&quot; &quot;) 
+
++&quot;&apos;&quot;</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Site Address</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>All_Open_Scheduled_Visits__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Total number of scheduled visits that are open</inlineHelpText>
+        <label>All Open Scheduled Visits</label>
+        <summaryFilterItems>
+            <field>Visit__c.Status__c</field>
+            <operation>notEqual</operation>
+            <value>Complete</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.IsFollowUp__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.Assisted_Visit__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.Aborted_Visit__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.Quick_Call_Out__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Visit__c.Service__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>AutoInvoice__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Do you want to create an invoice as soon as the Invoice Status is &quot;Accepted&quot; and all visits are complete?</inlineHelpText>
+        <label>AutoInvoice</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Billing_Query__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Supporting information for billing query</inlineHelpText>
+        <label>Billing Query Information</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Billing_Ref__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Service_Contract__r.Account_Ref__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The Billing Reference of the associated Contract</inlineHelpText>
+        <label>Billing Reference</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Business_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Business Type of the service</inlineHelpText>
+        <label>Business Type</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Asbestos</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Electric</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Fire</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Gas</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Pest</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Water</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Calendar_Year_Period__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Tick this box to reset the visit number (1 of X) to the start of the year</inlineHelpText>
+        <label>Reset Visit Numbering</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Chargeable__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(Service_Value_PA__c = 0.00,FALSE,TRUE)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Is the Service Chargeable?</inlineHelpText>
+        <label>Chargeable</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Contact_Name__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the Primary Contact</inlineHelpText>
+        <label>Contact Name</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipName>Preventative_Maintenance</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Contract_End_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Service_Contract__r.End_Date__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>End Date of the Contract (Can be left blank)</inlineHelpText>
+        <label>Contract End Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Contract_Ref_PO__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Service_Contract__r.Customer_Reference__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Customer Reference</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Contract_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>TEXT(Service_Contract__r.Type__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Contract Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Create_New_Schedule__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Checks if the Schedule is to be created</inlineHelpText>
+        <label>Create New Schedule</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Current_Visit_Number__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(
+Calendar_Year_Period__c = FALSE,
+IF(
+FLOOR(MOD(Visits_Complete__c + Initial_Visit_Number__c,Number_of_Visit_Per_Year__c))=0,
+Number_of_Visit_Per_Year__c,
+MOD(Visits_Complete__c + Initial_Visit_Number__c,Number_of_Visit_Per_Year__c)
+),
+Visits_Complete_This_Year__c + 1
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Next Visit Number</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Detail__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Additional Details of the Service to be carried out</inlineHelpText>
+        <label>Unused</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Machine Service</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Water</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Pest</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Fix_all_Visits__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Selecting this option will fix all visits created in the schedule</inlineHelpText>
+        <label>Fix all Visits</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Frequency__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF( Service_Interval__c = 1,
+TEXT(Service_Frequency__c),
+TEXT(Service_Interval__c) &amp; &quot; &quot; &amp; TEXT(Service_Frequency__c)
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Frequency</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Full_Year_Schedule__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Do you want to create a complete schedule for the  full year / number of visits?</inlineHelpText>
+        <label>Full Schedule</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Initial_Visit_Number__c</fullName>
+        <defaultValue>1</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The starting Visit number if the schedule was created midway through the year.</inlineHelpText>
+        <label>First Visit Number</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Invoice_Description__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The description that will appear on the invoice if the automatic invoice flag is ticked</inlineHelpText>
+        <label>Invoice Description</label>
+        <length>32768</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Invoice_First_Visit__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Do you want to create the invoice on the first visit?</inlineHelpText>
+        <label>Invoice on First Visit</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Invoice_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Invoice Status</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Schedule Complete</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Billing Query</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Approved</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Invoiced__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Service_Contract__r.Invoiced__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Has the Contract / Job been invoiced</inlineHelpText>
+        <label>Contract / Job Invoiced</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Items_Covered__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Items Covered</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Cockroaches</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Crawling Insects</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Garden Ants</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Mice</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Rats</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Last_Scheduled_Visit__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The date of the last scheduled visit.  This excludes aborted, follow-ups and call outs</inlineHelpText>
+        <label>Last Scheduled Visit Date</label>
+        <summarizedField>Visit__c.Completion_Time__c</summarizedField>
+        <summaryFilterItems>
+            <field>Visit__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Complete</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.Aborted_Visit__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.IsFollowUp__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.Assisted_Visit__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.Quick_Call_Out__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Visit__c.Service__c</summaryForeignKey>
+        <summaryOperation>max</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Last_Visit__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date of Last Visit</inlineHelpText>
+        <label>Last Visit Date</label>
+        <summarizedField>Visit__c.Completion_Time__c</summarizedField>
+        <summaryFilterItems>
+            <field>Visit__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Complete</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Visit__c.Service__c</summaryForeignKey>
+        <summaryOperation>max</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Location__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Location</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Next_Visit_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The next visit date</inlineHelpText>
+        <label>Next Visit Date</label>
+        <summarizedField>Visit__c.Due_Date__c</summarizedField>
+        <summaryFilterItems>
+            <field>Visit__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Open, Accepted, In Progress, Journey Started</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.IsFollowUp__c</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Visit__c.Service__c</summaryForeignKey>
+        <summaryOperation>min</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Next_Visit__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date of the last open Visit</inlineHelpText>
+        <label>Last Open Visit</label>
+        <summarizedField>Visit__c.Due_Date__c</summarizedField>
+        <summaryFilterItems>
+            <field>Visit__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Open, Accepted, In Progress, Journey Started</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Visit__c.Service__c</summaryForeignKey>
+        <summaryOperation>max</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Notes_Long__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Schedule Notes</label>
+        <length>32768</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Notes__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Additional Schedule Notes</inlineHelpText>
+        <label>Schedule Notes (Short)</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Number_of_Range_Selected__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This field updates using a workflow and the Range Selected Multi-Select Picklist</description>
+        <externalId>false</externalId>
+        <label>Number of Range Selected</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_of_Visit_Per_Year__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(ISPICKVAL(Service_Type__c,&apos;Contract Schedule&apos;),
+CASE(Service_Frequency__c,
+ &quot;Daily&quot;,ROUND(365.2425 /Service_Interval__c,0),
+ &quot;Weekly&quot;,ROUND(52 / Service_Interval__c * Number_of_Range_Selected__c,0),
+ &quot;Monthly&quot;, if(ISNULL( Service_Range__c ),ROUND(12 / Service_Interval__c,0) 
+, Number_of_Range_Selected__c),
+ 1
+)
+, Number_of_Visits__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Number of Visit Per Year</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_of_Visits__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>This is the number of Days, Weeks or Months depending on the Frequency set.</inlineHelpText>
+        <label>Number of Visits</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Open_Visits__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The Total Number of Open Visits on this Schedule</inlineHelpText>
+        <label>All Open Visits</label>
+        <summaryFilterItems>
+            <field>Visit__c.Status__c</field>
+            <operation>notEqual</operation>
+            <value>Complete</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Visit__c.Service__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>P_O_Number__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The purchase order for this schedule</inlineHelpText>
+        <label>P.O. Number</label>
+        <length>65</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Period_End__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Period_Start__c + 365.5</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Period End</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Period_Start__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF( Calendar_Year_Period__c = FALSE,
+
+DATE(
+YEAR (DATEVALUE(Start_Date__c)) + (FLOOR((TODAY() - DATEVALUE(Start_Date__c)) / 365.2425)),
+MONTH(DATEVALUE(Start_Date__c)),
+IF(AND(DAY(DATEVALUE(Start_Date__c)) = 29,MONTH(DATEVALUE(Start_Date__c)) = 02) , 28, DAY(DATEVALUE(Start_Date__c)))),
+
+DATE(YEAR(TODAY()),1,1)
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Period Start</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Price_Book__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Account__r.Price_Book__r.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Price Book Used on the Service</inlineHelpText>
+        <label>Price Book</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Product to be Scheduled</inlineHelpText>
+        <label>Product</label>
+        <lookupFilter>
+            <active>true</active>
+            <errorMessage>Please ensure the product is Active</errorMessage>
+            <filterItems>
+                <field>Product2.IsActive</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>Schedules</relationshipLabel>
+        <relationshipName>Services</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Range_Selected__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(Service_Range__c),1,
+IF(INCLUDES(  Service_Range__c , &quot;Mon&quot;), 1,0) +
+IF(INCLUDES(  Service_Range__c , &quot;Tue&quot;), 1,0) + 
+IF(INCLUDES(  Service_Range__c , &quot;Wed&quot;), 1,0) + 
+IF(INCLUDES(  Service_Range__c , &quot;Thur&quot;), 1,0) + 
+IF(INCLUDES(  Service_Range__c , &quot;Fri&quot;), 1,0) + 
+IF(INCLUDES(  Service_Range__c , &quot;Sat&quot;), 1,0) + 
+IF(INCLUDES(  Service_Range__c , &quot;Sun&quot;), 1,0) + 
+IF(INCLUDES(  Service_Range__c , &quot;Jan&quot;), 1,0) +
+IF(INCLUDES(  Service_Range__c , &quot;Feb&quot;), 1,0) +
+IF(INCLUDES(  Service_Range__c , &quot;Mar&quot;), 1,0) +
+IF(INCLUDES(  Service_Range__c , &quot;Apr&quot;), 1,0) +
+IF(INCLUDES(  Service_Range__c , &quot;May&quot;), 1,0) +
+IF(INCLUDES(  Service_Range__c , &quot;Jun&quot;), 1,0) +
+IF(INCLUDES(  Service_Range__c , &quot;Jul&quot;), 1,0) +
+IF(INCLUDES(  Service_Range__c , &quot;Aug&quot;), 1,0) +
+IF(INCLUDES(  Service_Range__c , &quot;Sep&quot;), 1,0) +
+IF(INCLUDES(  Service_Range__c , &quot;Oct&quot;), 1,0) +
+IF(INCLUDES(  Service_Range__c , &quot;Nov&quot;), 1,0) +
+IF(INCLUDES(  Service_Range__c , &quot;Dec&quot;), 1,0)
+
+
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Range Selected</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Response_SLA__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>SLA to be used on all Visits</inlineHelpText>
+        <label>Response SLA</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>SLA__c.Service_Contract__c</field>
+                <operation>equals</operation>
+                <valueField>$Source.Service_Contract__c</valueField>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>SLA__c</referenceTo>
+        <relationshipName>Services</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Response_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The agreed response time</inlineHelpText>
+        <label>Response Time</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>4 Hour</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>8 Hour</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>12 Hour</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>1 Day</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>3 Day</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>7 Day</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>10 Day</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>N/A</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Schedule_From__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The next visit be generated from one of these dates</inlineHelpText>
+        <label>Schedule From</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Completed</fullName>
+                    <default>true</default>
+                </value>
+                <value>
+                    <fullName>Due Date</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Planned Date</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Schedule_Invoiced__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Has this Schedule Been Invoiced</inlineHelpText>
+        <label>Schedule Invoiced</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Schedule_Summary__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>TEXT(Service_Interval__c) + &apos; &apos; +  Left(TEXT(Service_Frequency__c), 1)</formula>
+        <label>Schedule Summary</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Contract__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Related Contract / Job</inlineHelpText>
+        <label>Contract / Job</label>
+        <referenceTo>Service_Contract__c</referenceTo>
+        <relationshipLabel>Schedules</relationshipLabel>
+        <relationshipName>Preventative_Maintenance</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>true</reparentableMasterDetail>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Service_Frequency__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Schedule Frequency</inlineHelpText>
+        <label>Schedule Frequency</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Daily</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Weekly</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Monthly</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Yearly</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Service_Interval__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Schedule Interval</inlineHelpText>
+        <label>Schedule Interval</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Owner__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the Schedule Owner</inlineHelpText>
+        <label>Schedule Owner</label>
+        <referenceTo>Resource__c</referenceTo>
+        <relationshipLabel>Schedules</relationshipLabel>
+        <relationshipName>Services</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Range__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Schedule Range</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <controllingField>Service_Frequency__c</controllingField>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Mon</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Tue</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Wed</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Thur</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Fri</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Sat</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Sun</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Jan</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Feb</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Mar</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Apr</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>May</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Jun</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Jul</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Aug</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Sep</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Oct</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Nov</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Dec</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+            <valueSettings>
+                <controllingFieldValue>Weekly</controllingFieldValue>
+                <valueName>Mon</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Weekly</controllingFieldValue>
+                <valueName>Tue</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Weekly</controllingFieldValue>
+                <valueName>Wed</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Weekly</controllingFieldValue>
+                <valueName>Thur</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Weekly</controllingFieldValue>
+                <valueName>Fri</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Weekly</controllingFieldValue>
+                <valueName>Sat</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Weekly</controllingFieldValue>
+                <valueName>Sun</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Monthly</controllingFieldValue>
+                <valueName>Jan</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Monthly</controllingFieldValue>
+                <valueName>Feb</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Monthly</controllingFieldValue>
+                <valueName>Mar</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Monthly</controllingFieldValue>
+                <valueName>Apr</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Monthly</controllingFieldValue>
+                <valueName>May</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Monthly</controllingFieldValue>
+                <valueName>Jun</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Monthly</controllingFieldValue>
+                <valueName>Jul</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Monthly</controllingFieldValue>
+                <valueName>Aug</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Monthly</controllingFieldValue>
+                <valueName>Sep</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Monthly</controllingFieldValue>
+                <valueName>Oct</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Monthly</controllingFieldValue>
+                <valueName>Nov</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Monthly</controllingFieldValue>
+                <valueName>Dec</valueName>
+            </valueSettings>
+        </valueSet>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Service_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Schedule Type</inlineHelpText>
+        <label>Type</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Contract Schedule</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Job Schedule</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Call Out</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Service_Value_PA__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Total Value of Schedule Per Annum</inlineHelpText>
+        <label>Value</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Start_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date of the first Visit to be carried out</inlineHelpText>
+        <label>Schedule Start Date</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Status of Schedule</inlineHelpText>
+        <label>Schedule Status</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Active</fullName>
+                    <default>true</default>
+                </value>
+                <value>
+                    <fullName>Complete</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Inactive</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Time_Allocation__c</fullName>
+        <defaultValue>60</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Time allocated per visit in Minutes</inlineHelpText>
+        <label>Time Allocation (M)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Total_Inspection_Items__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Total Inspection Items</label>
+        <summaryForeignKey>Schedule_Items__c.Schedule__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Total_Number_of_Aborted_Visits__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The total number of aborted visits on this schedule</inlineHelpText>
+        <label>Total Number of Aborted Visits</label>
+        <summaryFilterItems>
+            <field>Visit__c.Aborted_Visit__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Visit__c.Service__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Total_Quick_Call_Outs__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Total number of quick call outs</inlineHelpText>
+        <label>Total Quick Call Outs</label>
+        <summaryFilterItems>
+            <field>Visit__c.Quick_Call_Out__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Visit__c.Service__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Total_Time_On_Site__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Total Time On Site in Minutes</inlineHelpText>
+        <label>Total Time On Site (M)</label>
+        <summarizedField>Visit__c.Time_On_Site__c</summarizedField>
+        <summaryForeignKey>Visit__c.Service__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Visit_Summary__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>&quot;Work carried out on &quot;&amp;
+TEXT(DAY(DATEVALUE(Last_Visit__c)))&amp;&quot;-&quot;&amp;
+TEXT(MONTH(DATEVALUE(Last_Visit__c)))&amp;&quot;-&quot;&amp;
+TEXT(YEAR(DATEVALUE(Last_Visit__c)))&amp;
+IF(ISBLANK(Next_Visit__c),&apos;&apos;,
+&quot; follow-up on &quot;&amp;
+TEXT(DAY(DATEVALUE(Next_Visit__c)))&amp;&quot;-&quot;&amp; 
+TEXT(MONTH(DATEVALUE(Next_Visit__c)))&amp;&quot;-&quot;&amp; 
+TEXT(YEAR(DATEVALUE(Next_Visit__c))))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Visit Summary</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Visits_Complete_This_Year__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Visits Completed as part of this year&apos;s schedule.  If a visit has been completed this year but was due in a previous year it is not counted in this calculation.</inlineHelpText>
+        <label>Scheduled Visits Complete This Year</label>
+        <summaryFilterItems>
+            <field>Visit__c.Completion_Time__c</field>
+            <operation>greaterOrEqual</operation>
+            <value>1/1/2018 12:00 AM</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.Quick_Call_Out__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.IsFollowUp__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.Aborted_Visit__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.Assisted_Visit__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Visit__c.Service__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Visits_Complete__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Total Number of Visits Complete</inlineHelpText>
+        <label>Total Scheduled Visits Complete</label>
+        <summaryFilterItems>
+            <field>Visit__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Complete</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.IsFollowUp__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.Aborted_Visit__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.Assisted_Visit__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Visit__c.Quick_Call_Out__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Visit__c.Service__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Visits_Remaining__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>If(
+ISNULL(Number_of_Visits__c), 
+Number_of_Visit_Per_Year__c - (Current_Visit_Number__c) + 1, 
+Number_of_Visits__c - Visits_Complete__c )</formula>
+        <label>Visits Remaining</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>Schedule</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>Service_Type__c</columns>
+        <columns>Account__c</columns>
+        <columns>Service_Owner__c</columns>
+        <columns>NAME</columns>
+        <columns>Number_of_Visit_Per_Year__c</columns>
+        <columns>Business_Type__c</columns>
+        <columns>Start_Date__c</columns>
+        <columns>Notes__c</columns>
+        <columns>Frequency__c</columns>
+        <columns>Visits_Complete__c</columns>
+        <columns>Service_Contract__c</columns>
+        <columns>Time_Allocation__c</columns>
+        <columns>Service_Frequency__c</columns>
+        <columns>Service_Interval__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>Job_Schedules</fullName>
+        <columns>NAME</columns>
+        <columns>Account__c</columns>
+        <columns>Service_Contract__c</columns>
+        <columns>Status__c</columns>
+        <columns>Number_of_Visit_Per_Year__c</columns>
+        <columns>Product__c</columns>
+        <columns>Frequency__c</columns>
+        <columns>Visits_Complete__c</columns>
+        <columns>Visits_Remaining__c</columns>
+        <columns>Service_Owner__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Service__c.Unscheduled_Service</value>
+        </filters>
+        <label>Job Schedules</label>
+    </listViews>
+    <nameField>
+        <displayFormat>S{000000}</displayFormat>
+        <label>Schedule Number</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Schedules</pluralLabel>
+    <recordTypeTrackFeedHistory>false</recordTypeTrackFeedHistory>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Call_Out</fullName>
+        <active>true</active>
+        <description>Call Out Shedule</description>
+        <label>Call Out</label>
+        <picklistValues>
+            <picklist>Business_Type__c</picklist>
+            <values>
+                <fullName>Asbestos</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Electric</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fire</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Gas</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pest</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Water</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Detail__c</picklist>
+            <values>
+                <fullName>Machine Service</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pest</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Water</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Invoice_Status__c</picklist>
+            <values>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Billing Query</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Schedule Complete</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Items_Covered__c</picklist>
+            <values>
+                <fullName>Cockroaches</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Crawling Insects</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Garden Ants</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mice</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rats</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Response_Time__c</picklist>
+            <values>
+                <fullName>1 Day</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>10 Day</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12 Hour</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>3 Day</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>4 Hour</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>7 Day</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>8 Hour</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>N%2FA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Schedule_From__c</picklist>
+            <values>
+                <fullName>Completed</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Due Date</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Planned Date</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_Frequency__c</picklist>
+            <values>
+                <fullName>Daily</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_Range__c</picklist>
+            <values>
+                <fullName>Apr</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Aug</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Dec</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Feb</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fri</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Jan</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Jul</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Jun</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mar</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>May</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mon</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Nov</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oct</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sat</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sep</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sun</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Thur</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tue</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Wed</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_Type__c</picklist>
+            <values>
+                <fullName>Call Out</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Complete</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Inactive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Scheduled_Service</fullName>
+        <active>true</active>
+        <description>Create Scheduled Services for recurring visits</description>
+        <label>Contract Schedule</label>
+        <picklistValues>
+            <picklist>Business_Type__c</picklist>
+            <values>
+                <fullName>Asbestos</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Electric</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fire</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Gas</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pest</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Water</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Detail__c</picklist>
+            <values>
+                <fullName>Machine Service</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pest</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Water</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Invoice_Status__c</picklist>
+            <values>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Billing Query</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Items_Covered__c</picklist>
+            <values>
+                <fullName>Cockroaches</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Crawling Insects</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Garden Ants</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mice</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rats</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Response_Time__c</picklist>
+            <values>
+                <fullName>1 Day</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10 Day</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12 Hour</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>3 Day</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>4 Hour</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>7 Day</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>8 Hour</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>N%2FA</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Schedule_From__c</picklist>
+            <values>
+                <fullName>Completed</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Due Date</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Planned Date</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_Frequency__c</picklist>
+            <values>
+                <fullName>Daily</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_Range__c</picklist>
+            <values>
+                <fullName>Apr</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Aug</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Dec</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Feb</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fri</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Jan</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Jul</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Jun</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mar</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>May</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mon</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Nov</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oct</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sat</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sep</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sun</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Thur</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tue</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Wed</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_Type__c</picklist>
+            <values>
+                <fullName>Contract Schedule</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Inactive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Unscheduled_Service</fullName>
+        <active>true</active>
+        <description>Unscheduled Service for reactive works</description>
+        <label>Job Schedule</label>
+        <picklistValues>
+            <picklist>Business_Type__c</picklist>
+            <values>
+                <fullName>Asbestos</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Electric</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fire</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Gas</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pest</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Water</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Detail__c</picklist>
+            <values>
+                <fullName>Machine Service</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pest</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Water</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Invoice_Status__c</picklist>
+            <values>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Billing Query</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Schedule Complete</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Items_Covered__c</picklist>
+            <values>
+                <fullName>Cockroaches</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Crawling Insects</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Garden Ants</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mice</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rats</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Response_Time__c</picklist>
+            <values>
+                <fullName>1 Day</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>10 Day</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>12 Hour</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>3 Day</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>4 Hour</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>7 Day</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>8 Hour</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>N%2FA</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Schedule_From__c</picklist>
+            <values>
+                <fullName>Completed</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Due Date</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Planned Date</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_Frequency__c</picklist>
+            <values>
+                <fullName>Daily</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_Range__c</picklist>
+            <values>
+                <fullName>Apr</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Aug</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Dec</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Feb</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fri</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Jan</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Jul</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Jun</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mar</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>May</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mon</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Nov</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oct</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sat</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sep</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sun</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Thur</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tue</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Wed</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Service_Type__c</picklist>
+            <values>
+                <fullName>Job Schedule</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Complete</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Inactive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts>
+        <customTabListAdditionalFields>Account__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Notes__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Number_of_Visit_Per_Year__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Service_Frequency__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Service_Interval__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Start_Date__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Status__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Service_Type__c</customTabListAdditionalFields>
+        <excludedStandardButtons>New</excludedStandardButtons>
+        <excludedStandardButtons>Accept</excludedStandardButtons>
+        <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
+        <listViewButtons>Update_Visit_Resource_List</listViewButtons>
+        <lookupPhoneDialogsAdditionalFields>Account__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Number_of_Visit_Per_Year__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Frequency__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Service_Owner__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Visits_Complete__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Visits_Remaining__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Account__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Business_Type__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Service_Contract__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Service_Interval__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Service_Frequency__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Number_of_Visit_Per_Year__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Next_Visit__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>Check_For_Billing_Query</fullName>
+        <active>true</active>
+        <description>Checks to see if there is a billing query and no information has been inserted</description>
+        <errorConditionFormula>AND(
+ISPICKVAL(Invoice_Status__c,&apos;Billing Query&apos;),
+ISBLANK(Billing_Query__c) 
+)</errorConditionFormula>
+        <errorDisplayField>Billing_Query__c</errorDisplayField>
+        <errorMessage>Please enter Billing Query Information</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Check_Monthly_Frequency</fullName>
+        <active>true</active>
+        <errorConditionFormula>OR(
+AND(
+ CONTAINS($Profile.Name,&apos;Admin&apos;), 
+ ISPICKVAL(Business_Type__c, &apos;Water&apos;),
+ ISPICKVAL(Service_Frequency__c,&apos;Monthly&apos;), 
+ ISNULL(Service_Range__c),
+ Service_Interval__c &lt;&gt; 1
+),
+AND(
+ CONTAINS($Profile.Name,&apos;Admin&apos;), 
+ ISPICKVAL(Service_Frequency__c,&apos;Monthly&apos;), 
+ NOT(ISNULL(Service_Range__c)),
+ Service_Interval__c &lt;&gt; 1
+)
+)</errorConditionFormula>
+        <errorDisplayField>Service_Interval__c</errorDisplayField>
+        <errorMessage>Please ensure the Schedule Interval is set to 1 and you have selected the relevant Months in the Range. This will be treated as a full year schedule.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Check_for_Contract_and_Account_Status</fullName>
+        <active>true</active>
+        <description>Checks to see if there is an Active Contract</description>
+        <errorConditionFormula>AND(
+CONTAINS($Profile.Name,&apos;Admin&apos;), 
+ISPICKVAL(Status__c,&apos;Active&apos;), 
+ ISPICKVAL(Service_Contract__r.Status__c,&apos;Inactive&apos;)
+)</errorConditionFormula>
+        <errorMessage>Please update the Service record(s) before making the Contract Inactive.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Edit_Schedule</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>page</linkType>
+        <masterLabel>New Schedule of Visits</masterLabel>
+        <openType>replace</openType>
+        <page>Edit_Schedule</page>
+        <protected>false</protected>
+    </webLinks>
+    <webLinks>
+        <fullName>Export_Service_Reports</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Export Service Reports</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/34.0/connection.js&quot;)} 
+{!REQUIRESCRIPT(&quot;/soap/ajax/34.0/apex.js&quot;)} 
+var accountId = &apos;{!Service__c.AccountId__c}&apos;; 
+var status = sforce.apex.execute(&quot;clientAttachments&quot;,&quot;chkAtt&quot;,{accId:accountId}); 
+
+if(status == &apos;false&apos;){ 
+alert(&apos;No Attachments for this Client!&apos;); 
+} 
+else{ 
+
+window.open(&apos;/apex/clientAttachmentPage?recID=&apos;+&quot;{!Service__c.AccountId__c}&quot;+&apos;&amp;AccName=&apos;+&quot;{!Service__c.Account__c}&quot;+&apos;&amp;serviceId=&apos;+&quot;{!Service__c.Id}&quot;,&apos;_parent&apos;);
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Get_Default_Alerts</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Get Default Alerts</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/20.0/connection.js&quot;)} //adds the proper code for inclusion of AJAX toolkit 
+var url = parent.location.href; //string for the URL of the current page 
+var insertRecords = []; //array for holding records that this code will ultimately update 
+
+//Get the Parent Record 
+var p = sforce.connection.query(&quot;Select ParentId from Account Where Id =&apos;{!Service__c.AccountId__c}&apos;&quot;); 
+var pac = p.getArray(&quot;records&quot;); //add all the contact id&apos;s to one complete string 
+var pacc = pac[0].ParentId; // add the parent Id 
+
+
+//Get all alerts for the related Account 
+var a = sforce.connection.query(&quot;Select Id FROM Contact WHERE Id NOT IN (Select Contact__c from STKR__Alerts__c where (STKR__Service_Contract__c = &apos;{!Service__c.Service_ContractId__c}&apos;) OR STKR__Service__c = &apos;{!Service__c.Id}&apos;) AND ((Account.Id = &apos;&quot;+pacc+&quot;&apos; AND STKR__Default_Alerts__c = &apos;Completed Visits on All Sites&apos;) OR (Account.Id = &apos;{!Service__c.AccountId__c}&apos; AND STKR__Default_Alerts__c != &apos;&apos;))&quot;); 
+
+//add all the contact id&apos;s to one complete string 
+var al = a.getArray(&quot;records&quot;); 
+
+//Check for Alerts present 
+if (al.length &lt; 1) { alert(&quot;There are No Default Alerts for contacts related to this record&quot;); 
+} else { 
+//for all records 
+for (var a=0; a &lt; al.length; a++) { 
+//create a new sObject for storing updated record details 
+var Insert_Alert = new sforce.SObject(&quot;STKR__Alerts__c&quot;); 
+Insert_Alert.STKR__Contact__c = al[a].Id; 
+Insert_Alert.STKR__Service_Contract__c =&apos;{!Service__c.Service_ContractId__c}&apos;; 
+Insert_Alert.STKR__Service__c =&apos;{!Service__c.Id}&apos;; 
+Insert_Alert.STKR__Visits__c = &apos;TRUE&apos;; 
+insertRecords.push(Insert_Alert); //add the updated record to our array 
+} 
+
+//Insert records back to Salesforce 
+var result = sforce.connection.create(insertRecords); 
+
+//refresh the page 
+parent.location.href = url; 
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>New_Call_Out</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>New Call Out</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/apex/NewJobSchedule?Account={!Service_Contract__c.AccountId__c}&amp;Contract={!Service_Contract__c.Id}&amp;RType=Call Out&amp;PBook={!Service_Contract__c.Price_Book__c}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>New_Job_Schedule</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>New Job Schedule</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/apex/NewJobSchedule?Account={!Service_Contract__c.AccountId__c}&amp;Contract={!Service_Contract__c.Id}&amp;RType=Job Schedule&amp;PBook={!Service_Contract__c.Price_Book__c}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>New_Service</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>New Contract Schedule</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/apex/NewService?Account={!Service_Contract__c.AccountId__c}&amp;Contract={!Service_Contract__c.Id}&amp;RType=Contract Schedule&amp;PBook={!Service_Contract__c.Price_Book__c}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Remove_Schedule</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Remove Open Visits</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/20.0/connection.js&quot;)} //adds the proper code for inclusion of AJAX toolkit
+
+var answer = confirm(&quot;WARNING: This will remove all open visits? (Maximum 200 at a time)&quot;);
+
+if (answer) { // If User Clicks OK
+
+var url = parent.location.href; //string for the URL of the current page
+var result = sforce.connection.query(&quot;SELECT Id from STKR__Visit__c where STKR__Service__c = &apos;{! Service__c.Id}&apos; AND STKR__Status__c = &apos;Open&apos; limit 200&quot;);
+
+var records = result.getArray(&quot;records&quot;);
+
+var idsForDeletion = [];
+
+for (var i=0; i&lt;records.length; i++) {
+      idsForDeletion.push(records[i].Id);
+  }
+
+  sforce.connection.deleteIds(idsForDeletion);
+  parent.location.href = url; //refresh the page
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Update_Visit_Description</fullName>
+        <availability>online</availability>
+        <description>Updates all open visit with the description from the Schedule Notes</description>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Update Visit Description</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/connection.js&quot;)} 
+{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/apex.js&quot;)} 
+
+var Service = {}; 
+var Notes; 
+
+// Define the variables used within the Script 
+var url = parent.location.href; //string for the URL of the current page 
+var updateRecords = []; //array for holding records that this code will ultimately update 
+
+// Get Visit Records 
+
+Service.ID = &apos;{!Service__c.Id}&apos;; 
+Notes = &apos;{!JSINHTMLENCODE(Service__c.Notes_Long__c)}&apos;; 
+
+var Vid=sforce.connection.query(&quot;Select Id from STKR__Visit__c where STKR__Service__c = &apos;&quot;+ Service.ID + &quot;&apos; AND STKR__Status__c != &apos;Complete&apos;&quot;); 
+var Vrecords = Vid.getArray(&quot;records&quot;); //add all the Service ids to an Array 
+
+// Start Master Update Script 
+if (Vrecords.length &lt; 1) { 
+alert(&quot;No Visits to update&quot;); 
+} 
+else { 
+
+var answer=confirm(&quot;WARNING: Are you sure you want to update all Open Visits with the current Schedule Notes?&quot;); 
+
+if (answer) { // If User Clicks OK 
+
+//Start Update Services Script 
+if (Vrecords.length &lt; 0) { alert(&quot;No Visits Found&quot;); 
+} else { //otherwise, there was a record selection 
+for (var a=0; a&lt;Vrecords.length; a++) { //for all records 
+var update_Visit = new sforce.SObject(&quot;STKR__Visit__c&quot;); //create a new sObject for storing updated record details 
+update_Visit.Id = Vrecords[a].Id; //set the Id of the selected record 
+update_Visit.STKR__Notes_Long__c = Notes; 
+updateRecords.push(update_Visit); //add the updated record to our array 
+result = sforce.connection.update(updateRecords); //push the updated records back to Salesforce 
+update_Visit = []; 
+updateRecords = []; 
+} //End Loop 
+} //End If 
+
+} // End if 
+parent.location.href = url; //refresh the page 
+} // If user clicks Cancel</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Update_Visit_Resource</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Update Visit Resource</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/apex.js&quot;)}
+
+    var Service = {};
+    var Resource = {};
+ 
+    // Define the variables used within the Script
+    var url = parent.location.href; //string for the URL of the current page
+    var updateRecords = []; //array for holding records that this code will ultimately update
+    
+    // Get Visit Records
+
+    Service.ID = &apos;{!Service__c.Id}&apos;;
+    Resource.ID = &apos;{!Service__c.Service_OwnerId__c}&apos;;   
+
+    var Vid=sforce.connection.query(&quot;Select Id from STKR__Visit__c  where STKR__Service__c = &apos;&quot;+ Service.ID + &quot;&apos; AND STKR__Status__c = &apos;Open&apos; AND STKR__Resource__c != &apos;&quot;+ Resource.ID + &quot;&apos; &quot;);
+    var Vrecords = Vid.getArray(&quot;records&quot;); //add all the Service ids to an Array
+    
+    // Start Master Update Script
+    if (Vrecords.length &lt; 1) { 
+     alert(&quot;No Visits to update&quot;);
+     }
+     else {
+
+     var answer=confirm(&quot;WARNING: Are you sure you want to update all Open Visits with the current Owner?&quot;);
+
+     if (answer) { // If User Clicks OK
+
+    //Start Update Services Script
+    if (Vrecords.length &lt;  0) { alert(&quot;No Visits Found&quot;);
+    } else { //otherwise, there was a record selection
+    for (var a=0; a&lt;Vrecords.length; a++) { //for all records
+    var update_Visit = new sforce.SObject(&quot;STKR__Visit__c&quot;); //create a new sObject for storing updated record details
+    update_Visit.Id = Vrecords[a].Id; //set the Id of the selected record
+    update_Visit.STKR__Resource__c = Resource.ID;
+    updateRecords.push(update_Visit); //add the updated record to our array
+    result = sforce.connection.update(updateRecords); //push the updated records back to Salesforce
+    update_Visit = [];
+    updateRecords = [];
+    } //End Loop
+    } //End If
+
+    } // End if
+     parent.location.href = url; //refresh the page
+     } // If user clicks Cancel</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Update_Visit_Resource_List</fullName>
+        <availability>online</availability>
+        <description>Updates the visit resource field with the schedule owner</description>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Update Visit Resource</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/20.0/connection.js&quot;)}; 
+var updateRecords = []; 
+ScheduleIds = {!GetRecordIds($ObjectType.Service__c)}; 
+
+if(ScheduleIds.length &lt; 1) 
+{ alert(&apos;Please select at least one record&apos;) 
+} 
+else{ 
+
+var answer=confirm(&quot;WARNING: Are you sure you want to update all Open Visits with the Schedule Owner of the selected records?&quot;); 
+if (answer) { 
+
+for (var a=0; a&lt;ScheduleIds.length; a++) { //for all records selected
+
+var R=sforce.connection.query(&quot;Select id,STKR__Service_Owner__c from STKR__Service__c where id = &apos;&quot;+ ScheduleIds[a] + &quot;&apos; limit 1&quot;); 
+
+var Resource = R.getArray(&quot;records&quot;); //add Resource
+
+var Vid=sforce.connection.query(&quot;Select Id,STKR__Service__r.STKR__Service_Owner__c,STKR__Service__r.Name from STKR__Visit__c where STKR__Service__c = &apos;&quot;+ ScheduleIds[a] + &quot;&apos; AND STKR__Status__c = &apos;Open&apos; AND STKR__Resource__c != &apos;&quot;+ Resource[0].STKR__Service_Owner__c + &quot;&apos; &quot;); 
+
+var Vrecords = Vid.getArray(&quot;records&quot;); //add all the Service ids to an Array 
+
+//Start Update visits  Script 
+if (Vrecords.length &gt; 0) {  
+for (var b=0; b&lt;Vrecords.length; b++) { //for all records 
+var update_Visit = new sforce.SObject(&quot;STKR__Visit__c&quot;); //create a new sObject for storing updated record details 
+update_Visit.Id = Vrecords[b].Id; //set the Id of the selected record 
+update_Visit.STKR__Resource__c = Resource[0].STKR__Service_Owner__c; 
+
+updateRecords.push(update_Visit); //add the updated record to our array 
+
+result = sforce.connection.update(updateRecords); //Save the records
+update_Visit = []; //Clear the cache
+updateRecords = []; //Clear the cache
+} //End if no visits
+} //End visit Loop 
+
+} //End Service Loop
+document.location.reload(true); //refresh the page 
+
+} // End if user clicks Cancel
+} // End no records found</url>
+    </webLinks>
+</CustomObject>

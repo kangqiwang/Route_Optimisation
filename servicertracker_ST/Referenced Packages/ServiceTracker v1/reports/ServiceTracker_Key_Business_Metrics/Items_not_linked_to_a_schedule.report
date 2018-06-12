@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>CUST_NAME</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c.Reference__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c.Inspection_Start_Date__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c.Last_Inspection_Date__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c.Next_Inspection_Date__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c.Status__c</field>
+    </columns>
+    <columns>
+        <field>Service_Item__c.Current_State__c</field>
+    </columns>
+    <description>Inspection Items no linked to a schedule</description>
+    <filter>
+        <criteriaItems>
+            <column>Service_Item__c.Linked_to_a_Schedule__c</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>0</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Service_Item__c.Item_Type__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>ACCOUNT.NAME</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Items not linked to a schedule</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>AccountCustomEntity$Service_Item__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Service_Item__c.Next_Inspection_Date__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

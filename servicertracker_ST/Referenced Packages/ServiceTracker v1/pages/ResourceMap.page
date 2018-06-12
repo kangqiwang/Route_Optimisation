@@ -1,0 +1,169 @@
+<apex:page controller="STKR.AccountList" showHeader="false" sidebar="false">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Google Maps</title>
+<!--    <script src="https://maps.googleapis.com/maps/api/js?key={!$Setup.STKR__GoogleMapsAPI__c.STKR__API_Key__c}&callback=loader" type="text/javascript"></script> -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjd7vLmWWHTtSfH_d5JNujUUSc5VIeqvM&callback=loader" type="text/javascript"></script>
+
+
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(window).load(function() {
+    $(".loader").fadeOut("slow");
+})
+</script>  
+<style>
+
+.loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('/img/loading32.gif') 50% 50% no-repeat rgb(249,249,249);
+}
+</style>  
+  </head>
+  <body>
+<div class="loader"/>
+    <div id="map" style="height:600px;"></div>
+    <div id="messages" style="display:none"></div>
+
+    <script type="text/javascript">   
+
+    var delay = 100;
+
+      var infowindow = new google.maps.InfoWindow();
+      var AccLat;
+      var AccLon;
+      
+      if("{!account}" == ''){ 
+           
+        AccLat = "{!$Organization.Latitude}";
+        AccLon = "{!$Organization.Longitude}";
+        
+        if(AccLat == ''){
+         AccLat = '51.4928971';
+         AccLon = '-0.2214058';
+        }
+        IC = "/img/icon";
+        } else {
+        AccLat = "{!account.Location__Latitude__s}";
+        AccLon = "{!account.Location__Longitude__s}" ;
+        IC= "/img/icon/home32.png";      
+        }
+      
+      var latlng = new google.maps.LatLng(AccLat,AccLon);
+            
+      var mapOptions = {
+        zoom: 9,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      }
+      var geo = new google.maps.Geocoder(); 
+      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      var bounds = new google.maps.LatLngBounds();
+      var cen = new google.maps.Marker({
+         position: latlng,
+         map: map,
+         url: "/",
+         animation: google.maps.Animation.DROP,
+         icon: IC,          
+         title: "{!account.Name}"
+      });
+
+      function getAddress(search, next, Ttl, ID, rlat, rlng, LMTIME) {
+       
+       geo.geocode({address:search}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var msg = 'address="' + search + '" lat=' +rlat+ ' lng=' +rlng+ '(delay='+delay+'ms)<br>';
+                document.getElementById("messages").innerHTML += msg;
+                createMarker(search,rlat,rlng,Ttl,ID,LMTIME);
+            }
+
+            else {
+
+              if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                nextAddress--;
+                delay++;
+              } else {
+                var reason="Code "+status;
+                var msg = 'address="' + search + '" error=' +reason+ '(delay='+delay+'ms)<br>';
+                document.getElementById("messages").innerHTML += msg;
+              }   
+            }
+            next();
+          }
+        );
+      }
+
+     function createMarker(add,lat,lng,Ttl,ID,LMTIME) {
+
+var contentString =
+      '<h1 id="firstHeading" class="firstHeading">'+Ttl+'</h1>'+
+      '<div id="bodyContent">'+
+      '<p><b>Last Updated: </b>'+
+      LMTIME
+      +'</b>' +
+      '<p><a href="'+ID+'" target="_blank">'+
+      'Click Here to Open</a> '+
+      '</div>'+
+      '</div>'; 
+       
+       var marker = new google.maps.Marker({
+         position: new google.maps.LatLng(lat,lng),
+         map: map,
+         //animation: google.maps.Animation.DROP,
+         icon: '{!$Resource.pin}',
+         title: Ttl,
+         zIndex: Math.round(latlng.lat()*-100000)<<5
+       });
+
+      google.maps.event.addListener(marker, 'click', function() {
+         infowindow.setContent(contentString); 
+         infowindow.open(map,marker);
+       });
+
+       bounds.extend(marker.position);
+
+     }
+
+      var addresses = []
+      var Ttl = [];
+      var ID = [];
+      var LMTIME =[];
+      var rlat = [];
+      var rlng = [];
+
+        <apex:repeat value="{!objAccounts}" var="vis" id="addressesId"> 
+          var add = "{!vis.STKR__Location__Latitude__s}" +","+"{!vis.STKR__Location__Longitude__s}" ;   
+          add = add.replace(/(\r\n|\n|\r)/gm," ");   
+          addresses.push(add);
+          rlat.push("{!vis.STKR__Location__Latitude__s}");
+          rlng.push("{!vis.STKR__Location__Longitude__s}");
+          Ttl.push("{!vis.Name}"+" ("+"{!vis.STKR__Territory__r.Name}"+")");
+          LMTIME.push("{!vis.LastModifiedDate}");
+          ID.push("/"+"{!vis.Id}");
+        </apex:repeat>      
+      var nextAddress = 0;
+      function theNext() {
+        if (nextAddress < addresses.length) {
+          setTimeout('getAddress("'+addresses[nextAddress]+'",theNext,"'+Ttl[nextAddress]+'","'+ID[nextAddress]+'","'+rlat[nextAddress]+'","'+rlng[nextAddress]+'","'+LMTIME[nextAddress]+'")', delay);
+          nextAddress++;
+        } else {
+
+         // map.fitBounds(bounds);
+        }
+      }
+
+      theNext();
+
+    </script>
+  </body>
+
+</html>
+
+</apex:page>

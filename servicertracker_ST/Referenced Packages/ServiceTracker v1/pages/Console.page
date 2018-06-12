@@ -1,0 +1,154 @@
+<apex:page action="{!pageLoad}" tabStyle="STKR__Console__tab" >
+<head>
+<script>
+function colorPageBlock(pageblock,color) {
+if (pageblock != null) pageblock.firstChild.style.cssText = "background-color: "+ color + ";";
+}
+</script>
+ <style>    
+        #map {
+            font-family: Arial;
+            font-size:12px;
+            line-height:normal !important;
+            height:600px;        
+            padding: 20px;
+        }       
+        .roundCornerCss{ 
+            /* outer shadows  (note the rgba is red, green, blue, alpha) */
+            -webkit-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.4); 
+            -moz-box-shadow: 0px 1px 6px rgba(23, 69, 88, .5);
+            
+            /* rounded corners */
+            -webkit-border-radius: 12px;
+            -moz-border-radius: 7px; 
+            border-radius: 7px;
+            
+            /* gradients */
+            background: -webkit-gradient(linear, left top, left bottom, 
+            color-stop(0%, white), color-stop(15%, white), color-stop(100%, #D7E9F5)); 
+            background: -moz-linear-gradient(top, white 0%, white 55%, #D5E4F3 130%); 
+        }   
+    </style>
+ 
+    
+<script>
+ function boolFunction(variable)
+    {
+    var bool = variable.value;      
+switch (bool)
+{
+  case 'Resources': document.getElementById('Rmap').style.display = 'block'; 
+                    document.getElementById('Conmap').style.display = 'none';
+                    document.getElementById('Cmap').style.display = 'none';
+                    document.getElementById('Fmap').style.display = 'none';
+                    document.getElementById('Jmap').style.display = 'none';
+  
+            break;
+  case 'Jobs':      document.getElementById('Rmap').style.display = 'none'; 
+                    document.getElementById('Conmap').style.display = 'none';
+                    document.getElementById('Cmap').style.display = 'none';
+                    document.getElementById('Fmap').style.display = 'none';
+                    document.getElementById('Jmap').style.display = 'block'; 
+
+ 
+            break;
+  case 'Call':      document.getElementById('Rmap').style.display = 'none'; 
+                    document.getElementById('Conmap').style.display = 'none';
+                    document.getElementById('Cmap').style.display = 'block';
+                    document.getElementById('Fmap').style.display = 'none';
+                    document.getElementById('Jmap').style.display = 'none';
+
+            break;
+  case 'Follow':    document.getElementById('Rmap').style.display = 'none'; 
+                    document.getElementById('Conmap').style.display = 'none';
+                    document.getElementById('Cmap').style.display = 'none';
+                    document.getElementById('Fmap').style.display = 'block';
+                    document.getElementById('Jmap').style.display = 'none';
+                    
+            break;          
+
+  case 'Contracts':    document.getElementById('Rmap').style.display = 'none'; 
+                    document.getElementById('Conmap').style.display = 'block';
+                    document.getElementById('Cmap').style.display = 'none';
+                    document.getElementById('Fmap').style.display = 'none';
+                    document.getElementById('Jmap').style.display = 'none';
+                    
+            break;              
+            
+  default:  alert(bool); 
+}
+}
+                
+</script>
+<style>
+#nav:link {color: #FFFFFF;font-size:16px;text-decoration:none;font-weight:700;}
+#nav:visited {color: #FFFFFF;font-size:16px;text-decoration:none;font-weight:700;}
+#nav:hover {color: #fff !important;font-size:16px;text-decoration:none;font-weight:700;background:#000000;}
+#nav:active {color: #FFFFFF;font-size:16px;text-decoration:none;font-weight:700;}
+</style>
+</head>
+<div id="Top"/>
+<apex:form >
+
+<div height="50px" style="background:#0A7CB2;">
+<center><a id="nav" href="#VisitList">ServiceTracker Mapping and Visit Lists</a>
+</center>
+</div>
+
+<table border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+<tr>
+<td valign="top" align="right" style="width:100%;">
+<div align="left" id="Map">
+<apex:pageBlock id="pgBlock">   
+        <apex:pageBlockSection title="Select a Map" columns="1" id="pgBlockSection" collapsible="false">
+            <apex:pageBlockSectionItem id="pgBlockSectionitem">
+                <apex:selectRadio id="idRadio1" onclick="boolFunction(this);" >
+                    <apex:selectOption itemValue="Resources" itemLabel="Resources" />
+                    <apex:selectOption itemValue="Contracts" itemLabel="Contracts" />
+                    <apex:selectOption itemValue="Jobs" itemLabel="Jobs" />
+                    <apex:selectOption itemValue="Call" itemLabel="Call Outs" />
+                    <apex:selectOption itemValue="Follow" itemLabel="Follow-Ups" />
+                </apex:selectRadio>
+            </apex:pageBlockSectionItem>
+          <script>colorPageBlock(document.getElementById("{!$Component.pgBlockSection}"), "#0A7CB2");</script>   
+        </apex:pageBlockSection>
+      </apex:pageBlock>
+
+
+      <span id="Rmap" style = "" class="roundCornerCss">
+        <apex:iframe src="/apex/ResourceMap" frameborder="false" width="100%"/>
+      </span>
+      <span id="Conmap" style = "display:none" class="roundCornerCss">
+        <apex:iframe src="/apex/ContractMap" frameborder="false" width="100%"/>
+      </span>
+      <span id="Cmap" style = "display:none" class="roundCornerCss">
+        <apex:iframe src="/apex/CallOutMap" frameborder="false" width="100%"/>
+      </span>
+      <span id="Jmap" style = "display:none" class="roundCornerCss">
+        <apex:iframe src="/apex/JobMap" frameborder="false" width="100%"/>
+      </span>
+      <span id="Fmap" style = "display:none" class="roundCornerCss">
+        <apex:iframe src="/apex/FollowUpMap" frameborder="false" width="100%"/>
+      </span>
+</div>
+</td>     
+</tr>
+</table>
+ <br/>
+<div align="Center">
+<a href="#Top">Back to Top</a>
+</div>
+
+ <br/>
+ <br/>
+</apex:form>
+<hr/>
+<div id="VisitList">
+<apex:enhancedList type="STKR__Visit__c" height="1000" rowsPerPage="200"/>
+</div>
+<br/>
+<apex:form >
+ <br/>
+</apex:form>
+
+</apex:page>

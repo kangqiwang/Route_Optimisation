@@ -1,0 +1,250 @@
+<apex:page showHeader="true" tabStyle="ServiceTracker_Support__tab" standardController="Organization" sidebar="true" >
+<script>
+function colorPageBlock(pageblock,color) {
+if (pageblock != null) pageblock.firstChild.style.cssText = "background-color: "+ color + ";";
+}
+</script>
+   <style>
+   .activeTab {background-color:#015A83; font-weight:600; color:white; background-image:none;font-size:14px;border: none;}
+   .inactiveTab {background-color:#0A7CB2; font-weight:600; color:white; background-image:none;font-size:14px;border: none;}
+   .rich-tabhdr-side-border { background-image:none;border: none; }
+   .rich-tabhdr-side-cell { background-image:none;border: none; }
+   .rich-tabhdr-cell-active {background-image:none;background-color:#015A83;border: none; }
+   .rich-tabhdr-cell-inactive {background-image:none;background-color:#0A7CB2;border: none; }
+   .rich-tabpanel {background-image:none;background-color:#0A7CB2;}
+   .panel { background-color:#F5FAFF; font-family:"vag-round", sans-serif; font-size:12px;}
+   </style>
+    <style type="text/css">
+        /* Color for the title bar */
+        .bPageBlock .pbHeader
+        {
+            background-color:#0A7CB2;
+        }
+        .bPageBlock .pbBody
+        {
+            /* Color for the pageblock background */
+            background-color:#0A7CB2;
+        }
+        .bPageBlock
+        {
+
+        }
+    </style>
+  <table border="0" width="100%">
+   <tr>       
+   <td align="left" valign="top">
+   <apex:image id="theLogo" value="{!$Resource.STKR__Logo}" height="100"/></td> <td style="vertical-align:middle"><div style="font-size:18px"><b>ServiceTracker Support &amp; Configuration</b></div></td>
+   </tr>
+  </table> 
+<div style="font-size:16px;color:#FFFFFF;">
+ <apex:tabPanel switchType="client" selectedTab="tabdetails" id="VisitTabPanel" tabClass="activeTab" inactiveTabClass="inactiveTab" contentClass="panel">
+ <apex:tab label="Setup">
+ <br/>
+<div style="font-size:20px"><b>Getting Started with ServiceTracker</b></div><br/>
+ To get started with ServiceTracker you will need to setup and configure the following elements in the system:<br/>
+<br/><br/>
+<hr/>
+<br/>
+<div style="font-size:18px"><b>Important features</b></div><br/>
+<table width="100%">
+<tr height="20px">
+ <td width="10%"> <b><a href="/005">Users</a></b></td>
+ <td>These will be the users that can log into ServiceTracker via the Web and Mobile. You will need to ensure that the correct ServiceTracker license is added to each user and the ServiceTracker Modules permission set is applied.  You can read more about user creation <a href="https://help.salesforce.com/HTViewQuickStarts?id=000120152" target="_blank"><b>here</b></a><br/></td>
+ </tr>
+ <tr height="20px">
+ <td>
+ <b><apex:outputLink target="_top" value="{!URLFOR($Action.Resource__c.Tab, $ObjectType.Resource__c)}">Resources</apex:outputlink></b> </td><td>Resources are linked to the user license and visits to allow for scheduling, mapping and visibility via the calendar.</td><br/>
+ </tr>
+ <tr height="20px">
+ <td>
+ <b><a href="/01s">Pricebooks</a></b></td> <td>Pricebooks can be assigned to Clients and are used to automate the pricing.<br/>
+ </td>
+ </tr>
+ <tr height="20px">
+ <td>
+ <b><a href="/01t">Products/Services</a> </b></td> <td>Products can relate to Quotes, Invoices, Work Orders and Schedules.<br/>
+ </td>
+ </tr>
+
+ <tr height="20px">
+ <td>
+ <b><apex:outputLink target="_top" value="{!URLFOR($Action.Prep_Waste__c.Tab, $ObjectType.Prep_Waste__c)}">Prep &amp; Waste</apex:outputlink></b> </td><td>Prep and Waste can be added to the system ready to be selected via the mobile against a visit.<br/>
+ </td>
+ </tr>
+ </table><br/>
+<br/>
+
+<apex:pageBlock title="Other features">
+ In addition to the important setup actions, you can also configure Territories, Skills, Resource Categories, Maps, Email templates, Reports, Dashboards, Customer Portal access and much more.  
+<br/><br/>
+<b><apex:outputLink target="_top" value="{!URLFOR($Action.Service_Territory__c.Tab, $ObjectType.Service_Territory__c)}">Territories</apex:outputlink></b> will help to organize schedules and automate the allocation of visits and are directly related to clients and resources<br/>
+Please get in touch with us if you would like to know more.
+</apex:pageblock>
+<apex:pageBlock title="Importing your Data">
+You can import data using the <b><a href="/ui/setup/dataimporter/DataImporterAdminLandingPage">Data Import Wizard</a></b> or you can download and use the <a href="/ui/setup/sforce/DataLoaderSetupPage"><b>Apex DataLoader</b></a> if you already have records you would like to insert into ServiceTracker.
+<br/><br/>
+</apex:pageblock>
+<apex:pageblock title="PDF Templates">
+Your company templates (Quotation, Invoice, Work Order, Service Reports, Waste Transfer, Inspection reports etc) can be developed into ServiceTracker using the tools provided in the setup screens or you can request development from a ServiceTracker development consultant if required.
+<br/><br/>
+<b>Service Report Template</b> - Your PDF Report will need to be created in Visualforce to allow for electronic sending of visit results. ServiceTracker can develop this for you if required<br/>
+<br/><br/>
+<b>User Default Report path</b> - This is required to ensure that PDF reports can be automatically sent to your customers via the system when visits are completed. A default path is part of the URL you see at the top of this screen. When creating users you will need to enter the default path into the user record followed by "/apex/" to ensure the report can be accessed remotely. For example, the default path for a user may appear as follows; "https://servicetracker-9453--c.eu5.visual.force.com/apex/".<br/>
+<br/><br/>
+Please get in touch with us if you would like to know more.
+
+</apex:pageblock>
+
+<!--
+<apex:form >
+ <apex:pageBlock title="Default Location">
+     <apex:pageBlockButtons >
+        <apex:commandButton action="{!Save}" id="saveButton" value="Save" style="display:none"/>
+        <apex:commandButton action="{!Cancel}" id="cancelButton" value="Cancel" style="display:none"/>
+    </apex:pageBlockButtons>
+ <apex:pageBlockSection id="DefaultLocation">                   
+     <apex:outputField value="{!Organization.Name}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputfield>
+     <apex:outputField value="{!Organization.Longitude}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputfield>
+     <apex:outputField value="{!Organization.Latitude}"><apex:inlineEditSupport showOnEdit="saveButton, cancelButton" event="ondblclick"/></apex:outputfield>
+ </apex:pageBlockSection>
+ </apex:pageBlock>
+ </apex:Form>
+ -->
+</apex:tab>
+ <apex:tab label="Configuration">
+<div algin="center" valign="top" style="font-size:16px;" id="Config"><b>Configure ServiceTracker</b></div>
+<table width="100%" height="600">
+<tr>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        <apex:outputLink target="_top" style="text-decoration: none;" value="/005"><apex:image id="Settings3" value="{!$Resource.STKR__Settings}" height="50"/><br/><br/>{!$ObjectType.User.label} Management</apex:outputLink>                           
+                  </td>
+                    
+                    <td style="text-align: center;">
+                        <apex:outputLink target="_top" style="text-decoration: none;" value="{!URLFOR($Action.Resource__c.Tab, $ObjectType.Resource__c)}"><apex:image id="Res" value="{!$Resource.STKR__Resource}" height="50"/><br/><br/>{!$ObjectType.STKR__Resource__c.label} Management</apex:outputLink>                           
+                  </td>                
+                    <td style="text-align: center;">
+                        <apex:outputLink target="_top" style="text-decoration: none;" value="{!URLFOR($Action.Service_Territory__c.Tab, $ObjectType.Service_Territory__c)}"><apex:image id="Terr" value="{!$Resource.STKR__Territory}" height="50"/><br/><br/>{!$ObjectType.STKR__Service_Territory__c.label} Management</apex:outputLink>                           
+                  </td>
+
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        <apex:outputLink target="_top" style="text-decoration: none;" value="{!URLFOR($Action.Skill__c.Tab, $ObjectType.Skill__c)}"><apex:image id="Skills" value="{!$Resource.STKR__Skills}" height="50"/><br/><br/>{!$ObjectType.STKR__Skill__c.label} Management</apex:outputLink>                           
+                  </td>
+                    <td style="text-align: center;">                   
+                        <apex:outputLink target="_top" style="text-decoration: none;" value="{!URLFOR($Action.Product2.Tab, $ObjectType.Product2)}"><apex:image id="Product" value="{!$Resource.STKR__Product}" height="50"/><br/><br/>{!$ObjectType.Product2.label} Management</apex:outputLink>
+                        
+                    </td>   
+
+                    <td style="text-align: center;">
+                        <apex:outputLink target="_top" style="text-decoration: none;" value="{!URLFOR($Action.Prep_Waste__c.Tab, $ObjectType.Prep_Waste__c)}"><apex:image id="Prep" value="{!$Resource.STKR__Prep}" height="50"/><br/><br/>{!$ObjectType.STKR__Prep_Waste__c.label} Management</apex:outputLink>                           
+                    </td>
+                </tr> 
+                <tr>
+                    <td style="text-align: center;">
+                        <apex:outputLink target="_top" style="text-decoration: none;" value="{!URLFOR($Action.Resource_Category__c.Tab, $ObjectType.Resource_Category__c)}"><apex:image id="Settings" value="{!$Resource.STKR__Settings}" height="50"/><br/><br/>{!$ObjectType.STKR__Resource_Category__c.label} Management</apex:outputLink>                           
+                  </td>
+
+                    <td style="text-align: center;">
+                        <apex:outputLink target="_top" style="text-decoration: none;" value="/00X"><apex:image id="Settings2" value="{!$Resource.STKR__Settings}" height="50"/><br/><br/>Email Templates</apex:outputLink>                           
+                  </td>
+                    <td style="text-align: center;">
+                        <apex:outputLink target="_top" style="text-decoration: none;" value="/00O/o"><apex:image id="Settings4" value="{!$Resource.STKR__Settings}" height="50"/><br/><br/>Reports &amp; Dashboards</apex:outputLink>                           
+                  </td>
+                </tr>                   
+         
+ </table>
+ <br/>
+<div align="Center">
+<a href="#Top">Back to Top</a>
+</div>
+  </apex:tab>
+ <apex:tab label="Custom Settings">
+  <apex:iframe src="/apex/ServiceTrackerConfig" />
+  </apex:tab>
+  
+<apex:tab label="Mobile">
+<apex:pageBlock title="ServiceTracker Mobile">
+To download the ServiceTracker Field Mobile Application for Android or iOS please click <a href="http://www.servicetrackersystems.com/Mobile.html" target="_blank"><b>here</b></a>
+<br/><br/>
+You will be taken to our download page from ServiceTracker.uk.com
+<br/><br/>
+Please follow the instructions on the page
+</apex:pageBlock>
+</apex:tab>
+<apex:tab label="Training">
+ <apex:pageBlock title="Training Guides/Videos">
+ How to guides and more can be accessed through the ServiceTracker Training pages. Click <a href="http://www.servicetrackersystems.com/blog/training/" target="_blank"><b>here</b></a>.
+ <br/>
+ <br/>
+ </apex:pageBlock>
+ 
+ <apex:pageBlock title="ServiceTracker Community">
+ Find out more about what is happening in the ServiceTracker community and have your say. Click <a href="http://www.servicetrackersystems.com/blog/" target="_blank"><b>here</b></a>.
+ <br/>
+ <br/>
+ </apex:pageBlock>
+</apex:tab>
+<apex:tab label="Support">
+<apex:pageBlock title="Support Blog"> 
+ View our Support Blog to find out more about new releases, bug fixes and more. Click <a href="http://www.servicetrackersystems.com/blog/support/" target="_blank"><b>here</b></a>.
+ <br/>
+ <br/>
+ </apex:pageBlock>
+ <apex:pageBlock title="Log/View Support Calls">
+ To view or create a support tickets, please log into the ServiceTracker self support portal using your supplied credentials or email  <a href="mailto:support@servicetracker.uk.com">support@servicetracker.uk.com</a>.<br/>
+ <br/>
+ To arrange for a new login please contact <a href="mailto:support@servicetracker.uk.com">support@servicetracker.uk.com</a><br/>
+ <br/>
+ <div align="left">
+ <FORM ACTION="https://na3.salesforce.com/sserv/login.jsp" METHOD="POST">
+ <INPUT TYPE="HIDDEN" NAME="orgId" VALUE="00D50000000JOQ7"/>
+
+ <label for="un">Username:</label>
+ <INPUT TYPE="TEXT" id="un" NAME="un"/>
+ <BR/>
+
+ <label for="pw">Password:&nbsp;</label>
+ <INPUT TYPE="PASSWORD" id="pw" NAME="pw"/>
+ <BR/>
+ <BR/>
+ <INPUT TYPE="SUBMIT" VALUE="Login"/>
+ </FORM>
+ </div>
+ </apex:pageBlock>
+
+  </apex:tab>
+
+<apex:tab label="News">
+<table width="100%">
+<tr>
+<td>
+<apex:pageBlock title="ServiceTracker Blog">
+ Get the latest ServiceTracker News. Click <a href="http://www.servicetrackersystems.com/blog/" target="_blank"><b>here</b></a>.
+ <br/>
+ <br/>
+ </apex:pageBlock>
+ </td>
+<td>
+ <apex:pageBlock title="News">
+ <div align="center">
+ <html>​
+ <a class="twitter-timeline"
+  width="100%"
+  height="549"
+  href="https://twitter.com/ServiceTrkr"
+  data-widget-id="486851856656637952">Tweets by @ServiceTrkr
+</a>
+ <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+ </html>
+</div>
+ </apex:pageBlock>  
+</td>
+</tr>
+</table>
+</apex:tab>
+</apex:tabPanel>
+</div>
+</apex:page>

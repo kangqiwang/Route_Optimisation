@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Service__c.Visits__r$Name</field>
+    </columns>
+    <columns>
+        <field>Service__c.Visits__r$Account_lkp__c</field>
+    </columns>
+    <columns>
+        <field>Service__c.Visits__r$Address__c</field>
+    </columns>
+    <columns>
+        <field>Service__c.Visits__r$Resource_Name__c</field>
+    </columns>
+    <columns>
+        <field>Service__c.Visits__r$Arrival_Time__c</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>Service__c.Visits__r$Lone_Worker__c</column>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>1</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Service__c.Visits__r$Status__c</column>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>In Progress</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>Lone Worker Report</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Schedules__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Service__c$Contract_End_Date__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

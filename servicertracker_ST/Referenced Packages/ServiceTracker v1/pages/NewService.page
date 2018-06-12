@@ -1,0 +1,123 @@
+<apex:page StandardController="STKR__Service__c" Extensions="STKR.Service" tabStyle="STKR__Service__c" cache="true" >  
+<script>
+ function boolFunction(variable)
+    {
+    var bool = variable.value;      
+switch (bool)
+{
+  case '': document.getElementById('rangetext').style.display = 'none';  
+                document.getElementById('range').style.display = 'none';
+            break;
+  case 'Daily': document.getElementById('rangetext').style.display = 'none';  
+                document.getElementById('range').style.display = 'none';
+            break;
+  case 'Monthly': document.getElementById('rangetext').style.display = 'block';    
+                  document.getElementById('range').style.display = 'block';
+            break;
+  case 'Yearly':  document.getElementById('rangetext').style.display = 'none';
+                  document.getElementById('range').style.display = 'none';     
+            break;
+  case 'Weekly':  document.getElementById('rangetext').style.display = 'block'; 
+                  document.getElementById('range').style.display = 'block';                     
+            break;          
+                  
+}
+}
+                
+</script>
+
+       <apex:form >
+        <apex:pagemessages />
+        <div align="center">
+         <apex:commandButton action="{!saving}" id="submit" value="Save"/>
+         <apex:commandButton action="{!savingNew}" value="Save and New"/>
+         <apex:commandButton action="{!close}" value="Cancel" immediate="true" />
+        </div> 
+        
+        <apex:pageBlock title="Details">             
+            <apex:outputPanel layout="block">
+            <apex:pageBlockSection columns="2">
+              <apex:inputField value="{!Headerinfo.STKR__Account__c}" required="true" >
+             <apex:actionSupport event="onchange" rerender="PageErrors,items" immediate="true"/>
+            </apex:inputfield>
+            <apex:inputField value="{!STKR__Service__c.STKR__Service_Owner__c}" required="true"/>
+            <apex:outputField label="Type" value="{!Headerinfo.RecordTypeId}"/>
+            <apex:inputField value="{!STKR__Service__c.STKR__Business_Type__c}" required="true"/>         
+            <apex:inputField value="{!STKR__Service__c.STKR__Contact_Name__c}" required="false"/>
+            <apex:inputField value="{!STKR__Service__c.STKR__P_O_Number__c}" required="false"/>            
+            </apex:pageBlockSection>  
+            </apex:outputpanel>            
+             
+             <apex:outputPanel id="Interval" layout="block">
+              <apex:pageBlockSection columns="2" >
+               <apex:inputField value="{!STKR__Service__c.STKR__Start_Date__c}" required="true" />
+               <apex:inputField value="{!STKR__Service__c.STKR__Product__c}" required="true" />
+               <apex:inputField value="{!STKR__Service__c.STKR__Service_Interval__c}" required="true"/>               
+               <apex:inputField value="{!STKR__Service__c.STKR__Service_Frequency__c}" required="true" id="frequency" onclick="boolFunction(this);"/>
+            </apex:pageBlockSection>  
+            </apex:outputpanel>  
+            <div id="rangetext" align="center" style="font-size:14px;display:none">
+                <b> Optional: Select a range for more accurate scheduling</b><br/>
+               (Use Ctrl + A to select <u>All</u> or Ctrl + click to select multiple values)<br/><br/>
+            </div>
+             <div id="range" style="display:none">
+            <apex:outputPanel layout="block" style="align:center">
+               <center>
+               <apex:inputField value="{!STKR__Service__c.STKR__Service_Range__c}" required="false" style="width:25px;"/>            
+               </center>
+             </apex:outputPanel>
+             </div> 
+             <apex:outputPanel layout="block">
+              <apex:pageBlockSection columns="2">    
+               <apex:inputField value="{!STKR__Service__c.STKR__Time_Allocation__c}" required="true"/>
+               <apex:inputField value="{!Headerinfo.STKR__Schedule_From__c}" required="true"/>
+               <apex:inputField value="{!Headerinfo.STKR__Initial_Visit_Number__c}" required="true"/>
+               <apex:inputField value="{!Headerinfo.STKR__Service_Value_PA__c}"/>
+               <apex:inputField value="{!Headerinfo.STKR__Full_Year_Schedule__c}"/>
+               <apex:inputField value="{!Headerinfo.STKR__Add_Inspection_Items__c}"/>                 
+               <apex:inputField value="{!Headerinfo.STKR__Fix_all_Visits__c}"/>             
+               <apex:inputHidden value="{!HeaderInfo.STKR__Create_New_Schedule__c}"/>;        
+              </apex:pageBlockSection>   
+             </apex:outputPanel>  
+   
+            <apex:outputPanel id="detail" layout="block">
+            <apex:pageBlockSection columns="1">
+            <apex:inputField value="{!Headerinfo.STKR__Notes_Long__c}" style="height:100px; width:600px;"  />
+            <apex:inputField value="{!Headerinfo.STKR__Items_Covered__c}"/>
+            
+            </apex:pageBlockSection>      
+         </apex:outputpanel>
+           
+        </apex:pageBlock>
+        <apex:pageBlock title="{!$ObjectType.STKR__Service_Item__c.labelPlural}" id="items">
+            <apex:pageBlockTable value="{!ItemList}" var="c" style="background-color:#F5FAFF; font-family:'vag-round', sans-serif; font-size:12px; border-radius:10px;">        
+                <!-- This is how we access the contact values within our cContact container/wrapper -->
+                <apex:column value="{!c.STKR__Reference__c}"/>
+                <apex:column value="{!c.STKR__Type__c}"/>
+                <apex:column value="{!c.STKR__Item_Type__c}"/>
+                <apex:column value="{!c.STKR__Location__c}"/>
+                <apex:column value="{!c.STKR__Inspection_Interval__c}"/>
+                <apex:column value="{!c.STKR__Inspection_Frequency__c}"/>
+                <apex:column value="{!c.STKR__Next_Inspection_Date__c}"/>
+                <apex:column value="{!c.STKR__Status__c}"/>
+                <apex:column value="{!c.STKR__Current_State__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>        
+
+<div align="center">
+<apex:commandButton action="{!saving}" value="Save"/>
+<apex:commandButton action="{!savingNew}" value="Save and New"/>
+<apex:commandButton action="{!close}" value="Cancel" immediate="true" />
+</div>    
+</apex:form>
+<body>
+<script>
+$(document).ready(function () {
+    toggleFields();  
+    $("#frequency").change(function () {
+        toggleFields();
+    });
+});    
+</script>
+</body>
+</apex:page>

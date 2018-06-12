@@ -1,0 +1,29 @@
+<apex:page showheader="false" sidebar="false" standardcontroller="STKR__Resource__c" renderAs="PDF">
+<html>
+<div style="font-family: Arial,Helvetica Neue,Helvetica,sans-serif; ">
+<table border="1" width = "400px" height="185px">
+<tr><td>
+<table width="100%">
+<tr>
+<td valign="top">
+<b>PROMPT<br/>Register</b><br/><br/>
+<apex:outputfield value="{!STKR__Resource__c.STKR__Photo_del__c}"/></td>
+<td valign="top" style="font-size: 10px; ">
+<b>BASIS PROMPT Register</b><br/>
+<b>Professional Pest Controllers Register</b><br/>
+<h2>Full Member</h2>
+<b><apex:outputfield value=" {!STKR__Resource__c.Name}"/></b><br/><br/>
+<table style="font-size: 10px; ">
+<tr><td valign="top"><b>Account Number :</b></td><td> <apex:outputfield value=" {!STKR__Resource__c.STKR__Account_Number__c}"/></td></tr>
+<tr><td valign="top"><b>Registered No :</b> </td><td><apex:outputfield value=" {!STKR__Resource__c.STKR__Registered_No__c}"/></td></tr>
+<tr><td valign="top"><b>Expiry Date :</b> </td><td><apex:outputfield value=" {!STKR__Resource__c.STKR__Expiry_Date__c}"/></td></tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</div>
+</html>
+</apex:page>

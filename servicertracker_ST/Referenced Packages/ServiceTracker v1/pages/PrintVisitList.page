@@ -1,0 +1,107 @@
+<apex:page standardController="Account" extensions="STKR.GenerateVisitList" showHeader="false" sidebar="false" applyHtmlTag="false" renderAs="PDF">
+ <head>       
+        <style type="text/css"  media="print">           
+            @page {                                                     
+                @top-center {                   
+                    content: element(header);    
+                }
+                size: 210mm 297mm;
+                margin: 15mm;
+                margin-right:0mm;
+                
+                margin-top: 4.215cm;
+                margin-bottom: 6.80cm;
+                margin-left: 1.27cm;
+                margin-right:1cm;
+                @bottom-left {
+                content: element(footer);
+                }           
+            }                                 
+
+            div.header {                
+                        padding: 0px;              
+                        position: running(header);
+                               
+                        height: 40px;
+                        margin-bottom: 15px;
+                                
+            }           
+            div.footer {                
+                display: block;             
+                padding: 5px;               
+                position: running(footer);  
+                
+                clear: both;
+                margin-top: 15px;
+                        
+            } 
+                            
+                                  
+        </style>
+    </head>   
+ 
+<div style="font-family: Arial, Helvetica Neue, Helvetica, sans-serif; font-size:11px;color:#0A7CB2">
+
+<apex:form >
+<div class="header">
+  <table border="0" width="100%">
+    <tr><td align="Left" style="font-size:25px">VISIT SCHEDULE<br/>
+    (
+    <apex:outputText value="{0,date, dd/MM/yyyy}"><apex:param value="{!sstart}"/></apex:outputText>
+    )
+    <apex:outputText value="{0,date, dd/MM/yyyy}"><apex:param value="{!send}"/></apex:outputText>
+    </td>
+<td align="right"><apex:image id="theLogo" value="{!$Resource.STKR__Logo}" height="100"/></td>
+
+   </tr>
+
+  </table> 
+
+</div>
+
+
+<div class = "content" style="page-break-beore:auto;">  
+   <table border="0" width="100%">
+   <tr>
+   <td valign="top"><b>Site:</b></td>
+   <td> 
+   <b>{!Account.Name}<br/></b> <br/>  
+  {!IF(ISBLANK(Account.ShippingStreet),'',Account.ShippingStreet+",")} <br/>
+  {!IF(ISBLANK(Account.ShippingCity),'',Account.ShippingCity+",")} <br/>
+  {!IF(ISBLANK(Account.ShippingState),'',Account.ShippingState+",")} <br/>
+  {!IF(ISBLANK(Account.ShippingPostalCode),'',Account.ShippingPostalCode)}  </td>
+   
+  </tr> 
+  </table>
+<hr/>
+
+<br/>
+<table width="100%">
+<tr>
+<td><b>Date</b></td>
+<td><b>Type</b></td>
+<td><b>Description</b></td>
+<td><b>Signed</b></td>
+
+</tr>
+<apex:repeat value="{!svt}" var="a" >
+<tr style="{!if(AND(DateValue(a.STKR__Due_Date__c) < send,DateValue(a.STKR__Due_Date__c) > sstart),'','display:none')}">
+<td><apex:outputText value="{0,date, dd/MM/yyyy}"><apex:param value="{!CASE(MOD(DATEVALUE(a.STKR__Due_Date__c) - DATE(1900, 1, 7), 7), 0, a.STKR__Due_Date__c +1, 6, a.STKR__Due_Date__c +2,a.STKR__Due_Date__c)}"/></apex:outputText></td>
+<td>Routine</td>
+<td>{!a.STKR__Notes_Long__c}</td>
+<td>________________________</td>
+</tr>
+</apex:repeat>
+</table>
+</div>
+<div class="footer">
+  <table width="100%">
+  <tr>
+   <td align="center" style="font-size:10px">{!$Organization.Name},{!$Organization.Street},{!$Organization.City},{!$Organization.State},{!$Organization.PostalCode}<br/>
+Telephone {!$Organization.Phone}</td>
+  </tr>
+  </table>
+</div>
+</apex:form>
+</div>
+</apex:page>

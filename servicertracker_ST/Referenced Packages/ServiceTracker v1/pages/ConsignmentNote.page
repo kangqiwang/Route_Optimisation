@@ -1,0 +1,153 @@
+<apex:page standardController="STKR__Resource__c" extensions="STKR.VisitWaste" renderAs="PDF">
+<div style="font-family: Arial, Helvetica Neue, Helvetica, sans-serif; font-size:9px;color:#000000">
+<table width="100%">
+<tr style=" color: white; background: #000000; border: 1px solid black;"><td colspan="2">&nbsp;</td></tr>
+<tr>
+<td align="left" valign="top">
+<h1>
+The Hazardous Waste Regulations 2005:<br/>
+Consignment Note
+</h1>
+</td>
+<td align="right" valign="center">
+   <apex:image id="theLogo" value="{!$Resource.STKR__Logo}" height="50"/>
+</td>
+</tr>
+</table>
+<HR/>
+<table width="100%">
+<tr style=" color: white; background: #000000; border: 1px solid black;"><td colspan="2"><b>PART A Notification details</b></td></tr>
+<tr>
+<td valign="top">1 Consignment note Code: <b>EXEVAN/??????</b><br/><br/>
+2 The Waste described below is to be removed from (name, address, postcode, telephone, email, facsimilie):<br/>
+<b>Van Vynck Environmental Services Ltd<br/>
+Riverside Business Centre, Fort Road
+Tilbury, Essex,RM18 7ND<br/>
+RM18 7ND<br/>
+01375 489701
+</b>
+<br/><br/>
+
+3 Premises Code (where applicable): <b>N/A</b></td>
+
+<td valign="top">4 The Waste will be taken  to (name, address and postcode):<br/><b>Van Vynck Environmental Services Ltd<br/>Riverside Business Centre<br/>Fort Road, Tilbury, Essex<br/>RM18 7ND</b><br/><br/>
+5 The Waste producer was (if different from 2) (name, address, postcode, telephone, email, facsimile):<br/><b>Van Vynck Environmental Services Ltd<br/>Riverside Business Centre<br/>Fort Road, Tilbury, Essex,RM18 7ND<BR/>01375 489701, info@vvenv.co.uk</b></td>
+</tr>
+</table>
+
+<table width="100%">
+<tr style=" color: white; background: #000000; border: 1px solid black;"><td colspan="2"><b>PART B Description of the waste</b></td></tr>
+<tr>
+<td valign="top">1 The process giving rise to the waste(s) was: <b>Pest Control</b></td>
+<td valign="top">2 SIC for the process giving rise to the waste: <b>81.29/1</b></td>
+</tr>
+<tr>
+
+<td colspan="2"><br/>3 WASTE DETAILS (where more than one waste type is collected all of the information given below must be completed for each EWC identified)</td>
+</tr>
+</table>
+The chemical/biological components in the waste and their concentrations are:
+<apex:pageBlock >
+<apex:pageBlockTable value="{!VisitWaste}" var="p1" width="100%" border="1"> 
+<apex:column headervalue="Description of waste" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Prep_Waste__r.name)}"/>
+<apex:column headervalue="List of Wastes (EWC code)(6 digits)" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Prep_Waste__r.STKR__Waste_Code__c)}"/>
+<apex:column headervalue="Quantity (KG)" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Qty__c)}"/>
+<apex:column headervalue="Component" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Prep_Waste__r.STKR__Active_Ingredient__c)}"/>
+<apex:column headervalue="Concentration (% or mg/kg)" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Prep_Waste__r.STKR__Volume__c)}"/>
+<apex:column headervalue="Physical form (gas, liquid, solid, powder, sludge or mixed)" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Prep_Waste__r.STKR__Physical_form__c)}"/>
+<apex:column headervalue="Hazard Code(s)" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Prep_Waste__r.STKR__Hazard_Code__c)}"/>
+<apex:column headervalue="Container type, number and size" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Prep_Waste__r.STKR__Container_type__c)}"/>
+</apex:pageBlockTable>
+</apex:pageBlock>
+<br/>
+<b>The information given below is to be completed for each EWC identified</b><br/>
+<br/>
+<apex:pageBlock >
+<apex:pageBlockTable value="{!VisitWaste}" var="p1" width="100%" border="1"> 
+<apex:column headervalue="EWC Code" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Prep_Waste__r.STKR__Waste_Code__c)}"/>
+<apex:column headervalue="UN identification number(s)" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.name)}"/>
+<apex:column headervalue="Proper shiping name(s)" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Prep_Waste__r.name)}"/>
+<apex:column headervalue="UN Class(es)" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Prep_Waste__r.STKR__UN_Class__c)}"/>
+<apex:column headervalue="Packing group(s)" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Prep_Waste__r.STKR__Packing_group__c)}"/>
+<apex:column headervalue="Special handling requirements" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Prep_Waste__r.STKR__Special_handling_requirements__c)}"/>
+</apex:pageBlockTable>
+</apex:pageBlock>
+<br/>
+<table width="100%">
+<tr style=" color: white; background: #000000; border: 1px solid black;">
+<td width="50%"><b>PART C Carriers certificate</b></td>
+<td width="50%"><b>PART D Consignor's certificate</b></td>
+</tr>
+<tr>
+<td valign="top">
+<b>If more than one carrier is used, please attach a schedule for subsequent carriers. 
+If schedule of carriers is attached tick here: ___</b><br/><br/>
+I certify that I today collected the consignment and that the details in A2, A4 and B3 are correct and 
+I have been advised of any specific handling requirements.<br/>
+Where this note comprises part of a multiple collection the round number and collection number are: <b>YES</b><br/><br/>
+1. Carrier Name: <b>{!STKR__Resource__c.Name}</b><br/><br/>
+On behalf of (name, address, postcode, telephone, email, facsimilie):<br/>
+<b>Van Vynck Environmental Services Ltd<br/>
+Riverside Business Centre, Fort Road, Tilbury, Essex, RM18 7ND<br/>
+01375 489701, info@vvenv.co.uk</b><br/><br/>
+2. Carrier Registration no./reason for exemption:<br/>
+<b>CB / DM 3583TY</b><br/><br/>
+3. Vehicle registration no. (or mode of transport, if not road):<br/>
+<b><apex:repeat value="{!Vehicle}" var="v">{!v.Name}</apex:repeat></b><br/><br/>
+Signature <apex:image height="50px" value="/servlet/servlet.FileDownload?file={!STKR__Resource__c.STKR__Signature_Id__c}" rendered="{!IF(STKR__Resource__c.STKR__Signature_Id__c != '', '', 'display:none')}"/><br/><br/>
+Date <b><apex:outputText value="{0,date, dd/MM/yyyy}"><apex:param value="{!Today()}"/></apex:outputText></b> Time <b><apex:outputText value="{0,date, HH:mm}"><apex:param value="{!Today()}"/></apex:outputText></b><br/>
+</td>
+<td valign="top">
+I certify that the information in  A,B and C has been completed and is correct, that the carrier is registered or 
+exempt and was advised of the appropriate precautionary measures. <br/><br/>
+All of the waste is packaged and labelled correctly 
+and the carrier has been advised of any special handling requirements.<br/><br/>
+I confirm that I have fulfilled my duty to apply the waste hierarchy as required by Regulation 12 of the waste 
+(England and Wales) Regulations 2011.<br/><br/>
+Consignor Name: <b>
+{!STKR__Resource__c.Name}
+   </b><br/>
+On behalf of (name, address, postcode, telephone, email, facsimilie):<br/>
+<b>Van Vynck Environmental Services Ltd<br/>
+Riverside Business Centre, Fort Road, Tilbury, Essex, RM18 7ND<br/>
+01375 489701, info@vvenv.co.uk</b><br/><br/><br/><br/><br/><br/>
+Signature       <apex:image height="50px" value="/servlet/servlet.FileDownload?file={!STKR__Resource__c.STKR__Signature_Id__c}" rendered="{!IF(STKR__Resource__c.STKR__Signature_Id__c != '', '', 'display:none')}"/><br/><br/>
+Date <b><apex:outputText value="{0,date, dd/MM/yyyy}"><apex:param value="{!Today()}"/></apex:outputText></b> Time <b><apex:outputText value="{0,date, HH:mm}"><apex:param value="{!Today()}"/></apex:outputText></b><br/>
+</td>
+</tr>
+</table>
+<div style="page-break-before:always">
+<table width="100%">
+<tr style=" color: white; background: #000000; border: 1px solid black;"><td><b>PART E Consignee's certificate </b>(where more than one waste type is collected all of the information given below must be  completed for each EWC)</td></tr>
+</table>
+<apex:pageBlock >
+
+<apex:pageBlockTable value="{!VisitWaste}" var="p1" width="100%" border="1"> 
+<apex:column headervalue="Individual EWC Code(s) recieved" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Prep_Waste__r.STKR__Waste_Code__c)}"/>
+<apex:column headervalue="Quantity  of each EWC code recieved (kg)" value=" {!if(p1.STKR__Prep_Waste__r.STKR__Waste_Code__c = '','',p1.STKR__Qty__c)}"/>
+<apex:column headervalue="EWC code accepted/rejected" value=" {!if(p1.name = '','','')}"/>
+<apex:column headervalue="Waste management operation (R or D code)" value=" {!if(p1.name = '','','')}"/>
+</apex:pageBlockTable>
+</apex:pageBlock>
+<br/>
+<table width="100%">
+<tr><td valign="top" width="50%">1. I received this waste at the address given in A4 on: Date _________ Time ______<br/><br/>
+2. Vehicle registration no. (or mode of transport if not road): <b><apex:repeat value="{!Vehicle}" var="v"> {!v.Name}</apex:repeat></b><br/><br/>
+3. Where waste is rejected please provide details:<br/><br/><br/>I certify that waste permit/exempt waste operation number: _______________<br/>
+authorises the management of the waste described in B at the address given in A4.<br/><br/>
+Where the consignment forms part of a multiple collection , as identified in Part C, I certify that the total number of 
+consignments forming the collection are: ___<br/>
+</td>
+<td valign="top" width="50%">Name: _____________________________<br/><br/>
+On behalf of (name, address, postcode, telephone, email, facsimilie):<br/>
+<b>Van Vynck Environmental Services Ltd<br/>
+Riverside Business Centre, Fort Road, Tilbury, Essex, RM18 7ND<br/>
+01375 489701, info@vvenv.co.uk</b><br/><br/>
+Signature:<br/><br/><br/>
+Date _________ Time _________
+</td>
+</tr>
+</table>
+</div>
+</div>
+</apex:page>

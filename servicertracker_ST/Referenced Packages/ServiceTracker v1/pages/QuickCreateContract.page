@@ -1,0 +1,16 @@
+<apex:page sidebar="true" tabStyle="STKR__Service__c" standardController="STKR__Service__c">
+<style>
+.labelCol {
+    text-align:left !important;
+}
+.bPageBlock .pbBottomButtons .pbButtonb .btn { 
+  display: inline;
+  float: left;
+
+}
+</style>
+<apex:sectionHeader title="Quick Create a Contract"/>
+
+    <flow:interview name="New_Contract_v1" finishLocation="/{!$CurrentPage.parameters.redirect}" buttonLocation="bottom"/>
+
+</apex:page>

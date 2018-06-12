@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>Colour_Code__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>CASE(Subject , 
+&quot;Contract Visit&quot;, IMAGE(&quot;/img/samples/color_green.gif&quot;, &quot;green&quot;, 30, 30) , 
+&quot;Job Visit&quot;, IMAGE(&quot;/img/samples/color_red.gif&quot;, &quot;Red&quot;, 30, 30), 
+&quot;Call Out&quot;, IMAGE(&quot;/img/samples/color_red.gif&quot;, &quot;Red&quot;, 30, 30), 
+&quot;Follow-Up&quot;, IMAGE(&quot;/img/samples/color_yellow.gif&quot;, &quot;Yellow&quot;, 30, 30), 
+IMAGE(&quot;/img/samples/color_green.gif&quot;, &quot;Green&quot;, 30, 30))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Colour Code</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>No_Days__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(
+    DurationInMinutes &lt; 420,
+    0.5,
+    IF(
+        (DurationInMinutes/1440) &gt; FLOOR((DurationInMinutes/1440)) + 0.5,
+        FLOOR((DurationInMinutes/1440)) + 1,
+        ROUND((DurationInMinutes/1440) + 0.5,0)
+    )
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>No. Days</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SendToMobile__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(
+AND(
+ Subject &lt;&gt; &apos;&apos;,
+ Upper(Subject) &lt;&gt; &apos;START OF THE DAY&apos;,
+ Upper(Subject) &lt;&gt; &apos;END OF THE DAY&apos;,
+ Upper(Subject) &lt;&gt; &apos;WORKING TIME&apos;,
+ Upper(Subject) &lt;&gt; &apos;START WORK&apos;,
+ ISBLANK(VisitId__c),
+ ActivityDate &gt; Today() -15,
+ ActivityDate &lt; Today() +45,
+ Owner:User.Id =  $User.Id
+)
+,TRUE,FALSE
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>SendToMobile</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>ShowInCalendar__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(
+AND(
+ Subject &lt;&gt; &apos;&apos;,
+ Upper(Subject) &lt;&gt; &apos;START OF THE DAY&apos;,
+ Upper(Subject) &lt;&gt; &apos;END OF THE DAY&apos;,
+ Upper(Subject) &lt;&gt; &apos;WORKING TIME&apos;,
+ Upper(Subject) &lt;&gt; &apos;START WORK&apos;,
+ ISBLANK(VisitId__c)
+) 
+,TRUE,FALSE
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>ShowInCalendar</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>VisitId__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <deprecated>false</deprecated>
+        <externalId>true</externalId>
+        <label>VisitId</label>
+        <length>32</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+</CustomObject>

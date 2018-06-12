@@ -1,0 +1,3846 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <content>VisitDetail</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <comment>Action override created by Lightning App Builder during activation.</comment>
+        <content>Visit_Record_Page</content>
+        <formFactor>Large</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Flexipage</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>true</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Aborted_Visit__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Has this visit been aborted, see notes</inlineHelpText>
+        <label>Aborted Visit</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Accepted__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date the Visit was Accepted</inlineHelpText>
+        <label>Accepted</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Account_Check__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(Account_lkp__c = Service__r.Account__c,TRUE,FALSE)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Account Check</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Account__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Account_lkp__r.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Related Account Name</inlineHelpText>
+        <label>Account Name</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Account_lkp__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The Account Linked to this Visit</inlineHelpText>
+        <label>Site</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Visits</relationshipLabel>
+        <relationshipName>Visits</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Additional_Resource__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Additional Resource</label>
+        <referenceTo>Resource__c</referenceTo>
+        <relationshipLabel>Visits (Additional Resource)</relationshipLabel>
+        <relationshipName>Supporting_Visits</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Address__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>&quot;&apos;&quot;+
+
+SUBSTITUTE( 
+
+IF(Account_lkp__r.ShippingStreet &lt;&gt; &apos;&apos;,Account_lkp__r.ShippingStreet,&apos;&apos;)
++&quot; &quot;+
+IF(Account_lkp__r.ShippingCity &lt;&gt; &apos;&apos;,Account_lkp__r.ShippingCity,&apos;&apos;)
++&quot; &quot;+
+IF(Account_lkp__r.ShippingState &lt;&gt; &apos;&apos;,Account_lkp__r.ShippingState,&apos;&apos;)
++&quot; &quot;+
+IF(Account_lkp__r.ShippingPostalCode &lt;&gt; &apos;&apos;,Account_lkp__r.ShippingPostalCode,&apos;&apos;)
++&quot; &quot;+
+IF(Account_lkp__r.ShippingCountry &lt;&gt; &apos;&apos;,Account_lkp__r.ShippingCountry,&apos;&apos;)
+
+,&quot;,&quot;,&quot; &quot;) 
+
++&quot;&apos;&quot;</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Address</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Alert_Sent__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Has an alert been sent</inlineHelpText>
+        <label>Alert To Be Sent</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Arival_GeoLocation__c</fullName>
+        <deprecated>false</deprecated>
+        <displayLocationInDecimal>true</displayLocationInDecimal>
+        <externalId>false</externalId>
+        <label>Arrival GeoLocation</label>
+        <required>false</required>
+        <scale>6</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Location</type>
+    </fields>
+    <fields>
+        <fullName>Arrival_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date of Arrival on Site</inlineHelpText>
+        <label>Arrival Time</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Assign_To_User__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Assign To User</label>
+        <referenceTo>Resource__c</referenceTo>
+        <relationshipLabel>Visits (Resource)</relationshipLabel>
+        <relationshipName>Visits1</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Assisted_Visit__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Is this visit for an additional resource on an existing visit. (Check the Created from field to see which visit)</inlineHelpText>
+        <label>Assisted Visit</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Automated_Next_Visit_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>CASE(Service__r.Service_Frequency__c,
+
+&apos;Daily&apos;,Recurrence_Date__c+Service__r.Service_Interval__c,
+&apos;Weekly&apos;,Recurrence_Date__c+(Service__r.Service_Interval__c * 7),
+&apos;Monthly&apos;,IF(ISNULL(Service__r.Service_Range__c),
+Recurrence_Date__c+(Service__r.Service_Interval__c * 30.416),
+Due_Date__c + 365.242),
+Due_Date__c +(Service__r.Service_Interval__c * 365.242)
+
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Automatic Next Visit Date based on Frequency and Interval</inlineHelpText>
+        <label>Automated Next Visit Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Complete__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Is the Visit Complete?</inlineHelpText>
+        <label>THIS FIELD IS NOT USED</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Completed_This_Period__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(
+AND(
+ISPICKVAL(Status__c,&apos;Complete&apos;),
+DATEVALUE(Completion_Time__c) &gt;=  Service__r.Period_Start__c,
+DATEVALUE(Completion_Time__c) &lt;=  Service__r.Period_End__c
+),TRUE,
+FALSE
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Completed This Period</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Completion_GeoLocation__c</fullName>
+        <deprecated>false</deprecated>
+        <displayLocationInDecimal>true</displayLocationInDecimal>
+        <externalId>false</externalId>
+        <label>Completion GeoLocation</label>
+        <required>false</required>
+        <scale>6</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Location</type>
+    </fields>
+    <fields>
+        <fullName>Completion_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date the Visit was Completed</inlineHelpText>
+        <label>Completion Time</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Copy_Inspections_to_Next_Visit__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Automatically load inspections based on inspection date and Account</inlineHelpText>
+        <label>Automatic Inspections</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Current_State__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF( 
+AND(
+DATEVALUE(Due_Date__c) &lt;  TODAY(),
+ISPICKVAL(Status__c,&apos;Open&apos;)
+), IMAGE(&quot;/img/msg_icons/error16.png&quot;, &quot;Account Flag&quot;) + &quot; Overdue&quot;,
+
+CASE(TEXT(Status__c), 
+&quot;Open&quot;, IMAGE(&quot;/img/msg_icons/warning16.png&quot;,&quot;Warning&quot;) + &quot; Open&quot;, 
+&quot;Accepted&quot;, IMAGE(&quot;/img/samples/flag_green.gif&quot;,&quot;Accepted&quot;) + &quot; Accepted&quot;,
+&quot;In Progress&quot;, IMAGE(&quot;/img/samples/flag_yellow.gif&quot;,&quot;In Progress&quot;) + &quot; In Progress&quot;,
+&quot;Complete&quot;, IMAGE(&quot;/img/msg_icons/confirm16.png&quot;, &quot;Complete&quot;) + &quot; Complete&quot;,
+IMAGE(&quot;/s.gif&quot;,&quot;&quot;))
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Current State of Visit</inlineHelpText>
+        <label>Current State</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Date_Pick__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Date Pick</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Days_Overdue__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF( DATEVALUE(Due_Finish__c) &lt; TODAY()&amp;&amp;NOT(ISPICKVAL(Status__c,&quot;Complete&quot;)), TODAY()-DATEVALUE(Due_Finish__c), 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Days Overdue</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Due_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date the Visit is Due to Start</inlineHelpText>
+        <label>Due Start</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Due_Day__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(
+LEN(TEXT(DAY(DATEVALUE( Due_Date__c )))) = 1,
+&quot;0&quot;+TEXT(DAY(DATEVALUE( Due_Date__c ))),
+TEXT(DAY(DATEVALUE( Due_Date__c )))
+)+&quot;/&quot;+
+IF(
+LEN(TEXT(MONTH(DATEVALUE( Due_Date__c )))) = 1,
+&quot;0&quot;+TEXT(MONTH(DATEVALUE( Due_Date__c ))),
+TEXT(MONTH(DATEVALUE( Due_Date__c )))
+)+&quot;/&quot;+
+TEXT(YEAR(DATEVALUE( Due_Date__c )))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Due Day</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Due_Finish__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date Visit is Due to be Completed By</inlineHelpText>
+        <label>Due Finish</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Dummy_Visit__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Is this a dummy visit</inlineHelpText>
+        <label>Dummy Visit</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Escalation_Required__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Is an escalation required</inlineHelpText>
+        <label>Escalation Required</label>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Estimated_Next_Visit_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>CASE(
+MOD(DATEVALUE(Automated_Next_Visit_Date__c) - DATE(1900, 1, 7), 7),
+0, Automated_Next_Visit_Date__c +1,
+6, Automated_Next_Visit_Date__c -1,
+Automated_Next_Visit_Date__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Estimated Next Visit Date</inlineHelpText>
+        <label>Estimated Next Visit Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Field_Notes__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Notes provided at the time of Completion</inlineHelpText>
+        <label>Findings</label>
+        <length>32768</length>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Fixed_Visit_Text__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>if( Fixed_Visit__c = TRUE,&quot;FIXED VISIT - &quot;,&quot;&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Fixed Visit Text</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Fixed_Visit__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>This visit cannot be moved</inlineHelpText>
+        <label>Fixed Visit</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Follow_Up_Scheduled__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Follow-Up Scheduled</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Follow_Up__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date of Follow-Up Visit Requried</inlineHelpText>
+        <label>Follow-Up</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Follow_Up_from_Visit__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Created from Visit</label>
+        <referenceTo>Visit__c</referenceTo>
+        <relationshipLabel>Follow-Up Visits</relationshipLabel>
+        <relationshipName>Master_Visits</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Heath_And_Safety__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Details of the Health and safety on the visit</inlineHelpText>
+        <label>Health and Safety</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>No Health &amp; Safety issues to report</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Accident to report</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Incident to report</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Near miss to report</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Hygiene__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Hygiene Required</inlineHelpText>
+        <label>Hygiene</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>High</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Medium</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Low</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>IsFollowUp__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Is this a Follow-Up Visit</inlineHelpText>
+        <label>Follow-Up Visit</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Items_Inspected__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of Items Inspected on Visit</inlineHelpText>
+        <label>Items Inspected</label>
+        <summaryFilterItems>
+            <field>Inspection__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Inspected</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Inspection__c.Visit__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Items_to_inspect__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Estimated Number of Items to Inspect on Visit</inlineHelpText>
+        <label>Items to Inspect</label>
+        <summaryFilterItems>
+            <field>Inspection__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Pending</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Inspection__c.Visit__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Journey_Start_GeoLocation__c</fullName>
+        <deprecated>false</deprecated>
+        <displayLocationInDecimal>true</displayLocationInDecimal>
+        <externalId>false</externalId>
+        <label>Journey Start GeoLocation</label>
+        <required>false</required>
+        <scale>6</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Location</type>
+    </fields>
+    <fields>
+        <fullName>Journey_Start__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date that the Journey to Site started</inlineHelpText>
+        <label>Journey Start</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Last_Completion_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Due_Finish__c + ((365.5 / Service__r.Number_of_Visit_Per_Year__c) - 1)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>This is the day before the la</inlineHelpText>
+        <label>Last Completion Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Location__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(Service__r.Location__c),&apos;N/A&apos;, Service__r.Location__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Location</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lone_Worker__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Is there a lone worker on this visit</inlineHelpText>
+        <label>Lone Worker</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>No_Actions_Created__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of actions created on this visit</inlineHelpText>
+        <label>No. Actions Created</label>
+        <summaryFilterItems>
+            <field>Inspection__c.Action_Created__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Inspection__c.Visit__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Notes_Long__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Visit Description</label>
+        <length>32768</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Notes__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Additional details of Visit</inlineHelpText>
+        <label>Visit Description (Short)</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Number_of_Alerts__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Service__r.Service_Contract__r.Number_of_Alerts__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Number of Alerts</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Open_This_Period__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF( 
+
+AND( 
+
+Visit_Type__c = &quot;Contract Visit&quot;, 
+
+NOT(ISPICKVAL(Status__c,&quot;Complete&quot;)), 
+
+DATEVALUE(Completion_Time__c) &gt;= Service__r.Period_Start__c , 
+
+DATEVALUE(Completion_Time__c) &lt;= Service__r.Period_End__c 
+
+),TRUE, 
+
+FALSE 
+
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Open This Period</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Other_Pests_Found__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Details of Other Pests Found</inlineHelpText>
+        <label>Other Pests Found</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Other_Prep_Used__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Details of any other Prep Used</inlineHelpText>
+        <label>Other Prep Used</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Owned_By_Current_User__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Check if the Record is Owned by the Current User and the record is Active</description>
+        <externalId>false</externalId>
+        <formula>IF ( 
+AND(
+Resource__r.User__c  = $User.Id, 
+NOT(ISPICKVAL(Account_lkp__r.Status__c,&apos;Inactive&apos;)),
+NOT(ISPICKVAL(Account_lkp__r.Status__c,&apos;On Stop&apos;)),
+NOT(ISPICKVAL(Account_lkp__r.Status__c,&apos;On Hold&apos;)),
+NOT(ISPICKVAL(Service__r.Status__c,&apos;Inactive&apos;)), 
+NOT(ISPICKVAL(Service__r.Service_Contract__r.Status__c,&apos;Inactive&apos;)) 
+),
+&quot;TRUE&quot;, &quot;FALSE&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Owned By Current User and Active</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ParentId__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>If(Len(
+Account_lkp__r.ParentId) &lt; 1,Account_lkp__c,Account_lkp__r.ParentId)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>ParentId</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Payment_on_site_reference__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Payment on site reference</inlineHelpText>
+        <label>Payment Reference</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Pests_Found__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Details of pests found</inlineHelpText>
+        <label>Pests Found</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Bed Bugs</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Bees &amp; Wasps</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Birds</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Biting Insects</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Booklice</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Centipedes &amp; Millipedes</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Clothes Moth</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Cluster Flies</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Cockroaches</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Earwigs</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Flies</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Fly Breeding Sites</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Fruitflies</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Garden Ants</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Ground Beetles</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>House Crickets</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Mice</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Moths</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Other</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Rats</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Silverfish</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Stored Product Insects</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Tobacco Beetle</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Tropical Ants</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Wasps</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Woodlice</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Planned_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The Original Planned Date</inlineHelpText>
+        <label>Planned Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Prep_Used__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Preparations Used</inlineHelpText>
+        <label>Prep Used</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Advion Gel Bait</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Algaecide</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Aquapy</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Avert Flowable</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Avert Gel Bait</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Biopren BMS</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Biopren Duo</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Coopex Insect Powder</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Deadline Rat Blocks</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Deadline Wheat</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Defenacoum</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Demand CS</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Ficam D</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Ficam W</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Insectaban Residual Emulsion</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Killgerid</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>K-Othrine</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Maxforce Quantum</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Maxforce White IC</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Neosorexa Pasta Bait</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Oa2ki</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Oa2ki Aerosol</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Oa2ki Trigger Spray</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Phostoxin</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Prep</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>PX-Lepto</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>PX-OrniKil</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Pyblast</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Pybuthrin 33</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Ratimor Fresh Bait</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Ratimor Pasta Bait</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Rodilon</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Romax Bromadiolone</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Romax Rat CP</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Rodenticide</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Sewarin</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Solo Blox</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Sorexa Gel</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Sorex Brodifacoum Bait Blocks</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Storm</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>ULV 500</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Vertox Contact Gel</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Other</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Priority__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Priority Level of Visit</inlineHelpText>
+        <label>Priority</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>High</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Medium</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Low</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Product__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Service__r.Product__r.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Product</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Proofing__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Proofing required</inlineHelpText>
+        <label>Proofing</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>High</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Medium</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Low</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Quick_Call_Out__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>This is a one-off call out visit</inlineHelpText>
+        <label>Call Out Visit</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Rating__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>TEXT(Account_lkp__r.Rating)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Rating</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Reassign_Resource__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reassign Resource</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Nigel Sargent</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Mike Day</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Field User</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Recommendations__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Details of Recommendations made</inlineHelpText>
+        <label>Recommendations</label>
+        <length>32768</length>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Recurrence_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>CASE(Service__r.Schedule_From__c,
+&quot;Completed&quot;,  Arrival_Time__c,
+&quot;Planned Date&quot;, Planned_Date__c , 
+Due_Date__c 
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Recurrence Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Report_Uploaded__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Has the report been uploaded</inlineHelpText>
+        <label>THIS FIELD IS NOT USED</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Resource_Email__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Resource__r.User__r.Email</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Resource Email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Resource_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Related to Resource.Name</description>
+        <externalId>false</externalId>
+        <formula>Resource__r.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Related to Resource.Name</inlineHelpText>
+        <label>Resource Name</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Resource__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of Resource for Visit</inlineHelpText>
+        <label>Resource</label>
+        <referenceTo>Resource__c</referenceTo>
+        <relationshipLabel>Visits</relationshipLabel>
+        <relationshipName>Visits</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Risk_Assessment_Questions__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Select which Risk Assessment Options are True for this Visit</inlineHelpText>
+        <label>Risk Assessment Questions</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>All Hazards and risks considered</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Inspection for rodent carcasses</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Works covered by safe working practices</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Current site Risk Assessment Understood</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Current site Method Statement Understood</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Safe System of Work Understood</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Qualified to perform the treatment</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Risk_Assessment__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Risk Assessment details</inlineHelpText>
+        <label>Risk Assessment</label>
+        <length>32768</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Risk_Rating__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>CASE(TEXT(Risk__c), 
+&quot;High&quot;, IMAGE(&quot;/img/samples/color_red.gif&quot;,&quot;High&quot;,20,20), 
+&quot;Medium&quot;, IMAGE(&quot;/img/samples/color_yellow.gif&quot;,&quot;Medium&quot;,20,20) , 
+&quot;Low&quot;, IMAGE(&quot;/img/samples/color_green.gif&quot;,&quot;Low&quot;,20,20), 
+IMAGE(&quot;/img/samples/color_green.gif&quot;,&quot;Low&quot;,20,20)
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Risk Rating</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Risk__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Level of Risk</inlineHelpText>
+        <label>Risk</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>High</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Medium</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Low</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>None</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Route__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Route Order Number</inlineHelpText>
+        <label>Route Order</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Contract__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Service__r.Service_Contract__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Service Contract</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Related to Schedule</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Related to Schedule</inlineHelpText>
+        <label>Schedule</label>
+        <referenceTo>Service__c</referenceTo>
+        <relationshipLabel>Visits</relationshipLabel>
+        <relationshipName>Visits</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>true</reparentableMasterDetail>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Setup_Installation__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Is this visit the initial setup / installation</inlineHelpText>
+        <label>Setup / Installation Visit</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Site_Post_Code__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Account_lkp__r.ShippingPostalCode</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Site Post Code</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Skill_Required__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Service__r.Product__r.Skill_Required__r.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Skill Required</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Status of Visit</inlineHelpText>
+        <label>Status</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Open</fullName>
+                    <default>true</default>
+                </value>
+                <value>
+                    <fullName>Accepted</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Journey Started</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>In Progress</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Complete</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Territory__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Service__r.Account__r.Territory__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Service Territory of Visit</inlineHelpText>
+        <label>Service Territory</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Test_Field_per__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Test Field per</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Time_Allocation__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Service__r.Time_Allocation__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Time Allocation</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Time_On_Site__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>(Completion_Time__c -  Arrival_Time__c)  * 1440</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Total Time On Site in Minutes</inlineHelpText>
+        <label>Time On Site (M)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Total_Inspection_Items__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Items_Inspected__c +  Items_to_inspect__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Inspection Items</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Travel_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>(Arrival_Time__c -  Journey_Start__c) * 1440</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Total Travel Time in Monutes</inlineHelpText>
+        <label>Travel Time (M)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Uplift_Removal_Visit__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Uplift / Removal Visit</inlineHelpText>
+        <label>Uplift / Removal Visit</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>UserId__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Related Resource User.Id</description>
+        <externalId>false</externalId>
+        <formula>IF(
+Resource__r.User__r.IsActive = TRUE,
+Resource__r.User__c,
+null
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Related Resource User.Id</inlineHelpText>
+        <label>UserId</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>View_Report__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>HYPERLINK($User.Default_Path__c +  $User.Default_Report__c+&apos;?Id=&apos;+Id  ,&quot;View&quot;, &quot;_blank&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>View Report</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Visit_Summary__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>If(NOT(ISBLANK(TEXT(Risk__c))),TEXT(Risk__c)+&quot; Risk Identified. &quot;+ BR() ,&quot;No Risk Identified.&quot;+ BR())+  
+IF(No_Actions_Created__c &gt; 0,&quot;Action Required. &quot;+ BR(),&quot;No Actions required.&quot;+ BR())+
+IF(Escalation_Required__c = TRUE,&quot;Escalation required. &quot;+ BR(),&quot;&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Visit Summary</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Visit_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(IsFollowUp__c,Fixed_Visit_Text__c + &apos;Follow-Up&apos;, 
+
+IF(
+OR(ISPICKVAL(Service__r.Service_Type__c,&apos;Call Out&apos;),Quick_Call_Out__c),&apos;Call Out&apos;, 
+
+CASE(TEXT(Service__r.Service_Type__c),
+&apos;Contract Schedule&apos;,Fixed_Visit_Text__c + &apos;Contract Visit&apos;,
+&apos;Job Schedule&apos;,Fixed_Visit_Text__c + &apos;Job Visit&apos;,
+Fixed_Visit_Text__c + &apos;Contract Visit&apos;
+))
+)+IF(Assisted_Visit__c,&apos; (Assisted)&apos;,&apos;&apos;)+
+IF(Setup_Installation__c,&apos; (Setup/Installation)&apos;,&apos;&apos;)
++IF(Uplift_Removal_Visit__c,&apos; (Uplift/Removal)&apos;,&apos;&apos;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Type of Visit (Scheduled or Unscheduled)</inlineHelpText>
+        <label>Visit Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>included_in_Calendar__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(
+AND(
+DATEVALUE(Due_Date__c) &lt; TODAY() + 2 , 
+DATEVALUE(Due_Date__c) &gt; TODAY() - 1
+
+),TRUE,FALSE
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Included in Calendar</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>isOKToRunReport__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>If(
+AND(
+Report_Uploaded__c != TRUE,
+ISPICKVAL(Status__c,&apos;Complete&apos;),
+NOT(ISBLANK(Completion_Time__c)),
+OR(
+ Items_Inspected__c &gt;=1,
+ No_Actions_Created__c  &gt;=1,
+ Visit_Summary__c != &apos;&apos;
+)
+)
+,TRUE,FALSE)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>isOKToGenerateReport</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <label>Visit</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>Account_lkp__c</columns>
+        <columns>Visit_Type__c</columns>
+        <columns>NAME</columns>
+        <columns>Notes__c</columns>
+        <columns>Due_Date__c</columns>
+        <columns>Resource__c</columns>
+        <columns>Due_Finish__c</columns>
+        <columns>Completion_Time__c</columns>
+        <columns>Status__c</columns>
+        <columns>Copy_Inspections_to_Next_Visit__c</columns>
+        <columns>Date_Pick__c</columns>
+        <columns>ParentId__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All Visits</label>
+        <language>en_US</language>
+    </listViews>
+    <listViews>
+        <fullName>Nigel_s_visits</fullName>
+        <columns>NAME</columns>
+        <columns>Account__c</columns>
+        <columns>Due_Date__c</columns>
+        <columns>Notes__c</columns>
+        <columns>Arrival_Time__c</columns>
+        <columns>Completion_Time__c</columns>
+        <columns>Status__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Completion_Time__c</field>
+            <operation>equals</operation>
+            <value>LAST_90_DAYS</value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operation>equals</operation>
+            <value>Complete</value>
+        </filters>
+        <label>Completed Visits Last 90 Days</label>
+    </listViews>
+    <nameField>
+        <displayFormat>V{00000}</displayFormat>
+        <label>Visit Number</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Visits</pluralLabel>
+    <recordTypeTrackFeedHistory>false</recordTypeTrackFeedHistory>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>ScheduledVisit</fullName>
+        <active>true</active>
+        <description>A Scheduled Service Visit as part of recurring maintenance</description>
+        <label>Scheduled Visit</label>
+        <picklistValues>
+            <picklist>Heath_And_Safety__c</picklist>
+            <values>
+                <fullName>Accident to report</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Incident to report</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Near miss to report</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No Health %26 Safety issues to report</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Hygiene__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Pests_Found__c</picklist>
+            <values>
+                <fullName>Bed Bugs</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Bees %26 Wasps</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Birds</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Biting Insects</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Booklice</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Centipedes %26 Millipedes</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Clothes Moth</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cluster Flies</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cockroaches</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Earwigs</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Flies</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fly Breeding Sites</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fruitflies</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Garden Ants</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ground Beetles</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>House Crickets</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mice</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Moths</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rats</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Silverfish</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Stored Product Insects</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tobacco Beetle</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tropical Ants</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Wasps</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Woodlice</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Prep_Used__c</picklist>
+            <values>
+                <fullName>Advion Gel Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Algaecide</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Aquapy</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Avert Flowable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Avert Gel Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Biopren BMS</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Biopren Duo</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Coopex Insect Powder</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Deadline Rat Blocks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Deadline Wheat</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Defenacoum</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Demand CS</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ficam D</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ficam W</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Insectaban Residual Emulsion</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>K-Othrine</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Killgerid</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Maxforce Quantum</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Maxforce White IC</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Neosorexa Pasta Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oa2ki</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oa2ki Aerosol</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oa2ki Trigger Spray</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>PX-Lepto</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>PX-OrniKil</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Phostoxin</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Prep</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pyblast</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pybuthrin 33</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ratimor Fresh Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ratimor Pasta Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rodenticide</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rodilon</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Romax Bromadiolone</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Romax Rat CP</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sewarin</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solo Blox</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sorex Brodifacoum Bait Blocks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sorexa Gel</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Storm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>ULV 500</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Vertox Contact Gel</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Priority__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Proofing__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reassign_Resource__c</picklist>
+            <values>
+                <fullName>Field User</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mike Day</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Nigel Sargent</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk_Assessment_Questions__c</picklist>
+            <values>
+                <fullName>All Hazards and risks considered</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Current site Method Statement Understood</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Current site Risk Assessment Understood</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Inspection for rodent carcasses</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Qualified to perform the treatment</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Safe System of Work Understood</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Works covered by safe working practices</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>None</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Accepted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Complete</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Progress</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Journey Started</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>TestNewRecordType</fullName>
+        <active>true</active>
+        <label>TestNewRecordType</label>
+        <picklistValues>
+            <picklist>Heath_And_Safety__c</picklist>
+            <values>
+                <fullName>Accident to report</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Incident to report</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Near miss to report</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No Health %26 Safety issues to report</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Hygiene__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Pests_Found__c</picklist>
+            <values>
+                <fullName>Bed Bugs</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Bees %26 Wasps</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Birds</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Biting Insects</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Booklice</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Centipedes %26 Millipedes</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Clothes Moth</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cluster Flies</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cockroaches</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Earwigs</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Flies</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fly Breeding Sites</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fruitflies</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Garden Ants</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ground Beetles</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>House Crickets</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mice</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Moths</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rats</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Silverfish</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Stored Product Insects</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tobacco Beetle</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tropical Ants</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Wasps</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Woodlice</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Prep_Used__c</picklist>
+            <values>
+                <fullName>Advion Gel Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Algaecide</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Aquapy</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Avert Flowable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Avert Gel Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Biopren BMS</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Biopren Duo</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Coopex Insect Powder</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Deadline Rat Blocks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Deadline Wheat</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Defenacoum</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Demand CS</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ficam D</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ficam W</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Insectaban Residual Emulsion</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>K-Othrine</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Killgerid</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Maxforce Quantum</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Maxforce White IC</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Neosorexa Pasta Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oa2ki</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oa2ki Aerosol</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oa2ki Trigger Spray</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>PX-Lepto</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>PX-OrniKil</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Phostoxin</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Prep</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pyblast</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pybuthrin 33</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ratimor Fresh Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ratimor Pasta Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rodenticide</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rodilon</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Romax Bromadiolone</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Romax Rat CP</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sewarin</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solo Blox</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sorex Brodifacoum Bait Blocks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sorexa Gel</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Storm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>ULV 500</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Vertox Contact Gel</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Priority__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Proofing__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reassign_Resource__c</picklist>
+            <values>
+                <fullName>Field User</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mike Day</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Nigel Sargent</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk_Assessment_Questions__c</picklist>
+            <values>
+                <fullName>All Hazards and risks considered</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Current site Method Statement Understood</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Current site Risk Assessment Understood</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Inspection for rodent carcasses</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Qualified to perform the treatment</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Safe System of Work Understood</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Works covered by safe working practices</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>None</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Accepted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Complete</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Progress</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Journey Started</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Unscheduled_Visit</fullName>
+        <active>false</active>
+        <description>An Unscheduled Service Visit as part of reactive work</description>
+        <label>Unscheduled Visit</label>
+        <picklistValues>
+            <picklist>Heath_And_Safety__c</picklist>
+            <values>
+                <fullName>Incident to report</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No Health %26 Safety issues to report</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Hygiene__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Pests_Found__c</picklist>
+            <values>
+                <fullName>Bed Bugs</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Bees %26 Wasps</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Birds</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Biting Insects</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Booklice</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Centipedes %26 Millipedes</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Clothes Moth</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cluster Flies</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cockroaches</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Earwigs</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Flies</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fly Breeding Sites</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fruitflies</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Garden Ants</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ground Beetles</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>House Crickets</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mice</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Moths</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rats</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Silverfish</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Stored Product Insects</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tobacco Beetle</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tropical Ants</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Woodlice</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Prep_Used__c</picklist>
+            <values>
+                <fullName>Advion Gel Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Algaecide</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Aquapy</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Avert Flowable</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Avert Gel Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Biopren BMS</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Biopren Duo</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Coopex Insect Powder</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Deadline Rat Blocks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Deadline Wheat</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Defenacoum</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Demand CS</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ficam D</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ficam W</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Insectaban Residual Emulsion</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>K-Othrine</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Killgerid</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Maxforce Quantum</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Maxforce White IC</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Neosorexa Pasta Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oa2ki</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oa2ki Aerosol</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Oa2ki Trigger Spray</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>PX-Lepto</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>PX-OrniKil</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Phostoxin</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Prep</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pyblast</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pybuthrin 33</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ratimor Fresh Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ratimor Pasta Bait</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rodenticide</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rodilon</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Romax Bromadiolone</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Romax Rat CP</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sewarin</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solo Blox</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sorex Brodifacoum Bait Blocks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sorexa Gel</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Storm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>ULV 500</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Vertox Contact Gel</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Priority__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Proofing__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Reassign_Resource__c</picklist>
+            <values>
+                <fullName>Field User</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mike Day</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Nigel Sargent</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk_Assessment_Questions__c</picklist>
+            <values>
+                <fullName>All Hazards and risks considered</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Inspection for rodent carcasses</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Works covered by safe working practices</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Accepted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Complete</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Progress</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts>
+        <customTabListAdditionalFields>Due_Date__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Notes__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Resource__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Status__c</customTabListAdditionalFields>
+        <listViewButtons>Auto_Schedule</listViewButtons>
+        <listViewButtons>Manually_Allocate</listViewButtons>
+        <listViewButtons>Calculate_Route</listViewButtons>
+        <listViewButtons>Push_Selected_Visits_to_WebFleet</listViewButtons>
+        <listViewButtons>Plan_Route</listViewButtons>
+        <lookupDialogsAdditionalFields>Notes__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Resource__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Status__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Account__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Due_Date__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Due_Finish__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Items_to_inspect__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Visit_Type__c</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Due_Date__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Notes__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Items_to_inspect__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Resource__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Status__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>Check_Account</fullName>
+        <active>true</active>
+        <errorConditionFormula>Account_Check__c = FALSE</errorConditionFormula>
+        <errorDisplayField>Account_lkp__c</errorDisplayField>
+        <errorMessage>The Visit Account Must match the Schedule Account</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Check_Completion_Times</fullName>
+        <active>true</active>
+        <description>Check to see if the Completion times are accurate</description>
+        <errorConditionFormula>AND(
+ISPICKVAL(Status__c,&apos;Complete&apos;),
+CONTAINS($Profile.Name,&apos;Admin&apos;), 
+OR(
+ISBLANK(Completion_Time__c),
+ISBLANK(Arrival_Time__c),
+Completion_Time__c &gt;  NOW() + (1/1440),
+Completion_Time__c &lt; Arrival_Time__c
+)
+)</errorConditionFormula>
+        <errorMessage>Please Check The Visit Completion Times</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Check_Visit_Status</fullName>
+        <active>true</active>
+        <description>Check for an Active Service</description>
+        <errorConditionFormula>AND(
+CONTAINS($Profile.Name,&apos;Admin&apos;), 
+ISPICKVAL(Status__c,&apos;Open&apos;),
+ISPICKVAL(Service__r.Status__c,&apos;Inactive&apos;)
+)</errorConditionFormula>
+        <errorMessage>Please update the Service record before making the record Inactive.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Check_for_Closed</fullName>
+        <active>false</active>
+        <description>Check if the Visit is closed and there is no Completion or Arrival Times</description>
+        <errorConditionFormula>AND(
+CONTAINS($Profile.Name,&apos;Admin&apos;), 
+Complete__c = TRUE,
+OR(
+ISBLANK(Completion_Time__c),
+ISBLANK(Arrival_Time__c)
+)
+)</errorConditionFormula>
+        <errorMessage>Please enter both an Arrival and Completion time for this visit.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Check_for_Completion_in_the_future</fullName>
+        <active>false</active>
+        <description>Check that the Completion time is not greater than the current time</description>
+        <errorConditionFormula>AND(
+CONTAINS($Profile.Name,&apos;Admin&apos;), 
+Completion_Time__c &gt; (NOW() + (1/600.0))
+)</errorConditionFormula>
+        <errorMessage>You cannot close this Visit in the future</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Uncheck_Complete_Flag</fullName>
+        <active>false</active>
+        <errorConditionFormula>AND( 
+PRIORVALUE( Complete__c), 
+Complete__c = FALSE 
+)</errorConditionFormula>
+        <errorMessage>This visit has already been completed</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Auto_Schedule</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Auto Schedule</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/20.0/connection.js&quot;)} //adds the proper code for inclusion of AJAX toolkit 
+var url = parent.location.href; //string for the URL of the current page 
+var records = {!GETRECORDIDS($ObjectType.Visit__c)}; //grabs the Visit records that the user is requesting to update 
+var updateRecords = []; //array for holding records that this code will ultimately update 
+
+if (records[0] == null) { //if the button was clicked but there was no record selected 
+alert(&quot;Please select at least one record to update.&quot;); //alert the user that they didn&apos;t make a selection 
+} else { //otherwise, there was a record selection 
+var answer=confirm(&quot;WARNING: This will update all selected records and schedule visits based on Territory and Skill. Are you sure you want to proceed?&quot;);
+if (answer) { // If User Clicks OK
+
+var update_Visit= new sforce.SObject(&quot;STKR__Visit__c&quot;); //create a new sObject for storing updated record details 
+
+for (var a=0; a&lt;records.length; a++) { //for all records 
+
+var ter = sforce.connection.query(&quot;Select STKR__Territory__c,STKR__Skill_Required__c from STKR__Visit__c Where Id = &apos;&quot; + records[a] + &quot;&apos;&quot;);
+var resource = ter.getArray(&apos;records&apos;);
+
+if( resource[a] != null){
+
+var res = sforce.connection.query(&quot;Select Id from STKR__Resource__c where STKR__Territory__c = &apos;&quot; + resource[a].STKR__Territory__c + &quot;&apos; AND Id in (Select STKR__Resource__c from STKR__Resource_Skill__c where STKR__Skill_Name__c = &apos;&quot; + resource[a].STKR__Skill_Required__c + &quot;&apos;)&quot;);
+
+var resource = res.getArray(&quot;records&quot;);
+
+if (resource[a] == null) { //if there are no resources
+alert(&quot;There are no resources for this visit&quot;); //alert the user 
+} else {
+update_Visit.Id = records[a]; //set the Id of the selected record 
+update_Visit.STKR__Resource__c = resource[a].Id; //Close the tasks 
+updateRecords.push(update_Visit); //add the updated record to our array 
+resource = &quot;&quot;;
+
+} 
+result = sforce.connection.update(updateRecords); //push the updated records back to Salesforce 
+}
+parent.location.href = url; //refresh the page 
+}
+}
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Calculate_Route</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Calculate Route</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/20.0/connection.js&quot;)} //adds the proper code for inclusion of AJAX toolkit
+var url = parent.location.href; //string for the URL of the current page
+var records = {!GETRECORDIDS($ObjectType.Visit__c)};
+var updateRecords = []; //array for holding records that this code will ultimately update
+var location = &apos;&apos;;
+var postcode = &apos;&apos;;
+var start = &apos;&apos;;
+ 
+if (records[0] == null) { //if the button was clicked but there was no record selected
+
+alert(&quot;Please select at least one record to calculate.&quot;); //alert the user that they didn&apos;t make a selection 
+
+} else { //otherwise, there was a record selection
+
+for (var a=1; a&lt;records.length; a++) { //for all records
+var vis = sforce.connection.query(&quot;Select id, STKR__Resource__r.STKR__User__r.PostalCode, STKR__Account_lkp__r.ShippingPostalCode From STKR__Visit__c WHERE id = &apos;&quot;+records[a]+&quot;&apos;&quot;);
+start = vis.records.STKR__Resource__r.STKR__User__r.PostalCode;
+location = &quot;loc&quot;+a+&quot;=&quot;+vis.records.STKR__Account_lkp__r.ShippingPostalCode+&quot;&amp;&quot;;
+postcode = postcode+location;
+}
+
+
+
+var gurl = &quot;http://gebweb.net/optimap/index.php?loc0=&quot;+start+&quot;&amp;&quot;+postcode;
+
+window.open(gurl);
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Calorifier_Inspection_Report</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Calorifier Inspection Report</masterLabel>
+        <openType>newWindow</openType>
+        <page>CalorifierReport</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
+    <webLinks>
+        <fullName>Chlorination_Certificate</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Chlorination Certificate</masterLabel>
+        <openType>newWindow</openType>
+        <page>ChlorinationReport</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
+    <webLinks>
+        <fullName>Complete_Visit</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Complete Visit</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/23.0/connection.js&quot;)}
+var url = parent.location.href; 
+var updateRecord; 
+var vis = sforce.connection.retrieve(&quot;Id,STKR__Due_Date__c,STKR__Due_Finish__c&quot;, &quot;STKR__Visit__c&quot;, [&apos;{!Visit__c.Id }&apos;]);
+var n = new Date().toISOString();
+var update_visit = new sforce.SObject(&quot;STKR__Visit__c&quot;);
+var iRecord = new sforce.SObject(&quot;STKR__Inspection__c&quot;); 
+var idate = new Date().toISOString();
+
+update_visit.Id = &apos;{!Visit__c.Id}&apos;;
+if(vis[0].STKR__Due_Finish__c &lt; n){
+update_visit.STKR__Arrival_Time__c = vis[0].STKR__Due_Date__c;
+update_visit.STKR__Completion_time__c = vis[0].STKR__Due_Finish__c;
+idate = vis[0].STKR__Due_Date__c;
+} else {
+update_visit.STKR__Arrival_Time__c = n;
+update_visit.STKR__Completion_time__c = n;
+}
+update_visit.STKR__Status__c = &quot;Complete&quot;;
+
+var updateInspections = confirm(&quot;This will also update all Inspections on this Visit? Click OK to continue or Cancel to update the visit only&quot;);
+
+if (updateInspections){
+
+var strQuery=&quot;Select Id from STKR__Inspection__c where STKR__Visit__c = &apos;&quot; +&apos;{!Visit__c.Id}&apos;+&quot;&apos;&quot;;
+
+var inspections = sforce.connection.query(strQuery);
+var nrecords = inspections.getArray(&quot;records&quot;);
+for(var i=0; i &lt; nrecords.length ; i ++)
+{
+        iRecord.Id = nrecords[i].Id;
+        iRecord.STKR__Status__c = &quot;Inspected&quot;;
+        iRecord.STKR__Inspection_Date_Time__c = idate;
+        sforce.connection.update([iRecord]);
+
+}
+
+}
+sforce.connection.update([update_visit]);
+
+parent.location.href = url;</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Cooling_Tower_Report</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Cooling Tower Report</masterLabel>
+        <openType>newWindow</openType>
+        <page>WaterCoolingTowerReport</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
+    <webLinks>
+        <fullName>Delete_Visits</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Delete Visits</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/9.0/connection.js&quot;)} 
+
+var records = {!GETRECORDIDS( $ObjectType.Visit__c )}; 
+
+if (records[0] == null) { 
+alert(&quot;Please select at least one record.&quot;) } 
+else { 
+
+var errors = []; 
+var result = sforce.connection.deleteIds(records); 
+if (result &amp;&amp; result.length){ 
+var numFailed = 0; 
+var numSucceeded = 0; 
+for (var i = 0; i &lt; result.length; i++){ 
+var res = result[i]; 
+if (res &amp;&amp; res.success == &apos;true&apos;){ 
+numSucceeded++; 
+} else { 
+var es = res.getArray(&quot;errors&quot;); 
+if (es.length &gt; 0) { 
+errors.push(es[0].message); 
+} 
+numFailed++; 
+} 
+} 
+if (numFailed &gt; 0){ 
+alert(&quot;Failed: &quot; + numFailed + &quot;\nSucceeded: &quot; + numSucceeded + &quot; \n Due to: &quot; + errors.join(&quot;\n&quot;)); 
+} else { 
+alert(&quot;Number of records deleted: &quot; + numSucceeded); 
+} 
+} 
+window.location.reload(); 
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Manually_Allocate</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Manually Allocate</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>/apex/STKR__ManualAllocation?id={!Visit__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>New_Billing</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>New Billing</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/apex/STKR__NewBilling?retURL={!Visit__c.Id}&amp;sfdc.override=1&amp;Acc={!Service__c.AccountId__c}&amp;Contract={!Service__c.Service_ContractId__c}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>New_Visit</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>New Visit</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>{!URLFOR($Action.Visit__c.New, null, [
+
+ STKR__Visit__c.STKR__Service__c = Service__c.Id, 
+ STKR__Visit__c.STKR__Due_Date__c = IF(Service__c.Last_Scheduled_Visit__c = NULL,NOW(),Service__c.Last_Scheduled_Visit__c  + (365.5 / Service__c.Number_of_Visit_Per_Year__c)),
+ STKR__Visit__c.STKR__Planned_Date__c = IF(Service__c.Last_Scheduled_Visit__c = NULL,NOW(),Service__c.Last_Scheduled_Visit__c  + (365.5 / Service__c.Number_of_Visit_Per_Year__c)),
+ STKR__Visit__c.STKR__Due_Finish__c = IF(Service__c.Last_Scheduled_Visit__c = NULL,NOW(),Service__c.Last_Scheduled_Visit__c  + (365.5 / Service__c.Number_of_Visit_Per_Year__c)),
+ STKR__Visit__c.STKR__ResourceId__c = Service__c.Service_OwnerId__c , 
+ STKR__Visit__c.STKR__Account_lkp__c=Service__c.AccountId__c, 
+ STKR__Visit__c.STKR__Notes_Long__c =Service__c.Notes_Long__c 
+
+
+])}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Notify_Operative</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Notify Operative</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/_ui/core/email/author/EmailAuthor?p24={!Visit__c.Resource_Email__c}&amp;rtype=003&amp;p3_lkid={!Visit__c.Id}&amp;p6=New {!Visit__c.Visit_Type__c} for {!Visit__c.Account_lkp__c}&amp;retURL=/{!Visit__c.Id}&amp;p7=Dear {!Visit__c.Resource__c}%0a%0aA new visit has been generated in ServiceTracker and requires your attention.%0a%0aThe details are as follows:%0a%0aAccount: {!Visit__c.Account_lkp__c}%0aContract Ref: {!Service__c.Service_Contract__c}%0aVisit No: {!Visit__c.Name}%0a
+Visit Date: {!Visit__c.Due_Date__c}%0a%0a
+
+Description: {!Visit__c.Notes_Long__c}%0a%0aTo view this visit please log into ServiceTracker or click on the following link http://www.eKt2119gT817IZ.com/{! Visit__c.Id}.
+%0a%0aRegards%0a%0a{!User.Name}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Plan_Route</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Plan Route (Example)</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/apex.js&quot;)}
+
+var records = {!GETRECORDIDS($ObjectType.Visit__c)}; //records to update
+var url = &apos;http://service.maxoptra.com/rest/2/engineers-api/orders/save&apos;;
+var xmlbody;
+
+if (records[0] == null) { //if the button was clicked but there was no record selected
+alert(&quot;Please select at least one record to send to Maxoptra.&quot;); //alert the user that they didn&apos;t make a selection 
+} else { //otherwise, there was a record selection
+
+for (var a=0; a &lt; records.length; a++) { //for all records
+
+var s=sforce.connection.query(&quot;Select Id,STKR__Account_lkp__r.Name,STKR__Due_Date__c,STKR__Due_Finish__c,STKR__Account_lkp__r.ShippingCity,Name,STKR__Notes_Long__c,STKR__Account_lkp__r.STKR__location__Latitude__s,STKR__Account_lkp__r.STKR__location__Longitude__s,STKR__Service__r.STKR__Contact_Name__r.FirstName,STKR__Service__r.STKR__Contact_Name__r.LastName,STKR__Service__r.STKR__Contact_Name__r.Phone,STKR__Service__r.STKR__Contact_Name__r.email,STKR__Address__c from STKR__Visit__c where id = &apos;&quot;+records[a]+&quot;&apos;&quot;); // Get all the records
+
+lon = s.records.STKR__Account_lkp__r.STKR__location__Longitude__s;
+lat = s.records.STKR__Account_lkp__r.STKR__location__Latitude__s;
+
+dts = s.records.STKR__Due_Date__c;
+st = dts.substring(11,16);
+d = dts.substring(8,10)+&quot;/&quot;+dts.substring(5,7)+&quot;/&quot;+dts.substring(0,4)+&quot; &quot;+st;
+
+dtf = s.records.STKR__Due_Finish__c;
+ft = dtf.substring(11,16);
+
+name = s.records.STKR__Service__r.STKR__Contact_Name__r.FirstName+&quot; &quot;+s.records.STKR__Service__r.STKR__Contact_Name__r.LastName;
+
+a = s.records.STKR__Address__c;
+addr = a.replace(/\&apos;/g, &quot;&quot;);
+
+xmlbody = &apos;&lt;apiRequest&gt;&lt;accountID&gt;ukd0789&lt;/accountID&gt;&lt;user&gt;ukd0789&lt;/user&gt;&lt;password&gt;nXfNGw&lt;/password&gt;&lt;orders&gt;&lt;order&gt;&lt;orderReference&gt;&apos;+s.records.Name+&apos;&lt;/orderReference&gt;&lt;areaOfControl&gt;Wales&lt;/areaOfControl&gt;&lt;releaseDate&gt;&apos;+d+&apos;&lt;/releaseDate&gt;&lt;dueDate&gt;&apos;+d+&apos;&lt;/dueDate&gt;&lt;client&gt;&lt;name&gt;&apos;+s.records.STKR__Account_lkp__r.Name+&apos;&lt;/name&gt;&lt;contactPerson&gt;&apos;+name+&apos;&lt;/contactPerson&gt;&lt;contactNumber&gt;&apos;+s.records.STKR__Service__r.STKR__Contact_Name__r.Phone+&apos;&lt;/contactNumber&gt;&lt;/client&gt;&lt;customerLocation&gt;&lt;name&gt;&apos;+s.records.STKR__Account_lkp__r.Name+&apos;&lt;/name&gt;&lt;contactName&gt;&apos;+name+&apos;&lt;/contactName&gt;&lt;phoneNumber&gt;&apos;+s.records.STKR__Service__r.STKR__Contact_Name__r.Phone+&apos;&lt;/phoneNumber&gt;&lt;description&gt;&apos;+s.records.STKR__Notes_Long__c+&apos;&lt;/description&gt;&lt;position&gt;&lt;address&gt;&apos;+addr+&apos;&lt;/address&gt;&lt;latitude&gt;&apos;+lat+&apos;&lt;/latitude&gt;&lt;longitude&gt;&apos;+lon+&apos;&lt;/longitude&gt;&lt;/position&gt;&lt;customer&gt;&lt;name&gt;&apos;+s.records.STKR__Account_lkp__r.Name+&apos;&lt;/name&gt;&lt;contactPerson&gt;&apos;+name+&apos;&lt;/contactPerson&gt;&lt;contactNumber&gt;&apos;+s.records.STKR__Service__r.STKR__Contact_Name__r.Phone+&apos;&lt;/contactNumber&gt;&lt;/customer&gt;&lt;accessTimes&gt;&lt;defaultAccessTime&gt;&lt;start&gt;&apos;+st+&apos;&lt;/start&gt;&lt;end&gt;&apos;+ft+&apos;&lt;/end&gt;&lt;/defaultAccessTime&gt;&lt;/accessTimes&gt;&lt;/customerLocation&gt;&lt;durationDrop&gt;1&lt;/durationDrop&gt;&lt;workDescription&gt;&apos;+s.records.STKR__Notes_Long__c+&apos;&lt;/workDescription&gt;&lt;/order&gt;&lt;/orders&gt;&lt;/apiRequest&gt;&apos;;
+
+var req = new XMLHttpRequest();
+req.open(&quot;POST&quot;, url, true);
+
+req.onreadystatechange = function () {
+    if (req.readyState != 4){
+        alert(&apos;HTTP error &apos; + req.status);
+       alert(req.responseText);
+    }   
+}
+
+
+    req.setRequestHeader(&apos;Content-type&apos;, &apos;application/XML&apos;);
+    req.send(xmlbody);
+    alert(&quot;Visit Sent to Maxoptra&quot;);
+} //end for
+} //end if</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Print_Report</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>Print Report</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>/apex/{!$User.Default_Report__c}?Id={!Visit__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Print_Service_Report</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Preview/Email Report</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>../apex/STKR__SendAsPDF?Visit={!Visit__c.Id}&amp;Contract={!Service_Contract__c.Id}&amp;Acc={!Visit__c.Account_lkpId__c}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Push_Selected_Visits_to_WebFleet</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Push to WebFleet</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/apex.js&quot;)}
+
+var records = {!GETRECORDIDS($ObjectType.Visit__c)}; //records to update
+var URL;
+
+if (records[0] == null) { //if the button was clicked but there was no record selected
+alert(&quot;Please select at least one record to send to WebFleet.&quot;); //alert the user that they didn&apos;t make a selection 
+} else { //otherwise, there was a record selection
+
+for (var a=0; a &lt; records.length; a++) { //for all records
+
+var s=sforce.connection.query(&quot;Select Id,STKR__Account_lkp__r.ShippingStreet,STKR__Due_Date__c,STKR__Account_lkp__r.ShippingCity,STKR__Account_lkp__r.ShippingPostalCode,STKR__Account_lkp__r.ShippingCountry,Name,STKR__Notes_Long__c,STKR__Account_lkp__r.STKR__location__Latitude__s,STKR__Account_lkp__r.STKR__location__Longitude__s from STKR__Visit__c where id = &apos;&quot;+records[a]+&quot;&apos;&quot;); // Get all the records
+
+ln = s.records.STKR__Account_lkp__r.STKR__location__Longitude__s;
+lt = s.records.STKR__Account_lkp__r.STKR__location__Latitude__s;
+
+lon = ln.replace(&quot;.&quot;, &quot;&quot;).substring(0,8);
+lat = lt.replace(&quot;.&quot;, &quot;&quot;).substring(0,8);
+
+dt = s.records.STKR__Due_Date__c;
+t = dt.substring(11,19);
+d = dt.substring(0,8);
+
+URL = &quot;https://csv.business.tomtom.com/extern?account=service-tracker&amp;username=admin&amp;password=Start2016&amp;apikey=03b06dc8-645b-4be4-9549-42932d6eaf03&amp;lang=en&amp;action=sendDestinationOrderExtern&amp;objectno=002&amp;orderid=&quot;+s.records.Name+&quot;&amp;ordertext=&quot;+s.records.STKR__Notes_Long__c+&quot;&amp;country=UK&amp;zip=&quot;+s.records.STKR__Account_lkp__r.ShippingPostalCode+&quot;&amp;city=&quot;+s.records.STKR__Account_lkp__r.ShippingCity+&quot;&amp;street=&quot;+s.records.STKR__Account_lkp__r.ShippingStreet+&quot;&amp;longitude=&quot;+lon+&quot;&amp;latitude=&quot;+lat+&quot;&amp;useISO8601=true&amp;orderdate=&quot;+d+&quot;ordertime=&quot;+t
+
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange=function() {
+  if (xmlhttp.readyState==4 &amp;&amp; xmlhttp.status==200) {
+    var response = xmlhttp.responseText; 
+    if(response == &apos;&apos;){response=&quot;Visit Sent to WebFleet&quot;}
+    alert(response);
+  }
+}
+
+xmlhttp.open(&quot;GET&quot;,URL,true);
+xmlhttp.send();
+URL = &quot;&quot;;
+}
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Push_to_Webfleet</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Push to Webfleet</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/30.0/apex.js&quot;)}
+
+var a=sforce.connection.query(&quot;Select Id,ShippingStreet,ShippingCity,ShippingPostalCode,ShippingCountry,STKR__location__Latitude__s,STKR__location__Longitude__s from Account where id = &apos;{!Visit__c.Account_lkpId__c}&apos;&quot;); // Get all the Account contracts
+var Arecords=a.getArray(&quot;records&quot;); //add all the Account to an Array
+
+ln = Arecords[0].STKR__location__Longitude__s;
+lt = Arecords[0].STKR__location__Latitude__s;
+
+lon = ln.replace(&quot;.&quot;, &quot;&quot;).substring(0,8);
+lat = lt.replace(&quot;.&quot;, &quot;&quot;).substring(0,8);
+
+dt = &apos;{!TEXT(Visit__c.Due_Date__c)}&apos;;
+d = dt.substring(0,10);
+t = dt.substring(11,19);
+
+URL = &quot;https://csv.business.tomtom.com/extern?account=service-tracker&amp;username=admin&amp;password=Start2016&amp;apikey=03b06dc8-645b-4be4-9549-42932d6eaf03&amp;lang=en&amp;action=sendDestinationOrderExtern&amp;objectno=001&amp;orderid={!Visit__c.Name}&amp;ordertext={!Visit__c.Notes_Long__c}&amp;country=UK&amp;zip=&quot;+Arecords[0].ShippingPostalCode+&quot;&amp;city=&quot;+Arecords[0].ShippingCity+&quot;&amp;street=&quot;+Arecords[0].ShippingStreet+&quot;&amp;longitude=&quot;+lon+&quot;0&amp;latitude=&quot;+lat+&quot;&amp;useISO8601=true&amp;orderdate=&quot;+d+&quot;ordertime=&quot;+t
+
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange=function() {
+  if (xmlhttp.readyState==4 &amp;&amp; xmlhttp.status==200) {
+    var response = xmlhttp.responseText; 
+    if(response == &apos;&apos;){response=&quot;Visit sent to WebFleet&quot;;}    
+     alert(response);
+  }
+}
+
+xmlhttp.open(&quot;GET&quot;,URL,true);
+xmlhttp.send();</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Record_of_Chlorination</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Record of Chlorination</masterLabel>
+        <openType>newWindow</openType>
+        <page>RecordOfChlorination</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
+    <webLinks>
+        <fullName>Remove_Selected</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Remove Selected</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>// Include and initialize the AJAX Toolkit javascript {!REQUIRESCRIPT(&quot;/soap/ajax/10.0/connection.js&quot;)} 
+
+// Get the list of accounts that should be deleted. 
+
+var idsToDelete = {!GETRECORDIDS( $ObjectType.Visit__c )}; 
+
+var deleteWarning = &apos;Are you sure you wish to delete &apos; +idsToDelete.length + &apos; records?&apos;; 
+
+if (idsToDelete.length &amp;&amp; (window.confirm(deleteWarning))) 
+
+{ 
+
+// Delete the records, and pass a function into the call// so that the toolkit refreshes the current page// asynchronously when the call succeeds.// 
+
+sforce.connection.deleteIds(idsToDelete,function() {navigateToUrl(window.location.href);});} 
+
+else if (idsToDelete.length == 0) {alert(&quot;Please select the records you wish to delete.&quot;);}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Service_Report</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>Service Report</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>../apex/{!User.Default_Report__c}?id={!Visit__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Tank_Inspection_Report</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Tank Inspection Report</masterLabel>
+        <openType>newWindow</openType>
+        <page>TankInspectionReport</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
+    <webLinks>
+        <fullName>Temperature_Report</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Temperature Report</masterLabel>
+        <openType>newWindow</openType>
+        <page>TemperatureMonitoringReport</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
+</CustomObject>

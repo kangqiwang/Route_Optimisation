@@ -1,0 +1,93 @@
+<apex:page standardController="STKR__Actions__c" showHeader="true" tabStyle="STKR__Actions__c">
+<apex:includeScript value="/soap/ajax/20.0/connection.js" />
+   <style>
+   .activeTab {background-color:#015A83; font-weight:600; color:white; background-image:none;font-size:14px;border: none;}
+   .inactiveTab {background-color:#0A7CB2; font-weight:600; color:white; background-image:none;font-size:14px;border: none;}
+   .rich-tabhdr-side-border { background-image:none;border: none; }
+   .rich-tabhdr-side-cell { background-image:none;border: none; }
+   .rich-tabhdr-cell-active {background-image:none;background-color:#015A83;border: none; }
+   .rich-tabhdr-cell-inactive {background-image:none;background-color:#0A7CB2;border: none; }
+   .rich-tabpanel {background-image:none;background-color:#0A7CB2;}
+   .panel { background-color:#F5FAFF; font-family:"vag-round", sans-serif; font-size:12px;}
+   .link{ text-decoration: underline; cursor:pointer; }
+
+   </style>
+<script type="text/javascript">
+$(window).load(function() {
+    $(".loader").fadeOut("slow");
+})
+</script>  
+   <apex:tabPanel switchType="client" selectedTab="tabdetails" id="ActionTabPanel" tabClass="activeTab" inactiveTabClass="inactiveTab" contentClass="panel">
+<apex:tab label="Details" name="ActionDetails" id="tabdetails">
+<apex:detail inlineEdit="True" relatedList="false" title="true" oncomplete="window.location.reload();"/>
+</apex:tab>
+<apex:tab label="{!$ObjectType.STKR__Inspection__c.label}" name="Inspection" id="tabIns" onclick="initPage();">
+<div class="loader"> 
+<div id="inspection"></div>
+<div id="iURL"></div>
+<script id="clientEventHandlersJS" language="javascript">
+initPage();
+function initPage() {
+var inspection = '';
+var iURL = '';
+var createdDate = new Date('{!STKR__Actions__c.CreatedDate}').toISOString();
+var item = '{!STKR__Actions__c.STKR__Service_Item__c}';
+
+        var day= createdDate.slice(8,10);
+        var month=createdDate.slice(5,7);
+        var year=createdDate.slice(0,4);
+        var createdDate = day+"/"+month+"/"+year;
+
+sforce.connection.sessionId = '{!$Api.Session_ID}';
+ 
+    var qr = sforce.connection.query("SELECT id,Name,STKR__Item_Detail__c,STKR__Inspection_Date_Time__c,STKR__Result__c,STKR__Reason_for_failure__c FROM STKR__Inspection__c where STKR__status__c = 'Inspected' AND STKR__InspectionDate__c = '"+createdDate+"' AND STKR__Service_Item__c = '"+item+"' LIMIT 1");
+    var recs = qr.getArray("records");
+
+    if (recs[0] != null)
+    {
+    var iDate = recs[0].STKR__Inspection_Date_Time__c.slice(8,10)+"/"+recs[0].STKR__Inspection_Date_Time__c.slice(5,7)+"/"+recs[0].STKR__Inspection_Date_Time__c.slice(0,4);
+    var iResult = recs[0].STKR__Result__c;
+    var iReason = recs[0].STKR__Reason_for_failure__c;
+    var iDetail = recs[0].STKR__Item_Detail__c;
+    var URL = "/"+recs[0].Id;
+    if(iResult == null){ iResult = 'No result provided';};   
+    if(iReason == null){ iReason = 'No reason provided';};  
+     
+    inspection = "<b>Item Detail:</b> "+iDetail+"<br/><br/><b> Inspection Number: </b><a href='"+URL+"'>"+recs[0].Name+ "</a><br/><br/><b>Inspection Date:</b> "+iDate+"<br/><br/><b>Result: </b>"+iResult+"<br/><br/><b>Reason: </b>"+iReason+"<br/><br/>";
+    iURL = "<a href='"+URL+"'>To go to the Inspection detail click here</a>";
+    }
+
+    else
+    {
+    inspection = "<br/><br/>No related Inspection<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>";
+    }
+    document.getElementById("inspection").innerHTML = inspection;
+    document.getElementById("iURL").innerHTML = iURL;
+// End Init Page with the bracket below.
+}
+</script> 
+</div>
+<apex:outputField value="{!STKR__Actions__c.CreatedDate}" rendered="false"/>
+<apex:outputField value="{!STKR__Actions__c.STKR__Service_Item__c}" rendered="false"/>
+
+
+
+</apex:tab>
+<apex:tab label="{!$ObjectType.STKR__Billing__c.labelPlural}" name="Billing" id="tabBill">
+<apex:relatedList subject="{!STKR__Actions__c}" list="Quotes_Invoices_WO__r" />
+</apex:tab>
+<apex:tab label="{!$ObjectType.NoteAndAttachment.labelPlural}" name="Notes_Attachments" id="tabAtt">
+<apex:relatedList subject="{!STKR__Actions__c}" list="CombinedAttachments" />
+</apex:tab>
+<apex:tab label="History" name="History" id="tabHist">
+        <apex:pageBlock id="Histories" title="History">            
+            <apex:pageBlockTable value="{!STKR__Actions__c.Histories}" var="h">
+                <apex:column headerValue="Date"  value="{!h.createddate}"/>
+                <apex:column headerValue="What" value="{!h.field}"/>
+                <apex:column headerValue="From" value="{!h.oldvalue}"/>
+                <apex:column headerValue="To"   value="{!h.newvalue}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+</apex:tab>
+</apex:tabPanel>
+</apex:page>

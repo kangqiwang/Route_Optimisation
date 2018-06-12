@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <aggregates>
+        <calculatedFormula>Resource__c.Working_Hours__c:SUM -  (Visit__c.Time_Allocation__c:SUM / 60)</calculatedFormula>
+        <datatype>number</datatype>
+        <developerName>FORMULA1</developerName>
+        <downGroupingContext>Resource__c.Visits__r$Due_Date__c</downGroupingContext>
+        <isActive>true</isActive>
+        <isCrossBlock>false</isCrossBlock>
+        <masterLabel>Time remaining</masterLabel>
+        <scale>2</scale>
+    </aggregates>
+    <columns>
+        <field>Resource__c.Visits__r$Name</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Resource__c$Working_Hours__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Resource__c.Visits__r$Time_Allocation__c</field>
+    </columns>
+    <crossFilters>
+        <operation>with</operation>
+        <primaryTableColumn>Resource__c$Id</primaryTableColumn>
+        <relatedTable>Visit__c</relatedTable>
+        <relatedTableJoinColumn>Resource__c</relatedTableJoinColumn>
+    </crossFilters>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Resource__c$Name</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Resource__c.Visits__r$Due_Date__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Time Tracker</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Resources_With_Visits__c</reportType>
+    <scope>organization</scope>
+    <showDetails>false</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Resource__c.Visits__r$Due_Date__c</dateColumn>
+        <interval>INTERVAL_LASTWEEK</interval>
+    </timeFrameFilter>
+</Report>

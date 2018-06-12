@@ -1,0 +1,74 @@
+<apex:page controller="STKR.clientAttachments" showHeader="true"  docType="html-5.0" sidebar="true">
+<apex:form >
+<apex:includeScript value="/soap/ajax/34.0/connection.js"/>
+<apex:includeScript value="/soap/ajax/34.0/apex.js"/>
+<apex:includescript value="//code.jquery.com/jquery-1.11.1.min.js"/>
+<apex:includeScript value="{!URLFOR($Resource.STKR__jszip,'Stuk-jszip-ab3829a/dist/jszip.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.STKR__filesaver,'FileSaver.js-master/FileSaver.js')}"/>
+
+<script type="text/javascript">
+ var j$ = jQuery.noConflict();
+ var accountId = '{!accountRecordId}';
+ var serviceId = '{!serviceId}';
+ var fromDate;
+ var toDate;
+ var zipFile = new JSZip();
+ var jsAtt;
+function buttonsEnabled(enabled) {
+ // retrieve all of the buttons or links on the page with the css class of btn
+ var $buttons = jQuery('.btn');
+ if (enabled === false) {
+  // add the btnDisabled class to give it the look of being disabled 
+  $buttons.toggleClass('btnDisabled', true).attr('disabled', 'disabled');  
+  $buttons.toggleClass('btnDisabled', true).attr('value', 'Please Wait...');  
+
+ } else {
+  // remove the css class and the disabled attribute
+  $buttons.toggleClass('btnDisabled', false).attr('disabled', null);
+  $buttons.toggleClass('btnDisabled', false).attr('value', 'Export files');
+ } 
+}
+function ExportFiles(td,fd){
+ fromDate = document.getElementById(fd).value;
+ toDate = document.getElementById(td).value;
+ Visualforce.remoting.Manager.invokeAction(
+ '{!$RemoteAction.clientAttachments.getAttachments}',
+ accountId,fromDate,toDate,serviceId,
+ function(result,event) {
+ if(event.status){
+ jsAtt = result;
+ j$.each(jsAtt, function(key,value) { 
+  var Aname = value.attName;
+  var Abody = value.attEncodedBody;
+  compressFile(zipFile, Aname, Abody);
+ });
+ downloadZip(zipFile);
+ }
+ });
+ buttonsEnabled(false);
+ return false;
+};
+function compressFile(zipFile, name, data) {
+ zipFile.file(name, data, {base64:true});
+}
+function downloadZip(zipFile){
+ sforce.connection.sessionId = '{!$Api.Session_ID}';
+ zipFile.generateAsync({type:"blob"})
+ .then(function(content) {
+ saveAs(content, "Service Reports.zip");
+});
+ buttonsEnabled(true);
+};
+ </script>
+<apex:pageBlock title="Export Service Reports for {!if(serviceId = null,accountName,'the selected service')}">
+<a href="/{!if(serviceId = null,accountRecordId,serviceId)}">« back to the {!if(serviceId=null,'client record','service record')}</a><br/><br/><br/><br/>
+  Please enter a date range for the Service Reports* and click Export Files <br/>
+  <br/><br/>
+  <b>From Date: </b>&nbsp;&nbsp;<apex:input value="{!fromDate}" type="auto" id="fd"/>
+  <b>To Date: </b>&nbsp;&nbsp;<apex:input value="{!toDate}" type="auto" id="td"/>&nbsp;&nbsp;
+  <apex:commandButton id="btn" value="Export Files" onclick="ExportFiles('{!$Component.td}','{!$Component.fd}'); return false;" /><br/><br/><br/><br/>
+  <div style="color:red">*Please note this will download Service Reports related to Visits completed in the chosen date range</div><br/>
+</apex:pageBlock>
+
+  </apex:form>
+</apex:page>

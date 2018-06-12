@@ -1,0 +1,84 @@
+<apex:page docType="html-5.0" standardcontroller="STKR__Visit__c" Extensions="STKR.AnyObjectSignatureController" showheader="false" sidebar="false" standardStylesheets="false">
+<script>var $j = jQuery.noConflict();</script>
+
+<!-- jQuery + jQuery Mobile files -->
+<apex:includeScript value="{!URLFOR($Resource.STKR__jquery, 'jquery-1.8.2.min.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.STKR__jquery, 'jquery.mobile-1.2.1.min.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.STKR__jquery, 'jquery.mobile-1.2.1.min.css')}" />  
+    
+<div data-role="page" id="signatureCaptureHome"> 
+<div data-role="content">
+<h1 id="recordSigId">Capture Signature:</h1>
+<canvas id="signatureCanvas" style="height:'200px';width='100%'"/>
+<input id="saveSigButton" type="button" name="SigCap" onclick="saveSignature();" value="Capture Signature"></input>
+</div> 
+</div> 
+<div data-role="page" id="signatureCaptureHome"> 
+</div> 
+
+<script>
+
+    var canvas;
+    var context;
+    var drawingUtil;
+    var isDrawing = false;
+
+function DrawingUtil() 
+{
+    isDrawing = false;
+    canvas.addEventListener("touchstart",start,false);
+    canvas.addEventListener("touchmove",draw,false);
+    canvas.addEventListener("touchend",stop,false);
+    context.strokeStyle = "#FFF";  
+}
+
+//Start Event for Signature Capture on HTML5 Canvas
+function start(event) 
+{
+    isDrawing = true;
+    canvas = document.getElementById("signatureCanvas");
+    context = canvas.getContext("2d");    
+    context.strokeStyle = "rgba(155,0,0,0.5)";      
+    context.beginPath();
+    context.moveTo(event.touches[0].pageX - canvas.getBoundingClientRect().left,event.touches[0].pageY - canvas.getBoundingClientRect().top);
+}
+
+//Event while someone is drawing to capture the path while they draw....
+function draw(event) {
+    event.preventDefault();
+    if(isDrawing) {     
+        context.lineTo(event.touches[0].pageX - canvas.getBoundingClientRect().left,event.touches[0].pageY - canvas.getBoundingClientRect().top);
+        context.stroke();
+    }
+}
+
+
+//Event when someone stops drawing their signature line
+function stop(event) {
+    if(isDrawing) {
+        context.stroke();
+        context.closePath();
+        isDrawing = false;
+    }
+}
+
+canvas = document.getElementById("signatureCanvas");
+context = canvas.getContext("2d");
+drawingUtil = new DrawingUtil(canvas);
+
+function saveSignature()
+{
+var strDataURI = canvas.toDataURL();
+var parentId = "{!$CurrentPage.parameters.id}";
+    // alert(strDataURI);
+    strDataURI = strDataURI.replace(/^data:image\/(png|jpg);base64,/, "");
+//alert(parentId);
+
+AnyObjectSignatureController.saveSignature(strDataURI,parentId);
+alert(vst1.Name);
+}
+
+
+</script>
+
+</apex:page>

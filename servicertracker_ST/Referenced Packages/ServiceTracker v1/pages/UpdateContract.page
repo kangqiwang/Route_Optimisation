@@ -1,0 +1,88 @@
+<apex:page standardController="STKR__Service_Contract__c"
+           showChat="false" 
+           sidebar="false" 
+           showHeader="false" 
+           standardStylesheets="false">
+           
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"/>
+    <script src="/soap/ajax/27.0/connection.js" type="text/javascript"/>
+    <script src="/soap/ajax/27.0/apex.js" type="text/javascript"/>
+    
+    <script type="text/javascript">
+    var Contract = {};
+    function authorize()
+    { sforce.connection.sessionId = '{!GETSESSIONID()}'; }      
+  
+    function getContractID() 
+    {
+    // Define the variables used within the Script
+    var url = parent.location.href; //string for the URL of the current page
+    var updateRecords = []; //array for holding records that this code will ultimately update
+    var ActiveFlag = '{!STKR__Service_Contract__c.STKR__Status__c}';
+    
+    // Get Service Records
+
+    Contract.ID = '{!STKR__Service_Contract__c.Id}';
+
+    var Sid=sforce.connection.query("Select Id from STKR__Service__c  where STKR__Service_Contract__c = '"+ Contract.ID + "' AND STKR__Status__c != 'Inactive'");
+    var Srecords = Sid.getArray("records"); //add all the Service ids to an Array
+    
+    // Get Visit Records
+
+    var Vid=sforce.connection.query("Select Id from STKR__Visit__c  where STKR__Service__r.STKR__Service_Contract__r.Id = '"+ Contract.ID + "' AND STKR__Status__c = 'Open' limit 200");
+    var Vrecords = Vid.getArray("records"); //add all the Visit ids to an Array
+  
+    // Start Master Update Script
+    if ((ActiveFlag == "Inactive") && (Srecords.length > 0)) {
+
+     var answer=confirm("WARNING: This Record is Inactive. Do you want to update all related records and remove any open visits accordingly? (Maximum 200 at a time)");
+
+     if (answer) { // If User Clicks OK
+
+    try{ 
+
+    //Start Update Services Script
+    if (Srecords.length <  0) { alert("No Services Found");
+    } else { //otherwise, there was a record selection
+    for (var a=0; a<Srecords.length; a++) { //for all records
+    var update_service = new sforce.SObject("STKR__Service__c"); //create a new sObject for storing updated record details
+    update_service.Id = Srecords[a].Id; //set the Id of the selected record
+    update_service.STKR__Status__c = ActiveFlag;
+    updateRecords.push(update_service); //add the updated record to our array
+    result = sforce.connection.update(updateRecords); //push the updated records back to Salesforce
+    update_service = [];
+    updateRecords = [];
+    } //End Loop
+    } //End If
+
+
+    //Start Delete Visits Script
+    var idsForDeletion = [];
+    if (Vrecords.length <  0) { alert("No Visits Found");
+    } else { //otherwise, there was a record selection
+    for (var b=0; b<Vrecords.length; b++) { //for all records
+     
+     idsForDeletion.push(Vrecords[b].Id); //add the updated record to our array
+    } //End Loop
+    
+    sforce.connection.deleteIds(idsForDeletion);
+    } //End If
+
+    } catch(e) { }
+
+    parent.location.href = url; //refresh the page
+    
+    } // If user clicks Cancel 
+    } // Not an inactive contract
+
+    }
+     
+    $(document).ready(
+     function()
+    {
+     authorize();
+     getContractID();
+    });
+   </script>
+            
+ </apex:page>

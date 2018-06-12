@@ -1,0 +1,1799 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <content>BillingDetail</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>true</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Accepted_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date the Quote was accepted</inlineHelpText>
+        <label>Accepted Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Account_Ref__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>External Account Reference for Billing</inlineHelpText>
+        <label>Billing Reference</label>
+        <length>64</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Account__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the Account for Billing</inlineHelpText>
+        <label>Billing Account</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipName>Billing</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>true</reparentableMasterDetail>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Action__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The Action this Quotation is related to</inlineHelpText>
+        <label>Action</label>
+        <referenceTo>Actions__c</referenceTo>
+        <relationshipLabel>Quotes / Invoices / WO</relationshipLabel>
+        <relationshipName>Quotes_Invoices_WO</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Areas_Covered_by_Recommendations__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Areas Covered by Recommendations</inlineHelpText>
+        <label>Areas Covered by Recommendations</label>
+        <length>32768</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Bill_To_Site__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Do you want to take the Site Address as the billing address</inlineHelpText>
+        <label>Bill To Site</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Billing_Account_Details__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>&quot;Client:  &quot;+IF(Account__r.Parent.Name = &apos;&apos;,Account__r.Name,Account__r.Parent.Name)+BR()+
+&quot;Site: &quot;+Account__r.Name+BR()+
+&quot;Billing Address: &quot;+Account__r.BillingStreet+&quot;, &quot;+Account__r.BillingCity+&quot;, &quot;+Account__r.BillingState+&quot;, &quot;+Account__r.BillingPostalCode+BR()+
+&quot;Site Address: &quot;+Account__r.ShippingStreet+&quot;, &quot;+Account__r.ShippingCity+&quot;, &quot;+Account__r.ShippingState+&quot;, &quot;+Account__r.ShippingPostalCode</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Details taken from the Billing Account lookup</inlineHelpText>
+        <label>Billing Account Details</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Billing_Frequency__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Frequency of Billing</inlineHelpText>
+        <label>Billing Frequency</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Monthly</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Yearly</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Billing_Interval__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Numeric interval between billing.</inlineHelpText>
+        <label>Billing Interval</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Contact_Details__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>&quot;Name: &quot;+ Requested_By__r.FirstName +&quot; &quot;+ Requested_By__r.LastName +BR()+
+&quot;Email: &quot;+ Requested_By__r.Email +&quot; &quot;+BR()+
+&quot;Phone: &quot;+ Requested_By__r.Phone</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Details taken from the Requested by Contact</inlineHelpText>
+        <label>Contact Details</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Contract_Term__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Contract Term</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>N/A</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Job Work Only</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>6 Months</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>12 Months</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>24 Months</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>36 Months</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Contract_or_Job__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Contract or Job</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Job</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Service Contract</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Credit_Control__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>If( 
+AND(
+ISPICKVAL(Status__c,&quot;Invoiced&quot;),
+Date__c &lt; (TODAY() + 30)
+),
+&quot;30 Days&quot;,&quot;&quot;
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Credit Control</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Date__c</fullName>
+        <defaultValue>Today()</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date of Billing</inlineHelpText>
+        <label>Date</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>External_Invoice_Description__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Visit__r.Product__c + &apos; &apos; +  Site_Address__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>External Invoice Description</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>External_Invoice_Number__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>External Invoice Number</label>
+        <length>50</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Findings__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The findings of the survey or quote analysis</inlineHelpText>
+        <label>Findings</label>
+        <length>32768</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Introduction__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Quotation introduction text</inlineHelpText>
+        <label>Introduction</label>
+        <length>32768</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Invoice_Link__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Link to this invoice in third party finance package</description>
+        <externalId>false</externalId>
+        <label>Invoice Link</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>Invoice_Period__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(NOT(ISBLANK(Service_Contract__c)), 
+
+&quot;01/&quot; + 
+
+IF(LEN(TEXT(MONTH(Date__c ))) &gt; 1 , TEXT(MONTH(Date__c )), &quot;0&quot; + TEXT(MONTH(Date__c ))) + &quot;/&quot; + 
+
+RIGHT(TEXT(YEAR(Date__c )),2) 
+
+&amp;&quot; - &quot;&amp; 
+
+TEXT(CASE( MONTH(Next_Billing_Date__c - 1), 
+1, 31, 
+2, IF(MOD(YEAR(Next_Billing_Date__c -1) , 4) = 0, 29, 28), 
+3, 31, 
+4, 30, 
+5, 31, 
+6, 30, 
+7, 31, 
+8, 31, 
+9, 30, 
+10, 31, 
+11, 30, 
+12, 31, 
+0 
+) 
+) 
++&quot;/&quot;+ 
+
+IF(LEN(TEXT(MONTH(Next_Billing_Date__c - 1))) &gt; 1 , TEXT(MONTH(Next_Billing_Date__c -1)), &quot;0&quot; + TEXT(MONTH(Next_Billing_Date__c -1))) + &quot;/&quot; + 
+
+IF( 
+TEXT(MONTH(Next_Billing_Date__c -1)) = 
+&quot;12&quot;, RIGHT(TEXT(YEAR(Next_Billing_Date__c) - 1),2) 
+, 
+RIGHT(TEXT(YEAR(Next_Billing_Date__c)),2) 
+
+) 
+
+
+
+
+, 
+
+IF(LEN(TEXT(DAY(DATEVALUE(Schedule__r.Start_Date__c)))) &gt; 1 , TEXT(DAY(DATEVALUE(Schedule__r.Start_Date__c))), &quot;0&quot; + TEXT(DAY(DATEVALUE(Schedule__r.Start_Date__c)))) + &quot;/&quot; + 
+
+
+IF( LEN(TEXT(MONTH(DATEVALUE(Schedule__r.Start_Date__c)))) &gt; 1 , TEXT(MONTH(DATEVALUE(Schedule__r.Start_Date__c))), &quot;0&quot; + TEXT(MONTH(DATEVALUE(Schedule__r.Start_Date__c)))) + &quot;/&quot; + 
+
+
+RIGHT(TEXT(YEAR(DATEVALUE(Schedule__r.Start_Date__c))),2) 
+
+&amp;&quot; - &quot;&amp; 
+
+IF(LEN(TEXT(DAY(DATEVALUE(Schedule__r.Last_Visit__c)))) &gt; 1 , TEXT(DAY(DATEVALUE(Schedule__r.Last_Visit__c))), &quot;0&quot; + TEXT(DAY(DATEVALUE(Schedule__r.Last_Visit__c)))) + &quot;/&quot; + 
+
+
+IF( LEN(TEXT(MONTH(DATEVALUE(Schedule__r.Last_Visit__c)))) &gt; 1 , TEXT(MONTH(DATEVALUE(Schedule__r.Last_Visit__c))), &quot;0&quot; + TEXT(MONTH(DATEVALUE(Schedule__r.Last_Visit__c)))) + &quot;/&quot; + 
+
+RIGHT(TEXT(YEAR(DATEVALUE(Schedule__r.Last_Visit__c))),2) 
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Invoice Period</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Invoice_details__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Invoice details</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Payment in full prior to commencement</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>50% payment prior to commencement</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Monthly</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Quarterly</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>6 Monthly</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Upon completion of works</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Items_to_Convert__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of items to convert</inlineHelpText>
+        <label>Items to Convert</label>
+        <summaryFilterItems>
+            <field>Billing_Items__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Convert</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Billing_Items__c.Billing_Number__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>NextInvoiceCreated__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>NextInvoiceCreated</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Next_Billing_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Next Billing Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Owner__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Owner</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Quotes_Invoices_WO</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>P_O_Number__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Billing Purchase Order Number</inlineHelpText>
+        <label>P.O. Number</label>
+        <length>64</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Parent_Quote_Invoice__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Parent Quote/Invoice</label>
+        <referenceTo>Billing__c</referenceTo>
+        <relationshipLabel>Quotes / Invoices / WO</relationshipLabel>
+        <relationshipName>Child_Quote_Invoice</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Part_Invoiced__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(Total_Billing_Value__c &gt; Total_Invoiced__c,TRUE,FALSE)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Part Invoiced</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Previous_Quote_Invoice_Value__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Parent_Quote_Invoice__r.Total_Billing_Value__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Previous Quote/Invoice Value</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>PriceBook__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Account__r.Price_Book__r.Id</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>PriceBook</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Recommendations__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Recommendations</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>3 Part Baiting program</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Pest management Contract</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Bird Management Contract</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Recurring__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Is this recurring billing?</inlineHelpText>
+        <label>Recurring</label>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Requested_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The contact in ServiceTracker that requested the quotation</inlineHelpText>
+        <label>Requested By</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Contact.AccountId</field>
+                <operation>equals</operation>
+                <valueField>$Source.Account__c</valueField>
+            </filterItems>
+            <infoMessage>The contact does not belong to the related site.  Search again or remove the filter</infoMessage>
+            <isOptional>true</isOptional>
+        </lookupFilter>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Quotes / Invoices / WO (Requested By)</relationshipLabel>
+        <relationshipName>Quotes_Invoices</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Schedule__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The related schedule</inlineHelpText>
+        <label>Schedule</label>
+        <referenceTo>Service__c</referenceTo>
+        <relationshipName>Quotes_Invoices</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Contract__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Related Service Contract Number</inlineHelpText>
+        <label>Service Contract</label>
+        <referenceTo>Service_Contract__c</referenceTo>
+        <relationshipName>Billing</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Site_Address__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Site Address</inlineHelpText>
+        <label>Site Address</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Site_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The name of the person on site</inlineHelpText>
+        <label>Site Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Quotes / Invoices / WO (Site Contact)</relationshipLabel>
+        <relationshipName>Quotes_Invoices_WO</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Status of current Billing</inlineHelpText>
+        <label>Status</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>New</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Survey</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Negotiating</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Quoted</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Accepted</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Invoiced</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Credited</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Cancelled</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Paid</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Ready to Invoice</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Sync_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The date the Work Order Was Synced with the Schedule</inlineHelpText>
+        <label>Sync Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Total_Billing_Value__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Total billing item value</inlineHelpText>
+        <label>Total Value</label>
+        <summarizedField>Billing_Items__c.Line_Value__c</summarizedField>
+        <summaryFilterItems>
+            <field>Billing_Items__c.Optional__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Billing_Items__c.Billing_Number__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Total_Cost__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Total cost to the business</inlineHelpText>
+        <label>Total Cost</label>
+        <summarizedField>Billing_Items__c.Cost__c</summarizedField>
+        <summaryFilterItems>
+            <field>Billing_Items__c.Optional__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Billing_Items__c.Billing_Number__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Total_Discount_Applied__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Total_Sales_Price__c - Total_Billing_Value__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Discount Applied</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Invoiced__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Total Value of Line Items Invoiced</inlineHelpText>
+        <label>Total Invoiced</label>
+        <summarizedField>Billing_Items__c.Already_Invoiced__c</summarizedField>
+        <summaryForeignKey>Billing_Items__c.Billing_Number__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Total_Items_Converted__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The total number of items converted</inlineHelpText>
+        <label>Total Items Converted</label>
+        <summaryFilterItems>
+            <field>Billing_Items__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Converted</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Billing_Items__c.Billing_Number__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Total_Remaining__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Total_Billing_Value__c -  Total_Invoiced__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Remaining</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Total_Sales_Price__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The total sales price prior to discount applied</inlineHelpText>
+        <label>Total Sales Price</label>
+        <summarizedField>Billing_Items__c.Total_Before_Discount__c</summarizedField>
+        <summaryFilterItems>
+            <field>Billing_Items__c.Optional__c</field>
+            <operation>notEqual</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Billing_Items__c.Billing_Number__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Total_Value_Converted__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Total Value of Items Converted</inlineHelpText>
+        <label>Total Value Converted</label>
+        <summarizedField>Billing_Items__c.Line_Value__c</summarizedField>
+        <summaryFilterItems>
+            <field>Billing_Items__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Converted</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Billing_Items__c.Billing_Number__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Total_Value_Outstanding__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Total_Billing_Value__c -  Total_Value_Converted__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Value Outstanding</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Type of Billing</inlineHelpText>
+        <label>Type</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Quote</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Invoice</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Work Order</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Value_Same_as_Previous_Invoice__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF( Previous_Quote_Invoice_Value__c &lt;&gt;  Total_Billing_Value__c ,FALSE,TRUE)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Value Same as Previous Invoice</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Version__c</fullName>
+        <defaultValue>1</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The version number of the record</inlineHelpText>
+        <label>Version</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Visit__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Related Visit Number</inlineHelpText>
+        <label>Visit</label>
+        <referenceTo>Visit__c</referenceTo>
+        <relationshipName>Billing</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Write_Up__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the details of the survey here and include photographs where necessary.</inlineHelpText>
+        <label>Write-Up</label>
+        <length>32768</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Html</type>
+        <visibleLines>25</visibleLines>
+    </fields>
+    <label>Quote / Invoice / WO</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Account__c</columns>
+        <columns>Account_Ref__c</columns>
+        <columns>P_O_Number__c</columns>
+        <columns>Date__c</columns>
+        <columns>Total_Billing_Value__c</columns>
+        <columns>Status__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>All_Accepted_Quotes</fullName>
+        <columns>Account__c</columns>
+        <columns>NAME</columns>
+        <columns>P_O_Number__c</columns>
+        <columns>Status__c</columns>
+        <columns>Total_Billing_Value__c</columns>
+        <columns>Total_Sales_Price__c</columns>
+        <columns>Type__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Status__c</field>
+            <operation>equals</operation>
+            <value>Accepted</value>
+        </filters>
+        <label>All Accepted Quotes</label>
+    </listViews>
+    <listViews>
+        <fullName>InvoicesToBeRun</fullName>
+        <columns>NAME</columns>
+        <columns>Account__c</columns>
+        <columns>Status__c</columns>
+        <columns>Invoice_Link__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Billing__c.Invoice</value>
+        </filters>
+        <label>Invoices To Be Run</label>
+        <language>en_US</language>
+    </listViews>
+    <listViews>
+        <fullName>Overdue</fullName>
+        <columns>NAME</columns>
+        <columns>Date__c</columns>
+        <columns>Type__c</columns>
+        <columns>Total_Billing_Value__c</columns>
+        <columns>Status__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Date__c</field>
+            <operation>lessThan</operation>
+            <value>TODAY</value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operation>notEqual</operation>
+            <value>Accepted,Invoiced,Paid</value>
+        </filters>
+        <label>Overdue</label>
+    </listViews>
+    <listViews>
+        <fullName>Quotes</fullName>
+        <columns>NAME</columns>
+        <columns>Account__c</columns>
+        <columns>Date__c</columns>
+        <columns>Total_Billing_Value__c</columns>
+        <columns>Status__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Billing__c.Quote</value>
+        </filters>
+        <label>Quotes</label>
+        <language>en_US</language>
+    </listViews>
+    <nameField>
+        <displayFormat>QI-{000000}</displayFormat>
+        <label>Number</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Quotes / Invoices / WO</pluralLabel>
+    <recordTypeTrackFeedHistory>false</recordTypeTrackFeedHistory>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Invoice</fullName>
+        <active>true</active>
+        <description>Invoice Record</description>
+        <label>Invoice</label>
+        <picklistValues>
+            <picklist>Billing_Frequency__c</picklist>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Contract_Term__c</picklist>
+            <values>
+                <fullName>12 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>24 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>36 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Job Work Only</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>N%2FA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Contract_or_Job__c</picklist>
+            <values>
+                <fullName>Job</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Contract</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Invoice_details__c</picklist>
+            <values>
+                <fullName>50%25 payment prior to commencement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6 Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Payment in full prior to commencement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quarterly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Upon completion of works</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Recommendations__c</picklist>
+            <values>
+                <fullName>3 Part Baiting program</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Bird Management Contract</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pest management Contract</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Credited</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Invoiced</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>New</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Paid</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Invoice</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Quote</fullName>
+        <active>true</active>
+        <description>Quote Record</description>
+        <label>Quote</label>
+        <picklistValues>
+            <picklist>Billing_Frequency__c</picklist>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Contract_Term__c</picklist>
+            <values>
+                <fullName>12 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>24 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>36 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Job Work Only</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>N%2FA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Contract_or_Job__c</picklist>
+            <values>
+                <fullName>Job</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Contract</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Invoice_details__c</picklist>
+            <values>
+                <fullName>50%25 payment prior to commencement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6 Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Payment in full prior to commencement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quarterly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Upon completion of works</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Recommendations__c</picklist>
+            <values>
+                <fullName>3 Part Baiting program</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Bird Management Contract</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pest management Contract</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Accepted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Negotiating</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>New</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Quoted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Survey</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Quote</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Work_Order</fullName>
+        <active>true</active>
+        <description>Work Order</description>
+        <label>Work Order</label>
+        <picklistValues>
+            <picklist>Billing_Frequency__c</picklist>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Contract_Term__c</picklist>
+            <values>
+                <fullName>12 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>24 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>36 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Job Work Only</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>N%2FA</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Contract_or_Job__c</picklist>
+            <values>
+                <fullName>Job</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Service Contract</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Invoice_details__c</picklist>
+            <values>
+                <fullName>50%25 payment prior to commencement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>6 Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Payment in full prior to commencement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quarterly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Upon completion of works</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Recommendations__c</picklist>
+            <values>
+                <fullName>3 Part Baiting program</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Bird Management Contract</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pest management Contract</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>New</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Work Order</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts>
+        <customTabListAdditionalFields>Account__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Date__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Status__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Total_Billing_Value__c</customTabListAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>Check_for_Recurring_Billing</fullName>
+        <active>true</active>
+        <description>Check to see if all fields have been correctly filled in</description>
+        <errorConditionFormula>AND(
+Recurring__c = TRUE,
+ OR(
+ ISBLANK(Next_Billing_Date__c), 
+ ISBLANK(Billing_Interval__c),
+ ISBLANK(TEXT(Billing_Frequency__c))
+)
+)</errorConditionFormula>
+        <errorMessage>Please ensure all recurring billing fields are complete.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Clone_with_Line_Items</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>page</linkType>
+        <masterLabel>Clone with Line Items</masterLabel>
+        <openType>replace</openType>
+        <page>Clone</page>
+        <protected>false</protected>
+    </webLinks>
+    <webLinks>
+        <fullName>Clone_with_unconverted_Items</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Clone with unconverted Items</masterLabel>
+        <openType>newWindow</openType>
+        <page>CloneUnconvertedOnly</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
+    <webLinks>
+        <fullName>Convert</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Convert</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/20.0/connection.js&quot;)} //adds the proper code for inclusion of AJAX toolkit
+var url = &apos;/apex/STKR__ConvertQuote?varBillingID={!Billing__c.Id}&amp;varRecordType={!IF(ISPICKVAL(Billing__c.Contract_or_Job__c,&apos;Service Contract&apos;),&apos;Service Contract&apos;,&apos;Job&apos;)}&apos;; //string for the URL
+
+var records = sforce.connection.query(&quot;Select Id FROM STKR__Billing_items__c WHERE STKR__Status__c = &apos;Convert&apos; AND STKR__Billing_Number__c = \&apos;{!Billing__c.Id}\&apos;&quot;);
+
+var result= records.getArray(&quot;records&quot;); //Check the results
+  if (result.length &lt; 1) { alert(&quot;Please select all line items to be Converted using the Line Items tab&quot;);
+
+} else { //otherwise, there was a record found
+
+parent.location.href = url; //refresh the page
+
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Convert_to_Invoice</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Convert to Invoice</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/20.0/connection.js&quot;)} //adds the proper code for inclusion of AJAX toolkit
+var url = parent.location.href; //string for the URL of the current page
+var updateRecords = []; //array for holding records to update
+
+var answer=confirm(&quot;WARNING: This will convert the Quote to an Invoice. Are you sure?&quot;);
+if (answer) { 
+
+var R = sforce.connection.query(&quot;Select Id from recordtype where name = &apos;Invoice&apos; AND SobjectType = &apos;STKR__Billing__c&apos; &quot;);
+var rid = R.getArray(&quot;records&quot;); //add all the Account id&apos;s to an Array
+
+var billing = new sforce.SObject(&quot;STKR__Billing__c&quot;);
+billing.id = &quot;{!Billing__c.Id}&quot;;
+billing.STKR__Type__c = &apos;Invoice&apos;;
+billing.recordtypeId = rid[0].Id;
+billing.STKR__Date__c = new Date().toISOString();
+var bResult = sforce.connection.update([billing]);
+
+parent.location.href = url; //refresh the page
+
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Create_PDF</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>Print</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>/apex/QuoteTemplate?Id={!Billing__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Email</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Email</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/_ui/core/email/author/EmailAuthor?p2_lkid={!Billing__c.Requested_ById__c}&amp;rtype=003&amp;p3_lkid={!Billing__c.Id}&amp;retURL={!Billing__c.Id}&amp;template_id=00Xb0000000F5ov&amp;new_template=1</url>
+    </webLinks>
+    <webLinks>
+        <fullName>New_Billing</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Quick Create</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/apex/STKR__NewBilling?Acc=
+
+{!if(Service__c.Id != &apos;&apos;,Service__c.AccountId__c,
+if(Service_Contract__c.Id = &apos;&apos;,Account.Id, Service_Contract__c.AccountId__c))}
+
+&amp;Contract={!Service_Contract__c.Id}&amp;Bref={!if(Service_Contract__c.Id = &apos;&apos;, Account.Billing_Reference__c,Service_Contract__c.Account_Ref__c)}
+&amp;Pbook={!if(Service_Contract__c.Id = &apos;&apos;, Account.Price_BookId__c ,
+Service_Contract__c.Price_Book__c)}
+&amp;Cref={!Service_Contract__c.Customer_Reference__c}&amp;Serv={!if(Service__c.Id = &apos;&apos;,null,Service__c.Id)}
+&amp;Action={!Actions__c.Id}&amp;Vis={!Visit__c.Id}&amp;SAddress=
+{!Account.ShippingStreet}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>New_Work_Order</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>New Work Order</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/apex/STKR__NewBilling?Acc={!Service_Contract__c.AccountId__c}&amp;Contract={!Service_Contract__c.Id}&amp;Bref={!Service_Contract__c.Account_Ref__c}&amp;Pbook={!Service_Contract__c.Price_Book__c}
+&amp;Cref={!Service_Contract__c.Customer_Reference__c}&amp;Serv={!if(Service__c.Id = &apos;&apos;,null,Service__c.Id)}&amp;Rtype=Work Order</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Save_as_Attachment</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>page</linkType>
+        <masterLabel>Save as Attachment</masterLabel>
+        <openType>replace</openType>
+        <page>SaveAsAttachment</page>
+        <protected>false</protected>
+    </webLinks>
+    <webLinks>
+        <fullName>Send_to_Finance</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Send to Finance</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/20.0/connection.js&quot;)} //adds the proper code for inclusion of AJAX toolkit
+var url = parent.location.href; //string for the URL of the current page
+var updateRecords = []; //array for holding records to update
+
+var answer=confirm(&quot;WARNING: This will send the entire invoice to your finance system. Are you sure?&quot;);
+if (answer) { 
+
+var billing = new sforce.SObject(&quot;STKR__Billing__c&quot;);
+billing.id = &quot;{!Billing__c.Id}&quot;;
+billing.STKR__Status__c = &apos;Ready to Invoice&apos;
+
+// Get all the line items 
+var e = sforce.connection.query(&quot;Select Id,STKR__Line_Value__c,STKR__Invoice_Value_Remaining__c FROM STKR__Billing_Items__c WHERE STKR__Invoice_Status__c != &apos;Invoiced&apos; AND STKR__Billing_Number__c = &apos;{!Billing__c.Id}&apos;&quot;); 
+
+var records = e.getArray(&quot;records&quot;); 
+
+if(records.length == 0){
+alert(&quot;There are no items to Invoice&quot;);
+}else {
+for (var a=0; a&lt;records.length; a++) { //for all records
+var update_lines = new sforce.SObject(&quot;STKR__Billing_Items__c&quot;); 
+update_lines.Id = records[a].Id; 
+update_lines.STKR__Invoice_Value__c = records[a].STKR__Invoice_Value_Remaining__c; 
+update_lines.STKR__Status__c = &apos;To Be Invoiced&apos;;
+updateRecords.push(update_lines); //add the updated record to our array
+}
+
+var lresult = sforce.connection.update(updateRecords);
+}
+
+var bResult = sforce.connection.update([billing]);
+parent.location.href = url; //refresh the page
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Sync_With_Schedule</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Sync With Schedule</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/20.0/connection.js&quot;)} //adds the proper code for inclusion of AJAX toolkit
+var url = parent.location.href; //string for the URL of the current page
+var updateRecords = []; //array for holding records to update
+var insertRecords = []; //array for holding records for insert
+var insertARecords = []; //array for holding records for insert
+var s = &apos;{!Billing__c.Schedule__c}&apos;;
+var prod;
+
+if ( s == 0) { //if there is no schedule
+alert(&quot;There is no schedule associated to this Work Order. Please add the schedule number to the record.&quot;); //alert the user that they didn&apos;t make a selection 
+} else { //otherwise, there is a schedule
+
+var p = sforce.connection.query(&quot;Select Id FROM Product2 WHERE Name = &apos;See Line Items&apos; limit 1&quot;);
+var pr = p.getArray(&quot;records&quot;); //add all the product id&apos;s to one complete string
+
+//If there is no product called see line items then create it
+if (pr.length &lt; 1) {
+var insert_Product = new sforce.SObject(&quot;Product2&quot;); 
+insert_Product.isActive = &apos;TRUE&apos;;
+insert_Product.Name = &apos;See Line Items&apos;;
+insertRecords.push(insert_Product); //add the updated record to our array
+var presult = sforce.connection.create(insertRecords); 
+
+prod = presult[0].id;
+} else {
+prod = pr[0].Id
+}
+// Get all the line descriptions from the line items
+var e = sforce.connection.query(&quot;Select STKR__Line_Description_Long__c FROM STKR__Billing_Items__c WHERE STKR__Billing_Number__c = &apos;{!Billing__c.Id}&apos;&quot;);
+
+var ex = e.getArray(&quot;records&quot;); //add all the asset id&apos;s to one complete string
+if (ex.length &gt; 0) {
+
+var notes= new sforce.StringBuffer();
+for (var i=0; i&lt; ex.length; i++) {
+notes.append(ex[i].STKR__Line_Description_Long__c).append(&apos;\n&apos;);
+}
+
+}
+//Update the schedule
+var update_schedule = new sforce.SObject(&quot;STKR__Service__c&quot;); //create a new sObject for storing updated record details
+
+update_schedule.Id = &apos;{!Billing__c.ScheduleId__c}&apos;; //set the Id 
+update_schedule.STKR__Service_Value_PA__c =&apos;{!VALUE(TEXT(  Billing__c.Total_Billing_Value__c ))}&apos;;
+update_schedule.STKR__Notes_Long__c = notes;
+update_schedule.STKR__Product__c = prod;
+updateRecords.push(update_schedule); //add the updated record to our array
+var result = sforce.connection.update(updateRecords); //push the updated records back to Salesforce
+
+var billing = new sforce.SObject(&quot;STKR__Billing__c&quot;);
+billing.id = &quot;{!Billing__c.Id}&quot;;
+billing.STKR__Sync_Date__c = new Date().toISOString();
+var bResult = sforce.connection.update([billing]);
+
+var answer=confirm(&quot;ACTION: Do you want to convert Line Items to Actions on the next open visit associated with the schedule?&quot;);
+if (answer) { // If User Clicks OK
+
+var insert_actions = new sforce.SObject(&quot;STKR__Actions__c&quot;); //create a new sObject 
+var Vid = sforce.connection.query(&quot;Select Id,Name,STKR__Account_lkp__c,STKR__UserId__c,STKR__Due_Date__c from STKR__Visit__c where STKR__Service__c = &apos;{!Billing__c.ScheduleId__c}&apos; AND STKR__Status__c = &apos;Open&apos; Order By STKR__Due_Date__c ASC Limit 1&quot;);
+var Vrecords = Vid.getArray(&quot;records&quot;); //add all the Account id&apos;s to an Array
+
+if (Vrecords.length &lt;  0) { alert(&quot;Cannot Find any Open Visits&quot;);
+} else { //otherwise, there was a record selection
+
+for (var a=0; a&lt; ex.length; a++) {
+
+insert_actions.STKR__Visit__c = Vrecords[0].Id;
+insert_actions.STKR__Account__c = Vrecords[0].STKR__Account_lkp__c;
+insert_actions.STKR__Status__c = &apos;Open&apos;;
+insert_actions.STKR__Priority__c= &apos;Medium&apos;;
+insert_actions.STKR__Date_for_Completion__c = new Date().toISOString();
+insert_actions.STKR__Assigned_To__c = Vrecords[0].STKR__UserId__c;
+insert_actions.STKR__Action__c = ex[a].STKR__Line_Description_Long__c;
+
+insertARecords.push(insert_actions); //add the updated record to our array
+var Aresult = sforce.connection.create(insertARecords); //create the records
+insertARecords = [];
+
+} //End Loop
+
+} //End If
+}
+
+parent.location.href = url; //refresh the page
+}</url>
+    </webLinks>
+</CustomObject>

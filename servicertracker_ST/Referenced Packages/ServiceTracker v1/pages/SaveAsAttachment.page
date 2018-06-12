@@ -1,0 +1,4 @@
+<apex:page standardController="STKR__Billing__c" extensions="STKR.PDFExtension" action="{!attachPDF}">
+<!--  Need to include field on page so the controller ext can access it-->
+    {!STKR__Billing__c.Name}
+</apex:page>

@@ -1,0 +1,39 @@
+<apex:page controller="STKR.multiple_actions" sidebar="false">
+    <script>
+      function setFocusOnLoad(){ mass.focus();} 
+    </script> 
+                                             
+<apex:form >
+<apex:pageBlock title="New {!$ObjectType.STKR__Actions__c.labelplural}">
+<apex:outputPanel id="hiddenblock"><apex:pagemessages /></apex:outputPanel>
+<div style="color:red"><B>* Please ensure that the Action Detail and the Date is entered to save the record.</b></div>
+<br/><br/>
+<apex:pageblockbuttons >
+<apex:commandButton action="{!saving}" value="Save" />
+<apex:commandButton action="{!close}" value="Cancel" immediate="true" />
+</apex:pageblockbuttons>
+<apex:pageBlockTable value="{!Action}" var="itr" id="table" style="background-color:#F5FAFF; font-family:'vag-round', sans-serif; font-size:12px; border-radius:10px;width:100%;">
+          <apex:inputHidden value="{!itr.STKR__Account__c}"/>
+          <apex:inputHidden value="{!itr.STKR__Service_Item__c}"/>
+          <apex:inputHidden value="{!itr.STKR__Visit__c}"/>
+
+          <apex:column style="vertical-align:Top;height:20" headerValue="Record Type"><apex:inputfield value="{!itr.RecordTypeId}">
+          <apex:actionSupport event="onchange" rerender="PageErrors, table"/>
+          </apex:inputField>
+           
+          </apex:column>
+          <apex:column style="vertical-align:Top;height:20" headerValue="Type"><apex:inputfield value="{!itr.STKR__Type__c}"/></apex:column>
+          <apex:column headerValue="Action Detail" width="25%"><apex:inputfield value="{!itr.STKR__Action__c}" style="width: 300px; height: 40px" id="Type"/></apex:column>       
+          <apex:column style="vertical-align:Top;height:20" headerValue="Item"><apex:inputfield value="{!itr.STKR__Service_Item__c}" id="Item"/></apex:column>
+          <apex:column style="vertical-align:Top;height:20" headerValue="Priority"><apex:inputfield value="{!itr.STKR__Priority__c}"/></apex:column>
+          <apex:column style="vertical-align:Top;height:20" headerValue="Assigned To"><apex:inputfield value="{!itr.STKR__Assigned_To__c}"/></apex:column>
+          <apex:column style="vertical-align:Top;height:20" headerValue="Date to be Completed"><apex:inputfield value="{!itr.STKR__Date_for_Completion__c}" id="DatetoBeCompleted"/></apex:column>
+          
+          <apex:facet name="footer"><apex:commandLink value="+ add row" action="{!addrow}" rerender="table,error"/></apex:facet>  
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:form>
+<script>  
+   var mass=document.getElementById('{$!Type}');
+</script>
+</apex:page>

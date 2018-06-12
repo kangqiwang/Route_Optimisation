@@ -1,0 +1,16 @@
+<apex:page extensions="STKR.APIMessageController" standardController="STKR__Billing__c">
+
+    <apex:pageblock title="Xero Messages">
+    <apex:pagemessages id="messages"/>
+        <apex:form >        
+                <apex:pageBlockTable value="{!messages}" var="xero">
+                    <apex:column width="10%" headerValue="Message Type" value="{!xero.STKR__messageType__c}"/>
+                    <apex:column width="55%" headerValue="Message">
+                    {!xero.STKR__message__c}, to resolve this error update the field <a href="{!xero.STKR__messageUrl__c}">{!xero.STKR__Resolution_Field__c}</a> 
+                    </apex:column>
+                    <apex:column width="35%" headerValue="Related Invoice" value="{!xero.STKR__relatedInvoice__c}"/>
+                </apex:pageBlockTable>
+        </apex:form>
+    </apex:pageblock>     
+
+</apex:page>

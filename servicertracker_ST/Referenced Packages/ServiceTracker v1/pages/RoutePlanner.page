@@ -1,0 +1,47 @@
+<apex:page standardController="STKR__Visit__c" sidebar="false" showHeader="false" applyHtmlTag="true">
+<apex:includeScript value="/soap/ajax/20.0/connection.js" />
+<apex:form id="thisForm">
+<style type="text/css">
+html,
+body {
+background-color: transparent;
+}
+</style>
+<script type="text/javascript">
+
+function Tracker(){ 
+  sforce.connection.sessionId = '{!$Api.Session_ID}';
+        var u = "'"+document.getElementById('{!$Component.pageblockid.txtOwner}').value+"'";
+        //var D = document.getElementById('{!$Component.pageblockid.txtDate}').value;
+        var D = "24/03/2015";
+        var maps = ''; 
+        var gurl = "https://www.google.com/maps/dir";
+        var day= D.slice(0,2);
+        var month=D.slice(3,5);
+        var year=D.slice(6,10);
+        var newdate = day+"/"+month+"/"+year;
+        var Acc = sforce.connection.query("Select STKR__Account_lkp__r.ShippingPostalCode, STKR__Due_Date__c from STKR__Visit__c where STKR__Resource_Name__c = "+u+" AND STKR__Due_Day__c = '"+newdate+"'");
+        var ex = Acc.getArray("records");
+           if (ex.length < 1) { alert("There is no Routing information for this date or user");
+           } else {         
+           for (var a=0; a < ex.length; a++) { //for all records   
+            maps = maps+"/"+ex[a].STKR__Account_lkp__r.ShippingPostalCode;
+           }
+        gurl = gurl + maps;   
+
+        window.open(gurl,"frame","menubar=1,resizable=1,scrollbars=1,width=900,height=600");
+
+     }
+    return report;
+    }  
+  
+</script>
+<b>Please Enter a Resource and a Date:</b>
+
+<apex:pageBlock id="pageblockid">
+<apex:inputField id="txtOwner"  required="true" value="{!STKR__Visit__c.STKR__Resource__c}" style="width:135px" />
+<apex:commandButton onclick="javascript:return Tracker();" value="Plan Route"/>
+</apex:pageBlock>
+
+</apex:form>  
+</apex:page>

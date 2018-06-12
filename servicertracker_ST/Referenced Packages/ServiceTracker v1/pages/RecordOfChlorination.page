@@ -1,0 +1,175 @@
+<apex:page showHeader="false" showchat="false" sidebar="false" applyHtmlTag="false" standardController="STKR__Visit__c" renderAs="PDF">
+
+ <head>       
+        <style type="text/css"  media="print">           
+            @page {                                                     
+                @top-center {                   
+                    content: element(header);    
+                }
+                size: 210mm 297mm;
+                margin: 15mm;
+                margin-right:0mm;
+                
+                margin-top: 4.215cm;
+                margin-bottom: 2.80cm;
+                margin-left: 1.27cm;
+                margin-right:1cm;
+                @bottom-left {
+                    content: element(footer);
+                }           
+            }                                 
+
+            div.header {                
+                        padding: 10px;              
+                        position: running(header);
+                               
+                        height: 80px;
+                        margin-bottom: 15px;
+                                
+            }           
+            div.footer {                
+                display: block;             
+                padding: 5px;               
+                position: running(footer);  
+                
+                clear: both;
+                margin-top: 15px;
+                        
+            }                 
+                                  
+            
+        </style>            
+    </head>   
+ 
+<apex:repeat var="i" value="{!STKR__Visit__c.Inspections__r}">
+<apex:repeat var="i" value="{!i}" rendered="{!IF(i.STKR__Cleaned__c = TRUE, TRUE, FALSE)}">
+
+<div style="font-family: Arial, Helvetica Neue, Helvetica, sans-serif; font-size:13px;">
+
+<apex:form >
+
+<div class="header">
+  <table border="0" width="100%">
+   <tr><td align="left"><apex:image id="theLogo" value="{!$Resource.STKR__Logo}" width="150" height="80"/></td>
+       <td align="Center"><H1>Record of Chlorination</H1></td>
+   </tr>
+  </table>     
+</div>
+
+<div class="footer">
+  <table width="100%" style="color: #fff; background: blue;border: 1px solid black">
+  <tr>
+   <td align="center">Western Environmental Limited Western House, Britonwood Trading Estate, Knowsley, Merseyside L33 7YP<br/>
+Telephone 0151 546 1000   Facsimile 0151 546 5777/8870   E-mail:  info@westerngroup.co.uk</td>
+  </tr>
+  </table>
+</div>
+</apex:form>
+<div class = "content" style="page-break-after:always;">  
+   <table border="0" width="100%">
+   <tr>
+   <td> 
+    {!Visit__c.Service__r.Account__r.Name}<br/>
+    {!IF(ISBLANK(Visit__c.Service__r.Account__r.ShippingStreet),'',Visit__c.Service__r.Account__r.ShippingStreet)}<br/>
+    {!IF(ISBLANK(Visit__c.Service__r.Account__r.ShippingCity),'',Visit__c.Service__r.Account__r.ShippingCity)}<br/>
+    {!IF(ISBLANK(Visit__c.Service__r.Account__r.ShippingState),'',Visit__c.Service__r.Account__r.ShippingState)}<br/>
+    {!IF(ISBLANK(Visit__c.Service__r.Account__r.ShippingPostalCode),'',Visit__c.Service__r.Account__r.ShippingPostalCode)}<br/>
+   </td>
+  </tr>
+<br/>
+<br/>
+<br/>
+<br/>
+  <tr>
+   <td align="left">
+    System Type:<br/>
+   </td>
+   <td> 
+    {!i.Service_Item__r.Type__c}
+   </td>
+  </tr>
+  <tr>
+   <td align="left">
+    System Designation:<br/>
+   </td>
+   <td> 
+    {!i.Service_Item__r.Location__c}
+   </td>
+  </tr>
+  <tr>
+   <td align="left">
+    Disinfecting Agent:<br/>
+   </td>
+   <td> 
+    {!i.Disinfecting_Agent__c}
+   </td>
+  </tr>  
+  <tr>
+   <td align="left">
+    Method of Cleaning:<br/>
+   </td>
+   <td> 
+    {!i.Method_of_Cleaning__c}
+   </td>
+  </tr> 
+  <tr>
+   <td align="left">
+    Method of Neutralisation:<br/>
+   </td>
+   <td> 
+    {!i.Method_of_Neutralisation__c}
+   </td>
+  </tr> 
+   <tr>
+   <td align="left">
+    Recommended Date for Next Cleaning:<br/>
+   </td>
+   <td> 
+    {!i.Method_of_Neutralisation__c}
+   </td>
+  </tr>  
+  
+  </table>
+<br/>
+<br/>
+<br/>
+<br/>
+  
+ <table width="100%" columns="3" style="border: 1px solid black;">
+ 
+   <tr style="border: 1px solid black">
+   <td width="30%" style="border: 1px solid black">
+     Chlorination Results
+   </td>
+   <td width="30%" style="border: 1px solid black">
+    Full system circulation achieved: {!i.Full_system_circulation_achieved_Pre__c}
+   </td>
+   <td width="30%" style="border: 1px solid black">
+    Full system circulation achieved: {!i.Full_system_circulation_achieved_Post__c}
+   </td>
+  </tr>
+</table>
+
+ <table width="100%" columns="3" style="border: 1px solid black;">
+ 
+   <tr style="border: 1px solid black">
+   <td align="left" width="40%" style="border: 1px solid black">
+    Signature of Engineer:<br/>
+   </td>
+   <td width="30%" style="border: 1px solid black"> {!Visit__c.Resource_Name__c}
+   </td>
+   <td width="30%" style="border: 1px solid black">
+    <apex:repeat value="{!STKR__Visit__c.Attachments}" var="s">
+     <apex:image height="100px"
+       value="{!URLFOR($Action.Attachment.Download, s.Id)}"/>
+   </apex:repeat>
+   </td>
+  </tr>
+
+</table>
+</div>
+</div>
+
+</apex:repeat> 
+</apex:repeat> 
+</apex:page>

@@ -1,0 +1,20 @@
+<apex:page sidebar="true" tabStyle="Account" standardController="Account">
+<style>
+.labelCol {
+    text-align:left !important;
+
+}
+.TextArea {
+  width: 20;
+}
+
+.bPageBlock .pbBottomButtons .pbButtonb .btn { 
+  display: inline;
+  float: left;
+
+}
+</style>
+<apex:sectionHeader title="Quick Create a Client"/>
+
+    <flow:interview name="NewClient" finishLocation="/{!$CurrentPage.parameters.redirect}" buttonLocation="bottom"/>
+</apex:page>

@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Active_Ingredient__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Prep_Waste__r.Active_Ingredient__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Active Ingredient</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Container_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Container Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Disposal_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date Disposed</inlineHelpText>
+        <label>Disposal Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Inspection__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Inspection</label>
+        <referenceTo>Inspection__c</referenceTo>
+        <relationshipLabel>Prep/Waste Management</relationshipLabel>
+        <relationshipName>Prep_Waste_Management</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Notes__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Notes</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Prep_Waste__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Prep/Waste</label>
+        <referenceTo>Prep_Waste__c</referenceTo>
+        <relationshipName>Prep_Waste_Management</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Qty__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The Quantity of items</inlineHelpText>
+        <label>Qty</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Removed_from_Site__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Has the item been removed from Site</inlineHelpText>
+        <label>Removed from Site</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Visit__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Visit</label>
+        <referenceTo>Visit__c</referenceTo>
+        <relationshipName>Prep_Waste_Management</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Volume__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Volume</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>Prep/Waste Management</label>
+    <nameField>
+        <displayFormat>{000000}</displayFormat>
+        <label>Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Prep/Waste Management</pluralLabel>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>New_Inspection_Item</fullName>
+        <active>true</active>
+        <label>New Inspection Item</label>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Parts_Used</fullName>
+        <active>true</active>
+        <label>Parts Used</label>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Preparation</fullName>
+        <active>true</active>
+        <label>Preparation</label>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Waste</fullName>
+        <active>true</active>
+        <description>Waste Record Type</description>
+        <label>Waste</label>
+    </recordTypes>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <webLinks>
+        <fullName>Create_Inspection_Items</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Create Inspection Items</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>// Include and initialize the AJAX Toolkit javascript {!REQUIRESCRIPT(&quot;/soap/ajax/10.0/connection.js&quot;)} 
+var InsertARecords = []; //array for holding records that this code will ultimately update 
+var url = parent.location.href; //string for the URL of the current page 
+var ids = {!GETRECORDIDS( $ObjectType.Prep_Waste_Management__c )}; 
+var insert_line = new sforce.SObject(&quot;STKR__Service_item__c&quot;); //create a new sObject 
+
+if (ids.length == 0) { 
+alert(&quot;Please select the records you wish to create Inspection items from.&quot;); 
+} else { 
+
+var Warning = &apos;Are you sure you wish create Inspection Items from these selected records?\n\nItems will be created based on your default settings but you can amend and update frequency and intervals later in the process&apos;; 
+
+if (window.confirm(Warning)) { 
+
+for (var a=0; a&lt;ids.length; a++) { 
+
+var Pid = sforce.connection.query(&quot;Select id,Name,STKR__Visit__r.STKR__Account_lkp__c,STKR__Prep_Waste__r.Name,STKR__Notes__c,STKR__Qty__c from STKR__Prep_Waste_Management__c where id = &apos;&quot;+ids[a]+&quot;&apos;&quot;) 
+
+var Item = Pid.records.STKR__Prep_Waste__r.Name; 
+
+if(Item != null){ 
+
+for (var b=0; b &lt; Pid.records.STKR__Qty__c; b++) { 
+
+insert_line.STKR__Account__c = Pid.records.STKR__Visit__r.STKR__Account_lkp__c; 
+insert_line.STKR__Item_Type__c = Item; 
+insert_line.STKR__Inspection_Start_Date__c = new Date().toISOString(); 
+insert_line.STKR__Location__c = Pid.records.STKR__Notes__c; 
+insert_line.STKR__Inspection_Interval__c = 1;
+insert_line.STKR__Inspection_Frequency__c = &apos;Monthly&apos;;
+InsertARecords.push(insert_line); //add the updated record to our array 
+
+var Lresult = sforce.connection.create(InsertARecords); //create the records 
+
+InsertARecords = [];
+Lresult = null;
+
+} // end for
+
+} //end for 
+
+
+parent.location.href = url; //refresh the page 
+} // end if 
+} 
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Quote_Selected</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Quote Selected</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>// Include and initialize the AJAX Toolkit javascript {!REQUIRESCRIPT(&quot;/soap/ajax/10.0/connection.js&quot;)} 
+var InsertBRecord = []; //array for holding records that this code will ultimately 
+var InsertLIRecords = []; //array for holding records that this code will ultimately update 
+var url = parent.location.href; //string for the URL of the current page
+var ids = {!GETRECORDIDS( $ObjectType.Prep_Waste_Management__c )}; 
+
+if (ids.length == 0) { 
+alert(&quot;Please select the records you wish to convert.&quot;); 
+} else { 
+
+var Warning = &apos;Are you sure you wish convert these selected records to a Quote?\n\nPlease ensure that there each record has an related product and it exists in the associated pricebook before you begin&apos;; 
+
+if (window.confirm(Warning)) { 
+
+// Get the header detail
+
+var Vid = sforce.connection.query(&quot;Select Id,STKR__Account_lkp__c,STKR__Account_lkp__r.STKR__Price_Book__c,STKR__Service__r.STKR__Service_Contract__c,STKR__Service__c from STKR__Visit__c where Id = &apos;{!Visit__c.Id}&apos; Limit 1&quot;); 
+
+var Vrecords = Vid.getArray(&quot;records&quot;); //add all the Account id&apos;s to an Array 
+
+//Get the pricing and create the line item
+var pbook = Vrecords[0].STKR__Account_lkp__r.STKR__Price_Book__c;
+if(pbook == null){
+alert(&apos;Please add a price book to the site record&apos;);
+} else {
+
+//Create the Billing Record
+var insert_billing = new sforce.SObject(&quot;STKR__Billing__c&quot;); //create a new sObject
+insert_billing.STKR__Visit__c = Vrecords[0].Id; 
+insert_billing.STKR__Account__c = Vrecords[0].STKR__Account_lkp__c; 
+insert_billing.STKR__Schedule__c = Vrecords[0].STKR__Service__c; 
+insert_billing.STKR__Service_Contract__c = Vrecords[0].STKR__Service__r.STKR__Service_Contract__c; 
+insert_billing.STKR__Status__c = &apos;New&apos;; 
+insert_billing.STKR__Date__c = new Date().toISOString(); 
+
+InsertBRecord.push(insert_billing); //add the updated record to our array 
+var Bresult = sforce.connection.create(InsertBRecord); //create the records 
+
+for (var a=0; a&lt;ids.length; a++) {
+
+var Pid = sforce.connection.query(&quot;Select id,Name,STKR__Prep_Waste__r.STKR__Related_Product__c,STKR__Qty__c from STKR__Prep_Waste_Management__c where id = &apos;&quot;+ids[a]+&quot;&apos;&quot;)
+
+var prod = Pid.records.STKR__Prep_Waste__r.STKR__Related_Product__c;
+
+if(prod != null){
+
+var price = sforce.connection.query(&quot;select UnitPrice from PriceBookEntry where product2id = &apos;&quot;+ prod +&quot;&apos; AND PriceBook2Id = &apos;&quot;+ pbook +&quot;&apos;&quot;);
+
+var unitPrice = price.getArray(&quot;records&quot;);
+
+if(unitPrice.length &gt; 0){
+
+var insert_line = new sforce.SObject(&quot;STKR__Billing_items__c&quot;); //create a new sObject
+
+insert_line.STKR__Billing_Number__c = Bresult[0].id; 
+insert_line.STKR__Product__c = prod; 
+insert_line.STKR__Sales_Price__c = unitPrice[0].UnitPrice; 
+insert_line.STKR__Quantity__c = Pid.records.STKR__Qty__c;
+insert_line.STKR__Line_Description_Long__c = Pid.records.Name; 
+
+InsertLIRecords.push(insert_line); //add the updated record to our array 
+
+
+} // end else
+} // end if
+} //end for
+
+if(InsertLIRecords.length &gt; 0){
+var Lresult = sforce.connection.create(InsertLIRecords); //create the records 
+}
+parent.location.href = url; //refresh the page 
+} // end if
+} 
+}</url>
+    </webLinks>
+</CustomObject>

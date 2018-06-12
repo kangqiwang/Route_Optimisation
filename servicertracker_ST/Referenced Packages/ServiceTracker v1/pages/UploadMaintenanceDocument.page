@@ -1,0 +1,62 @@
+<apex:page standardController="STKR__Vehicle__c" tabStyle="STKR__Vehicle__c" extensions="STKR.UploadMaintenanceAttachmentController" docType="html-5.0">
+
+ <apex:sectionHeader title="{!STKR__Vehicle__c.Name}" subtitle="Attach File"/>
+ 
+ <apex:form id="form_Upload">
+ <apex:pageBlock >
+
+ <apex:pageBlockButtons >
+   <apex:commandButton id="uploadBtn" value="Upload File" action="{!processUpload}" />
+   <apex:commandButton action="{!back}" value="Cancel"/>
+ </apex:pageBlockButtons>
+ <apex:pageMessages />
+ 
+  <apex:pageBlockSection columns="1">
+
+    <apex:pageBlockSectionItem >
+      <apex:outputLabel value="Date" for="date"/>
+
+       <apex:input type="date" value="{!ldate}" size="10" id="ldate" onfocus="UploadMaintenanceAttachmentController.pickDate(false, this , false);" /> 
+    </apex:pageBlockSectionItem>
+   
+    <apex:pageBlockSectionItem >
+      <apex:outputLabel value="Type" for="type"/>
+      <apex:selectList value="{!selectedType}" size="1" id="type"> 
+        <apex:selectOption itemValue="Maintenance" itemLabel="Maintenance"/>
+        <apex:selectOption itemValue="MOT" itemLabel="MOT"/>
+        <apex:selectOption itemValue="Repair" itemLabel="Repair"/>
+        <apex:selectOption itemValue="TAX" itemLabel="TAX"/>
+        <apex:selectOption itemValue="Tyres" itemLabel="Tyres"/>
+        <apex:selectOption itemValue="Service" itemLabel="Service"/>
+        <apex:selectOption itemValue="Misc" itemLabel="Misc"/>
+      </apex:selectList>
+    </apex:pageBlockSectionItem>
+        
+    <apex:pageBlockSectionItem >
+      <apex:outputLabel value="Description" for="description"/> 
+      <apex:inputTextarea id="description" value="{!description}" rows="4" cols="50"/>
+    </apex:pageBlockSectionItem>
+    
+    <apex:pageBlockSectionItem >
+      <apex:outputLabel value="Cost" for="cost"/> 
+      <apex:inputtext id="cost" size="10" value="{!cost}"/>
+    </apex:pageBlockSectionItem>
+
+    <apex:pageBlockSectionItem >
+      <apex:outputLabel value="Under Warranty" for="warranty"/> 
+      <apex:inputcheckbox id="warranty" value="{!warranty}"/>
+    </apex:pageBlockSectionItem>
+
+    <apex:pageBlockSectionItem >
+      <apex:outputLabel value="File" for="file_File"/>
+      <apex:inputFile id="file_File" value="{!fileBody}" filename="{!fileName}"/>
+    </apex:pageBlockSectionItem>
+       
+  </apex:pageBlockSection>
+ 
+ </apex:pageBlock>
+
+
+ </apex:form>
+
+</apex:page>

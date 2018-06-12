@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Details of any H&amp;S Reported</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>H&amp;S Reported</name>
+    <style>none</style>
+    <subject>Health and Safety Requirement at {!Visit__c.Account_lkp__c}</subject>
+    <type>text</type>
+</EmailTemplate>

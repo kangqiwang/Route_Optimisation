@@ -1,0 +1,73 @@
+<apex:page standardController="STKR__Service__c"
+           showChat="false" 
+           sidebar="false" 
+           showHeader="false" 
+           standardStylesheets="false">
+           
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"/>
+    <script src="/soap/ajax/27.0/connection.js" type="text/javascript"/>
+    <script src="/soap/ajax/27.0/apex.js" type="text/javascript"/>
+    
+    <script type="text/javascript">
+    var Service = {};
+    var Resource = {};
+    function authorize()
+    { sforce.connection.sessionId = '{!GETSESSIONID()}'; }      
+  
+    function getServiceID() 
+    {
+    // Define the variables used within the Script
+    var url = parent.location.href; //string for the URL of the current page
+    var updateRecords = []; //array for holding records that this code will ultimately update
+    
+    // Get Visit Records
+
+    Service.ID = '{!STKR__Service__c.Id}';
+    Resource.ID = '{!STKR__Service__c.STKR__Service_Owner__c}';   
+
+    var Vid=sforce.connection.query("Select Id from STKR__Visit__c  where STKR__Service__c = '"+ Service.ID + "' AND STKR__Status__c = 'Open' AND STKR__Resource__c != '"+ Resource.ID + "' ");
+    var Vrecords = Vid.getArray("records"); //add all the Service ids to an Array
+    
+    // Start Master Update Script
+    if (Vrecords.length > 0) {
+
+     var answer=confirm("WARNING: Do you want to update all related Visit records with the current Owner?");
+
+     if (answer) { // If User Clicks OK
+
+    try{ 
+
+    //Start Update Services Script
+    if (Vrecords.length <  0) { alert("No Visits Found");
+    } else { //otherwise, there was a record selection
+    for (var a=0; a<Vrecords.length; a++) { //for all records
+    var update_Visit = new sforce.SObject("STKR__Visit__c"); //create a new sObject for storing updated record details
+    update_Visit.Id = Vrecords[a].Id; //set the Id of the selected record
+    update_Visit.STKR__Resource__c = Resource.ID;
+    updateRecords.push(update_Visit); //add the updated record to our array
+    result = sforce.connection.update(updateRecords); //push the updated records back to Salesforce
+    update_Visit = [];
+    updateRecords = [];
+    } //End Loop
+    } //End If
+
+
+    } catch(e) { }
+
+     parent.location.href = url; //refresh the page
+     } // If user clicks Cancel 
+    } // No Visits
+
+
+
+    }
+     
+    $(document).ready(
+     function()
+    {
+     authorize();
+     getServiceID();
+    });
+   </script>
+            
+ </apex:page>

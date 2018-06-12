@@ -1,0 +1,193 @@
+<apex:page showHeader="false" showchat="false" sidebar="false" extensions="STKR.sortLineItems" standardController="STKR__Billing__c" applyHtmlTag="false" renderAs="PDF" standardStylesheets="false">
+<head>
+<style type="text/css" media="print">
+@page {
+@top-center {
+content: element(header);
+}
+@bottom-right {
+ content: element(footer);
+}
+}
+ 
+div.header {
+padding: 10px;
+position: running(header);
+}
+div.footer {
+display: block;
+padding: 5px;
+position: running(footer);
+}
+ 
+</style>
+</head>
+ <apex:form >    
+
+ <div class="header">
+</div>
+ 
+<div class="footer">
+<div>
+  <table width="100%">
+  <tr>
+   <td align="center" style="font-size:10px">Generic Company Ltd, Gen Street, Generic City, Generic County, GNE R1C<br/>
+Telephone: 0800 000 000 E-mail: enquiries@genericcompanyletd.com </td>
+  </tr>
+  <tr><td align="center" style="font-size:10px">Company Reg 000000</td></tr>
+  </table>
+</div>
+</div>
+<div class="content" style="font-family: Arial, Helvetica Neue, Helvetica, sans-serif;font-size:11px">
+
+  <table width="100%">
+  <tr>
+  <td width="70%" valign="top">
+  <Div align="left">
+    <apex:image id="theImage" value="{!$Resource.STKR__Logo}" height="50"/>
+  </Div>
+  <br/>
+  <br/>
+  <br/>
+  <h1>{!If(Billing__c.Type__c = 'Invoice','INVOICE',If(Billing__c.Type__c = 'Quote','QUOTATION','WORK ORDER'))}<br/></h1>
+  </td>
+  <td align="right">
+  <b>
+  Generic Company Ltd<br/> 
+  Gen Street<br/>
+  Generic City<br/>
+  Generic County<br/>
+  GNE R1C<br/>
+  Tel : 0800 000000<br/>  
+  {!Billing__c.Owner__r.Email} <br/>
+  <br/>
+  {!If(Billing__c.Type__c = 'Invoice','Inv No.','Ref No.')}</b> {!Billing__c.Name}<br/>
+  {!If(Billing__c.Visit__c = '','','Visit No. '+Billing__c.Visit__r.Name)}<br/>
+
+  Dated &nbsp;<apex:outputfield value="{!STKR__Billing__c.STKR__Date__c}"/><br/>
+  {!If(Billing__c.Requested_By__r.LastName = '','','Contact '+Billing__c.Requested_By__r.FirstName+' '+Billing__c.Requested_By__r.LastName)}<br/>
+  {!If(Billing__c.Requested_By__r.Phone = '','','Tel '+Billing__c.Requested_By__r.Phone)}<br/>
+  {!If(Billing__c.Requested_By__r.Email = '','','Email '+Billing__c.Requested_By__r.Email)}<br/> 
+  VAT Registration No. 000000000<br/>
+  {!If(Billing__c.Account_Ref__c = '','','Client Ref '+Billing__c.Account_Ref__c)}<br/>
+  {!If(Billing__c.Type__c = 'Quote','','Purchase Order No. '+Billing__c.P_O_Number__c)}<br/>
+  
+  </td>
+</tr>
+</table>
+<br/>
+<table width="100%">
+<tr>
+<td align="left">
+<b>Billing Address</b><br/>
+  {!IF(ISBLANK(Billing__c.Account__r.ParentId),Billing__c.Account__r.Name,Billing__c.Account__r.Parent.Name)}<br/>
+  {!IF(ISBLANK(Billing__c.Account__r.BillingStreet),'',Billing__c.Account__r.BillingStreet)}<br/>
+  {!IF(ISBLANK(Billing__c.Account__r.BillingCity),'',Billing__c.Account__r.BillingCity)}<br/>
+  {!IF(ISBLANK(Billing__c.Account__r.BillingState),'',Billing__c.Account__r.BillingState)}<br/>
+  {!IF(ISBLANK(Billing__c.Account__r.BillingPostalCode),'',Billing__c.Account__r.BillingPostalCode)}<br/>
+</td>
+<td align="left">
+<b>Site Address</b><br/>
+{!Billing__c.Account__r.Name}<br/>
+  {!IF(ISBLANK(Billing__c.Account__r.ShippingStreet),'',Billing__c.Account__r.ShippingStreet)}<br/>
+  {!IF(ISBLANK(Billing__c.Account__r.ShippingCity),'',Billing__c.Account__r.ShippingCity)}<br/>
+  {!IF(ISBLANK(Billing__c.Account__r.ShippingState),'',Billing__c.Account__r.ShippingState)}<br/>
+  {!IF(ISBLANK(Billing__c.Account__r.ShippingPostalCode),'',Billing__c.Account__r.ShippingPostalCode)}<br/>
+  {!IF(ISBLANK(Billing__c.Account__r.Phone),'','Phone: '+Billing__c.Account__r.Phone)}
+</td>
+</tr>
+</table>
+<br/>
+<br/>
+<div style="font-size:12px" class="content">
+{!if(Billing__c.Type__c = 'Quote','Thank you for your valued enquiry. Please find our quotation detailed below…', 
+'')}
+{!if(Billing__c.Type__c = 'Invoice','Please find your Invoice detailed below…', 
+'')}
+
+
+<br/>
+<br/>
+<b>{!if(Billing__c.Type__c = 'Quote','Re : '+Billing__c.Introduction__c,'')}</b>
+<br/>
+<br/>
+<apex:outputfield value="{!STKR__Billing__c.STKR__Write_Up__c}"/>
+<br/>
+
+<div>
+  <apex:pageblock id="CustomList">
+   <apex:pageBlockTable value="{!lst}" var="o" width="100%" cellspacing="10">
+        <apex:column rendered="{!if(STKR__Billing__c.STKR__Type__c != 'Invoice',TRUE,FALSE)}" headerValue="Ref" value="{!o.STKR__Reference__c}" Style="height: 30px" width="10%"/>
+        <apex:column headerValue="QTY" value="{!o.STKR__Quantity__c}" Style="height: 30px" width="10%"/>
+        <apex:column headerValue="Description" value="{!o.STKR__Line_Description_Long__c}" Style="height: 30px" width="60%"/>
+       <apex:column rendered="{!if(STKR__Billing__c.STKR__Type__c != 'Work Order',TRUE,FALSE)}" style="text-align:right;height:30px" headerclass="ct" headerValue="Unit Price" value="{!o.STKR__Sales_Price__c}" width="30%"/>   
+       <apex:column rendered="{!if(STKR__Billing__c.STKR__Type__c != 'Work Order',TRUE,FALSE)}" style="text-align:right;height:30px" headerclass="ct" headerValue="Total" value="{!o.STKR__Line_Value__c}" width="30%"/>
+
+        
+        
+        
+        </apex:pageBlockTable>
+   </apex:pageBlock>
+</div>
+<br/>
+<hr/>
+<br/>
+<div style="{!if(Billing__c.Type__c = 'Work Order','display:none;','')}">
+<table width="100%">
+  <tr align="right">
+  <td width="89%"><Strong>Sub Total</strong></td> 
+  <td>£<apex:outputText value="{0, number,###,###,##0.00}"><apex:param value="{!STKR__Billing__c.STKR__Total_Billing_Value__c}" /></apex:outputText>
+  </td></tr>
+  <tr align="right">
+  <td><Strong>VAT</strong></td> 
+  <td align="right">£<apex:outputText value="{0, number,###,###,##0.00}"><apex:param value="{!STKR__Billing__c.STKR__Total_Billing_Value__c * 0.2}" /></apex:outputText>
+  </td></tr>  
+  <tr align="right">
+  <td><Strong>Total</strong></td> 
+  <td>£<apex:outputText value="{0, number,###,###,##0.00}"><apex:param value="{!STKR__Billing__c.STKR__Total_Billing_Value__c + (STKR__Billing__c.STKR__Total_Billing_Value__c * 0.2)}" /></apex:outputText>
+  </td></tr>
+  </table>
+  </div>
+<br/>
+<br/>
+  <b>
+  {!if(STKR__Billing__c.STKR__Type__c = 'Quote','Payment Terms: 30 days from completion of works.','')}  
+  {!if(STKR__Billing__c.STKR__Type__c = 'Invoice','Payment Terms: 30 days from Invoice.','')}
+  <br/>
+  {!if(STKR__Billing__c.STKR__Type__c = 'Quote','This quotation is valid for 30 days from the date of original quotation','')}
+  </b>  
+  <br/>
+  <br/>
+  {!if(STKR__Billing__c.STKR__Type__c = 'Quote','I look forward to hearing from you in due course…','')} 
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  {!if(STKR__Billing__c.STKR__Type__c = 'Quote','Yours Sincerely','')}
+  <br/>
+  <br/>
+  <br/>  
+  {!if(STKR__Billing__c.STKR__Type__c = 'Quote',STKR__Billing__c.Owner__r.FirstName,'')} {!If(STKR__Billing__c.STKR__Type__c = 'Quote',STKR__Billing__c.Owner__r.LastName,'')}<br/>
+  {!if(STKR__Billing__c.STKR__Type__c = 'Quote',STKR__Billing__c.Owner__r.Title,'')}
+  <br/><b>
+  {!if(STKR__Billing__c.STKR__Type__c != 'Invoice','','Please pay - Some Bank')}<br/>
+    {!if(STKR__Billing__c.STKR__Type__c != 'Invoice','','Sort Code: 00-00-00')}<br/>
+      {!if(STKR__Billing__c.STKR__Type__c != 'Invoice','','Acount No. 00000000')}<br/><br/>
+        {!if(STKR__Billing__c.STKR__Type__c != 'Invoice','','Remittance should be sent to remittance@genericcompanyltd.com or fax 0800 000 000')}<br/>  
+</b>
+
+    <apex:repeat value="{!Att}" var="a">
+      <apex:outputPanel layout="block" style="float:center;padding-top:10px;padding-left:10px;text-align:center">
+      <img height="600px" src="{!URLFOR($Action.Attachment.Download, a.Id)}" style="{!IF(Contains(a.Name,'Drawing'),'','display:none')}"/>
+        <apex:outputPanel layout="block" style="text-align:center">
+     <apex:outputtext rendered="{!IF(Contains(a.Name,'Drawing'), '', 'display:none')}" value="{!TRIM(LEFT(a.name, LEN(a.name) -4))}"/> 
+        </apex:outputPanel>
+      </apex:outputPanel>
+   </apex:repeat>
+
+  
+   </div>
+</div> 
+
+  </apex:form>  
+</apex:page>

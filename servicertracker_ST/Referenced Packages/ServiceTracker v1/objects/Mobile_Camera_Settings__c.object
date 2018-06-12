@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>Hierarchy</customSettingsType>
+    <description>You can specify Quality, Height, Width, and whether user can edit the image taken from app.</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>AllowEdit__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Allow users to edit the image after taking the picture.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Allow users to edit the image after taking the picture.</inlineHelpText>
+        <label>AllowEdit</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Height__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Height in pixels.
+Note : Aspect ratio will be the same.</inlineHelpText>
+        <label>Height</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quality__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Set the quality of image taken from device from 0 to 100. 
+
+Note : This will not affect the image selected from photo library/album.</inlineHelpText>
+        <label>Quality</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Width__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Width of the Image in pixels.</inlineHelpText>
+        <label>Width</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>Mobile Camera Settings</label>
+    <visibility>Public</visibility>
+</CustomObject>

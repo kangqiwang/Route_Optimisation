@@ -1,0 +1,892 @@
+<!-----------------------------------------------------------
+VisualForce Page Name :  Calendar
+Associated Objects    :  Event, Visit
+Details               :  * Showing Service Tracker Calendar with 4 views (day, Week, Month and Swim Lane View)
+                         * Supporting drag & drop and Stratch to update Event
+                         * Right click is also given to update records with popup 
+                         * Can print to every view
+                         * Showing List view of users in swim Lane view and supporting drag & drop between users
+Developed by          :  Rohit/Kamini/Mike/Ian 
+Company Name          :  Astrea IT Sercices
+created date          :  15th April 2015
+Last modified date    :  29th Jan 2018
+----------------------------------------------------------->
+<apex:page standardController="User" showHeader="true" docType="html" recordSetvar="users" sidebar="false" extensions="STKR.Calendar_Controller" tabStyle="STKR__ServiceTracker_Calendar__tab">
+    <apex:messages />
+    <link href="{!$Resource.Timelinefullcalendarcss}" rel="stylesheet" />
+        
+    <link href="{!$Resource.Timelinecss}" rel="stylesheet"/>
+    <script src="{!$Resource.TimelinemomentMin}"/>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"/>-->
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"/>
+    
+    <!--<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>-->
+    
+    <apex:includeScript value="https://code.jquery.com/ui/1.10.3/jquery-ui.js" />
+    <apex:includeScript value="{!$Resource.STKR__FullcalenderTimepick}"/>
+    
+    <apex:stylesheet value="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"  />
+    
+    <!--<script src="{!$Resource.TimelineJqueryMIn}"/>-->
+    <script src="{!$Resource.STKR__TimelineFullCalendarMin}"/>
+    <script src="{!$Resource.STKR__TimelineMin}"/>
+    
+    <script>
+        $(document).ready(function() {
+        
+        enabletimepicker();
+        });
+    </script>
+    
+    <script>
+     
+     $(document).ready(function() {
+        
+        
+        onLoadFunction();
+        
+        changeFCView('{!calView}');
+        changeDate('{!date_new}');
+
+        toggleView();
+        
+        // For button/span click
+        $( ".fc-button" ).click(function(){toggleView();rightclickonLoad();});
+        
+        //  For Previous button
+        $('.fc-prev-button').click(function() {
+            var moment = $('#calendar').fullCalendar('getDate');
+            $('[id$=date_new]').val(moment);
+            $( "#cal-quickpick" ).datepicker( "setDate", $('[id$=date_new]').val());
+            
+            if('{!currentMonth}' != moment.format('M')){
+                
+                // to set the current view
+                var view = $('#calendar').fullCalendar('getView');
+                $('[id$=calView]').val(view.name);
+                
+                sendNewDate();
+            }
+            
+        });
+        //  For Next button
+        $('.fc-next-button').click(function() {
+            var moment = $('#calendar').fullCalendar('getDate');
+            $('[id$=date_new]').val(moment);
+            $( "#cal-quickpick" ).datepicker( "setDate", $('[id$=date_new]').val());
+            
+            if('{!currentMonth}' != moment.format('M')){
+                
+                // to set the current view
+                var view = $('#calendar').fullCalendar('getView');
+                $('[id$=calView]').val(view.name);
+                
+                sendNewDate();
+            }    
+        });       
+        
+        //  For Colour button
+        $('.fc-prevYear-button').text('View / Change User Colours'); 
+
+        $('.fc-prevYear-button').click(function() {
+        newwindow=window.open('/apex/AllCalendarColours','Resources','height=500,width=300,toolbar=0,menubar=0,location=0');
+       if (window.focus) {newwindow.focus()}
+       sendNewDate();
+
+        });              
+    });
+    function onLoadFunction(){
+            
+         $('#cal-quickpick').datepicker({
+              altField: "#date_new",
+              altFormat: "ddd MMM dd yyyy HH:mm:ss Z",
+              onSelect: function(date) {
+                    $('[id$=date_new]').val(moment(date).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ'));
+                    if ($('[id$=calView]').val() != 'timelineDay'){
+                        $('[id$=calView]').val('agendaDay');//show normal day view
+                    }
+                    sendNewDate();
+              }              
+         });
+         
+         if ($('[id$=date_new]').val() != ''){
+             $( "#cal-quickpick" ).datepicker( "setDate", $('[id$=date_new]').val());
+         }
+         
+     
+         $('#calendar').fullCalendar({
+            editable: true,
+            startEditable: true,
+            durationEditable: true,
+            aspectRatio: 1.8,
+            scrollTime: '00:00',
+                       
+            header: {
+                left: 'today prev,next prevYear',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay,timelineDay'
+            },
+            defaultView: 'timelineDay',
+            timeFormat: 'HH:mm',
+            resourceAreaWidth: '15%',
+            resourceLabelText: 'Users',
+            resources: [
+            <apex:repeat value="{!usersList}" var="u">
+                <!--<apex:outputPanel rendered="{!if(u.id != u.name,true,false)}">-->
+                {
+                    id:'{!u.id}',
+                    title:'{!u.name}' 
+                    
+                },
+                <!--</apex:outputPanel>-->
+            </apex:repeat>
+                
+            ],
+events:[
+                //At run time, this APEX Repeat will render the array elements for the events array
+                
+                <apex:variable value="{!0}" var="outcnt"/>
+                <apex:repeat value="{!allEventsList}" var="evnts">
+                     <apex:variable value="{!0}" var="incnt"/>
+                     
+                    <apex:repeat value="{!evnts}" var="e">
+                    <apex:variable value="" var="classnameVal"/>
+                    <apex:variable value="target1" var="classnameVal" rendered="{!if(e.className == 'holiday',false,true)}"/>
+                    {
+                     
+                            title: '{!JSENCODE(e.title)}',
+                            start: '{!e.startString}',
+                            end: '{!e.endString}',
+                            url: '{!e.url}',
+                            allDay: {!e.allDay},
+                            className: '{!e.className} {!classnameVal}' ,
+                            ev_index:'{!outcnt},{!incnt}',
+                            resname : '{!e.resource}',
+                            address : '{!JSENCODE(e.address)}',
+                            visit_num:'{!e.name}',
+                            visit_type : '{!e.visitType}',
+                            visit_note : '{!if(contains(e.visitNotes,'null'),'',JSENCODE(e.visitNotes))}',
+                            visit_custate : '{!e.custate}',
+                            visit_fixedVisit : '{!if(e.fixedVisit = True,'Yes','No')}',
+                            rating:'{!e.rating}',
+                            resourceId:'{!e.relatedUser}',
+                            assignTostr:'{!e.assignToStr}',
+                            lastVis : '{!e.lastVisit}',
+                            borderColor : '{!e.colour}'
+                            
+                        },
+                        <apex:variable value="{!incnt+1}" var="incnt"/>
+                         
+                    </apex:repeat>
+                    <apex:variable value="{!outcnt+1}" var="outcnt"/>
+                </apex:repeat>
+                
+            ],            
+            eventDrop: function(event, delta, revertFunc) {
+                
+                $('[id$=visitInfo]').val(event.url);
+                $('[id$=eventStart_new]').val(event.start);
+                $('[id$=eventEnd_new]').val(event.end);
+                $('[id$=eventuserId]').val(event.resourceId);
+                updateEventSchedule();
+    
+            },
+            eventResize: function(event){
+                
+                $('[id$=visitInfo]').val(event.url);
+                $('[id$=eventStart_new]').val(event.start);
+                $('[id$=eventEnd_new]').val(event.end);
+                updateEventSchedule();
+            },
+             
+            eventMouseover: function(event, jsEvent) {
+                var lastVisit = '';
+                if(event.lastVis != ''){
+                    lastVisit = $.fullCalendar.moment(event.lastVis).format('DD/MM/YYYY HH:mm')
+                }
+               //var tooltip = '<div class="tooltipevent" style="width:400px;height:100px;background:#ccc;position:absolute;z-index:999;">' + calEvent.title + '</div>';
+                var tooltip ='<div class="tooltipevent" style="width:400px;height:100px;background:#fff;position:absolute;z-index:999;"> <div class="bPageBlock " onclick="return false;"><div class="pbBody" style="background:white;"><div class="pbSubsection">';
+                tooltip = tooltip + '<table border="0" class="detailList">';
+                tooltip = tooltip +'<tr><td class="labelCol">Fixed Visit</td><td class="dataCol col02">'+event.visit_fixedVisit+'</td></tr>';
+                tooltip = tooltip +'<tr><td class="labelCol">Current State</td><td class="dataCol col02">'+event.visit_custate+'</td></tr>';
+                    
+                var view = $('#calendar').fullCalendar('getView');
+                if(view.name =='timelineDay' ){
+                    var tempstr = event.title;
+                    if(tempstr.indexOf('Assigned to')>0){
+                        tempstr = tempstr.substring(0, tempstr.indexOf('Assigned to'));
+                    }
+                    tooltip = tooltip +'<tr><td class="labelCol">Account</td><td class="dataCol col02" style="border-bottom: 1px solid #e3deb8;">'+tempstr +'</td></tr>';
+                }
+                else
+                tooltip = tooltip +'<tr><td class="labelCol">Account</td><td class="dataCol col02" style="border-bottom: 1px solid #e3deb8;">'+event.title+'</td></tr>';
+                tooltip = tooltip +'<tr><td class="labelCol">Address </td><td class="dataCol col02">'+event.address+'</td></tr>';
+                tooltip = tooltip +'<tr><td class="labelCol">Visit Number </td><td class="dataCol col02">'+event.visit_num+'</td></tr>';
+                
+                //if(view.name !='timelineDay' )
+                tooltip = tooltip +'<tr><td class="labelCol">Resource Name</td><td class="dataCol col02">'+event.resname+'</td></tr>';
+                tooltip = tooltip +'<tr><td class="labelCol">Visit Type </td><td class="dataCol col02">'+event.visit_type+'</td></tr>';
+                tooltip = tooltip +'<tr><td class="labelCol">Visit Notes</td><td class="dataCol col02">'+event.visit_note+'</td></tr>';
+                tooltip = tooltip +'<tr><td class="labelCol">Start </td><td class="dataCol col02">'+$.fullCalendar.moment(event.start).format('DD/MM/YYYY HH:mm')+'</td></tr>';
+                if(event.end != null)
+                    tooltip = tooltip +'<tr><td class="labelCol">End</td><td class="dataCol col02">'+$.fullCalendar.moment(event.end).format('DD/MM/YYYY HH:mm')+'</td></tr>';
+                tooltip = tooltip +'<tr><td class="labelCol">Customer Type </td><td class="dataCol col02">'+event.rating+'</td></tr>';
+                tooltip = tooltip +'<tr><td class="labelCol">Last Visit Date </td><td class="dataCol col02">'+lastVisit+'</td></tr>';
+                
+                tooltip = tooltip +'</table></div></div></div></div>';
+                
+                $("body").append(tooltip);
+                $(this).mouseover(function(e) {
+                    $(this).css('z-index', 998);
+                    $('.tooltipevent').fadeIn('500');
+                    $('.tooltipevent').fadeTo('10', 1.9);
+                  
+                    
+                }).mousemove(function(e) {
+                    //console.log('e.pageY '+e.pageY+'  e.pageX '+e.pageX);
+                    //console.log('H:  '+$( document ).height());
+                    
+                    var totalDiffHgt = Math.abs($( document ).height() - e.pageY);
+                    //console.log('totalDiffHgt  '+totalDiffHgt);
+                    
+                    if(totalDiffHgt <400)
+                        $('.tooltipevent').css('top', e.pageY - 270);
+                    else
+                        $('.tooltipevent').css('top', e.pageY + 10);
+                        
+                    var totalDiffWid = Math.abs($( document ).width() - e.pageX);
+                    //console.log('totalDiffWid  '+totalDiffWid);
+                    if(totalDiffWid <450)
+                        $('.tooltipevent').css('left', e.pageX - 400);
+                    else
+                        $('.tooltipevent').css('left', e.pageX + 20);
+                });
+            },
+            
+            
+            eventMouseout: function(calEvent, jsEvent) {
+                $(this).css('z-index', 8);
+                $('.tooltipevent').remove();
+            },
+            eventRender: function(event, element)
+            { 
+                
+                var evtitle = element.find('.fc-title'); 
+                var view = $('#calendar').fullCalendar('getView');
+                if(view.name =='timelineDay' ){
+                    
+                    var tempstr = evtitle.text();
+                    
+                    if(tempstr.indexOf('Assigned to')>0){
+                        tempstr = tempstr.substring(0, tempstr.indexOf('Assigned to'));
+                        evtitle.text(tempstr);
+                    }
+                    
+                    
+                        
+                }
+            }
+                        
+            
+        });
+        
+                 
+        $('.fc-timelineDay-button').text('swim lane');
+        var vname ='month';
+        if('{!$CurrentPage.Parameters.view}' !='')
+            vname = '{!$CurrentPage.Parameters.view}';
+        
+        $('#calendar').fullCalendar( 'changeView', vname );
+    }
+    
+    // TOGGLEING THE MULTI-USER LIST OPTION AND PRINT BUTTON ACROSS VARIOUS VIEWS
+    function toggleView(){
+      var view = $('#calendar').fullCalendar('getView');
+      $('[id$=calView]').val(view.name);
+      
+      if(view.name=='timelineDay' ){
+          //$('[id$=multi_view]').show();
+          //$('[id$=single_view]').show(); 
+          $('[id$=print_btn]').hide();
+      } 
+      else{
+          //$('[id$=multi_view]').hide();
+          //$('[id$=single_view]').show();
+          $('[id$=print_btn]').show();
+      }
+      
+    }
+    
+    // STORE THE CURRENT VIEW WHEN USER CHANGE
+    function changeSingleView(){
+        //changeSingleView
+        var view = $('#calendar').fullCalendar('getView');
+        console.log('view Name '+view.name);
+        $('[id$=calView]').val(view.name);
+        actionOnUserChange();
+    }
+    // STORE THE CURRENT VIEW WHEN USER VIEW CHANGE
+    function changeViewonUserViewChange(){
+       // changeSingleView
+        var view = $('#calendar').fullCalendar('getView');
+        $('[id$=calView]').val(view.name);
+        pageLoad();
+    }
+    
+    
+    // SAVE CURRENT VIEW TO THE APEX VARIABLE "CALVIEW" IN THE SWIM LINE MODE
+    function saveSingleView(){
+        var view = $('#calendar').fullCalendar('getView');
+        console.log('view Name '+view.name);
+        $('[id$=calView]').val(view.name);
+        actionOnUserChangeSwimLane();
+    }
+    
+    // CHANGE FULL CALENDER VIEW
+    function changeFCView(changedName){
+        console.log('changed Name '+changedName);
+        if(changedName)
+            $('#calendar').fullCalendar( 'changeView', changedName);
+        
+    }
+    
+    // CHANGE FULLCALENDAR DATE
+    function changeDate(changedDate){
+        //alert(changedDate);
+        if(changedDate){
+            var d = $.fullCalendar.moment(changedDate); //2014-05-01
+            $('#calendar').fullCalendar( 'gotoDate',d ); 
+        }   
+    }
+    
+    // ENABLE TIME PICKER FOR POP_UP
+    function enabletimepicker(){
+        $('.event_time').timepicker({
+            showAnim: "slide",
+        })
+    }
+    // OPEN ANOTHER TAB IN PRINT VIEW
+    function showPrintableView(selecteduser,isself){
+        var view = $('#calendar').fullCalendar('getView');
+        var mydate = $('#calendar').fullCalendar('getDate');
+        window.open('/apex/CalendarPrint?view='+view.name+'&self='+isself+'&usr='+selecteduser+'&md='+mydate.format('YYYY-MM-DD'));
+       
+    }
+
+   
+    </script>
+    <style>
+    
+        .hover-end{
+            z-index:15000;
+            margin-left: 50%;
+            padding:8px;
+            text-align: left;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            top: 100%;
+            opacity: 1;
+            color: black;
+            font-size: 9pt;
+        }
+        .event-birthday {background:#CC99CC;border-color:#CC99CC;border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;font-family:"Tahoma", Geneva, sans-serif;}
+        .event-campaign {background:#D2315D;border-color:#D2315D;border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;font-family:"Tahoma", Geneva, sans-serif;}
+        .event-job {background:#9FE1E7;border-color:#9FE1E7;border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;font-family:"Tahoma", Geneva, sans-serif;}
+        .event-routine {border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;background:#a6a8ff;border-color:#a6a8ff;font-family:"Tahoma", Geneva, sans-serif; }
+        .event-personal {border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;background:#B96F6F;border-color:#B96F6F;font-family:"Tahoma", Geneva, sans-serif;}
+        .event-fixed {background:#FFFF00;border-color:#FFFF00;border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;font-family:"Tahoma", Geneva, sans-serif;}
+        .event-complete {background:#88C134;border-color:#88C134;border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;font-family:"Tahoma", Geneva, sans-serif;}
+        //.event-complete {background: repeating-linear-gradient(to right,rgba(136, 193, 52, 0.65),#a6a8ff 10px,rgba(136, 193, 52, 0.65) 10px,#a6a8ff 20px);color:#000;font-family:"Tahoma", Geneva, sans-serif;}      
+        .event-aborted {background:red;border-color:red;border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;font-family:"Tahoma", Geneva, sans-serif;}
+        .holiday {background:#FFAD46;border-color:#FFAD46;border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;font-family:"Tahoma", Geneva, sans-serif;}
+        
+        #cal-options {float:left;margin-top:0%;}
+        #cal-quickpick{margin-top:-65px;padding-left:20px;float:right;position:absolute;text-align:right;right:30vw;}        
+        #cal-legend { float:right;margin-top:0%;align:right;width:30%;}
+        #cal-legend ul {margin:0;padding:0;list-style:none;}
+        #cal-legend ul li {margin:0;padding:5px;float:left;}
+        #cal-legend ul li span {display:block; height:16px; width:16px; margin-right:4px; float:left; border-radius:4px;}
+        #calendar {margin-top:20px;}
+        #calendar a:hover {font-weight:bold !important;color:#000}
+        #calendar a.active {text-decoration:none;}
+        #calendar a:visited {color:#000;text-decoration:none}
+        .fc-event-content {padding:3px;}
+        
+        /*jQuery calendar style overides for the mini picker 26/06/2017 */
+        .ui-datepicker .ui-datepicker-title{
+            line-height: 1em;
+        }
+        .ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span{
+            margin-top: -8px;
+            color: transparent;
+        }
+        .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next{
+            height:1em;
+        }
+        .ui-widget{
+            font-size: 0.8em;
+        }
+       
+        
+        /*end jQuery calendar overides */
+        
+        ul {
+            list-style-type: none;
+            list-style-position: inside;
+            margin: 0;
+            padding: 0;
+        }
+        /* all context menus have this class */
+        .context-menu {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            
+            background-color: #f2f2f2;
+            border: 1px solid #999;
+            
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            z-index:10001;
+        }
+        .context-menu a {
+            display: block;
+            padding: 7px;
+            text-decoration: none;
+            color: #333;
+        }
+        .context-menu a:hover {
+            background-color: #666;
+            color: white;
+        }
+        
+        //default link styles. - Bodge to fix swimlane issue 
+        //loading css classes from the js led to invisible links. 
+        //Ian Clarke 25/05/2017
+        /* unvisited link */
+        a:link {
+            color: #ffffff;
+            text-decoration: none !important;
+        }
+        
+        /* visited link */
+        a:visited {
+            color: #ffffff;
+            text-decoration: none !important;
+        }
+        
+        /* mouse over link */
+        a:hover {
+            color: #000000;
+            text-decoration: bold!important;
+        }
+        
+        /* selected link */
+        a:active {
+            color: #ffffff;
+            text-decoration: none !important;
+        }        
+        
+        .target1 li {
+            //background-color: #ddd;
+            //color: #333;
+            border: 1px solid #c6c6c6;
+            //padding: 5px;
+        }
+        
+        .target1 {
+            //width: 130px;
+            //z-index:-11;
+            //position:absolute;
+            
+        }
+        .targetnew{
+            position:relative !important;
+        }
+        
+        .target1 li.green{
+            background-color: green;
+            color: #fff;
+        }
+        
+        .menu-item-1, .second-menu-item{
+            padding: 0px;
+            margin-left: 0;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .popupBack{
+            background-color:black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+        }
+        .custPopup{
+            background-color: white;
+            border-width: 2px;
+            border-style: solid;
+            z-index: 9999;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            height: 600px
+            width: 1000px;
+            margin-left: -250px;
+            top:100px;
+        }
+        .classname {
+            -moz-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+            -webkit-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+            box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+            background-color:#79bbff !important;
+            -moz-border-radius:6px;
+            -webkit-border-radius:6px;
+            border-radius:6px;
+            border:1px solid #84bbf3;
+            display:inline-block;
+            color:#000 !important;
+            font-family:arial;
+            font-size:15px;
+            font-weight:bold;
+            padding:6px 24px;
+            text-decoration:none;
+            text-shadow:1px 1px 0px #528ecc;
+           // background-image:none !important; if we use command button
+        }
+        .classname:hover {
+            background-color:#378de5 !important;
+        }.classname:active {
+            position:relative;
+            top:1px;
+        }
+        
+        
+        .resTable{
+            float:left;
+            margin-top:0.25rem;
+            //border:2.5px outset #262221;
+            font-weight:normal;
+            text-align:center;
+            //width:400px;
+            //width:100%;
+           // height:330px;
+               
+        }
+        .resTr{
+            float:left;
+            display:inline;
+            width:100%;
+            clear:both; 
+            height:10%;
+            margin-bottom:-1%; 
+        }
+        
+        .resTd {
+            display:inline-block;
+            float:left;
+            height:2rem;
+            width:25%;
+            color:black;
+            text-align:left;
+            //font-family: Georgia,serif;
+            font-weight: bold;
+            //margin-left:3px;
+            font-family:Arial,Helvetica,sans-serif;
+            font-size:92%;
+            white-space:nowrap;
+            margin-left: 3%;
+                        
+        }
+        .dateFormat{
+            display:none;
+        }
+        .datePicker{
+           z-index:10000;
+        }
+        body .bPageTitle{
+            padding:0px;
+        }
+        
+       
+    @media print {
+      html, body {
+        width: 100%;
+         height: 127mm;
+      }
+      #calform  :nth-child(n){
+          display:none;
+      }
+      #calendar{
+          border: 1px solid black;
+          display:block;
+      }
+     
+    }
+    </style>
+
+       <apex:pagemessages />
+        <!--<apex:outputPanel id="calPanel">-->
+            <apex:form id="calform">
+
+                 <apex:sectionHeader title="ServiceTracker Calendar"/>
+
+                
+                
+            <div id="cal-options">
+                    <apex:commandButton value="{!IF(includeRoutines,'Hide Routines','Show Routines')}" style="float:left;" action="{!toggleRoutines}"/>               
+                    <apex:commandButton value="{!IF(includeCompleted,'Hide Completed','Show Completed')}" style="float:left;" action="{!toggleCompleted}"/>               
+                    <apex:commandButton value="{!IF(includeMyEvents,'Hide Events','Show Events')}" style="float:left;" action="{!toggleMyEvents}"/>
+                    <apex:commandButton value="{!IF(includeTimeSheet,'Hide Work Times','Show Work Times')}" style="float:left;" action="{!toggleTimesheet}"/>
+
+                    <apex:commandButton value="Print" id="print_btn" onclick="showPrintableView('{!selecteduser}','{!includeMyEvents}');return false;" style="float:left;" />
+                       <br/> <br/>                  
+            <div style="float:left;width:100%;" id="single_view" >
+                        <span style="font-weight: bold;font-size:10pt; " >User:
+                        <apex:selectList value="{!selectedUser}" size="1" onchange="changeSingleView();">
+                            <apex:selectOptions value="{!userOption}"></apex:selectOptions>
+                            
+                        </apex:selectList>
+                        </span>
+                    <!--<apex:panelGrid columns="5" id="multi_view" style="display:none;margin-left: 27%;" > -->  
+                    <!--<apex:panelGrid columns="5" id="multi_view" style="margin-left: 27%;" >-->                     
+                    <apex:outputLabel style="font-weight:bold;" value="View:"/>
+                        <apex:selectList value="{!selectedListView}" size="1" onchange="changeViewonUserViewChange();">
+                            <apex:selectOptions value="{!alllistviewoptions}"/>
+                        </apex:selectList>
+                    <apex:outputlink value="/ui/list/FilterEditPage?id={!selectedListView }&retURL=/apex/STKR__Calendar">Edit </apex:outputlink> | 
+                    <apex:outputlink value="/ui/list/FilterEditPage?ftype=s&retURL=/apex/STKR__Calendar">Create</apex:outputlink>   
+                   <!-- </apex:panelGrid>-->
+                   </div>                       
+                </div>     
+ 
+                <apex:actionFunction name="sendNewDate" action="{!pageLoad}" status="status1"/>
+                <apex:inputHidden id="date_new" value="{!date_new}"/>
+                
+                <apex:actionFunction name="pageLoad" action="{!pageLoad}" status="status1"/>
+            
+                <!-- !!!!!!!!!!!   ACTION AND DEPENDING VARIABLES  !!!!!!!!!!-->
+                
+                <!-- THIS ACTION INVOKED WHEN RE-SIZING OR DRAG/DROP THE EVENT  -->
+                <apex:actionFunction name="updateEventSchedule" action="{!updateVisit}" reRender="rndm" oncomplete="rightclickonLoad();enabletimepicker();" />
+                
+                <apex:inputHidden id="eventEnd_new" value="{!eventEnd_new}"/>   
+                <apex:inputHidden id="eventStart_new" value="{!eventStart_new}"/>
+                <apex:inputHidden id="visitInfo" value="{!sObjRecId}" />
+                <apex:inputHidden id="eventuserId" value="{!eventNUserId}"/>
+                
+                <!-- SHOW RECORD FOR UPADATION IN THE POP_UP BOX-->
+                <apex:actionFunction name="showSobjectRecord" action="{!showSobjectRecord}" status="status1" reRender="event_panel,visit_panel" oncomplete="$('#{!JSENCODE(boxType)}_box').show();$('.popupBack').show();enabletimepicker();">
+                <apex:param id="sobjId" name="sobjHref" value=""/>
+                </apex:actionFunction>
+                
+                <apex:actionFunction name="delSobjectRecord" action="{!showSobjectRecord}" status="status1" reRender="rndm" oncomplete="redirectPage();enabletimepicker();">
+                <apex:param id="sobjIdToDel" name="sobjHrefForDel" value=""/>
+                <apex:param id="actionTo" name="action" value="delete"/>
+                </apex:actionFunction>
+                
+                <!-- WHEN USER CHANGE -->
+                <apex:actionFunction name="actionOnUserChange" action="{!onUserChange}" />
+                <apex:inputHidden id="calView" value="{!calView}"/>
+                
+                <apex:actionFunction name="actionOnUserChangeSwimLane" action="{!pageLoad}" />
+                <apex:actionFunction name="redirectPage" action="{!redirectpage}"/>
+                <div id="cal-quickpick">&nbsp;</div>
+                <div id="cal-legend">
+                    <ul>
+                        <li style="{!IF(includeRoutines,'','display:none')}"><span class="event-routine"></span>Routine</li>
+                        <li><span class="event-birthday"></span>Follow-Up</li>
+                        <li><span class="event-campaign"></span>Call Out</li>
+                        <li><span class="event-job"></span>Job</li>
+                        <li><span class="event-fixed"></span>Fixed Visit</li>
+                        <li style="{!IF(includeCompleted,'','display:none')}"><span class="event-complete"></span>Completed</li>
+                        <li><span class="event-aborted"></span>Aborted</li>
+                        <li><span class="holiday"></span>Public Holiday</li>
+                        <li style="{!IF(includeMyEvents,'','display:none')}"><span class="event-personal"></span>Events</li>
+
+                    </ul>
+                    
+                </div>
+                <apex:outputpanel >
+                    <apex:actionstatus id="status1">
+                        <apex:facet name="start">
+                            <div class="waitingSearchDiv" id="el_loading" style="  background-color: rgba(233, 236, 239, 0.6);height: 100%;opacity: .9;width:100%;z-index: 10000;"> 
+                                <div class="waitingHolder" style="top: 40%; width: 500px;left:30%;position:fixed;height: 500px;">
+                                <img class="waitingImage" src="{!URLFOR('/img/loading32.gif')}" style="background:0;" title="Please Wait..." />
+                                    <span class="waitingDescription">Please Wait...</span>
+                                </div>
+                            </div>
+                        </apex:facet>
+                    </apex:actionstatus>
+                </apex:outputpanel>
+                <br/>                
+                <div style="clear:both;"><!--fix floats--></div>
+                <div id="calendar"></div>
+                
+                 <!-- POP_UP BOX FOR UPDATING EVENT--> 
+            
+            <div id="" class="popupBack" style="display:none;"></div>
+            
+            <div id="visit_box" class="custPopup ontop" style="display:none;z-index:9999;border:2px solid;width:350px">
+                <apex:outputPanel id="visit_panel">
+                    <div class="resTable" style="width: 100%;margin:0px">
+                        <div class="resTr">
+                            <div class="resTd" style="font-size:120%;margin-left:0px;text-align:left;border-bottom:2.5px outset #262221;width:100%;/*height:140%*/;background-color:rgba(67, 125, 200, 1);color:white"  ><span style="margin-left:2%">Update Visit</span></div><br/>
+                            
+                            <div class="resTd" style="padding: 8px 0px 0px;">Account</div>
+                            <div class="resTd" style="margin-left: 4%;width:initial;padding: 8px 0px 0px;">
+                                <apex:outputField value="{!visitRec.STKR__Account_lkp__r.STKR__Site_Name_and_Street__c}" style="width:100%" /> 
+                            </div>  
+                        </div> 
+                         <div class="resTr">
+                            <div class="resTd" style="padding: 8px 0px 0px;">Visit Number</div>
+                            <div class="resTd" style="margin-left: 4%;width:initial;padding: 8px 0px 0px;">
+                                <apex:commandLink onclick="window.open('/{!visitRec.id}');return false;" value="{!visitRec.Name}" style="width:100%" /> 
+                            </div> 
+                        </div> 
+                        <div class="resTr" style="padding: 8px 0px 0px;">
+                            <div class="resTd" style="">Due Start</div>
+                            <div class="resTd" style="margin-left: 4%;">
+                                <!--<apex:inputField value="{!visitRec.STKR__Due_Date__c}" /> -->
+                                <apex:inputField value="{!datePick1.STKR__Date_Pick__c}" rendered="{!IF(visitRec != null && visitRec.id != null,true, false)}"/>
+                                <apex:inputText value="{!stTime}"  rendered="{!IF(visitRec != null && visitRec.id != null,true, false)}" styleClass="event_time" style="  width: 60px; margin-left: 10%;"/>
+                            </div>  
+                        </div>
+                        <div class="resTr" style="padding: 8px 0px 0px;">
+                            <div class="resTd" style="">Due Finish</div>
+                            <div class="resTd" style="margin-left: 4%;">
+                                <!--<apex:inputField value="{!visitRec.STKR__Due_Finish__c}" /> -->
+                                <apex:inputField value="{!datePick2.STKR__Date_Pick__c}" rendered="{!IF(visitRec != null && visitRec.id != null,true, false)}" />
+                                <apex:inputText value="{!enTime}" rendered="{!IF(visitRec != null && visitRec.id != null,true, false)}"  styleClass="event_time" style="  width: 60px; margin-left: 10%;"/>
+                            </div>  
+                        </div>
+                        <div class="resTr" style="padding: 8px 0px 0px;">
+                            <div class="resTd" style="padding: 8px 0px 0px;">Fixed Visit</div>
+                            <div class="resTd" style="margin-left: 4%;">
+                                <apex:inputField value="{!visitRec.STKR__Fixed_Visit__c}" style="width: 15px; margin-left: 0%;" />
+                            </div>    
+                        </div>
+                        <div class="resTr" style="padding: 8px 0px 0px;">
+                            <div class="resTd" style="">Resource Name</div>
+                            <div class="resTd" style="margin-left: 4%;">
+                                <apex:inputField value="{!visitRec.STKR__Resource__c}" /> 
+                            </div>  
+                        </div>
+                        <div class="resTr" style="padding: 8px 0px 0px;">
+                            <div class="resTd" style="">Additional <br/>Resource</div>
+                            <div class="resTd" style="margin-left: 4%;">
+                                <apex:inputField value="{!visitRec.STKR__Additional_Resource__c}" /> 
+                            </div>  
+                        </div>
+
+                        <div class="resTr" style="padding: 8px 0px 0px;">
+                            <div class="resTd" style="">Notes</div>
+                            <div class="resTd" style="margin-left: 4%;width:48%;">
+                                <apex:inputField value="{!visitRec.STKR__Notes_Long__c}" style="width:100%;resize:none;" /> 
+                            </div>  
+                        </div>
+                        <div class="resTr" style="padding: 8px 0px 0px;" >
+                            <div class="resTd" style="text-align: center;  margin-left: 25%;">
+                                <apex:commandButton value="Update" status="status1" styleClass="classname" action="{!updatEventInfo}" oncomplete="if('{!JSENCODE(pgMsg)}' !=''){alert('{!JSENCODE(pgMsg)}');}else{$('[id$=calView]').val($('#calendar').fullCalendar('getView').name);redirectPage();}" style="width: 90px;background-image:none;height: 30px;font-size: 14px;color:blue;" />
+                                <apex:commandButton value=" Close" status="status1" styleClass="classname" onclick="$('.popupBack').toggle();$('#visit_box').toggle();return false;" style="width: 90px;background-image:none;height: 30px;font-size: 14px;color:blue;" />
+                            </div>
+                        </div>  
+                    </div>
+                </apex:outputPanel>
+            </div>
+            
+            <div id="event_box" class="custPopup ontop" style="display:none;z-index:9999;border:2px solid;width:350px;">
+                <apex:outputPanel id="event_panel">
+                    <div class="resTable" style="width: 100%;margin:0px">
+                        <div class="resTr">
+                            <div class="resTd" style="font-size:120%;margin-left:0px;text-align:left;border-bottom:2.5px outset #262221;width:100%;/*height:140%*/;background-color:rgba(67, 125, 200, 1);color:white"  ><span style="margin-left:2%">Update Visit</span></div><br/>
+                            
+                            <div class="resTd" style="padding: 8px 0px 0px;">Subject</div>
+                            <div class="resTd" style="margin-left: 4%;width:initial;padding: 8px 0px 0px;">
+                                <apex:outputField value="{!eventRec.Subject}" style="width:100%" /> 
+                            </div> 
+                        </div> 
+                        <div class="resTr" style="padding: 8px 0px 0px;">
+                            <div class="resTd" style="">All day</div>
+                            <div class="resTd" style="margin-left: 4%;">
+                                <apex:inputField value="{!eventRec.isAllDayEvent}" />
+                               
+                            </div>  
+                        </div>
+                        <div class="resTr" style="padding: 8px 0px 0px;">
+                            <div class="resTd" style="">Due Start</div>
+                            <div class="resTd" style="margin-left: 4%;">
+                                <!--<apex:inputField value="{!eventRec.StartDateTime}" /> -->
+                                <apex:inputField value="{!datePick1.STKR__Date_Pick__c}" rendered="{!IF(eventRec != null && eventRec.id != null,true, false)}"/>
+                                <apex:inputText value="{!stTime}"  rendered="{!IF(eventRec != null && eventRec.id != null,true, false)}" style="  width: 60px; margin-left: 10%;" styleClass="event_time"/>
+                            </div>  
+                        </div>
+                        <div class="resTr" style="padding: 8px 0px 0px;">
+                            <div class="resTd" style="">Due Finish</div>
+                            <div class="resTd" style="margin-left: 4%;">
+                                <!--<apex:inputField value="{!eventRec.EndDateTime}" /> -->
+                                 <apex:inputField value="{!datePick2.STKR__Date_Pick__c}" rendered="{!IF(eventRec != null && eventRec.id != null,true, false)}"/>
+                                 <apex:inputText value="{!enTime}"  rendered="{!IF(eventRec != null && eventRec.id != null,true, false)}" styleClass="event_time" style="  width: 60px; margin-left: 10%;"/>
+                              
+                            </div>  
+                        </div>
+                    
+                        <div class="resTr" style="padding: 8px 0px 0px;">
+                            <div class="resTd" style="margin-left: 25%">
+                                <apex:commandButton value="Update" status="status1" styleClass="classname" action="{!updatEventInfo}" oncomplete="if('{!JSENCODE(pgMsg)}' !=''){alert('{!JSENCODE(pgMsg)}');}else{ $('[id$=calView]').val($('#calendar').fullCalendar('getView').name);redirectPage();}" style="width: 90px;background-image:none;height: 30px;font-size: 14px;color:blue;" /><!-- oncomplete="onLoadFunction();rightclickonLoad();$('.popupBack').toggle();$('#event_box').toggle();return false;" -->
+                                <apex:commandButton value=" Close" status="status1" styleClass="classname" onclick="$('.popupBack').toggle();$('#event_box').toggle();return false;" style="width: 90px;background-image:none;height: 30px;font-size: 14px;color:blue;" />
+                            </div>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            
+           <!--END OF POP UP BOX-->
+            </apex:form>
+       <!-- </apex:outputPanel>-->
+    
+       
+     
+    <script src="{!$Resource.STKR__RightclickJS}"/>
+    <script>
+        $(document).ready(function(){
+            rightclickonLoad();
+        
+        });
+        
+        function rightclickonLoad(){
+        $('.target1').contextMenu('context-menu-1', {
+            
+            'Update Visit': {
+                click: function(element) {  // element is the jquery obj clicked on when context menu launched
+                   //console.log($(element).data());
+                    var ojj = {};
+                    ojj = $(element).data();
+                    //console.log(ojj.fcSeg.event.url);
+                    
+                   showSobjectRecord(ojj.fcSeg.event.url);
+                   $('[id$=date_new]').val($('#calendar').fullCalendar('getDate'));
+                   //console.log('The js reports selected user as: {!selectedUser}');
+                },
+                klass: "menu-item-1" // a custom css class for this menu item (usable for styling)
+            }
+           /* 'Delete Visit': {
+                click: function(element){
+                    var ojj = {};
+                    ojj = $(element).data();
+                    console.log(ojj.fcSeg.event.url);
+                    delSobjectRecord(ojj.fcSeg.event.url);
+                },
+                klass: "second-menu-item"
+            }*/
+        });
+    }
+    </script>
+   
+</apex:page>

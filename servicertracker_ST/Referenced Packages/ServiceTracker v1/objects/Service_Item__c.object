@@ -1,0 +1,2945 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <content>ItemDetail</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>true</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Access_Details__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Details of Access</inlineHelpText>
+        <label>Access Details</label>
+        <length>125</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Account__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Related Account Name</inlineHelpText>
+        <label>Site</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Inspection Items</relationshipLabel>
+        <relationshipName>Service_Items</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>true</reparentableMasterDetail>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Additional_Details__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Additional Details of Inspection Item</inlineHelpText>
+        <label>Additional Details</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Anniversary_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Inspection Item Anniversary</inlineHelpText>
+        <label>Anniversary Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Automatic_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>If(Schedule_From__c =  &apos;P&apos;, Planned_Date__c , Last_Inspection_Date__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>This displays either the Last Inspection Date or the Last Visit Planned Date depending on the Schedule From Selection</inlineHelpText>
+        <label>Automatic Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Ball_Valve_Details__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Details of the ball valve</inlineHelpText>
+        <label>Ball Valve Details</label>
+        <length>125</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Bar_Code_Number__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Bar Code Number</inlineHelpText>
+        <label>Bar Code</label>
+        <length>64</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Bar_Code__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IMAGE(&quot;https://chart.googleapis.com/chart?chs=75x75&amp;cht=qr&amp;chl=&quot;+ Bar_Code_Number__c ,&quot;BarCode&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Scan this code for access to the record</inlineHelpText>
+        <label>QR Code</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>BlowDown_Valve__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>BlowDown Valve</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Yes</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>No</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Cannot Be Installed</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>N/A</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Cold_Water_Feed_Size__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Cold Water Feed Details</inlineHelpText>
+        <label>Cold Water Feed Size</label>
+        <length>125</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Cold_Water_Make_Up__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Cold Water Make-Up</inlineHelpText>
+        <label>Cold Water Make-Up</label>
+        <length>125</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Create_Call_Out__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Create Call Out</inlineHelpText>
+        <label>Create Call Out</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Current_State__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF( 
+DATEVALUE( Next_Inspection_Date__c ) &lt;= TODAY()- Grace_Days__c, 
+IMAGE(&quot;/img/msg_icons/error16.png&quot;, &quot;Overdue&quot;), 
+ IF(
+  OR(
+  ISNULL(Next_Inspection_Date__c),
+   AND(
+    DATEVALUE( Next_Inspection_Date__c ) &gt;= TODAY()- Grace_Days__c,
+    DATEVALUE( Next_Inspection_Date__c ) &lt; TODAY()
+   )
+  ),
+ IMAGE(&quot;/img/msg_icons/warning16.png&quot;,&quot;Warning&quot;),
+
+
+IMAGE(&quot;/img/msg_icons/confirm16.png&quot;,&quot;OK&quot;)
+))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Current State of Service Contract</inlineHelpText>
+        <label>Current State</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Default_Analysis__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Default Analysis</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Bird Analysis</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Chlorination</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>EFK Analysis</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Pre and Post Chlorination</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Default_Temp__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Default Temp (°c) of Inspection Item</inlineHelpText>
+        <label>Default Temp (°c)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Destratification__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Is there a Destratification Pump fitted</inlineHelpText>
+        <label>Destratification Pump Fitted</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Yes</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>No</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Dimensions__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Dimensions of Item</inlineHelpText>
+        <label>Dimensions</label>
+        <length>125</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Earliest_Inspection_Date_Next_Year__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Latest_Inspection_Date__c + 365.2425</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Earliest Inspection Date Next Year</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Grace_Days__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Grace Days allowed before and after planned Inspection date</inlineHelpText>
+        <label>Grace Days</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Heat_Source__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Heat Source</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Immersion Heater</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Solar Power</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Other (See notes)</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Hot_Water_Return_Size__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Hot Water Return Details</inlineHelpText>
+        <label>Hot Water Return Size</label>
+        <length>125</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hot_Water_Supply_Size__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Hot Water Supply Details</inlineHelpText>
+        <label>Hot Water Supply Size</label>
+        <length>125</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Inspection_Frequency__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Inspection Frequency</inlineHelpText>
+        <label>Inspection Frequency</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Daily</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Weekly</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Monthly</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Yearly</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Inspection_Interval__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Inspection Frequency</inlineHelpText>
+        <label>Inspection  Interval</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Inspection_Start_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The Date of the First Inspection</inlineHelpText>
+        <label>Inspection Start Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Install_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date Item was Installed</inlineHelpText>
+        <label>Install Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Item_Photo__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Image of the Item</inlineHelpText>
+        <label>Item Photo</label>
+        <length>32768</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Html</type>
+        <visibleLines>50</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Item_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Item Type</inlineHelpText>
+        <label>Item Type</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <controllingField>Type__c</controllingField>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Access Control</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Bath</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Calorifier</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>CCTV</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Central Heating</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Cold Water Storage Tank</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Cooling Tower</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Door</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>EFK Unit</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Emergency Lighting</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>External Bait Box</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Fire Alarm</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Fire Blanket</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Fire Extinguisher</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Fortic Water Heater</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Gas Boiler</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Gas Meter</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Glue Board</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Hand Basin</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Hot and Cold Water Taps</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Internal Bait Box</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Room</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Shower</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Sink</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Solar Panel</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Thermostat</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>TMV</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Trapper Box</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Urinal</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>W.C.</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Water Heater</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+            <valueSettings>
+                <controllingFieldValue>Fire Safety Equipment</controllingFieldValue>
+                <valueName>Emergency Lighting</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Fire Safety Equipment</controllingFieldValue>
+                <controllingFieldValue>Electrical</controllingFieldValue>
+                <valueName>Fire Alarm</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Fire Safety Equipment</controllingFieldValue>
+                <valueName>Fire Blanket</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Fire Safety Equipment</controllingFieldValue>
+                <valueName>Fire Extinguisher</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Fire Safety Equipment</controllingFieldValue>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <controllingFieldValue>Safety Equipment</controllingFieldValue>
+                <controllingFieldValue>Access Control</controllingFieldValue>
+                <controllingFieldValue>Pest &amp; Environmental</controllingFieldValue>
+                <controllingFieldValue>Electrical</controllingFieldValue>
+                <controllingFieldValue>Gas Servicing</controllingFieldValue>
+                <valueName>Room</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <valueName>Bath</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <valueName>Calorifier</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <valueName>Cold Water Storage Tank</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <controllingFieldValue>Pest &amp; Environmental</controllingFieldValue>
+                <valueName>Cooling Tower</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <valueName>Fortic Water Heater</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <valueName>Hand Basin</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <valueName>Hot and Cold Water Taps</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <valueName>Shower</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <valueName>Sink</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <controllingFieldValue>Gas Servicing</controllingFieldValue>
+                <valueName>Thermostat</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <valueName>TMV</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <valueName>Urinal</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <valueName>W.C.</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <valueName>Water Heater</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Safety Equipment</controllingFieldValue>
+                <controllingFieldValue>Electrical</controllingFieldValue>
+                <valueName>CCTV</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Safety Equipment</controllingFieldValue>
+                <controllingFieldValue>Access Control</controllingFieldValue>
+                <valueName>Door</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Access Control</controllingFieldValue>
+                <controllingFieldValue>Electrical</controllingFieldValue>
+                <valueName>Access Control</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Pest &amp; Environmental</controllingFieldValue>
+                <valueName>EFK Unit</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Pest &amp; Environmental</controllingFieldValue>
+                <valueName>External Bait Box</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Pest &amp; Environmental</controllingFieldValue>
+                <valueName>Glue Board</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Pest &amp; Environmental</controllingFieldValue>
+                <valueName>Internal Bait Box</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Pest &amp; Environmental</controllingFieldValue>
+                <valueName>Trapper Box</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Electrical</controllingFieldValue>
+                <valueName>Solar Panel</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Gas Servicing</controllingFieldValue>
+                <valueName>Central Heating</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Gas Servicing</controllingFieldValue>
+                <valueName>Gas Boiler</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Gas Servicing</controllingFieldValue>
+                <valueName>Gas Meter</valueName>
+            </valueSettings>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Last_Inspection_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Last Inspection Date</inlineHelpText>
+        <label>Last Inspection Date</label>
+        <summarizedField>Inspection__c.Inspection_Date_Time__c</summarizedField>
+        <summaryFilterItems>
+            <field>Inspection__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Inspected</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Inspection__c.Service_Item__c</summaryForeignKey>
+        <summaryOperation>max</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Last_Lamp_Replacement__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The date of the last lamp replacement</inlineHelpText>
+        <label>Last Lamp Replacement</label>
+        <summarizedField>Inspection__c.Inspection_Date_Time__c</summarizedField>
+        <summaryFilterItems>
+            <field>Inspection__c.Lamp_Changed__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Inspection__c.Service_Item__c</summaryForeignKey>
+        <summaryOperation>max</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Latest_Inspection_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Next_Inspection_Date__c -  Grace_Days__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The Latest Inspection date with Grace Days</inlineHelpText>
+        <label>Earliest Inspection Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Linked_Item__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Linked Item</inlineHelpText>
+        <label>Linked Item</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>Service_Item__c.Account__c</field>
+                <operation>equals</operation>
+                <valueField>$Source.Account__c</valueField>
+            </filterItems>
+            <infoMessage>The linked item does not belong to the related site of the current item. Please search again or remove the filter</infoMessage>
+            <isOptional>true</isOptional>
+        </lookupFilter>
+        <referenceTo>Service_Item__c</referenceTo>
+        <relationshipLabel>Inspection Items</relationshipLabel>
+        <relationshipName>Service_Items</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Linked_to_a_Schedule__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>If( Number_of_Schedules__c &gt; 0,TRUE,FALSE)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Linked to a Schedule</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Location__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Location of Inspection Item</inlineHelpText>
+        <label>Location</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Make__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Make of Inspection Item</inlineHelpText>
+        <label>Make</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <controllingField>Type__c</controllingField>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Make 1</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Make 2</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+            <valueSettings>
+                <controllingFieldValue>Fire Safety Equipment</controllingFieldValue>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <controllingFieldValue>Safety Equipment</controllingFieldValue>
+                <controllingFieldValue>Access Control</controllingFieldValue>
+                <controllingFieldValue>Pest &amp; Environmental</controllingFieldValue>
+                <controllingFieldValue>Electrical</controllingFieldValue>
+                <valueName>Make 1</valueName>
+            </valueSettings>
+            <valueSettings>
+                <controllingFieldValue>Fire Safety Equipment</controllingFieldValue>
+                <controllingFieldValue>Water Treatment and Delivery</controllingFieldValue>
+                <controllingFieldValue>Safety Equipment</controllingFieldValue>
+                <controllingFieldValue>Access Control</controllingFieldValue>
+                <controllingFieldValue>Pest &amp; Environmental</controllingFieldValue>
+                <controllingFieldValue>Electrical</controllingFieldValue>
+                <valueName>Make 2</valueName>
+            </valueSettings>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Material__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Material of Construction</inlineHelpText>
+        <label>Material</label>
+        <length>125</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Max_Visit_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The latest Visit due date that this item is assign to. This is the base date used to decide if an item needs to be dropped into a visit. (visit due date must be &gt;=max_vist_date + interval)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The latest Visit due date that this item is assign to. This is the base date used to decide if an item needs to be dropped into a visit. (visit due date must be &gt;=max_vist_date + interval)</inlineHelpText>
+        <label>Max Visit Date</label>
+        <summarizedField>Inspection__c.Inspection_Scheduled_For__c</summarizedField>
+        <summaryForeignKey>Inspection__c.Service_Item__c</summaryForeignKey>
+        <summaryOperation>max</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Mobile_Unique_Id__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <deprecated>false</deprecated>
+        <externalId>true</externalId>
+        <label>Mobile Unique Id</label>
+        <length>200</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Next_Inspection_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(Last_Inspection_Date__c),
+Inspection_Start_Date__c,
+CASE(TEXT(Inspection_Frequency__c), 
+&apos;Daily&apos;, Automatic_Date__c + Inspection_Interval__c, 
+&apos;Weekly&apos;,Automatic_Date__c +(Inspection_Interval__c * 7), 
+&apos;Monthly&apos;,Automatic_Date__c +(Inspection_Interval__c * 30.542), 
+&apos;Yearly&apos;,Automatic_Date__c +(Inspection_Interval__c * 365.25), 
+null))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Next Inspection Date</inlineHelpText>
+        <label>Next Inspection Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Number_of_Schedules__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of schedules linked to the Inspection Item</inlineHelpText>
+        <label>Number of Schedules</label>
+        <summaryForeignKey>Schedule_Items__c.Inspection_Item__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Number_of_Visit_Per_Year__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>CASE(Inspection_Frequency__c, 
+&quot;Daily&quot;,365.2425 /Inspection_Interval__c, 
+&quot;Weekly&quot;,52 / Inspection_Interval__c, 
+&quot;Monthly&quot;,12 / Inspection_Interval__c, 
+&quot;Yearly&quot;,IF(Inspection_Interval__c = 1,1,0),0 
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Number of Visit Per Year</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Order__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>VALUE(Sort_Order__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Order</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Planned_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The Last Planned Date of the Closed Visit</inlineHelpText>
+        <label>Last Visit Planned Date</label>
+        <summarizedField>Inspection__c.Visit_Planned_Date__c</summarizedField>
+        <summaryFilterItems>
+            <field>Inspection__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Inspected</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Inspection__c.Service_Item__c</summaryForeignKey>
+        <summaryOperation>max</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Reference__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Short reference code for the item</inlineHelpText>
+        <label>Reference</label>
+        <length>64</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Replacement_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Replacement Date</inlineHelpText>
+        <label>Replacement Date</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Result_History__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>P = Pass
+F = Fail</inlineHelpText>
+        <label>Result History</label>
+        <length>3</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Risk_Area__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Risk Area</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Low</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Medium</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>High</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Schedule_From__c</fullName>
+        <defaultValue>&apos;A&apos;</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>P = Planned, A = Automatic.</inlineHelpText>
+        <label>Schedule From</label>
+        <length>1</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Serial_Number__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Item Serial Number</inlineHelpText>
+        <label>Serial Number</label>
+        <length>16</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Size__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Item Size</inlineHelpText>
+        <label>Size</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sort_Order__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Item Sort Order</inlineHelpText>
+        <label>Sort Order</label>
+        <length>25</length>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Item Status</inlineHelpText>
+        <label>Status</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Active</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Inactive</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Supplementary_Heating__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Are there any supplementary heat sources</inlineHelpText>
+        <label>Supplementary Heating</label>
+        <length>125</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Temperature_Gauge_Location__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Temperature Gauge Location</inlineHelpText>
+        <label>Temperature Gauge Location</label>
+        <length>125</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Time_Allocation__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Time in minutes to service this item</inlineHelpText>
+        <label>Time Allocation</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Item Master Type</inlineHelpText>
+        <label>Master Type</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Fire Safety Equipment</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Water Treatment and Delivery</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Safety Equipment</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Access Control</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Pest &amp; Environmental</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Electrical</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Gas Servicing</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Year__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The year of manufacture, refil or installation</inlineHelpText>
+        <label>Year</label>
+        <length>4</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Inspection Item</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Account__c</columns>
+        <columns>Location__c</columns>
+        <columns>Serial_Number__c</columns>
+        <columns>Mobile_Unique_Id__c</columns>
+        <columns>Type__c</columns>
+        <columns>Item_Type__c</columns>
+        <columns>Status__c</columns>
+        <columns>Inspection_Interval__c</columns>
+        <columns>Inspection_Frequency__c</columns>
+        <columns>Grace_Days__c</columns>
+        <columns>RECORDTYPE</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+        <language>en_US</language>
+    </listViews>
+    <nameField>
+        <displayFormat>A-{000000}</displayFormat>
+        <label>Number</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Inspection Items</pluralLabel>
+    <recordTypeTrackFeedHistory>false</recordTypeTrackFeedHistory>
+    <recordTypeTrackHistory>true</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Calorifier</fullName>
+        <active>true</active>
+        <description>Calorifier Inspection Item</description>
+        <label>Calorifier</label>
+        <picklistValues>
+            <picklist>BlowDown_Valve__c</picklist>
+            <values>
+                <fullName>Cannot Be Installed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Default_Analysis__c</picklist>
+            <values>
+                <fullName>Bird Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Chlorination</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EFK Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pre and Post Chlorination</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Destratification__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Heat_Source__c</picklist>
+            <values>
+                <fullName>Immersion Heater</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other %28See notes%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solar Power</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Inspection_Frequency__c</picklist>
+            <values>
+                <fullName>Daily</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Item_Type__c</picklist>
+            <values>
+                <fullName>Calorifier</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Make__c</picklist>
+            <values>
+                <fullName>Make 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Make 2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk_Area__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Inactive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Water Treatment and Delivery</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Emergency_Lighting</fullName>
+        <active>true</active>
+        <description>Emergency Lighting Inspection Item</description>
+        <label>Emergency Lighting</label>
+        <picklistValues>
+            <picklist>BlowDown_Valve__c</picklist>
+            <values>
+                <fullName>Cannot Be Installed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Default_Analysis__c</picklist>
+            <values>
+                <fullName>Bird Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Chlorination</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EFK Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pre and Post Chlorination</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Destratification__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Heat_Source__c</picklist>
+            <values>
+                <fullName>Immersion Heater</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other %28See notes%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solar Power</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Inspection_Frequency__c</picklist>
+            <values>
+                <fullName>Daily</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Item_Type__c</picklist>
+            <values>
+                <fullName>Emergency Lighting</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Make__c</picklist>
+            <values>
+                <fullName>Make 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Make 2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk_Area__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Inactive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Access Control</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fire Safety Equipment</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Fire_Alarm</fullName>
+        <active>true</active>
+        <description>Fire Alarm Inspection Item</description>
+        <label>Fire Alarm</label>
+        <picklistValues>
+            <picklist>BlowDown_Valve__c</picklist>
+            <values>
+                <fullName>Cannot Be Installed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Default_Analysis__c</picklist>
+            <values>
+                <fullName>Bird Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Chlorination</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EFK Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pre and Post Chlorination</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Destratification__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Heat_Source__c</picklist>
+            <values>
+                <fullName>Immersion Heater</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other %28See notes%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solar Power</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Inspection_Frequency__c</picklist>
+            <values>
+                <fullName>Daily</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Item_Type__c</picklist>
+            <values>
+                <fullName>Fire Alarm</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Make__c</picklist>
+            <values>
+                <fullName>Make 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Make 2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk_Area__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Inactive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Fire Safety Equipment</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Fire_Extinguisher</fullName>
+        <active>true</active>
+        <description>Fire Extinguisher Inspection Item</description>
+        <label>Fire Extinguisher</label>
+        <picklistValues>
+            <picklist>BlowDown_Valve__c</picklist>
+            <values>
+                <fullName>Cannot Be Installed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Default_Analysis__c</picklist>
+            <values>
+                <fullName>Bird Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Chlorination</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EFK Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pre and Post Chlorination</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Destratification__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Heat_Source__c</picklist>
+            <values>
+                <fullName>Immersion Heater</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other %28See notes%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solar Power</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Inspection_Frequency__c</picklist>
+            <values>
+                <fullName>Daily</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Item_Type__c</picklist>
+            <values>
+                <fullName>Fire Blanket</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fire Extinguisher</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Make__c</picklist>
+            <values>
+                <fullName>Make 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Make 2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk_Area__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Inactive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Fire Safety Equipment</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Other_Asset</fullName>
+        <active>true</active>
+        <description>All Other Items</description>
+        <label>Other Item</label>
+        <picklistValues>
+            <picklist>BlowDown_Valve__c</picklist>
+            <values>
+                <fullName>Cannot Be Installed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Default_Analysis__c</picklist>
+            <values>
+                <fullName>Bird Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Chlorination</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EFK Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pre and Post Chlorination</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Destratification__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Heat_Source__c</picklist>
+            <values>
+                <fullName>Immersion Heater</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other %28See notes%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solar Power</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Inspection_Frequency__c</picklist>
+            <values>
+                <fullName>Daily</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Item_Type__c</picklist>
+            <values>
+                <fullName>Access Control</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>CCTV</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Calorifier</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Central Heating</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cold Water Storage Tank</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cooling Tower</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Door</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Emergency Lighting</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fire Alarm</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fire Blanket</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fire Extinguisher</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fortic Water Heater</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Gas Boiler</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Gas Meter</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hot and Cold Water Taps</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Room</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Shower</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solar Panel</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Thermostat</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Water Heater</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Make__c</picklist>
+            <values>
+                <fullName>Make 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Make 2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk_Area__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Inactive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Access Control</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Electrical</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Gas Servicing</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Safety Equipment</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Other_Water_Treatment</fullName>
+        <active>true</active>
+        <description>Water Treatment Inspection Item</description>
+        <label>Water Treatment</label>
+        <picklistValues>
+            <picklist>BlowDown_Valve__c</picklist>
+            <values>
+                <fullName>Cannot Be Installed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>N%2FA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Default_Analysis__c</picklist>
+            <values>
+                <fullName>Bird Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Chlorination</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EFK Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pre and Post Chlorination</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Destratification__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Heat_Source__c</picklist>
+            <values>
+                <fullName>Immersion Heater</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other %28See notes%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solar Power</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Inspection_Frequency__c</picklist>
+            <values>
+                <fullName>Daily</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Item_Type__c</picklist>
+            <values>
+                <fullName>Bath</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Calorifier</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cold Water Storage Tank</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Cooling Tower</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fortic Water Heater</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hand Basin</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hot and Cold Water Taps</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Shower</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sink</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>TMV</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Urinal</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>W%2EC%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Water Heater</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Make__c</picklist>
+            <values>
+                <fullName>Make 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Make 2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk_Area__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Inactive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Water Treatment and Delivery</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Pest_and_Environmental</fullName>
+        <active>true</active>
+        <description>Pest and Environmental Inspection Item</description>
+        <label>Pest and Environmental</label>
+        <picklistValues>
+            <picklist>BlowDown_Valve__c</picklist>
+            <values>
+                <fullName>Cannot Be Installed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Default_Analysis__c</picklist>
+            <values>
+                <fullName>Bird Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Chlorination</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EFK Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pre and Post Chlorination</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Destratification__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Heat_Source__c</picklist>
+            <values>
+                <fullName>Immersion Heater</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other %28See notes%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solar Power</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Inspection_Frequency__c</picklist>
+            <values>
+                <fullName>Daily</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Item_Type__c</picklist>
+            <values>
+                <fullName>EFK Unit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>External Bait Box</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Glue Board</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Internal Bait Box</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Room</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Trapper Box</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Make__c</picklist>
+            <values>
+                <fullName>Make 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Make 2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk_Area__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Inactive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Pest %26 Environmental</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>TMV</fullName>
+        <active>true</active>
+        <description>Thermostatic Mixing Valve Inspection Item</description>
+        <label>TMV</label>
+        <picklistValues>
+            <picklist>BlowDown_Valve__c</picklist>
+            <values>
+                <fullName>Cannot Be Installed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>N%2FA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Default_Analysis__c</picklist>
+            <values>
+                <fullName>Bird Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Chlorination</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EFK Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pre and Post Chlorination</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Destratification__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Heat_Source__c</picklist>
+            <values>
+                <fullName>Immersion Heater</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other %28See notes%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solar Power</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Inspection_Frequency__c</picklist>
+            <values>
+                <fullName>Daily</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Item_Type__c</picklist>
+            <values>
+                <fullName>TMV</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Make__c</picklist>
+            <values>
+                <fullName>Make 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Make 2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk_Area__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Inactive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Water Treatment and Delivery</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Water_Cooling_Tower</fullName>
+        <active>true</active>
+        <description>Water Cooling Tower</description>
+        <label>Water Cooling Tower</label>
+        <picklistValues>
+            <picklist>BlowDown_Valve__c</picklist>
+            <values>
+                <fullName>Cannot Be Installed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>N%2FA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Default_Analysis__c</picklist>
+            <values>
+                <fullName>Bird Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Chlorination</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EFK Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pre and Post Chlorination</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Destratification__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Heat_Source__c</picklist>
+            <values>
+                <fullName>Immersion Heater</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other %28See notes%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solar Power</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Inspection_Frequency__c</picklist>
+            <values>
+                <fullName>Daily</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Item_Type__c</picklist>
+            <values>
+                <fullName>Cooling Tower</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Make__c</picklist>
+            <values>
+                <fullName>Make 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Make 2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk_Area__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Inactive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Water Treatment and Delivery</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Water_Tank</fullName>
+        <active>true</active>
+        <description>Water Tank Inspection Item</description>
+        <label>Water Tank</label>
+        <picklistValues>
+            <picklist>BlowDown_Valve__c</picklist>
+            <values>
+                <fullName>Cannot Be Installed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>N%2FA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Default_Analysis__c</picklist>
+            <values>
+                <fullName>Bird Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Chlorination</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EFK Analysis</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pre and Post Chlorination</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Destratification__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Heat_Source__c</picklist>
+            <values>
+                <fullName>Immersion Heater</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other %28See notes%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Solar Power</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Inspection_Frequency__c</picklist>
+            <values>
+                <fullName>Daily</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Item_Type__c</picklist>
+            <values>
+                <fullName>Cold Water Storage Tank</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Make__c</picklist>
+            <values>
+                <fullName>Make 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Make 2</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Risk_Area__c</picklist>
+            <values>
+                <fullName>High</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Active</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Inactive</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type__c</picklist>
+            <values>
+                <fullName>Water Treatment and Delivery</fullName>
+                <default>true</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts>
+        <customTabListAdditionalFields>Account__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Location__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Serial_Number__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Status__c</customTabListAdditionalFields>
+        <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
+        <lookupDialogsAdditionalFields>Account__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Install_Date__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Location__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Serial_Number__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Status__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Bar_Code__c</lookupDialogsAdditionalFields>
+        <searchFilterFields>Account__c</searchFilterFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Location__c</searchFilterFields>
+        <searchFilterFields>Bar_Code__c</searchFilterFields>
+        <searchFilterFields>Serial_Number__c</searchFilterFields>
+        <searchResultsAdditionalFields>Account__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Serial_Number__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Install_Date__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Bar_Code__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+    <webLinks>
+        <fullName>Add_Multiple</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Add Multiple</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/apex/STKR__multiple_service_items?Account={!Account.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Edit_Selected</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>page</linkType>
+        <masterLabel>Edit Selected</masterLabel>
+        <openType>replace</openType>
+        <page>EditServiceItems</page>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+    </webLinks>
+</CustomObject>

@@ -1,0 +1,57 @@
+<apex:page controller="STKR.quickCreateSidebarController" action="{!configureCustomSettings}" applyHtmlTag="false" showHeader="false" sidebar="false" docType="html-5.0">
+<head>
+<style>
+a:link, a:visited {
+    background-color: #D0EEF8;
+    padding: 14px 25px;
+    text-align: center; 
+    text-decoration: none;
+    display: inline-block;
+}
+
+a:hover, a:active {
+    color: white;
+    padding: 14px 25px;
+    text-align: center; 
+    text-decoration: none;
+    display: inline-block;
+    }
+</style>
+</head>
+
+<b>
+<table style="font-size:16px;background-color:#D0EEF8" width="100%" align="left" >
+<tr style="height:20px" align="center">
+<td colspan="6">&nbsp;</td>
+</tr>
+<tr style="height:20px" align="center">
+<td align="right">
+    <a href="/apex/STKR__QuickCreateClient?redirect=001" target="_top"><apex:image alt="-" value="{!$Resource.STKR__AccountIcon}" style="align:right;"/>New Client</a>
+</td>
+<td>
+    
+    <a href="/apex/STKR__NewBilling?Acc={!account.Id}&Contract={!contract.id}&Bref={!account.STKR__Billing_Reference__c}&Pbook={!account.STKR__Price_Book__r.id}&Vis={!visit.id}&Serv={!service.id}&Cref={!service.STKR__P_O_Number__c}&action={!action.id}&SAddress={!account.ShippingStreet}" target="_top"><apex:image alt="-" value="{!$Resource.STKR__BillingIcon}"/>New Quote/Invoice</a>
+</td>
+<td>
+    
+    <a target="_top" href="/apex/STKR__QuickCreateContract?varAccountName={!account.name}&redirect=home/home.jsp"><apex:image alt="-" value="{!$Resource.STKR__ContractIcon}"/>New Contract</a>
+</td>
+<td>    
+    
+    <a href="/apex/STKR__CreateJob?varAccountName={!account.name}&redirect=home/home.jsp" target="_top"><apex:image alt="-" value="{!$Resource.STKR__ScheduleIcon}"/>New Job</a>
+</td>
+<td>
+    
+    <a href="/apex/STKR__CreateCallOut?varAccountName={!account.name}&redirect=home/home.jsp" target="_top" ><apex:image alt="-" value="{!$Resource.STKR__VisitIcon}"/>New Call Out</a>
+</td>
+<td>
+    
+    <a href="/apex/STKR__nearestTech" target="_top"><apex:image alt="-" value="{!$Resource.STKR__NearestIcon}"/>Nearest Tech</a>
+</td>
+</tr>
+<tr style="height:20px">
+<td colspan="6">&nbsp;</td>
+</tr>
+</table>
+</b>
+</apex:page>

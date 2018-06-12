@@ -1,0 +1,61 @@
+<apex:page standardController="STKR__Service_Item__c" recordSetVar="unused" sidebar="false">
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+<apex:includeScript value="{!URLFOR($Resource.STKR__tablesorter, 'jquery.tablesorter.min.js')}"/>
+<script type="text/javascript">
+    $j = jQuery.noConflict();    
+    $j(document).ready(function () {
+    $j("[id$=table]").tablesorter(); 
+    });
+  </script>
+
+<apex:form >
+<apex:pageBlock title=" Edit {!$ObjectType.STKR__Service_Item__c.labelplural}">
+<apex:pageMessages />
+<apex:pageBlockButtons >
+<apex:commandButton value="Save" action="{!Save}"/>
+<apex:commandButton value="Cancel" action="{!Cancel}"/>
+</apex:pageBlockButtons>
+<apex:pageBlockTable value="{!selected}" var="itr" id="table" style="background-color:#F5FAFF; font-family:'vag-round', sans-serif; font-size:12px; border-radius:10px;width:100%;">
+         <apex:column headerValue="Number">
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="Number "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+        <apex:outputText value="{!itr.Name}"/>          
+        </apex:column> 
+
+          
+         <apex:column style="width:10px;text-align:center" headerValue="Sort" >
+            <apex:facet name="header">
+              <apex:outputText styleClass="header">
+                <apex:outputText styleClass="header" value="Sort Order "/>
+                 <apex:image url="/img/move_up.gif"/>&nbsp;
+                 <apex:image url="/img/move_down.gif"/>
+              </apex:outputText>
+            </apex:facet> 
+            <apex:outputtext style="width:30px" value="{!itr.STKR__Sort_Order__c}"/>
+          </apex:column>  
+         <apex:column headerValue="Order"><apex:inputfield style="width:30px;text-align:center" value="{!itr.STKR__Sort_Order__c}"></apex:inputfield></apex:column>                 
+           <apex:column headerValue="Record Type"><apex:inputfield value="{!itr.RecordTypeId}">
+          <apex:actionSupport event="onchange" rerender="PageErrors, table"/>
+          </apex:inputField>
+          </apex:column>              
+          <apex:column headerValue="Type"><apex:inputfield style="width:120px" value="{!itr.STKR__Type__c}" id="Type"/></apex:column>
+          <apex:column headerValue="Item Type"><apex:inputfield style="width:120px" value="{!itr.STKR__Item_Type__c}" id="ItemType"/></apex:column>
+          <apex:column headerValue="Location"><apex:inputfield value="{!itr.STKR__Location__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="{!$ObjectType.STKR__Service_Item__c.fields.STKR__Reference__c.label}"><apex:inputfield style="width:30px" value="{!itr.STKR__Reference__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="{!$ObjectType.STKR__Service_Item__c.fields.STKR__Year__c.label}"><apex:inputfield style="width:30px" value="{!itr.STKR__Year__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="Interval"><apex:inputfield style="width:30px" value="{!itr.STKR__Inspection_Interval__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="Frequency"><apex:inputfield value="{!itr.STKR__Inspection_Frequency__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="Serial Number"><apex:inputfield style="width:60px" value="{!itr.STKR__Serial_Number__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="Make"><apex:inputfield value="{!itr.STKR__Make__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="Size"><apex:inputfield style="width:30px" value="{!itr.STKR__Size__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="Inspection Start Date"><apex:inputfield style="width:110px" value="{!itr.STKR__Inspection_Start_Date__c}"></apex:inputfield></apex:column>
+          <apex:column headerValue="Grace Days"><apex:inputfield style="width:30px" value="{!itr.STKR__Grace_Days__c}"></apex:inputfield></apex:column>
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:form>
+</apex:page>
