@@ -1,11 +1,24 @@
-<apex:page controller="MapControllertest" showHeader="false" sidebar="false">
+<apex:page controller="MapControllertest" showHeader="true" sidebar="true">
 <html>
     <head>    
-        <title>Nearest Tech</title>
+        <title>Route Optimisation</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.1/mapquest.js"></script>
         <link rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.1/mapquest.css"/>
+     <style>
+        #date_container{
+         display: flex;
+         justify-content: center;
+         }
+
+
+        
+        </style>   
+     
 
     <script type="text/javascript">
+        var resources = [];
+        var territories = [];
       window.onload = function() {
         L.mapquest.key = 'XFI9f8gkExRTk58rq7jyxDSMgkgt06KV';
 
@@ -19,17 +32,136 @@
           start: '350 5th Ave, New York, NY 10118',
           end: 'One Liberty Plaza, New York, NY 10006'
         });
+          
+          
+        <apex:repeat value="{!objectResource}" var="resource" id="resources">
+          var resource ={
+          	name: '{!resource.name}',
+              id: '{!resource.id}'
+          };
+        resources.push(resource);
+ 
+      </apex:repeat>
+      console.log(resources);
+          console.log(resources.length);
+          
+          <apex:repeat value="{!objectTerritory}" var="territory" id="territories">
+          var territory ={
+          	name: '{!territory.name}'
+          };
+        territories.push(territory);
+ 
+      </apex:repeat>
+      console.log(territories);
       }
+      var element = document.getElementById()
+      
+	$(document).ready(function(){
+      console.log( "ready!" );
+
+      
+        
+
+      //js json Ajax
+	$("#matrixForm").submit(function(event){
+		  event.preventDefault();
+          var locations= new Array();
+          locations[0]="51.4816, 3.1791";
+          locations[1]="51.5788, 3.2181";
+          locations[2]="51.5842,2.9977";
+          var options= new Array();
+          var allToAll=new Object();
+        
+          console.log("the form submit");
+          
+        //var mappingJson=JSON.stringify({locations,options:allToAll});
+          var mappingJson = `{ "locations": [ "Cardiff, CO", "Westminster, CO", "Boulder, CO"], "options": { "allToAll": true }}`;
+
+          $.ajax({
+          	  type: 'POST',
+			  dataType: 'jsonp',
+			  contentType: 'json',
+              url: "http://www.mapquestapi.com/directions/v2/routematrix",
+              data: {key: decodeURI("XFI9f8gkExRTk58rq7jyxDSMgkgt06KV"),
+                    json: mappingJson},
+              
+              success: function(data){
+              	console.log('form was submit,' + JSON.parse(data));
+              },
+              error: function(data){
+              	console.log("error");
+              },
+          });
+      	});
+        
+        });
+        
+        /*
+          function getdistance() {
+          var mappingJson='';
+          mappingJson += '{ locations: [ "Denver, CO", "Westminster, CO", "Boulder, CO"], "options": { "allToAll": true }}';
+          $.ajax({
+          url: 'https://www.mapquestapi.com/directions/v2/routematrix',
+          crossDomain: true,
+          dataType: 'jsonp',
+          
+          type: 'POST',
+          data:{
+          	key: decodeURI("XFI9f8gkExRTk58rq7jyxDSMgkgt06KV"),
+          	json: JSON.stringify({ "location" : [ "Cardiff, GB", "Caerphilly, GB", "Newport, GB"], "options": { "allToAll": true}})
+          },
+          success: function(data){ console.log(data);},
+          error: function(data) {
+          	console.log('error occurred -' + data);
+          },
+          beforeSend: setHeader,
+
+      });
+      */
+          //          var xmlhttp= new XMLHttpRequest();
+          //if (this.readyState == 4 && this.status == 200) 
+          //{
+          //            document.getElementById("availablityResults").innerHTML=this.responseText;
+          //}
+          //xmlhttp.open("POST", "https://www.mapquestapi.com/directions/v2/routematrix?key=XFI9f8gkExRTk58rq7jyxDSMgkgt06KV", true);
+          //xmlhttp.setRequestHeader("Content-Type", "application/json");
+          //xmlhttp.send(JSON.stringify({ "location" : [ "Cardiff, GB", "Caerphilly, GB", "Newport, GB"], "options": { "allToAll": true}}));
+          //console.log(xmlhttp.responseText);
+        //}
+      
     </script>
 
     </head>
     <body>
-        <apex:pageBlock title="Find Nearest Resource">
-        <h1>Please enter a postcode to search</h1>
-        <form action="https://www.mapquestapi.com/directions/v2/routematrix?key=XFI9f8gkExRTk58rq7jyxDSMgkgt06KV" method="POST" id="matrixForm">
-            <b>Post Code:</b>
-            <input type="text" name="location" id="location" value="{!$CurrentPage.parameters.postcode}" /> <input type="submit" name="submit" value="Find Nearest Tech" />        
-        </form>         
+        <apex:pageBlock title="Route Optimisation">
+        
+        <form id="matrixForm" method="POST" action="http://www.mapquestapi.com/directions/v2/routematrix?key=XFI9f8gkExRTk58rq7jyxDSMgkgt06KV">
+            <div id="date_container">
+
+            <div>
+            <h1>From Date </h1>
+            <input type="date" id="fromDate"/>    
+            </div>
+            	<div style='width: 30%;'></div>
+
+            <div style='float:left;'>
+            <h1>To Date</h1>
+            <input type="date" id="toDate"/>    
+            </div>
+            </div>
+            
+            <div>
+                <input type="checkbox" name="resources"/>
+            </div>
+                
+            <div>
+            	<input type="checkbox" name="territory"/>    
+            </div>
+            <div>
+            	<input type="submit" name="submit" value="Find Nearest Tech"/>    
+            </div>
+            
+        </form>
         <div id="result">
         </div>
         <br/>
