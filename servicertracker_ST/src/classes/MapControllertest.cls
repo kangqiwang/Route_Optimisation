@@ -2,6 +2,7 @@ public with sharing class MapControllertest {
     public list<STKR__Resource__c> objectResource {get; set;}
 	public STKR__nearestTechSettings__c mappingSettings {get;set;}
     public list<STKR__Service_Territory__c> objectTerritory {get; set;}
+    public list<STKR__Visit__c> objectVisit{get; set;}
     public MapControllertest(){
         Decimal forecastDays = 0; //default protects against no settings
         //get the resource.name and id
@@ -10,6 +11,10 @@ public with sharing class MapControllertest {
         //get the territory
         objectTerritory = new list<STKR__Service_Territory__c>();
         objectTerritory.addAll([SELECT Name from STKR__Service_Territory__c]);
+        // get the longitude and latitude
+        objectVisit = new list<STKR__Visit__c>();
+        objectVisit.addAll([SELECT STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Resource_Name__c ='Kang']);
+        System.debug(objectVisit);
         System.debug(objectResource);
         System.debug(objectTerritory);
       try{
@@ -17,6 +22,7 @@ public with sharing class MapControllertest {
           //override forecastDays if it's set up in the system. 
           mappingSettings = STKR__nearestTechSettings__c.getInstance();
           if(mappingSettings.STKR__Availability_Forecast_days__c != null){
+              
           forecastDays = mappingSettings.STKR__Availability_Forecast_days__c.intValue();
           }
 

@@ -371,13 +371,13 @@ LEFT(ShippingPostalCode,FIND(&quot; &quot;,ShippingPostalCode)-1)
         <url>{!REQUIRESCRIPT(&quot;/soap/ajax/34.0/connection.js&quot;)} 
 {!REQUIRESCRIPT(&quot;/soap/ajax/34.0/apex.js&quot;)} 
 var accountId = &apos;{!Account.Id}&apos;; 
-var status = sforce.apex.execute(&quot;clientAttachments&quot;,&quot;chkAtt&quot;,{accId:accountId}); 
+var status = sforce.apex.execute(&quot;STKR/clientAttachments&quot;,&quot;chkAtt&quot;,{accId:accountId}); 
 
 if(status == &apos;false&apos;){ 
 alert(&apos;No Attachments for this Client!&apos;); 
 } 
 else{ 
-window.location.href=&apos;/apex/clientAttachmentPage?recID=&apos;+&quot;{!Account.Id}&quot;+&apos;&amp;AccName=&apos;+&quot;{!Account.Name}&quot;+&apos;&amp;serviceId=&apos;+&quot;{!Service__c.Id}&quot;; 
+window.location.href=&apos;/apex/STKR__clientAttachmentPage?recID=&apos;+&quot;{!Account.Id}&quot;+&apos;&amp;AccName=&apos;+&quot;{!Account.Name}&quot;+&apos;&amp;serviceId=&apos;+&quot;{!Service__c.Id}&quot;; 
 }</url>
     </webLinks>
     <webLinks>
