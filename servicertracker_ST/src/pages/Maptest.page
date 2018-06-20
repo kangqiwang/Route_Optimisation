@@ -2,6 +2,7 @@
     <html>
         <head>    
             <title>Route Optimisation</title>
+            <script src="./../soap/ajax/43.0/connection.js" type="text/javascript"></script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
             <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.1/mapquest.js"></script>
             <link rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.1/mapquest.css"/>
@@ -33,7 +34,7 @@
                     end: 'One Liberty Plaza, New York, NY 10006'
                 });
                 
-                
+                //generate the HTML and add name
                 
                 <apex:repeat value="{!objectResource}" var="resource" id="resources">
                     var pResource=document.createElement("label");
@@ -42,19 +43,20 @@
                 pResource.appendChild(node);
                 element.appendChild(pResource);
                 var checkboxResource=document.createElement("input");
+                checkboxResource.name="resource";
+                checkboxResource.value='{!resource.name}';
                 checkboxResource.setAttribute('type', 'checkbox');
                 element.appendChild(checkboxResource);
                 
                 
                 var resource ={
                     name: '{!resource.name}',
-                    id: '{!resource.id}'
                 };
                 resources.push(resource);
                 
                 </apex:repeat>
                 // console.log(resources);
-                //  console.log(resources.length);
+                console.log(resources.length);
                 
                 <apex:repeat value="{!objectTerritory}" var="territory" id="territories">
                     var pResource=document.createElement("label");
@@ -64,13 +66,16 @@
                 element.appendChild(pResource);
                 var checkboxResource=document.createElement("input");
                 checkboxResource.setAttribute('type', 'checkbox');
+                checkboxResource.name="territory";
+                checkboxResource.value='{!territory.name}';
                 element.appendChild(checkboxResource);
                 
                 var territory ={
                     name: '{!territory.name}'
                 };
-                console.log('{!territory.name}');
                 
+                territories.push(territory);
+
                 </apex:repeat>
             }
             
@@ -79,12 +84,18 @@
             
             $(document).ready(function(){
                 
-                var formValue=$("#matrixForm").val();
-                console.log('form data' + formValue);
+                var formValue=$("#matrixForm").serializeArray();
                 //js json Ajax
                 $("#matrixForm").submit(function(event){
+                    //var formDate=$("#fromDate").val();
+                    //console.log(formValue);
                     //prevent send request
+                    var rawData=$("#matrixForm").serializeArray();
                     event.preventDefault();
+					
+                    
+                    processData(rawData);
+
                     // set the lantitude and longtitude
                     var locations= new Array();
                     locations[0]="51.4816, 3.1791";
@@ -97,7 +108,7 @@
                     
                     //var mappingJson=JSON.stringify({locations,options:allToAll});
                     var mappingJson = `{ "locations": [ "Cardiff, CO", "Westminster, CO", "Boulder, CO"], "options": { "allToAll": true }}`;
-
+                    
                     $.ajax({
                         type: 'POST',
                         dataType: 'jsonp',
@@ -124,12 +135,67 @@
             // generate the Json file
             //input :specific date and resource, territory output: the location 
             function getLocation(data){
-            	
+                
             }
             
             //input: data from the mapquest response. output: the time and distance
-            function getTravelTime(data){}
+            function getTravelTime(data){
+            	
+            }
             
+            //input: the raw data output: filter data using Query
+            function processData(data){
+                var territory=[];
+                var resource=[];
+                //get the resource and terrritory from the raw data
+                for (i=0; i<= data.length-1; i++){
+                    //console.log(i);
+                    //console.log(data[i].name=="resource");
+                    if(data[i].name=="territory"){
+                    	territory.push(data[i].value);
+                    }
+                    // for example : SELECT STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< 2019-06-19T08:26:00.000+0000 and STKR__Planned_Date__c> 2018-07-10T08:00:00.000+0000 and STKR__Resource_Name__c='Kang' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('Cardiff', 'Caerphilly')
+                    if (data[i].name=="resource"){
+                        resource.push(data[i].value);
+                    }
+
+                    /*
+                    var query="SELECT STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< 2019-06-19T08:26:00.000+0000 and STKR__Planned_Date__c> 2018-07-10T08:00:00.000+0000 and STKR__Resource_Name__c='"+data[i].value+"' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('Cardiff', 'Caerphilly')";
+                    var query = "SELECT STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Resource_Name__c ='"+data[i].value+"'";
+                    try{
+                        sforce.connection.sessionId="{!$Api.Session_ID}";
+                        console.log("{!$Api.Session_ID}");
+                        var queryResult=sforce.connection.query(query);
+                        console.log(queryResult);
+                    }catch(error){
+                        console.log(error);
+                    }
+                    */
+                }
+                // query to find the lantitude and longtitude
+                // old way is using for loop to send request one by one based on the resource and territory
+                //best way is use one request get multiple resources and territories.
+                for(i=0; i<= territory.length-1; i++){
+                	for(j=0; j<=resource.length-1; j++){
+                        var query="SELECT STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000 and STKR__Resource_Name__c='"+resource[j]+"' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('"+territory[i]+"')";
+                        console.log(data[1].value);
+                        console.log(data[0].value);
+                        console.log(resource[j]);
+                        console.log(territory[i]);
+
+                        try{
+                            sforce.connection.sessionId="{!$Api.Session_ID}";
+                            console.log("{!$Api.Session_ID}");
+                            var queryResult=sforce.connection.query(query);
+                            console.log(queryResult);
+                        }catch(error){
+                            console.log(error);
+                        }
+                    }
+                }
+                
+                
+            }
             /*
           function getdistance() {
           var mappingJson='';
@@ -174,13 +240,13 @@
                         
                         <div>
                             <label>From Date </label>
-                            <input type="date" id="fromDate"/>    
+                            <input type="date" id="fromDate" name="formDate"/>    
                         </div>
                         <div style='width: 30%;'></div>
                         
                         <div style='float:left;'>
                             <label>To Date</label>
-                            <input type="date" id="toDate"/>    
+                            <input type="date" id="toDate" name="toDate"/>    
                         </div>
                     </div>
                     
@@ -194,10 +260,10 @@
                         
                     </div>
                     <div>
-                        <input type="submit" name="submit" value="Find Nearest Tech"/>    
+                         <input type="submit" name="submit" value="Find Nearest Tech"/>    
                     </div>
-                    
-                </form>https://eu8.salesforce.com/_ui/common/apex/debug/ApexCSIPage#
+                 
+                </form>
                 <div id="result" style="display: none;">
                     <div class="header">
                     </div>
