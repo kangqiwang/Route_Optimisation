@@ -56,7 +56,7 @@
                 
                 </apex:repeat>
                 // console.log(resources);
-                console.log(resources.length);
+                //console.log(resources.length);
                 
                 <apex:repeat value="{!objectTerritory}" var="territory" id="territories">
                     var pResource=document.createElement("label");
@@ -89,48 +89,26 @@
                 $("#matrixForm").submit(function(event){
                     //var formDate=$("#fromDate").val();
                     //console.log(formValue);
-                    //prevent send request
                     var rawData=$("#matrixForm").serializeArray();
+                    //prevent send request
                     event.preventDefault();
-					
-                    
-                    processData(rawData);
-
-                    // set the lantitude and longtitude
-                    var locations= new Array();
-                    locations[0]="51.4816, 3.1791";
-                    locations[1]="51.5788, 3.2181";
-                    locations[2]="51.5842,2.9977";
-                    var options= new Array();
-                    var allToAll=new Object();
-                    
-                    
-                    
+                    getTravelTime(generateMapJson(requestToSforce(rawData)));
                     //var mappingJson=JSON.stringify({locations,options:allToAll});
-                    var mappingJson = `{ "locations": [ "Cardiff, CO", "Westminster, CO", "Boulder, CO"], "options": { "allToAll": true }}`;
-                    
-                    $.ajax({
-                        type: 'POST',
-                        dataType: 'jsonp',
-                        contentType: 'json',
-                        url: "http://www.mapquestapi.com/directions/v2/routematrix",
-                        data: {key: decodeURI("XFI9f8gkExRTk58rq7jyxDSMgkgt06KV"),
-                               json: mappingJson},
-                        
-                        success: function(data){
-                            console.log('form was submit,' + data.time);
-                        },
-                        error: function(data){
-                            console.log("error");
-                        },
-                    });
                 });
                 
             });
             
-            //input : latitude, longitude. output : show the map
-            function renderMap(latitude, longitude){
+            //input : return data by POST. output : show the map
+            function renderMap(data){
                 
+            }
+            // find the locations >= 25, need cluster location
+            function culsterlocation(mappingJson,num){
+                if (num>=24){
+                	culsterlocation(mappingJson,num);
+                }else{
+                	
+                }
             }
             // generate the Json file
             //input :specific date and resource, territory output: the location 
@@ -139,12 +117,29 @@
             }
             
             //input: data from the mapquest response. output: the time and distance
-            function getTravelTime(data){
-            	
+            function getTravelTime(mappingJson){
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'jsonp',
+                    contentType: 'json',
+                    url: "http://www.mapquestapi.com/directions/v2/routematrix",
+                    data: {key: decodeURI("XFI9f8gkExRTk58rq7jyxDSMgkgt06KV"),
+                           json: mappingJson},
+                    
+                    success: function(data){
+                        console.log(data);
+                        console.log('form was submit,' + data.time);
+                        renderMap(data);
+                    },
+                    error: function(data){
+                        console.log("error");
+                    },
+                });
+
             }
             
             //input: the raw data output: filter data using Query
-            function processData(data){
+            function requestToSforce(data){
                 var territory=[];
                 var resource=[];
                 //get the resource and terrritory from the raw data
@@ -152,50 +147,85 @@
                     //console.log(i);
                     //console.log(data[i].name=="resource");
                     if(data[i].name=="territory"){
-                    	territory.push(data[i].value);
+                        territory.push("'"+data[i].value+"'");
                     }
-                    // for example : SELECT STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< 2019-06-19T08:26:00.000+0000 and STKR__Planned_Date__c> 2018-07-10T08:00:00.000+0000 and STKR__Resource_Name__c='Kang' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('Cardiff', 'Caerphilly')
+                    // for example : SELECT STKR__ParentId__c, STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< 2019-06-19T08:26:00.000+0000 and STKR__Planned_Date__c> 2018-07-10T08:00:00.000+0000 and STKR__Resource_Name__c='Kang' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('Cardiff', 'Caerphilly')
                     if (data[i].name=="resource"){
-                        resource.push(data[i].value);
+                        resource.push("'"+data[i].value+"'");
                     }
-
-                    /*
-                    var query="SELECT STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< 2019-06-19T08:26:00.000+0000 and STKR__Planned_Date__c> 2018-07-10T08:00:00.000+0000 and STKR__Resource_Name__c='"+data[i].value+"' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('Cardiff', 'Caerphilly')";
-                    var query = "SELECT STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Resource_Name__c ='"+data[i].value+"'";
-                    try{
-                        sforce.connection.sessionId="{!$Api.Session_ID}";
-                        console.log("{!$Api.Session_ID}");
-                        var queryResult=sforce.connection.query(query);
-                        console.log(queryResult);
-                    }catch(error){
-                        console.log(error);
-                    }
-                    */
                 }
                 // query to find the lantitude and longtitude
                 // old way is using for loop to send request one by one based on the resource and territory
                 //best way is use one request get multiple resources and territories.
-                for(i=0; i<= territory.length-1; i++){
-                	for(j=0; j<=resource.length-1; j++){
-                        var query="SELECT STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000 and STKR__Resource_Name__c='"+resource[j]+"' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('"+territory[i]+"')";
-                        console.log(data[1].value);
-                        console.log(data[0].value);
-                        console.log(resource[j]);
-                        console.log(territory[i]);
-
-                        try{
-                            sforce.connection.sessionId="{!$Api.Session_ID}";
-                            console.log("{!$Api.Session_ID}");
-                            var queryResult=sforce.connection.query(query);
-                            console.log(queryResult);
-                        }catch(error){
-                            console.log(error);
-                        }
-                    }
+                var query="SELECT STKR__Service__r.id, STKR__Service__r.STKR__Service_Frequency__c, STKR__ParentId__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000 and STKR__Resource_Name__c IN ("+resource.toString()+") and STKR__Account_lkp__r.STKR__Territory__r.Name IN ("+territory.toString()+")";
+                try{
+                    sforce.connection.sessionId="{!$Api.Session_ID}";
+                    var queryResult=sforce.connection.query(query);
+                    console.log(queryResult);
+                }catch(error)
+                {
+                    console.log(error);
                 }
-                
+                console.log(queryResult);
+                return queryResult;
                 
             }
+            function locationNum(mappingJson,data){
+                for (i=0; i<=data.size-1; i++){
+                    if (i){
+                        if (data.records[i-1].STKR__Service__r.Id!= data.records[i].STKR__Service__r.Id){
+                            var lat=Number(data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s);
+                            var lng=Number(data.records[i].STKR__Account_lkp__r.STKR__location__Longitude__s);
+                            var latLng=lat+","+lng;
+                            mappingJson.locations.push(latLng);
+                        }
+                    }else{
+                        var lat=Number(data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s);
+                        var lng=Number(data.records[i].STKR__Account_lkp__r.STKR__location__Longitude__s);
+                        var latLng=lat+","+lng;
+                        mappingJson.locations.push(latLng);
+                    }
+                }
+                return mappingJson.locations.length;
+                
+            }
+            
+            function generateMapJson(data){
+                //var mappingJson = `{ "locations": [ "Cardiff, CO", "Westminster, CO", "Boulder, CO"], "options": { "allToAll": true }}`;
+                //console.log(data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s);
+                //console.log(data.records[i].STKR__Account_lkp__r.STKR__location__Longitude__s);
+
+                var mappingJson={};
+                var locations=[];
+                mappingJson.locations=locations;
+                var num=locationNum(mappingJson,data);
+                if (num <= 24){
+                    mappingJson.options={};
+                    mappingJson.options={"allToAll" :true};
+                    return JSON.stringify(mappingJson)
+                }else{
+                    culsterlocatin(mappingJson,num);
+                    mappingJson.options={};
+                    mappingJson.options={"allToAll" :true};
+                    return JSON.stringify(mappingJson);
+                }
+                console.log(num);
+                console.log(mappingJson);
+                /*
+                for(i=0;i<=data.size-1;i++){
+                    //mappingJson.location[i].latLng=latLng;
+                    var lat=data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s;
+                    var lng=data.records[i].STKR__Account_lkp__r.STKR__location__Longitude__s;
+                    latLng={"lat": lat,
+                           "lng": lng}
+                    //mappingJson.location[i].latLng.push(latLng);
+                    //mappingJson.location[i].latLng.lat=lat;
+                    //mappingJson.location[i].latLng.lng=lng;
+                    }
+                    */
+
+            }
+
             /*
           function getdistance() {
           var mappingJson='';

@@ -1,9 +1,13 @@
 public with sharing class MapControllertest {
+    
     public list<STKR__Resource__c> objectResource {get; set;}
 	public STKR__nearestTechSettings__c mappingSettings {get;set;}
     public list<STKR__Service_Territory__c> objectTerritory {get; set;}
     public list<STKR__Visit__c> objectVisit{get; set;}
+    
+    
     public MapControllertest(){
+        
         Decimal forecastDays = 0; //default protects against no settings
         //get the resource.name and id
     	objectResource=new list<STKR__Resource__c>();
