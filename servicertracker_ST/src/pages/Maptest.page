@@ -83,16 +83,16 @@
             
             
             $(document).ready(function(){
-                
-                var formValue=$("#matrixForm").serializeArray();
                 //js json Ajax
                 $("#matrixForm").submit(function(event){
-                    //var formDate=$("#fromDate").val();
-                    //console.log(formValue);
+                    //getting data from the Form.
                     var rawData=$("#matrixForm").serializeArray();
+                    console.log(rawData);
                     //prevent send request
                     event.preventDefault();
-                    getTravelTime(generateMapJson(requestToSforce(rawData)));
+                    var resourceData=requestResource(rawData);
+                    var timeMatrix=getTravelTime(generateMapJson(requestToSforce(rawData)),resourceData);
+                    
                     //var mappingJson=JSON.stringify({locations,options:allToAll});
                 });
                 
@@ -103,11 +103,27 @@
                 
             }
             // find the locations >= 25, need cluster location
-            function culsterlocation(mappingJson,num){
-                if (num>=24){
-                	culsterlocation(mappingJson,num);
+            //it is one of clever way to deal with limitations problems(optimized route with more than 25 stops)
+            function culsterlocation(mappingJson){
+                if (mappingJson.locations.length<=24){
+                	return 0;
+                }else if(mappingJson.locations.length<=99){
+                	return mutipleRequest(mappingJson);
                 }else{
-                	
+                	console.log("the location is too much");
+                }
+            }
+            
+            // it is a stupid way to deal with problem.obtain the full distance matrix through the different request.
+            function mutipleRequest(mappingJson){
+                var temMappingJson={};
+                temMappingJson.locations=locations;
+                for(i=0;i<mappingJson.locations.length/25+1;i++){
+                    //splite data for different requests
+                    for(j=0;j<mappingJson.locations.length; j++){
+                    	temMappingJson.locations.push(mappingJson.locations[j+i*25]);
+                    }
+                    getTravelTime(temMappingJson)
                 }
             }
             // generate the Json file
@@ -117,7 +133,7 @@
             }
             
             //input: data from the mapquest response. output: the time and distance
-            function getTravelTime(mappingJson){
+            function getTravelTime(mappingJson,resourceData){
                 $.ajax({
                     type: 'POST',
                     dataType: 'jsonp',
@@ -129,13 +145,53 @@
                     success: function(data){
                         console.log(data);
                         console.log('form was submit,' + data.time);
-                        renderMap(data);
+                        //calculate the optimisation
+                        optimisation(data,resourceData);
                     },
                     error: function(data){
                         console.log("error");
                     },
                 });
 
+            }
+            function optimisation(timeMatrix, resourceData){
+                console.log(timeMatrix.time);
+                console.log(resourceData.records);
+                
+                
+                
+
+            }
+            function valueForm (rawdata){
+                var resource=[];
+                var territory=[];
+                for (i=0;i<rawdata.length;i++){
+                    if(rawdata[i].name=="territory"){
+                        territory.push("'"+rawdata[i].value+"'");
+                    }
+                    // for example : SELECT STKR__ParentId__c, STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< 2019-06-19T08:26:00.000+0000 and STKR__Planned_Date__c> 2018-07-10T08:00:00.000+0000 and STKR__Resource_Name__c='Kang' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('Cardiff', 'Caerphilly')
+                    if (rawdata[i].name=="resource"){
+                        resource.push("'"+rawdata[i].value+"'");
+                    }
+                }
+                return [resource, territory]
+            }
+			function requestResource(rawdata){
+            	var data=valueForm(rawdata);
+                var resource=data[0];
+                var territory=data[1];
+                console.log(resource);
+                console.log(territory);
+                var query="select Id, Name, STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c from STKR__Resource__c where Name in ("+resource.toString()+")";
+                try{
+                    sforce.connection.sessionId="{!$Api.Session_ID}";
+                    var queryResult=sforce.connection.query(query);
+                    console.log(queryResult);
+                }catch(error)
+                {
+                    console.log(error);
+                }
+                return queryResult;
             }
             
             //input: the raw data output: filter data using Query
@@ -161,7 +217,6 @@
                 try{
                     sforce.connection.sessionId="{!$Api.Session_ID}";
                     var queryResult=sforce.connection.query(query);
-                    console.log(queryResult);
                 }catch(error)
                 {
                     console.log(error);
@@ -198,19 +253,19 @@
                 var mappingJson={};
                 var locations=[];
                 mappingJson.locations=locations;
-                var num=locationNum(mappingJson,data);
-                if (num <= 24){
+                locationNum(mappingJson,data);
+                console.log(mappingJson.locations);
+                if (mappingJson.locations.length <= 24){
                     mappingJson.options={};
                     mappingJson.options={"allToAll" :true};
                     return JSON.stringify(mappingJson)
                 }else{
-                    culsterlocatin(mappingJson,num);
-                    mappingJson.options={};
-                    mappingJson.options={"allToAll" :true};
-                    return JSON.stringify(mappingJson);
+                    //need mutiple requests based on the n*n matrix, such as 30*30, 3 request; 45*45
+                    mutipleRequest(mappingJson,num);
+                    return 0;
                 }
-                console.log(num);
-                console.log(mappingJson);
+                
+
                 /*
                 for(i=0;i<=data.size-1;i++){
                     //mappingJson.location[i].latLng=latLng;
