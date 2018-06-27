@@ -18,9 +18,12 @@
             
             
             <script type="text/javascript">
+                //distribute the Monday-Starday
             var resources = [];
             var territories = [];
             window.onload = function() {
+                //optimizedwaypoints example can be used
+                //https://developer.mapquest.com/documentation/mapquest-js/v1.3/examples/directions-with-optimized-waypoints/
                 L.mapquest.key = 'XFI9f8gkExRTk58rq7jyxDSMgkgt06KV';
                 
                 var map = L.mapquest.map('map', {
@@ -90,8 +93,10 @@
                     console.log(rawData);
                     //prevent send request
                     event.preventDefault();
+                    var visitData=requestToSforce(rawData);
+                    console.log(visitData)
                     var resourceData=requestResource(rawData);
-                    var timeMatrix=getTravelTime(generateMapJson(requestToSforce(rawData)),resourceData);
+                    var timeMatrix=getTravelTime(generateMapJson(visitData),resourceData,visitData);
                     
                     //var mappingJson=JSON.stringify({locations,options:allToAll});
                 });
@@ -133,7 +138,7 @@
             }
             
             //input: data from the mapquest response. output: the time and distance
-            function getTravelTime(mappingJson,resourceData){
+            function getTravelTime(mappingJson,resourceData,visitData){
                 $.ajax({
                     type: 'POST',
                     dataType: 'jsonp',
@@ -146,7 +151,7 @@
                         console.log(data);
                         console.log('form was submit,' + data.time);
                         //calculate the optimisation
-                        optimisation(data,resourceData);
+                        optimisation(data,resourceData,visitData);
                     },
                     error: function(data){
                         console.log("error");
@@ -154,9 +159,36 @@
                 });
 
             }
-            function optimisation(timeMatrix, resourceData){
+            function optimisation(timeMatrix, resourceData,visitData){
+                console.log(visitData);
                 console.log(timeMatrix.time);
                 console.log(resourceData.records);
+                var id=[];
+                var name=[];
+                var lunchBreak=[];
+                var expiryDate=[];
+                var workingHours=[];
+                
+                
+                
+                for(i=0; i<resourceData.size;i++){
+                    for(j=0; j<visitData.size;j++){
+                    	if(visitData.records[j].STKR__Planned_Date__c<resourceData.records[i].STKR__Expiry_Date__c){
+                            if (visitData.record[j].STKR__Resource__c==resourceData.records[i].id){
+                            	
+                            }
+                            //.push(resourceData.records[i].STKR__Working_Hours__c-resourceData.records[i].STKR__Lunch_Break_Minutes__c)
+                           }
+                    }
+                    
+					
+                    lunchBreak.push(resourceData.records[i].STKR__Lunch_Break_Minutes__c);
+                    workingHours.push(resourceData.records[i].STKR__Working_Hours__c);
+                    
+                }
+                
+                console.log(lunchBreak);
+                // formulate
                 
                 
                 
