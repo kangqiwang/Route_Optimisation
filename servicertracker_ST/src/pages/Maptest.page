@@ -96,7 +96,9 @@
                     var visitData=requestToSforce(rawData);
                     console.log(visitData)
                     var resourceData=requestResource(rawData);
-                    var timeMatrix=getTravelTime(generateMapJson(visitData),resourceData,visitData);
+                    var generatejson=generateMapJson(visitData);
+                    console.log(generatejson);
+                    var timeMatrix=getTravelTime(generatejson,resourceData,visitData);
                     
                     //var mappingJson=JSON.stringify({locations,options:allToAll});
                 });
@@ -162,25 +164,59 @@
             function optimisation(timeMatrix, resourceData,visitData){
                 console.log(visitData);
                 console.log(timeMatrix.time);
+                console.log(timeMatrix.distance);
                 console.log(resourceData.records);
+                console.log(visitData.records);
                 var id=[];
                 var name=[];
                 var lunchBreak=[];
                 var expiryDate=[];
                 var workingHours=[];
+                var fixVisit=[];
+                var schedualId=[];
                 
-                
+                for(i=0; i<visitData.size;i++){
+                    //consider about the frequency, may be don't need consider about the frequency
+                    if(visitData.records[i].STKR__Service__r.STKR__Frequency__c==="Weekly"){
+                    	console.log("weekly");
+                    }else if(visitData.records[i].STKR__Service__r.STKR__Frequency__c==="Daily"){
+                    	console.log("daily");
+                    }else if(visitData.records[i].STKR__Service__r.STKR__Frequency__c==="Monthly"){
+                    	console.log("monthly");
+                    }else if(visitData.records[i].STKR__Service__r.STKR__Frequency__c==="Yearly"){
+                    	console.log("yearly");
+                    }else{
+                    	console.log("none");
+                    }
+                    
+
+                    schedualId.push(visitData.records[i].STKR__Service__r.Id);
+                    
+                    if(visitData.records[i].STKR__Fixed_Visit__c!="false"){
+                        console.log(visitData.records[i].STKR__Fixed_Visit__c+"Yes");
+                    }else{
+                        console.log(visitData.records[i].STKR__Fixed_Visit__c+"No");
+                        // this is not fix_visit
+                        
+                        //for day
+                    }
+                    
+                    //visitData.records[i].STKR__Service__r.STKR__Frequency__c
+                    
+                }
+                console.log();
                 
                 for(i=0; i<resourceData.size;i++){
+                    /*
                     for(j=0; j<visitData.size;j++){
-                    	if(visitData.records[j].STKR__Planned_Date__c<resourceData.records[i].STKR__Expiry_Date__c){
+                    	if (visitData.records[j].STKR__Planned_Date__c<resourceData.records[i].STKR__Expiry_Date__c){
                             if (visitData.record[j].STKR__Resource__c==resourceData.records[i].id){
                             	
                             }
                             //.push(resourceData.records[i].STKR__Working_Hours__c-resourceData.records[i].STKR__Lunch_Break_Minutes__c)
                            }
                     }
-                    
+                    */
 					
                     lunchBreak.push(resourceData.records[i].STKR__Lunch_Break_Minutes__c);
                     workingHours.push(resourceData.records[i].STKR__Working_Hours__c);
@@ -201,7 +237,7 @@
                     if(rawdata[i].name=="territory"){
                         territory.push("'"+rawdata[i].value+"'");
                     }
-                    // for example : SELECT STKR__ParentId__c, STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< 2019-06-19T08:26:00.000+0000 and STKR__Planned_Date__c> 2018-07-10T08:00:00.000+0000 and STKR__Resource_Name__c='Kang' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('Cardiff', 'Caerphilly')
+                    // for example :  STKR__ParentId__c, STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< 2019-06-19T08:26:00.000+0000 and STKR__Planned_Date__c> 2018-07-10T08:00:00.000+0000 and STKR__Resource_Name__c='Kang' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('Cardiff', 'Caerphilly')
                     if (rawdata[i].name=="resource"){
                         resource.push("'"+rawdata[i].value+"'");
                     }
@@ -245,7 +281,7 @@
                 // query to find the lantitude and longtitude
                 // old way is using for loop to send request one by one based on the resource and territory
                 //best way is use one request get multiple resources and territories.
-                var query="SELECT STKR__Service__r.id, STKR__Service__r.STKR__Service_Frequency__c, STKR__ParentId__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000 and STKR__Resource_Name__c IN ("+resource.toString()+") and STKR__Account_lkp__r.STKR__Territory__r.Name IN ("+territory.toString()+")";
+                var query="SELECT  STKR__Service__r.STKR__Frequency__c, STKR__Fixed_Visit__c,STKR__Service__r.id, STKR__Service__r.STKR__Service_Frequency__c, STKR__ParentId__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000 and STKR__Resource_Name__c IN ("+resource.toString()+") and STKR__Account_lkp__r.STKR__Territory__r.Name IN ("+territory.toString()+")";
                 try{
                     sforce.connection.sessionId="{!$Api.Session_ID}";
                     var queryResult=sforce.connection.query(query);
@@ -258,6 +294,15 @@
                 
             }
             function locationNum(mappingJson,data){
+                /*
+                latitude=latitude.filter(function(elem, index, self){
+                    return index===self.indexOf(elem)})
+                longitude=longitude.filter(function(elem, index, self){
+                    return index===self.indexOf(elem)})
+                console.log(latitude);
+                console.log(longitude);
+                */
+                
                 for (i=0; i<=data.size-1; i++){
                     if (i){
                         if (data.records[i-1].STKR__Service__r.Id!= data.records[i].STKR__Service__r.Id){
@@ -274,19 +319,33 @@
                     }
                 }
                 return mappingJson.locations.length;
-                
             }
             
             function generateMapJson(data){
+                console.log(data);
                 //var mappingJson = `{ "locations": [ "Cardiff, CO", "Westminster, CO", "Boulder, CO"], "options": { "allToAll": true }}`;
                 //console.log(data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s);
-                //console.log(data.records[i].STKR__Account_lkp__r.STKR__location__Longitude__s);
-
+                //console.log(data.records.STKR__Account_lkp__r.STKR__location__Longitude__s);
+                /*
+				var latitude=[];
+                var longitude=[];
+                for(i=0; i<data.size;i++){
+                	latitude.push(data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s);
+                    longitude.push(data.records[i].STKR__Account_lkp__r.STKR__location__Longitude__s);
+                }
+                */
                 var mappingJson={};
                 var locations=[];
                 mappingJson.locations=locations;
-                locationNum(mappingJson,data);
-                console.log(mappingJson.locations);
+                
+                /*
+                })
+                */
+                //console.log(latitude);
+                //console.log(longitude);
+
+                var num=locationNum(mappingJson,data);
+                //console.log(mappingJson.locations);
                 if (mappingJson.locations.length <= 24){
                     mappingJson.options={};
                     mappingJson.options={"allToAll" :true};
