@@ -56,6 +56,15 @@ I am trying to use API to calculate the time and distance and deal with the mult
 4. prisa the json file and return to the table on the HTML
 
 
+SELECT Id,Name,STKR__Account__c,STKR__Frequency__c, STKR__Contract_End_Date__c,STKR__Fix_all_Visits__c, STKR__Start_Date__c, STKR__Time_Allocation__c, STKR__Service_Owner__c, STKR__Account__r.STKR__Location__longitude__s,STKR__Account__r.STKR__Location__Latitude__s from STKR__Service__c where STKR__Account__c in (SELECT Id from Account where STKR__Territory__c in ('a0S0N000014jOKsUAM','a0S0N000014jK7GUAU')) and STKR__Service_Owner__c in ('a0N0N00001KNcrUUAT','a0N0N00001KNcrFUAT','a0N0N00001KNJUmUAP') and STKR__Next_Visit_Date__c>2018-07-01T00:00:00.000+0000 and STKR__Next_Visit_Date__c<2018-07-14T00:00:00.000+0000
+
+
+
+SELECT Id,Name,STKR__Account__c,STKR__Frequency__c, STKR__Contract_End_Date__c,STKR__Fix_all_Visits__c, STKR__Start_Date__c, STKR__Time_Allocation__c, STKR__Service_Owner__c, STKR__Account__r.STKR__Location__longitude__s,STKR__Account__r.STKR__Location__Latitude__s from STKR__Service__c where STKR__Account__c in (SELECT Id from Account where STKR__Territory__c in ('a0S0N000014jOKsUAM','a0S0N000014jK7GUAU')) and STKR__Service_Owner__c in ('a0N0N00001KNcrUUAT','a0N0N00001KNcrFUAT','a0N0N00001KNJUmUAP') and STKR__Next_Visit_Date__c>2018-07-01T00:00:00.000+0000 and STKR__Next_Visit_Date__c<2018-07-14T00:00:00.000+0000
+
+
+
+SELECT Id,Name,STKR__Account__c,STKR__Frequency__c, STKR__Contract_End_Date__c,STKR__Fix_all_Visits__c, STKR__Start_Date__c, STKR__Time_Allocation__c, STKR__Service_Owner__c, STKR__Account__r.STKR__Location__longitude__s,STKR__Account__r.STKR__Location__Latitude__s from STKR__Service__c where STKR__Account__c in (SELECT Id from Account where STKR__Territory__c in ('a0S0N000014jOKsUAM','a0S0N000014jK7GUAU')) and STKR__Service_Owner__c in ('a0N0N00001KNcrUUAT','a0N0N00001KNcrFUAT','a0N0N00001KNJUmUAP') and STKR__Next_Visit_Date__c>2018-07-01T00:00:00.000+0000 and STKR__Next_Visit_Date__c<2018-07-14T00:00:00.000+0000
 
 
 
@@ -169,19 +178,125 @@ SELECT Id, Name from STKR__Resource__c
 
 SELECT Id,Name from STKR__Service_Territory__c
 
-SELECT Id, Name,STKR__location__Latitude__s, STKR__location__Longitude__s from Account
+Get Account Id and location based on Service territory:
+
+SELECT Id, Name,STKR__location__Latitude__s, STKR__location__Longitude__s, STKR__Territory__c  from Account
 
 Based on the Id,Name.
 
 
 
+Based on the  STKR__Service_Owner__c  -> STKR__Resource__c.Id
+STKR__Service_Territory__c.Id -> Account.Id -> STKR__Account__c
 
-SELECT Id,Name,STKR__Account__c,STKR__Frequency__c, STKR__Contract_End_Date__c,STKR__Fix_all_Visits__c, STKR__Start_Date__c, STKR__Time_Allocation__c, STKR__Service_Owner__c from STKR__Service__c
-
-
-
-
+SELECT Id,Name,STKR__Account__c,STKR__Frequency__c, STKR__Contract_End_Date__c,STKR__Fix_all_Visits__c, STKR__Start_Date__c, STKR__Time_Allocation__c, STKR__Service_Owner__c, STKR__Account__r.STKR__Location__longitude__s,STKR__Account__r.STKR__Location__Latitude__s from STKR__Service__c
 
 
+Chose the longitude and latitude
+
+
+Group by is helpful
+
+SELECT STKR__Account_lkp__r.Id,COUNT(Id) from STKR__Visit__c GROUP BY STKR__Account_lkp__r.Id
+
+
+
+
+SELECT Id,Name,STKR__Account__c,STKR__Frequency__c, STKR__Contract_End_Date__c,STKR__Fix_all_Visits__c, STKR__Start_Date__c, STKR__Time_Allocation__c, STKR__Service_Owner__c, STKR__Account__r.STKR__Location__longitude__s,STKR__Account__r.STKR__Location__Latitude__s from STKR__Service__c where STKR__Account__c in (SELECT Id from Account where STKR__Territory__c in ('a0S0N000014jOKsUAM'))
+
+
+
+
+a0N0N00001KNJUmUAP
+SELECT Id,Name,STKR__Account__c,STKR__Frequency__c, STKR__Contract_End_Date__c,STKR__Fix_all_Visits__c, STKR__Start_Date__c, STKR__Time_Allocation__c, STKR__Service_Owner__c, STKR__Account__r.STKR__Location__longitude__s,STKR__Account__r.STKR__Location__Latitude__s from STKR__Service__c where STKR__Account__c in (SELECT Id from Account where STKR__Territory__c in ('a0S0N000014jOKsUAM','a0S0N000014jK7GUAU')) and STKR__Service_Owner__c in ('a0S0N000014jOKsUAM','a0S0N000014jK7GUAU') and STKR__Period_End__c>2018-06-01 and STKR__Period_End__c<2018-07-31
+
+
+
+and STKR__Service_Owner__c in ('a0S0N000014jOKsUAM','a0S0N000014jK7GUAU') and STKR__Period_End__c>2018-06-01 and STKR__Period_End__c<2018-07-31
+
+
+
+Date problem is huge problem for search from STKR__Period_End__c
+
+and STKR__Period_End__c>2018-06-01 and STKR__Period_End__c>2018-06-30
+
+
+SELECT Id,Name,STKR__Account__c,STKR__Frequency__c, STKR__Contract_End_Date__c,STKR__Fix_all_Visits__c, STKR__Start_Date__c, STKR__Time_Allocation__c, STKR__Service_Owner__c, STKR__Account__r.STKR__Location__longitude__s,STKR__Account__r.STKR__Location__Latitude__s from STKR__Service__c where STKR__Account__c in (SELECT Id from Account where STKR__Territory__c in ('a0S0N000014jOKsUAM','a0S0N000014jK7GUAU')) and STKR__Service_Owner__c in ('a0N0N00001KNcrUUAT','a0N0N00001KNcrFUAT','a0N0N00001KNJUmUAP') 
+
+
+Schedule Interval
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Based on the Schedule
+
+
+
+sforce.Xml
+Id:"a0T0N00000k7cJqUAI"
+Name:"S000003"
+STKR__Account__c:"0010N00004KXd8xQAD"
+STKR__Account__r:sforce.Xml {type: "Account", Id: null, STKR__location__Longitude__s: "-3.240661", STKR__location__Latitude__s: "51.581666"}
+STKR__Contract_End_Date__c:"2018-12-01"
+STKR__Fix_all_Visits__c:"false"
+STKR__Frequency__c:"Weekly"
+STKR__Service_Owner__c:"a0N0N00001KNJUmUAP"
+STKR__Start_Date__c:"2018-06- 19T08:02:00.000Z"
+STKR__Time_Allocation__c:"120.0"
+type:"STKR__Service__c"
+
+
+STKR__Account__r:sforce.Xml
+Id:null
+STKR__location__Latitude__s:"51.581666"
+STKR__location__Longitude__s:"-3.240661"
+
+
+
+
+
+
+
+
+
+SELECT Id,Name,STKR__Account__c,STKR__Frequency__c, STKR__Contract_End_Date__c,STKR__Fix_all_Visits__c, STKR__Start_Date__c, STKR__Time_Allocation__c, STKR__Service_Owner__c, STKR__Account__r.STKR__Location__longitude__s,STKR__Account__r.STKR__Location__Latitude__s from STKR__Service__c where STKR__Account__c in (SELECT Id from Account where STKR__Territory__c in ('a0S0N000014jOKsUAM','a0S0N000014jK7GUAU')) and STKR__Service_Owner__c in ('a0N0N00001KNcrUUAT','a0N0N00001KNcrFUAT','a0N0N00001KNJUmUAP')
+
+ 
+ and STKR__Next_Visit_Date__c>2018-07-01T00:00:00.000+0000 and STKR__Next_Visit_Date__c<2018-07-14T00:00:00.000+0000
+
+
+
+
+
+select STKR__Days_Overdue__c,STKR__Due_Date__c,STKR__Due_Finish__c from STKR__Visit__c
+
+
+
+
+Change to visit
+
+SELECT Id,Name,STKR__Service__r.STKR__Last_Scheduled_Visit__c,STKR__Service__r.STKR__Frequency__c, STKR__Service__r.STKR__Contract_End_Date__c,STKR__Service__r.STKR__Fix_all_Visits__c, STKR__Service__r.STKR__Start_Date__c, STKR__Service__r.STKR__Time_Allocation__c, STKR__Service__r.STKR__Service_Owner__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Account_lkp__c in (SELECT Id from Account where STKR__Territory__c in ('a0S0N000014jOKsUAM','a0S0N000014jK7GUAU')) and STKR__Service__r.STKR__Service_Owner__c in ('a0N0N00001KNcrUUAT','a0N0N00001KNcrFUAT','a0N0N00001KNJUmUAP') 
 
 
