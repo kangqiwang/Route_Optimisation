@@ -15,6 +15,10 @@ global class ClientAlerts {
     global ApexPages.StandardSetController CAtt {
         get;
     }
+    global STKR__Client_Attachment__c CAttObj {
+        get;
+        set;
+    }
     global String CAType {
         get;
         set;

@@ -1,4 +1,4 @@
-<apex:page standardController="STKR__Service__c" showHeader="true" tabStyle="STKR__Service__c">
+<apex:page standardController="STKR__Service__c" extensions="STKR.ServiceExt" showHeader="true" tabStyle="STKR__Service__c">
 <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
 <apex:includeScript value="{!URLFOR($Resource.STKR__tablesorter, 'jquery.tablesorter.min.js')}"/>
 
@@ -77,7 +77,7 @@
 <apex:commandButton action="{!URLFOR('/apex/STKR__NewVisit?svc='+Service__c.id+'&acc='+acc+'&Notes='+Notes+'&Own='+Own)}" value="New Visit" immediate="true"/>
 </apex:pageBlockButtons>
  
-        <apex:pageBlockTable value="{!STKR__Service__c.Visits__r}" id="visits" var="o" styleClass="tablesorter" headerClass="header">
+        <apex:pageBlockTable value="{!vlst}" id="visits" var="o" styleClass="tablesorter" headerClass="header">
 
         <apex:column style="{!IF(NOT(o.STKR__Status__c != 'Complete'), 'display:none', '')}">
             <apex:facet name="header">
@@ -135,7 +135,7 @@
 <apex:form >
 <apex:pageblock id="VisitHistory" title="Visit History"  >
 
-        <apex:pageBlockTable value="{!STKR__Service__c.Visits__r}" id="visith" var="o" styleClass="tablesorter" headerClass="header" rows="365">
+        <apex:pageBlockTable value="{!vhlst}" id="visith" var="o" styleClass="tablesorter" headerClass="header" rows="365">
         <apex:column style="{!IF(NOT(o.STKR__Status__c = 'Complete'), 'display:none', '')}">
             <apex:facet name="header">
               <apex:outputText styleClass="header">

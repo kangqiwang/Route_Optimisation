@@ -6,6 +6,7 @@ public with sharing class MapControllertest {
     public list<STKR__Visit__c> objectVisit{get; set;}
     
     
+    
     public MapControllertest(){
         
         Decimal forecastDays = 0; //default protects against no settings
@@ -14,7 +15,7 @@ public with sharing class MapControllertest {
         objectResource.addAll([SELECT Id, Name from STKR__Resource__c]);
         //get the territory
         objectTerritory = new list<STKR__Service_Territory__c>();
-        objectTerritory.addAll([SELECT Name from STKR__Service_Territory__c]);
+        objectTerritory.addAll([SELECT Id, Name from STKR__Service_Territory__c]);
         // get the longitude and latitude
         objectVisit = new list<STKR__Visit__c>();
         objectVisit.addAll([SELECT STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Resource_Name__c ='Kang']);

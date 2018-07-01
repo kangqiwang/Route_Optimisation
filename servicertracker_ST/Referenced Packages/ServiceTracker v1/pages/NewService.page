@@ -74,8 +74,9 @@ switch (bool)
                <apex:inputField value="{!Headerinfo.STKR__Initial_Visit_Number__c}" required="true"/>
                <apex:inputField value="{!Headerinfo.STKR__Service_Value_PA__c}"/>
                <apex:inputField value="{!Headerinfo.STKR__Full_Year_Schedule__c}"/>
-               <apex:inputField value="{!Headerinfo.STKR__Add_Inspection_Items__c}"/>                 
+               <apex:inputField value="{!Headerinfo.STKR__RetainDayWeek__c}"/>
                <apex:inputField value="{!Headerinfo.STKR__Fix_all_Visits__c}"/>             
+               <apex:inputField value="{!Headerinfo.STKR__Add_Inspection_Items__c}"/>                 
                <apex:inputHidden value="{!HeaderInfo.STKR__Create_New_Schedule__c}"/>;        
               </apex:pageBlockSection>   
              </apex:outputPanel>  

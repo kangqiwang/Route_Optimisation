@@ -244,8 +244,8 @@ IF(Account_lkp__r.ShippingCountry &lt;&gt; &apos;&apos;,Account_lkp__r.ShippingC
 &apos;Daily&apos;,Recurrence_Date__c+Service__r.Service_Interval__c,
 &apos;Weekly&apos;,Recurrence_Date__c+(Service__r.Service_Interval__c * 7),
 &apos;Monthly&apos;,IF(ISNULL(Service__r.Service_Range__c),
-Recurrence_Date__c+(Service__r.Service_Interval__c * 30.416),
-Due_Date__c + 365.242),
+ADDMONTHS(Recurrence_Date__c,Service__r.Service_Interval__c),
+ADDMONTHS(Due_Date__c,12)),
 Due_Date__c +(Service__r.Service_Interval__c * 365.242)
 
 )</formula>
@@ -738,7 +738,7 @@ Automated_Next_Visit_Date__c)</formula>
         <trackHistory>true</trackHistory>
         <trackTrending>false</trackTrending>
         <type>LongTextArea</type>
-        <visibleLines>3</visibleLines>
+        <visibleLines>6</visibleLines>
     </fields>
     <fields>
         <fullName>Notes__c</fullName>
@@ -834,10 +834,10 @@ NOT(ISPICKVAL(Account_lkp__r.Status__c,&apos;Inactive&apos;)),
 NOT(ISPICKVAL(Account_lkp__r.Status__c,&apos;On Stop&apos;)),
 NOT(ISPICKVAL(Account_lkp__r.Status__c,&apos;On Hold&apos;)),
 NOT(ISPICKVAL(Service__r.Status__c,&apos;Inactive&apos;)), 
+NOT(ISPICKVAL(Service__r.Status__c,&apos;On Hold&apos;)), 
 NOT(ISPICKVAL(Service__r.Service_Contract__r.Status__c,&apos;Inactive&apos;)) 
 ),
 &quot;TRUE&quot;, &quot;FALSE&quot;)</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Owned By Current User and Active</label>
         <required>false</required>
         <trackHistory>false</trackHistory>
@@ -1574,6 +1574,17 @@ IMAGE(&quot;/img/samples/color_green.gif&quot;,&quot;Low&quot;,20,20)
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Site_Contact_Mobile__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Site Contact Mobile</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Phone</type>
     </fields>
     <fields>
         <fullName>Site_Post_Code__c</fullName>
@@ -3444,6 +3455,28 @@ for(var i=0; i &lt; nrecords.length ; i ++)
 sforce.connection.update([update_visit]);
 
 parent.location.href = url;</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Convert_Recommendation_to_Action</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Convert Recommendation to Action</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/22.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/22.0/apex.js&quot; )}
+var connection = sforce.connection;
+var newAction= new sforce.SObject(&quot;STKR__Actions__c&quot;);
+newAction.STKR__Visit__c =  &quot;{!Visit__c.Id}&quot;;
+
+var aDate = new Date(); 
+newAction.STKR__Date_for_Completion__c = aDate;
+newAction.STKR__Action__c = &quot;{!Visit__c.Recommendations__c}&quot;;
+newActionSTKR__Assigned_To__c = &quot;{!Visit__c.UserId__c}&quot;;
+newAction.STKR__Account__c =  &quot;{!Visit__c.Account_lkpId__c}&quot;;
+result = sforce.connection.create([newAction]);
+window.location.reload();</url>
     </webLinks>
     <webLinks>
         <fullName>Cooling_Tower_Report</fullName>

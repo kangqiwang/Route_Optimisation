@@ -109,6 +109,18 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Contract_Job__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>TEXT(Billing_Number__r.Contract_or_Job__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Contract / Job</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Cost__c</fullName>
         <deprecated>false</deprecated>
         <externalId>false</externalId>
@@ -526,10 +538,13 @@ updateRecords.push(update_item); //add the updated record to our array
 }
 
 result = sforce.connection.update(updateRecords); //Insert records back to Salesforce
- alert(&quot;Please use the Convert button on the invoice detail to create a corresponding schedule&quot;);
 
-parent.location.href = url; //refresh the page
+var url = &apos;/apex/STKR__ConvertQuote?varBillingID={!Billing__c.Id }&amp;varRecordType={!IF(ISPICKVAL( Billing__c.Contract_or_Job__c ,&apos;Service Contract&apos;),&apos;Service Contract&apos;,&apos;Job&apos;)}&apos;; //string for the URL 
+
+parent.location.href = url; //refresh the page 
+
 }
+
 }</url>
     </webLinks>
     <webLinks>

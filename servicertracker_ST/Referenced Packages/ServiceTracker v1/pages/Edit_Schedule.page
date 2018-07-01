@@ -35,7 +35,9 @@
               <apex:pageBlockSection columns="2">    
                <apex:inputField value="{!STKR__Service__c.STKR__Time_Allocation__c}" required="true"/>
                <apex:inputField value="{!STKR__Service__c.STKR__Number_of_Visits__c}" required="true" rendered="{!If(STKR__Service__c.STKR__Service_Type__c = 'Contract Schedule',false,true)}"/>
+               <apex:outputtext value=""/>
                <apex:inputField value="{!STKR__Service__c.STKR__Full_Year_Schedule__c}"/> 
+               <apex:inputField value="{!STKR__Service__c.STKR__RetainDayWeek__c}"/> 
                <apex:inputField value="{!STKR__Service__c.STKR__Fix_all_Visits__c}"/> 
                <apex:inputField value="{!STKR__Service__c.STKR__Add_Inspection_Items__c}"/> 
                <apex:inputhidden value="{!UpdateInfo.STKR__Create_New_Schedule__c}"/>     

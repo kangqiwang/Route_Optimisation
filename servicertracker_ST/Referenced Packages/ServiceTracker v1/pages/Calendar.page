@@ -9,12 +9,12 @@ Details               :  * Showing Service Tracker Calendar with 4 views (day, W
 Developed by          :  Rohit/Kamini/Mike/Ian 
 Company Name          :  Astrea IT Sercices
 created date          :  15th April 2015
-Last modified date    :  29th Jan 2018
+Last modified date    :  19th Jun 2018
 ----------------------------------------------------------->
 <apex:page standardController="User" showHeader="true" docType="html" recordSetvar="users" sidebar="false" extensions="STKR.Calendar_Controller" tabStyle="STKR__ServiceTracker_Calendar__tab">
     <apex:messages />
     <link href="{!$Resource.Timelinefullcalendarcss}" rel="stylesheet" />
-        
+    <link href="https://fullcalendar.io/releases/fullcalendar-scheduler/1.9.4/scheduler.min.css" rel="stylesheet" />        
     <link href="{!$Resource.Timelinecss}" rel="stylesheet"/>
     <script src="{!$Resource.TimelinemomentMin}"/>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"/>-->
@@ -84,16 +84,7 @@ Last modified date    :  29th Jan 2018
                 sendNewDate();
             }    
         });       
-        
-        //  For Colour button
-        $('.fc-prevYear-button').text('View / Change User Colours'); 
-
-        $('.fc-prevYear-button').click(function() {
-        newwindow=window.open('/apex/AllCalendarColours','Resources','height=500,width=300,toolbar=0,menubar=0,location=0');
-       if (window.focus) {newwindow.focus()}
-       sendNewDate();
-
-        });              
+                   
     });
     function onLoadFunction(){
             
@@ -113,18 +104,21 @@ Last modified date    :  29th Jan 2018
              $( "#cal-quickpick" ).datepicker( "setDate", $('[id$=date_new]').val());
          }
          
-     
          $('#calendar').fullCalendar({
-            editable: true,
+            editable: true,            
+            navLinks: true,
+            weekNumbers: true,
             startEditable: true,
             durationEditable: true,
+            locale : 'en',
             aspectRatio: 1.8,
-            scrollTime: '00:00',
-                       
+            groupByResource: true,
+            scrollTime: '09:00',
+            firstDay: 1,              
             header: {
-                left: 'today prev,next prevYear',
+                left: 'today prev,next',
                 center: 'title',
-                right: 'month,agendaWeek,agendaDay,timelineDay'
+                right: 'month,agendaWeek,agendaFourDay,agendaDay,timelineDay'
             },
             defaultView: 'timelineDay',
             timeFormat: 'HH:mm',
@@ -135,15 +129,15 @@ Last modified date    :  29th Jan 2018
                 <!--<apex:outputPanel rendered="{!if(u.id != u.name,true,false)}">-->
                 {
                     id:'{!u.id}',
-                    title:'{!u.name}' 
-                    
+                    title:'{!u.name}'
+                    +","
                 },
                 <!--</apex:outputPanel>-->
             </apex:repeat>
                 
             ],
-events:[
-                //At run time, this APEX Repeat will render the array elements for the events array
+            events:[
+               //At run time, this APEX Repeat will render the array elements for the events array
                 
                 <apex:variable value="{!0}" var="outcnt"/>
                 <apex:repeat value="{!allEventsList}" var="evnts">
@@ -172,7 +166,7 @@ events:[
                             resourceId:'{!e.relatedUser}',
                             assignTostr:'{!e.assignToStr}',
                             lastVis : '{!e.lastVisit}',
-                            borderColor : '{!e.colour}'
+                            borderColor : '{!e.colour}',
                             
                         },
                         <apex:variable value="{!incnt+1}" var="incnt"/>
@@ -181,7 +175,15 @@ events:[
                     <apex:variable value="{!outcnt+1}" var="outcnt"/>
                 </apex:repeat>
                 
-            ],            
+            ], 
+                        views: {
+             agendaFourDay: {
+             type: 'agenda',
+             duration: { days: 4 },
+             groupByResource: true
+             //groupByDateAndResource: true
+             }
+            },
             eventDrop: function(event, delta, revertFunc) {
                 
                 $('[id$=visitInfo]').val(event.url);
@@ -372,11 +374,27 @@ events:[
         window.open('/apex/CalendarPrint?view='+view.name+'&self='+isself+'&usr='+selecteduser+'&md='+mydate.format('YYYY-MM-DD'));
        
     }
+/* Set the width of the side navigation to 250px */
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
 
-   
+/* Set the width of the side navigation to 0 */
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}       
     </script>
+
+<!-- SET THE STYLING OF THE CALENDAR -->
+
     <style>
-    
+      body {
+    margin: 0;
+    padding: 0;
+    font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+    font-size: 12px;
+  }
+
         .hover-end{
             z-index:15000;
             margin-left: 50%;
@@ -386,20 +404,21 @@ events:[
             bottom: 0;
             width: 100%;
             top: 100%;
+            font-family:Arial, Helvetica, sans-serif;
             opacity: 1;
             color: black;
-            font-size: 9pt;
+            font-size: 10pt;
         }
-        .event-birthday {background:#CC99CC;border-color:#CC99CC;border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;font-family:"Tahoma", Geneva, sans-serif;}
-        .event-campaign {background:#D2315D;border-color:#D2315D;border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;font-family:"Tahoma", Geneva, sans-serif;}
-        .event-job {background:#9FE1E7;border-color:#9FE1E7;border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;font-family:"Tahoma", Geneva, sans-serif;}
-        .event-routine {border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;background:#a6a8ff;border-color:#a6a8ff;font-family:"Tahoma", Geneva, sans-serif; }
-        .event-personal {border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;background:#B96F6F;border-color:#B96F6F;font-family:"Tahoma", Geneva, sans-serif;}
-        .event-fixed {background:#FFFF00;border-color:#FFFF00;border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;font-family:"Tahoma", Geneva, sans-serif;}
-        .event-complete {background:#88C134;border-color:#88C134;border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;font-family:"Tahoma", Geneva, sans-serif;}
-        //.event-complete {background: repeating-linear-gradient(to right,rgba(136, 193, 52, 0.65),#a6a8ff 10px,rgba(136, 193, 52, 0.65) 10px,#a6a8ff 20px);color:#000;font-family:"Tahoma", Geneva, sans-serif;}      
-        .event-aborted {background:red;border-color:red;border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;font-family:"Tahoma", Geneva, sans-serif;}
-        .holiday {background:#FFAD46;border-color:#FFAD46;border-left-width: 15px;border-top-width:0px;border-bottom-width:0px;border-right-width:0px;color:#000;font-family:"Tahoma", Geneva, sans-serif;}
+        .event-birthday {background:#CC99CC;border-color:#CC99CC;border-left-width: 15px;border-top-width:1px;border-bottom-width:1px;border-right-width:1px;color:#000;font-family:Arial, Helvetica, sans-serif;font-size:11px;}
+        .event-campaign {background:#D2315D;border-color:#D2315D;border-left-width: 15px;border-top-width:1px;border-bottom-width:1px;border-right-width:1px;color:#000;font-family:Arial, Helvetica, sans-serif;font-size:11px;}
+        .event-job {background:#9FE1E7;border-color:#9FE1E7;border-left-width: 15px;border-top-width:1px;border-bottom-width:1px;border-right-width:1px;color:#000;font-family:Arial, Helvetica, sans-serif;font-size:11px;}
+        .event-routine {border-left-width: 15px;border-top-width:1px;border-bottom-width:1px;border-right-width:1px;color:#000;background:#a6a8ff;border-color:#a6a8ff;font-family:Arial, Helvetica, sans-serif;font-size:11px; }
+        .event-personal {border-left-width: 15px;border-top-width:1px;border-bottom-width:1px;border-right-width:1px;color:#000;background:#f0b5ad;border-color:#f0b5ad;font-family:Arial, Helvetica, sans-serif;font-size:11px;}
+        .event-fixed {background:#FFFF00;border-color:#FFFF00;border-left-width: 15px;border-top-width:1px;border-bottom-width:1px;border-right-width:1px;color:#000;font-family:Arial, Helvetica, sans-serif;font-size:11px;}
+        .event-complete {background:#88C134;border-color:#88C134;border-left-width: 15px;border-top-width:1px;border-bottom-width:1px;border-right-width:1px;color:#000;font-family:Arial, Helvetica, sans-serif;font-size:11px;}
+        //.event-complete {background: repeating-linear-gradient(to right,rgba(136, 193, 52, 0.65),#a6a8ff 10px,rgba(136, 193, 52, 0.65) 10px,#a6a8ff 20px);color:#000;font-family:Arial, Helvetica, sans-serif;font-size:11px;}      
+        .event-aborted {background:red;border-color:red;border-left-width: 15px;border-top-width:1px;border-bottom-width:1px;border-right-width:1px;color:#000;font-family:Arial, Helvetica, sans-serif;font-size:11px;}
+        .holiday {background:#FFAD46;border-color:#FFAD46;border-left-width: 15px;border-top-width:1px;border-bottom-width:1px;border-right-width:1px;color:#000;font-family:Arial, Helvetica, sans-serif;font-size:11px;}
         
         #cal-options {float:left;margin-top:0%;}
         #cal-quickpick{margin-top:-65px;padding-left:20px;float:right;position:absolute;text-align:right;right:30vw;}        
@@ -629,8 +648,57 @@ events:[
       }
      
     }
+ 
+/* The side navigation menu */
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 3000; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #0A7CB2; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    //overflow-y: hidden; /* Disable Vertical scroll
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #FFF;
+    display: block;
+    transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+    position: absolute;
+    top: 0px;
+    right: 15px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
     </style>
 
+<!-- START OF CALENDAR BODY ---->
+<div style="font-family:Arial, Helvetica, sans-serif">
        <apex:pagemessages />
         <!--<apex:outputPanel id="calPanel">-->
             <apex:form id="calform">
@@ -644,8 +712,9 @@ events:[
                     <apex:commandButton value="{!IF(includeCompleted,'Hide Completed','Show Completed')}" style="float:left;" action="{!toggleCompleted}"/>               
                     <apex:commandButton value="{!IF(includeMyEvents,'Hide Events','Show Events')}" style="float:left;" action="{!toggleMyEvents}"/>
                     <apex:commandButton value="{!IF(includeTimeSheet,'Hide Work Times','Show Work Times')}" style="float:left;" action="{!toggleTimesheet}"/>
+                    <apex:commandButton value="Show User Colours" id="showLeft" onclick="openNav();return false;" style="float:left;"/>
+                    <apex:commandButton value="Print" id="print_btn" onclick="showPrintabletio('{!selecteduser}','{!includeMyEvents}');return false;" style="float:left;" />
 
-                    <apex:commandButton value="Print" id="print_btn" onclick="showPrintableView('{!selecteduser}','{!includeMyEvents}');return false;" style="float:left;" />
                        <br/> <br/>                  
             <div style="float:left;width:100%;" id="single_view" >
                         <span style="font-weight: bold;font-size:10pt; " >User:
@@ -707,8 +776,8 @@ events:[
                         <li><span class="event-fixed"></span>Fixed Visit</li>
                         <li style="{!IF(includeCompleted,'','display:none')}"><span class="event-complete"></span>Completed</li>
                         <li><span class="event-aborted"></span>Aborted</li>
-                        <li><span class="holiday"></span>Public Holiday</li>
-                        <li style="{!IF(includeMyEvents,'','display:none')}"><span class="event-personal"></span>Events</li>
+                        <li><span class="holiday"></span>Public Holiday </li>
+                        <li style="{!IF(includeMyEvents,'','display:none')}"><span class="event-personal"></span>Event</li>
 
                     </ul>
                     
@@ -853,7 +922,7 @@ events:[
     
        
      
-    <script src="{!$Resource.STKR__RightclickJS}"/>
+    <script src="{!$Resource.RightclickJS}"/>
     <script>
         $(document).ready(function(){
             rightclickonLoad();
@@ -888,5 +957,11 @@ events:[
         });
     }
     </script>
-   
+ <div id="mySidenav" class="sidenav">
+<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="">Menu</a>
+  <apex:iframe src="/apex/STKR__AllCalendarColours" height="600px"/>
+</div>
+</div>
+ 
 </apex:page>

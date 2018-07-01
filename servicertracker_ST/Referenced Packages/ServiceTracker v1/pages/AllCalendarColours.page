@@ -1,6 +1,5 @@
-<apex:page standardController="STKR__Resource__c" extensions="STKR.AddColorExtension" applyBodyTag="false" applyHtmlTag="false" showHeader="false" sidebar="false" standardStylesheets="false">
-    
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<apex:page standardController="STKR__Resource__c" extensions="STKR.AddColorExtension" showHeader="false" sidebar="false">
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <style>
 input[type="color"] {
     -webkit-appearance: none;
@@ -41,12 +40,13 @@ input[type="color"]::-webkit-color-swatch {
         
             <apex:form >
             <div style="font-family:arial">
-                <apex:pageBlock title="Resource List">
-        <apex:pageBlockTable value="{!records}" var="record"> 
-            <apex:column > 
-                 <input type="color" id="myColor" onchange="saveColorCode(this.value,'{!record.id}');" value= "{!record.Colour__c}"/>&nbsp;
+                <apex:pageBlock title="Resources">
+                            <apex:commandButton value="Save" oncomplete="location.reload()"  /><br/><br/>
+        <apex:pageBlockTable value="{!Resrecords}" var="record"> 
+            <apex:column headerValue="Colour"> 
+                 <input type="color" id="myColor" onchange="saveColorCode(this.value,'{!record.id}');" value= "{!record.Colour__c}"/>
             </apex:column> 
-            <apex:column > 
+            <apex:column headerValue="Name"> 
                 <apex:outputText value="{!record.Name}"/> 
             </apex:column>             
         </apex:pageBlockTable> 
@@ -95,5 +95,6 @@ input[type="color"]::-webkit-color-swatch {
             border-radius: 3px;
             }
         </style>
-    </html>
+    </html>  
+
 </apex:page>

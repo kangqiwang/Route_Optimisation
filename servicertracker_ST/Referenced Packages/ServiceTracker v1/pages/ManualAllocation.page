@@ -16,6 +16,7 @@
 </apex:pageBlockTable>
 <apex:commandButton value="Save" action="{!save}"/>
 <apex:commandButton value="Cancel" action="{!cancel}"/>
+<apex:commandButton value="Close" action="{!cancel}"/>
 </apex:pageBlock>
 <apex:iframe id="Map" height="400px" width="100%" src="apex/STKR__ResourceMap"/>
 </apex:form>

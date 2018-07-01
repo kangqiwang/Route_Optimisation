@@ -117,7 +117,15 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>PicklistEntryWrapperTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>PicklistFieldController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PicklistFieldControllerTest</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
@@ -130,6 +138,10 @@
     </classAccesses>
     <classAccesses>
         <apexClass>Service</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>ServiceExt</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
@@ -165,6 +177,14 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>ServiceTrackerTestClassPart7</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>ServiceTrackerTestClassPart8</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>SiteItems</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -174,6 +194,14 @@
     </classAccesses>
     <classAccesses>
         <apexClass>Technicians</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>TestController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>TestScheduleUpdateInspectionItems</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
@@ -230,6 +258,10 @@
     </classAccesses>
     <classAccesses>
         <apexClass>XeroCalloutUtility</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>XeroConfigControllerTest</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
@@ -338,6 +370,10 @@
     </classAccesses>
     <classAccesses>
         <apexClass>visitAlertAppTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>xeroConfigController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
@@ -637,6 +673,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Billing_Items__c.Contract_Consumable__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Billing_Items__c.Contract_Job__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2686,6 +2727,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Service__c.RetainDayWeek__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Service__c.Schedule_From__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -3347,6 +3393,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Visit__c.Setup_Installation__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Visit__c.Site_Contact_Mobile__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>

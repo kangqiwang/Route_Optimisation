@@ -1,0 +1,13 @@
+<aura:component implements="force:lightningQuickAction" >
+<aura:attribute name="recordId" type="Id" />
+<aura:attribute name="STKR__Visit__c" type="STKR__Visit__c" />
+<aura:attribute name="Columns" type="List" />
+<force:recordData aura:id="accountRecord"
+                  recordId="{!v.recordId}"
+                  targetFields="{!v.STKR__Visit__c}"
+                  layoutType="FULL"
+                  />
+<lightning:card iconName="standard:contact" title="{! 'History for ' + v.STKR__Visit__c.Name}">
+
+</lightning:card>	
+</aura:component>
