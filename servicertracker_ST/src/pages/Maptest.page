@@ -24,7 +24,7 @@
             window.onload = function() {
                 //optimizedwaypoints example can be used
                 //https://developer.mapquest.com/documentation/mapquest-js/v1.3/examples/directions-with-optimized-waypoints/
-                L.mapquest.key = 'XFI9f8gkExRTk58rq7jyxDSMgkgt06KV';
+                L.mapquest.key = 'iJHqMi80cdsL6r70ePqDTYXHeSoNjx2Y';
                 
                 var map = L.mapquest.map('map', {
                     center: [40.7128, -74.0059],
@@ -71,7 +71,7 @@
                 checkboxResource.setAttribute('type', 'checkbox');
                 checkboxResource.name="territory";
                 checkboxResource.value='{!territory.Id}';
-                element.appendChild(checkboxResource);resourceNum
+                element.appendChild(checkboxResource);
                 
                 var territory ={
                     name: '{!territory.name}'
@@ -93,8 +93,10 @@
                     console.log(rawData);
                     //prevent send request
                     event.preventDefault();
+                    var territory=[];
+                    var resource=[];
                     var visitData=requestToSforce(rawData);
-                    console.log(visitData)
+                    console.log(visitData);
                     var resourceData=requestResource(rawData);
                     var generatejson=generateMapJson(visitData);
                     console.log(generatejson);
@@ -146,7 +148,7 @@
                     dataType: 'jsonp',
                     contentType: 'json',
                     url: "http://www.mapquestapi.com/directions/v2/routematrix",
-                    data: {key: decodeURI("XFI9f8gkExRTk58rq7jyxDSMgkgt06KV"),
+                    data: {key: decodeURI("iJHqMi80cdsL6r70ePqDTYXHeSoNjx2Y"),
                            json: mappingJson},
                     
                     success: function(data){
@@ -183,6 +185,8 @@
                 //}
                 //seperate the visitData to resourceData, which means seperate schedule to individuals.
                 var resourceNum=[];
+                var fixVist=[];
+                var overduVisit=[];
                 //STKR__Last_Visit__c
                 for(j=0;j<resourceData.size;j++){
                     var jobSeperated=[];
@@ -197,25 +201,43 @@
                 console.log(resourceNum);
                 //seperated job
                 for(j=0;j<resourceNum.length;j++){
-                	for(i=0;i<resourceNum[j];i++){
-                        if (visitData.records[i].STKR__Frequency__c=="Weekly"){
-                            
-                            if(visitData.records[i].STKR__Last_Visit__c){
-                                //request to visit, get all the data from service and visit
-                                var date=visitData.records[i].STKR__Last_Visit__c;
-                                date.setDate(visitData.records[i].STKR__Last_Visit__c.getDate()+7/visitData.records[i].STKR__Service_Interval__c);
+                    for(i in resourceNum[j]){
+                        
+                        if(visitData.records[i].STKR__Fixed_Visit__c!="false" && !visitData.records[i].STKR__Days_Overdue__c){
+                            //it is fix visit and not overdue visit
+                            fixVisit.push(i);
+                        }else if(visitData.records[i].STKR__Fixed_Visit__c!="ture" && !visitData.records[i].STKR__Days_Overdue__c){
+                            //it is not fix visit and not overdue visit
+                            if (visitData.records[i].STKR__Service__r.STKR__Frequency__c=="Weekly"){
+                                if(visitData.records[i].STKR__Service__r.STKR__Last_Visit__c){
+                                    //request to visit, get all the data from service and visit
+                                    var date=visitData.records[i].STKR__Service__r.STKR__Last_Visit__c;
+                                    date.setDate(visitData.records[i].STKR__Service__r.STKR__Last_Visit__c.getDate()+7/visitData.records[i].STKR__Service_Interval__c);
+                                    console.log(date);
+                                }else{
+                                    
+                                }
+                                
+                            }else if (visitData.records[i].STKR__Service__r.STKR__Frequency__c=="Daily"){
+                                
+                            }else if (visitData.records[i].STKR__Frequency__c=="Monthly"){
+                                
+                            }else if (visitData.records[i].STKR__Frequency__c=="Yearly"){
                                 
                             }
-                        	    
-                        }else if (visitData.records[i].STKR__Frequency__c=="Daily"){
-                        
-                        }else if (visitData.records[i].STKR__Frequency__c=="Monthly"){
-                        
-                        }else if (visitData.records[i].STKR__Frequency__c=="Yearly"){
-                        
+                        }else if (visitData.records[i].STKR__Fixed_Visit__c!="ture" && visitData.records[i].STKR__Days_Overdue__c){
+                            //it is not fix visit and is overdue visit
+                            overdueVisit.push(i);
+                        }else{
+                            //it is fix visit and overdue visit
+                            overdueVisit.push(i);
+                            fixVisit.push(i);
+                            
                         }
-                        	resourceData.records[j].STKR__Lunch_Break_Minutes__c+visitData.records[i].STKR__Time_Allocation__c<=resourceData.records[j].STKR__Working_Hours__c*60
-                        }
+                        
+                        resourceData.records[j].STKR__Lunch_Break_Minutes__c+visitData.records[i].STKR__Time_Allocation__c<=resourceData.records[j].STKR__Working_Hours__c*60
+                        
+                    }
                 }
                         /*
                     //consider about the frequency, may be don't need consider about the frequency
@@ -235,10 +257,7 @@ y__c==="Yearly"){
 
                     schedualId.push(visitData.records[i].STKR__Service__r.Id);
                     
-                    if(visitData.records[i].STKR__Fixed_Visit__c!="false"){
-                        console.log(visitData.records[i].STKR__Fixed_Visit__c+"Yes");
-                    }else{
-                        console.log(visitData.records[i].STKR__Fixed_Visit__c+"No");
+                    
                         // this is not fix_visit
                         
                         //for day
@@ -288,19 +307,15 @@ y__c==="Yearly"){
                         resource.push("'"+rawdata[i].value+"'");
                     }
                 }
-                return [resource, territory]
+                return [resource,territory];
             }
 			function requestResource(rawdata){
-            	var data=valueForm(rawdata);
-                var resource=data[0];
-                var territory=data[1];
-                console.log(resource);
-                console.log(territory);
-                var query="select Id, Name, STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c from STKR__Resource__c where Id in ("+resource.toString()+")";
+            	var resource=valueForm(rawdata);
+                var query="select Name, STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c from STKR__Resource__c where Id in ("+resource[0].toString()+")";
+                console.log(query);
                 try{
                     sforce.connection.sessionId="{!$Api.Session_ID}";
                     var queryResult=sforce.connection.query(query);
-                    console.log(queryResult);
                 }catch(error)
                 {
                     console.log(error);
@@ -310,8 +325,11 @@ y__c==="Yearly"){
             
             //input: the raw data output: filter data using Query
             function requestToSforce(data){
-                var territory=[];
-                var resource=[];
+                var resource=valueForm(data);
+                var territory=resource[1];
+                resource=resource[0];
+                
+                /*
                 //get the resource and terrritory from the raw data
                 for (i=0; i<= data.length-1; i++){
                     //console.log(i);
@@ -322,13 +340,14 @@ y__c==="Yearly"){
                     // for example : SELECT STKR__Next_Visit_Date__c STKR__ParentId__c, STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< 2019-06-19T08:26:00.000+0000 and STKR__Planned_Date__c> 2018-07-10T08:00:00.000+0000 and STKR__Resource_Name__c='Kang' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('Cardiff', 'Caerphilly')
                     if (data[i].name=="resource"){
                         resource.push("'"+data[i].value+"'");
+                        
                     }
                 }
-                
+                */
                 // query to find the lantitude and longtitude
                 // old way is using for loop to send request one by one based on the resource and territory
                 //best way is use one request get multiple resources and territories.
-                var query="SELECT Id,Name,STKR__Next_Visit__c,STKR__Service_Interval__c,STKR__Account__c,STKR__Frequency__c, STKR__Contract_End_Date__c,STKR__Fix_all_Visits__c, STKR__Start_Date__c, STKR__Time_Allocation__c, STKR__Service_Owner__c, STKR__Account__r.STKR__Location__longitude__s,STKR__Account__r.STKR__Location__Latitude__s from STKR__Service__c where STKR__Account__c in (SELECT Id from Account where STKR__Territory__c in ("+territory.toString()+")) and STKR__Service_Owner__c in ("+resource.toString()+") and STKR__Period_End__c>"+data[0].value+" and STKR__Start_Date__c<"+data[1].value+"T08:26:00.000+0000";
+                var query="SELECT Id,Name,STKR__Account_lkp__r.Id,STKR__Service__r.Id,STKR__Fixed_Visit__c, STKR__Service__r.STKR__Last_Scheduled_Visit__c,STKR__Service__r.STKR__Frequency__c, STKR__Service__r.STKR__Contract_End_Date__c,STKR__Service__r.STKR__Fix_all_Visits__c, STKR__Service__r.STKR__Start_Date__c, STKR__Service__r.STKR__Time_Allocation__c, STKR__Service__r.STKR__Service_Owner__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Account_lkp__c in (SELECT Id from Account where STKR__Territory__c in ("+territory.toString()+")) and STKR__Service__r.STKR__Service_Owner__c in ("+resource.toString()+") and STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000";
                 console.log(query);
                 try{
                     sforce.connection.sessionId="{!$Api.Session_ID}";
@@ -350,50 +369,37 @@ y__c==="Yearly"){
                 console.log(latitude);
                 console.log(longitude);
                 */
-                
-                for (i=0; i<=data.size-1; i++){
-                    
-                            var lat=Number(data.records[i].STKR__Account__r.STKR__location__Latitude__s);
-                            var lng=Number(data.records[i].STKR__Account__r.STKR__location__Longitude__s);
+                var accountLocation=[];
+                for (i=0; i<data.size-1; i++){
+                    if(data.records[i].STKR__Account_lkp__r.Id!=data.records[i+1].STKR__Account_lkp__r.Id){
+                            var lat=Number(data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s);
+                            var lng=Number(data.records[i].STKR__Account_lkp__r.STKR__location__Longitude__s);
                             var latLng=lat+","+lng;
                             mappingJson.locations.push(latLng);
-
+							accountLocation.push(i);
+                        }
                 }
-                return mappingJson.locations.length;
+                return accountLocation;
             }
             
             function generateMapJson(data){
-                console.log(data);
-                //var mappingJson = `{ "locations": [ "Cardiff, CO", "Westminster, CO", "Boulder, CO"], "options": { "allToAll": true }}`;
-                //console.log(data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s);
-                //console.log(data.records.STKR__Account_lkp__r.STKR__location__Longitude__s);
-                /*
-				var latitude=[];
-                var longitude=[];
-                for(i=0; i<data.size;i++){
-                	latitude.push(data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s);
-                    longitude.push(data.records[i].STKR__Account_lkp__r.STKR__location__Longitude__s);
-                }
-                */
+
                 var mappingJson={};
                 var locations=[];
                 mappingJson.locations=locations;
-                
-                /*
-                })
-                */
-                //console.log(latitude);
-                //console.log(longitude);
 
-                var num=locationNum(mappingJson,data);
-                //console.log(mappingJson.locations);
+                var accountLocation=locationNum(mappingJson,data);
+
+                console.log("the index of different location or Account:"+accountLocation);
+                
+                //consider about the multiple location
                 if (mappingJson.locations.length <= 24){
                     mappingJson.options={};
                     mappingJson.options={"allToAll" :true};
                     return JSON.stringify(mappingJson)
                 }else{
                     //need mutiple requests based on the n*n matrix, such as 30*30, 3 request; 45*45
-                    mutipleRequest(mappingJson,num);
+                    mutipleRequest(mappingJson,mappingJson.locations.length);
                     return 0;
                 }
                 
@@ -452,7 +458,7 @@ y__c==="Yearly"){
         <body>
             <apex:pageBlock title="Route Optimisation">
                 
-                <form id="matrixForm" method="POST" action="http://www.mapquestapi.com/directions/v2/routematrix?key=XFI9f8gkExRTk58rq7jyxDSMgkgt06KV">
+                <form id="matrixForm" method="POST" action="http://www.mapquestapi.com/directions/v2/routematrix?key=iJHqMi80cdsL6r70ePqDTYXHeSoNjx2Y">
                     <div id="date_container">
                         
                         <div>

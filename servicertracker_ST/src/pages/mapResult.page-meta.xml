@@ -6,7 +6,7 @@
     <label>mapResult</label>
     <packageVersions>
         <majorNumber>1</majorNumber>
-        <minorNumber>401</minorNumber>
+        <minorNumber>404</minorNumber>
         <namespace>STKR</namespace>
     </packageVersions>
 </ApexPage>
