@@ -172,12 +172,11 @@
                 //}
                 //seperate the visitData to resourceData, which means seperate schedule to individuals.
                 var resourceNum=[];
-                //STKR__Last_Visit__c
-                for(j=0;j<resourceData.size;j++)
-                {
+                var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
+                
+                for(j=0;j<resourceData.size;j++){
                     var jobSeperated=[];
-                    for(i=0; i<visitData.size;i++)
-                    {
+                    for(i=0; i<visitData.size;i++){
                         if (visitData.records[i].STKR__Service__r.STKR__Service_Owner__c==resourceData.records[j].Id)
                         {
                             jobSeperated.push(i);
@@ -189,30 +188,121 @@
                 
                 var NOverdueNFix=[];
                 var NOverdueFix=[];
-                var OverdueFix=[];
-                var OverdueNFix=[];
                 //seperated job
-                for(j=0;j<resourceNum.length;j++)
-                {
-                    var overdueNotFixVisit=[];
-                    var overdueFixVisit=[];
+                for(j=0;j<resourceNum.length;j++){
                     var notOverdueNotFixVisit=[];
                     var notOverdueFixVisit=[];
-                    for(var i in resourceNum[j])
-                    {
-                        if(visitData.records[resourceNum[j][i]].STKR__Fixed_Visit__c=="true" && visitData.records[resourceNum[j][i]].STKR__Days_Overdue__c==0.0){
+                    for(var i in resourceNum[j]){
+                        if(visitData.records[resourceNum[j][i]].STKR__Fixed_Visit__c=="true"){
                             //it is fix visit and not overdue visit.
-                            notOverdueFixVisit.push(resourceNum[j][i]);
-                            console.log("it is fix visit and not overdue visit");
-                            
-                        }else if(visitData.records[resourceNum[j][i]].STKR__Fixed_Visit__c!="true" && visitData.records[resourceNum[j][i]].STKR__Days_Overdue__c==0.0){
+                            var days=Math.round(Math.abs((new Date(visitData.records[resourceNum[j][i]].STKR__Due_Date__c).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
+                            notOverdueFixVisit.push([days,resourceNum[j][i]]);
+                            //console.log("it is fix visit and not overdue visit");
+                        }else{
                             //it is not fix visit and not overdue visit
-                            console.log("it is not fix visit and not overdue visit");
-                            notOverdueNotFixVisit.push(resourceNum[j][i]);
+                            //console.log("it is not fix visit and not overdue visit");
+                            var days=Math.round(Math.abs((new Date(visitData.records[resourceNum[j][i]].STKR__Due_Date__c).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
+                            notOverdueNotFixVisit.push([days,resourceNum[j][i]]);
+                        }
+                        //dayVisit.push([daysNoverdue,resourceNum[j][i]]);
+                        //console.log(daysNoverdue);
+                        
+                        //console.log(notOverdueNotFixVisit);
+                    }
+                    // re-structure the [days] and [visit]
+                    for (var i in notOverdueNotFixVisit){
+                        if (visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Frequency__c=="Weekly"){
+                            //console.log("Weekly");
+                            //request to visit, get all the data from service and visit
+                            notOverdueNotFixVisit[i].push(7/visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Service_Interval__c);
+                            //console.log(visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Service_Interval__c);
+                            //know the total day user chose.
+                        }else if (visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Frequency__c=="Daily"){
+                            notOverdueNotFixVisit[i].push(0);
+                        }else if (visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Frequency__c=="Monthly"){
+                            //may be the number need to be changed
+                            notOverdueNotFixVisit[i].push(30.5/visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Service_Interval__c);
                             
-                            
-                        }else if (visitData.records[resourceNum[j][i]].STKR__Fixed_Visit__c!="true" && visitData.records[resourceNum[j][i]].STKR__Days_Overdue__c !=0.0){
+                        }else if (visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Frequency__c=="Yearly"){
+                            notOverdueNotFixVisit[i].push(365/visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Service_Interval__c);
+                        }
+                        
+                        notOverdueNotFixVisit[i].push(resourceData.records[j].STKR__Lunch_Break_Minutes__c+visitData.records[notOverdueNotFixVisit[i][1]].STKR__Time_Allocation__c);
+                        notOverdueNotFixVisit[i].push(resourceData.records[j].STKR__Working_Hours__c*60);
+                        
+                    }
+                    
+                    // push status -1 for fixvisit and 
+                    if(!notOverdueFixVisit){
+                        for(var i in notOverdueFixVisit){
+                            notOverdueFixVisit[i].push(-1);
+                        }
+                        notOverdueNotFixVisit = notOverdueNotFixVisit.concat(notOverdueFixVisit);
+                    }
+                    /*group the array based on the same days, which means map{key:day, value:[visits,grade]}
+                    
+                    1. first sort based on days
+                    2. delete the same elements
+                    */
+                    
+                    
+                    notOverdueNotFixVisit.sort(function(a,b){
+                        return a[0]-b[0]
+                    });
+                    console.log(notOverdueNotFixVisit);
+                    //delete the same element
+                    for (i=0; i<notOverdueNotFixVisit.length-1;i++){
+                        if (notOverdueNotFixVisit[i][0]===notOverdueNotFixVisit[i+1][0]){
+                            console.log("notOverdueNotFixVisit[i][0]===notOverdueNotFixVisit[i+1][0]");
+                            if (notOverdueNotFixVisit[i][1].length){
+                                notOverdueNotFixVisit[i][1].push(notOverdueNotFixVisit[i+1][1]);
+                                notOverdueNotFixVisit[i][2].push(notOverdueNotFixVisit[i+1][2]);
+                                notOverdueNotFixVisit[i][3].push(notOverdueNotFixVisit[i+1][3]);
+                            }else{
+                                var tem=notOverdueNotFixVisit[i][1];
+                                notOverdueNotFixVisit[i][1]=[];
+                                notOverdueNotFixVisit[i][1].push(tem,notOverdueNotFixVisit[i+1][1]);
+                                var tem =notOverdueNotFixVisit[i][2];
+                                notOverdueNotFixVisit[i][2]=[];
+                                notOverdueNotFixVisit[i][2].push(tem,notOverdueNotFixVisit[i+1][2]);
+                                var tem =notOverdueNotFixVisit[i][3];
+                                notOverdueNotFixVisit[i][3]=[];
+                                notOverdueNotFixVisit[i][3].push(tem+notOverdueNotFixVisit[i+1][3]);
+                            }
+                            notOverdueNotFixVisit.splice(i+1,1);
+                            i--;
+                        }
+                        console.log(notOverdueNotFixVisit);
+                    }
+                    // 
+                    for (var i of notOverdueNotFixVisit){
+                    }
+                    //get time for calculation
+                    console.log(notOverdueNotFixVisit);
+                    NOverdueNFix.push(notOverdueNotFixVisit);
+                    NOverdueFix.push(notOverdueFixVisit);    
+                }
+                
+                console.log(NOverdueNFix);
+                console.log(NOverdueFix);
+                
+                
+                predictDay(OverdueNFix,OverdueFix,NOverdueNFix,NOverdueFix);
+            }     
+            
+            /*
+            overdue problem
+            var OverdueFix=[];
+            var OverdueNFix=[];
+            
+            var overdueNotFixVisit=[];
+            var overdueFixVisit=[];
+            
+            && visitData.records[resourceNum[j][i]].STKR__Days_Overdue__c==0.0
+            
+             }else if (visitData.records[resourceNum[j][i]].STKR__Fixed_Visit__c!="true" && visitData.records[resourceNum[j][i]].STKR__Days_Overdue__c !=0.0){
                             //it is fix visit and is overdue visit
+                            
                             console.log("it is not fix visit and is overdue visit");
                             overdueNotFixVisit.push(resourceNum[j][i]);
                         }else{
@@ -220,41 +310,11 @@
                             console.log("it is fix visit and overdue visit");
                             overdueFixVisit.push(resourceNum[j][i]);                        
                         }
-                    
-                    resourceData.records[j].STKR__Lunch_Break_Minutes__c+visitData.records[i].STKR__Time_Allocation__c<=resourceData.records[j].STKR__Working_Hours__c*60
-                    
-                }
-                NOverdueNFix.push(notOverdueNotFixVisit);
-                NOverdueFix.push(notOverdueFixVisit);
-                OverdueFix.push(overdueFixVisit);
-                OverdueNFix.push(overdueNotFixVisit);
-
-                
-            }
-                var days=rawData[1].value-rawData[0].value;
-                console.log(days);
-
-             predictDay(OverdueNFix,OverdueFix,NOverdueNFix,NOverdueFix);
-            }     
+                        OverdueFix.push(overdueFixVisit);
+                    OverdueNFix.push(overdueNotFixVisit);
+            */
             
-            
-                
-                /*
-                    //consider about the frequency, may be don't need consider about the frequency
-                    if(visitData.records[i].STKR__Frequency__c==="Weekly"){
-                    	console.log("weekly");
-                    }else if(visitData.records[i].STKR__Frequency__c==="Daily"){
-                    	console.log("daily");
-                    }else if(visitData.records[i].STKR__Frequency__c==="Monthly"){
-                    	console.log("monthly");
-                    }else if(visitData.records[i].STKR__Frequenc                        if (visitData.records[i].STKR__Service_Owner__c==resourceData.records[j].Id)
-y__c==="Yearly"){
-                    	console.log("yearly");
-                    }else{
-                    	console.log("none");
-                    }
-                    
-
+            /*
                     schedualId.push(visitData.records[i].STKR__Service__r.Id);
                     
                     
@@ -292,67 +352,45 @@ y__c==="Yearly"){
                 // formulate
                 
                 */
-                
-                
             
             function predictDay(overdueNotFixVisit,overdueFixVisit,notOverdueNotFixVisit,notOverdueFixVisit){
-                if (visitData.records[resourceNum[j][i]].STKR__Service__r.STKR__Frequency__c=="Weekly"){
-                    if(visitData.records[resourceNum[j][i]].STKR__Service__r.STKR__Last_Visit__c){
-                        //request to visit, get all the data from service and visit
-                        var date=visitData.records[resourceNum[j][i]].STKR__Service__r.STKR__Last_Visit__c;
-                        //avoid the weekend
-                        date.setDate(visitData.records[resourceNum[j][i]].STKR__Service__r.STKR__Last_Visit__c.getDate()+7/visitData.records[resourceNum[j][i]].STKR__Service_Interval__c);
-                        //know the total day user chose.
-                        
-                    }else{
-                        
+            }
+            
+            function valueForm (rawdata){
+                var resource=[];
+                var territory=[];
+                for (i=0;i<rawdata.length;i++){
+                    if(rawdata[i].name=="territory"){
+                        territory.push("'"+rawdata[i].value+"'");
                     }
-                    
-                }else if (visitData.records[resourceNum[j][i]].STKR__Service__r.STKR__Frequency__c=="Daily"){
-                    
-                }else if (visitData.records[resourceNum[j][i]].STKR__Service__r.STKR__Frequency__c=="Monthly"){
-                    
-                }else if (visitData.records[resourceNum[j][i]].STKR__Service__r.STKR__Frequency__c=="Yearly"){
-                    
-                    
+                    // for example :  STKR__ParentId__c, STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< 2019-06-19T08:26:00.000+0000 and STKR__Planned_Date__c> 2018-07-10T08:00:00.000+0000 and STKR__Resource_Name__c='Kang' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('Cardiff', 'Caerphilly')
+                    if (rawdata[i].name=="resource"){
+                        resource.push("'"+rawdata[i].value+"'");
+                    }
                 }
+                return [resource,territory];
+            }
+            function requestResource(rawdata){
+                var resource=valueForm(rawdata);
+                var query="select Id,Name,STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c from STKR__Resource__c where Id in ("+resource[0].toString()+")";
+                console.log(query);
+                try{
+                    sforce.connection.sessionId="{!$Api.Session_ID}";
+                    var queryResult=sforce.connection.query(query);
+                }catch(error)
+                {
+                    console.log(error);
                 }
+                return queryResult;
+            }
+            
+            //input: the raw data output: filter data using Query
+            function requestToSforce(data){
+                var resource=valueForm(data);
+                var territory=resource[1];
+                resource=resource[0];
                 
-                function valueForm (rawdata){
-                    var resource=[];
-                    var territory=[];
-                    for (i=0;i<rawdata.length;i++){
-                        if(rawdata[i].name=="territory"){
-                            territory.push("'"+rawdata[i].value+"'");
-                        }
-                        // for example :  STKR__ParentId__c, STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< 2019-06-19T08:26:00.000+0000 and STKR__Planned_Date__c> 2018-07-10T08:00:00.000+0000 and STKR__Resource_Name__c='Kang' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('Cardiff', 'Caerphilly')
-                        if (rawdata[i].name=="resource"){
-                            resource.push("'"+rawdata[i].value+"'");
-                        }
-                    }
-                    return [resource,territory];
-                }
-                function requestResource(rawdata){
-                    var resource=valueForm(rawdata);
-                    var query="select Id,Name, STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c from STKR__Resource__c where Id in ("+resource[0].toString()+")";
-                    console.log(query);
-                    try{
-                        sforce.connection.sessionId="{!$Api.Session_ID}";
-                        var queryResult=sforce.connection.query(query);
-                    }catch(error)
-                    {
-                        console.log(error);
-                    }
-                    return queryResult;
-}
-                
-                //input: the raw data output: filter data using Query
-                function requestToSforce(data){
-                    var resource=valueForm(data);
-                    var territory=resource[1];
-                    resource=resource[0];
-                    
-                    /*
+                /*
                 //get the resource and terrritory from the raw data
                 for (i=0; i<= data.length-1; i++){
                     //console.log(i);
@@ -370,7 +408,7 @@ y__c==="Yearly"){
                 // query to find the lantitude and longtitude
                 // old way is using for loop to send request one by one based on the resource and territory
                 //best way is use one request get multiple resources and territories.
-                var query="SELECT Id,Name,STKR__Days_Overdue__c,STKR__Account_lkp__r.Id,STKR__Service__r.Id,STKR__Fixed_Visit__c, STKR__Service__r.STKR__Last_Scheduled_Visit__c,STKR__Service__r.STKR__Frequency__c, STKR__Service__r.STKR__Contract_End_Date__c,STKR__Service__r.STKR__Fix_all_Visits__c, STKR__Service__r.STKR__Start_Date__c, STKR__Service__r.STKR__Time_Allocation__c, STKR__Service__r.STKR__Service_Owner__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Account_lkp__c in (SELECT Id from Account where STKR__Territory__c in ("+territory.toString()+")) and STKR__Service__r.STKR__Service_Owner__c in ("+resource.toString()+") and STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000";
+                var query="SELECT Id,Name,STKR__Service__r.STKR__Service_Interval__c,STKR__Due_Date__c,STKR__Days_Overdue__c,STKR__Account_lkp__r.Id,STKR__Service__r.Id,STKR__Fixed_Visit__c, STKR__Service__r.STKR__Last_Scheduled_Visit__c,STKR__Service__r.STKR__Frequency__c, STKR__Service__r.STKR__Contract_End_Date__c,STKR__Service__r.STKR__Fix_all_Visits__c, STKR__Service__r.STKR__Start_Date__c, STKR__Service__r.STKR__Time_Allocation__c, STKR__Service__r.STKR__Service_Owner__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Account_lkp__c in (SELECT Id from Account where STKR__Territory__c in ("+territory.toString()+")) and STKR__Service__r.STKR__Service_Owner__c in ("+resource.toString()+") and STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000";
                 console.log(query);
                 try{
                     sforce.connection.sessionId="{!$Api.Session_ID}";
@@ -381,10 +419,9 @@ y__c==="Yearly"){
                 }
                 console.log(queryResult);
                 return queryResult;
-                
             }
-                function locationNum(mappingJson,data){
-                    /*
+            function locationNum(mappingJson,data){
+                /*
                 latitude=latitude.filter(function(elem, index, self){
                     return index===self.indexOf(elem)})
                 longitude=longitude.filter(function(elem, index, self){
@@ -404,30 +441,30 @@ y__c==="Yearly"){
                 }
                 return accountLocation;
             }
+            
+            function generateMapJson(data){
                 
-                function generateMapJson(data){
-                    
-                    var mappingJson={};
-                    var locations=[];
-                    mappingJson.locations=locations;
-                    
-                    var accountLocation=locationNum(mappingJson,data);
-                    
-                    console.log("the index of different location or Account:"+accountLocation);
-                    
-                    //consider about the multiple location
-                    if (mappingJson.locations.length <= 24){
-                        mappingJson.options={};
-                        mappingJson.options={"allToAll" :true};
-                        return JSON.stringify(mappingJson)
-                    }else{
-                        //need mutiple requests based on the n*n matrix, such as 30*30, 3 request; 45*45
-                        mutipleRequest(mappingJson,mappingJson.locations.length);
-                        return 0;
-                    }
-                    
-                    
-                    /*
+                var mappingJson={};
+                var locations=[];
+                mappingJson.locations=locations;
+                
+                var accountLocation=locationNum(mappingJson,data);
+                
+                console.log("the index of different location or Account:"+accountLocation);
+                
+                //consider about the multiple location
+                if (mappingJson.locations.length <= 24){
+                    mappingJson.options={};
+                    mappingJson.options={"allToAll" :true};
+                    return JSON.stringify(mappingJson)
+                }else{
+                    //need mutiple requests based on the n*n matrix, such as 30*30, 3 request; 45*45
+                    mutipleRequest(mappingJson,mappingJson.locations.length);
+                    return 0;
+                }
+                
+                
+                /*
                 for(i=0;i<=data.size-1;i++){
                     //mappingJson.location[i].latLng=latLng;
                     var lat=data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s;
@@ -441,8 +478,8 @@ y__c==="Yearly"){
                     */
                 
             }
-                
-                /*
+            
+            /*
           function getdistance() {
           var mappingJson='';
           mappingJson += '{ locations: [ "Denver, CO", "Westminster, CO", "Boulder, CO"], "options": { "allToAll": true }}';
@@ -464,18 +501,18 @@ y__c==="Yearly"){
 
       });
       */
-                //          var xmlhttp= new XMLHttpRequest();
-                //if (this.readyState == 4 && this.status == 200) 
-                //{
-                //            document.getElementById("availablityResults").innerHTML=this.responseText;
-                //}STKR__Period_End__c
-                //xmlhttp.open("POST", "https://www.mapquestapi.com/directions/v2/routematrix?key=XFI9f8gkExRTk58rq7jyxDSMgkgt06KV", true);
-                //xmlhttp.setRequestHeader("Content-Type", "application/json");
-                //xmlhttp.send(JSON.stringify({ "location" : [ "Cardiff, GB", "Caerphilly, GB", "Newport, GB"], "options": { "allToAll": true}}));
-                //console.log(xmlhttp.responseText);
-                //}
-                
-                </script>
+            //          var xmlhttp= new XMLHttpRequest();
+            //if (this.readyState == 4 && this.status == 200) 
+            //{
+            //            document.getElementById("availablityResults").innerHTML=this.responseText;
+            //}STKR__Period_End__c
+            //xmlhttp.open("POST", "https://www.mapquestapi.com/directions/v2/routematrix?key=XFI9f8gkExRTk58rq7jyxDSMgkgt06KV", true);
+            //xmlhttp.setRequestHeader("Content-Type", "application/json");
+            //xmlhttp.send(JSON.stringify({ "location" : [ "Cardiff, GB", "Caerphilly, GB", "Newport, GB"], "options": { "allToAll": true}}));
+            //console.log(xmlhttp.responseText);
+            //}
+            
+            </script>
             
         </head>
         <body>

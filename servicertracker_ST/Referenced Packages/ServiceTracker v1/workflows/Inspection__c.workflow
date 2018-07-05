@@ -51,7 +51,7 @@ TEXT(Result__c) = &apos;null&apos;
         <fullName>schedule_for_visit_due</fullName>
         <description>changes the scheduled date to the visit due date.</description>
         <field>Inspection_Scheduled_For__c</field>
-        <formula>Visit__r.Due_Date__c</formula>
+        <formula>Visit__r.Planned_Date__c</formula>
         <name>schedule for visit due</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
@@ -125,7 +125,7 @@ TEXT(Result__c) = &apos;null&apos;
             <operation>equals</operation>
             <value>Pending</value>
         </criteriaItems>
-        <description>changes the scheduled for date to mate the visit due date.</description>
+        <description>changes the scheduled for date to match the visit planned date.</description>
         <triggerType>onAllChanges</triggerType>
     </rules>
 </Workflow>
