@@ -299,4 +299,4 @@ Change to visit
 
 SELECT Id,Name,STKR__Service__r.STKR__Last_Scheduled_Visit__c,STKR__Service__r.STKR__Frequency__c, STKR__Service__r.STKR__Contract_End_Date__c,STKR__Service__r.STKR__Fix_all_Visits__c, STKR__Service__r.STKR__Start_Date__c, STKR__Service__r.STKR__Time_Allocation__c, STKR__Service__r.STKR__Service_Owner__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Account_lkp__c in (SELECT Id from Account where STKR__Territory__c in ('a0S0N000014jOKsUAM','a0S0N000014jK7GUAU')) and STKR__Service__r.STKR__Service_Owner__c in ('a0N0N00001KNcrUUAT','a0N0N00001KNcrFUAT','a0N0N00001KNJUmUAP') 
 
-
+#回国一定自己开自己的公司
