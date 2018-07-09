@@ -72,5 +72,12 @@ public with sharing class MapControllertest {
     
         
     }
+    public PageReference routeOptimisation() {
+        
+        System.debug('kang');
+        
+        return null;
+        
+    }
 
 }

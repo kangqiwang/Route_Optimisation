@@ -274,20 +274,17 @@
                         }
                         console.log(notOverdueNotFixVisit);
                     }
-                    // 
-                    for (var i of notOverdueNotFixVisit){
-                    }
-                    //get time for calculation
+                    
+                    
                     console.log(notOverdueNotFixVisit);
                     NOverdueNFix.push(notOverdueNotFixVisit);
-                    NOverdueFix.push(notOverdueFixVisit);    
+                    NOverdueFix.push(notOverdueFixVisit);
                 }
                 
                 console.log(NOverdueNFix);
                 console.log(NOverdueFix);
                 
                 
-                predictDay(OverdueNFix,OverdueFix,NOverdueNFix,NOverdueFix);
             }     
             
             /*
@@ -518,12 +515,13 @@
         <body>
             <apex:pageBlock title="Route Optimisation">
                 
-                <form id="matrixForm" method="POST" action="http://www.mapquestapi.com/directions/v2/routematrix?key=iJHqMi80cdsL6r70ePqDTYXHeSoNjx2Y">
+                <apex:form id="matrixForm">
                     <div id="date_container">
                         
                         <div>
                             <label>From Date </label>
                             <input type="date" id="fromDate" name="formDate"/>    
+                            <apex:actionFunction action="{!routeOptimisation}" rerender="result" name=""/>
                         </div>
                         <div style='width: 30%;'></div>
                         
@@ -546,7 +544,7 @@
                         <input type="submit" name="submit" value="Find Nearest Tech"/>    
                     </div>
                     
-                </form>
+                </apex:form>
                 <div id="result" style="display: none;">
                     <div class="header">
                     </div>
