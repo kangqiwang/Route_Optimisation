@@ -90,21 +90,25 @@
                 $("#matrixForm").submit(function(event){
                     //getting data from the Form.
                     var rawData=$("#matrixForm").serializeArray();
-                    console.log(rawData);
+                    //console.log(rawData);
+
                     //prevent send request
                     event.preventDefault();
                     var territory=[];
                     var resource=[];
+                    //get the visitData
                     var visitData=requestToSforce(rawData);
-                    console.log(visitData);
+                    //console.log(visitData);
+                    //get the resourcedata
                     var resourceData=requestResource(rawData);
+                    //console.log(resourceData);
+                    //get the different Json file
                     var generatejson=generateMapJson(visitData);
-                    console.log(generatejson);
+                    //console.log(generatejson);
                     var timeMatrix=getTravelTime(generatejson,resourceData,visitData,rawData);
-                    
+                    optimisation(timeMatrix,resourceData,visitData,rawData);
                     //var mappingJson=JSON.stringify({locations,options:allToAll});
                 });
-                
             });
             
             //input : return data by POST. output : show the map
@@ -143,47 +147,82 @@
             
             //input: data from the mapquest response. output: the time and distance
             function getTravelTime(mappingJson,resourceData,visitData,rawData){
-                $.ajax({
-                    type: 'POST',
-                    dataType: 'jsonp',
-                    contentType: 'json',
-                    url: "http://www.mapquestapi.com/directions/v2/routematrix",
-                    data: {key: decodeURI("iJHqMi80cdsL6r70ePqDTYXHeSoNjx2Y"),
-                           json: mappingJson},
-                    
-                    success: function(data){
-                        console.log(data);
-                        console.log('form was submit,' + data.time);
-                        //calculate the optimisation
-                        optimisation(data,resourceData,visitData,rawData);
-                    },
-                    error: function(data){
-                        console.log("error");
-                    },
-                });
-                
+                var timelist=[];
+                for(var i=0; i<visitData.length; i++){
+                    //console.log(visitData.length);
+                    //console.log(mappingJson);
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'jsonp',
+                        contentType: 'json',
+                        url: "http://www.mapquestapi.com/directions/v2/routematrix",
+                        data: {key: decodeURI("iJHqMi80cdsL6r70ePqDTYXHeSoNjx2Y"),
+                               json: mappingJson[i]},
+                        
+                        success: function(data){
+                            //console.log(data);
+                            //console.log('form was submit,' + data.time);
+                            //calculate the optimisation
+                            timelist.push(data);
+                            console.log("successdata"+data);
+                            console.log("success"+timelist);
+                        },
+                        error: function(data){
+                            console.log("error");
+                            
+                        },
+                    });	
+
+                }
+                do{
+                	console.log("I am stupid machine")
+                }
+                while (visitData.length!=timelist.length)
+                return timelist;
             }
+            //timeMatrix and resourceData and visitData is array for different territory
             function optimisation(timeMatrix, resourceData,visitData,rawData){
+                
+                //console.log('resource  ' + resourceData);
+                //console.log('visit   ' + visitData);
+                //console.log('timeMatrix   ' + timeMatrix);
+                
                 //var lastVisied=visitData.records[i].STKR__Last_Visit__c;
                 //  if (lastVisied){
                 
                 //}else{
-                
+                //console.log('timeMatrix   ' + timeMatrix[1]);
                 //}
                 //seperate the visitData to resourceData, which means seperate schedule to individuals.
-                var resourceNum=[];
-                var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
-                
-                for(j=0;j<resourceData.size;j++){
-                    var jobSeperated=[];
-                    for(i=0; i<visitData.size;i++){
-                        if (visitData.records[i].STKR__Service__r.STKR__Service_Owner__c==resourceData.records[j].Id)
-                        {
-                            jobSeperated.push(i);
+                for(i=0; i<visitData.length;i++){
+                    var resource=resourceData[i];
+                    var visit=visitData[i];
+                    var Matrix=timeMatrix[i];
+                    var resourceNum=[];
+                    console.log(visit);
+                    console.log(resource);
+                    console.log(Matrix);
+                    
+                    for(j=0;j<resource.length;j++){
+                        console.log(j);
+                        console.log(resource.records[j].Name);
+                        console.log(resource.records[j].STKR__Expiry_Date__c);
+                        console.log(resource.records[j].STKR__Working_Hours__c);
+                        console.log(resource.records[1]);
+                        console.log(resource.records[0]);
+                        var jobSeperated=[];
+                        for(a=0; a<visit.size;a++){
+                            if (visit.records[a].STKR__Service__r.STKR__Service_Owner__c==resource.records[j].Id)
+                            {
+                                jobSeperated.push(a);
+                            }
                         }
-                    }
-                    resourceNum.push(jobSeperated);
+                        resourceNum.push(jobSeperated);
+                    }                	
+                    
                 }
+                var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
+
                 console.log(resourceNum);
                 
                 var NOverdueNFix=[];
@@ -369,53 +408,44 @@
             }
             function requestResource(rawdata){
                 var resource=valueForm(rawdata);
-                var query="select Id,Name,STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c from STKR__Resource__c where Id in ("+resource[0].toString()+")";
-                console.log(query);
-                try{
-                    sforce.connection.sessionId="{!$Api.Session_ID}";
-                    var queryResult=sforce.connection.query(query);
-                }catch(error)
-                {
-                    console.log(error);
+                var result=[];
+                for(var i of resource[1]){
+                    var query="select Id,Name,STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c from STKR__Resource__c where Id in ("+resource[0].toString()+") and STKR__Territory__c in ("+i+")";
+                    //console.log(query);
+                    try{
+                        sforce.connection.sessionId="{!$Api.Session_ID}";
+                        var queryResult=sforce.connection.query(query);
+                        result.push(queryResult);
+                    }catch(error)
+                    {
+                        console.log(error);
+                    }
                 }
-                return queryResult;
+                return result;
             }
             
             //input: the raw data output: filter data using Query
             function requestToSforce(data){
                 var resource=valueForm(data);
                 var territory=resource[1];
+                var result=[];
                 resource=resource[0];
-                
-                /*
-                //get the resource and terrritory from the raw data
-                for (i=0; i<= data.length-1; i++){
-                    //console.log(i);
-                    //console.log(data[i].name=="resource");
-                    if(data[i].name=="territory"){
-                        territory.push("'"+data[i].value+"'");
-                    }
-                    // for example : SELECT STKR__Next_Visit_Date__c STKR__ParentId__c, STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< 2019-06-19T08:26:00.000+0000 and STKR__Planned_Date__c> 2018-07-10T08:00:00.000+0000 and STKR__Resource_Name__c='Kang' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('Cardiff', 'Caerphilly')
-                    if (data[i].name=="resource"){
-                        resource.push("'"+data[i].value+"'");
-                        
-                    }
-                }
-                */
                 // query to find the lantitude and longtitude
                 // old way is using for loop to send request one by one based on the resource and territory
                 //best way is use one request get multiple resources and territories.
-                var query="SELECT Id,Name,STKR__Service__r.STKR__Service_Interval__c,STKR__Due_Date__c,STKR__Days_Overdue__c,STKR__Account_lkp__r.Id,STKR__Service__r.Id,STKR__Fixed_Visit__c, STKR__Service__r.STKR__Last_Scheduled_Visit__c,STKR__Service__r.STKR__Frequency__c, STKR__Service__r.STKR__Contract_End_Date__c,STKR__Service__r.STKR__Fix_all_Visits__c, STKR__Service__r.STKR__Start_Date__c, STKR__Service__r.STKR__Time_Allocation__c, STKR__Service__r.STKR__Service_Owner__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Account_lkp__c in (SELECT Id from Account where STKR__Territory__c in ("+territory.toString()+")) and STKR__Service__r.STKR__Service_Owner__c in ("+resource.toString()+") and STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000";
-                console.log(query);
-                try{
-                    sforce.connection.sessionId="{!$Api.Session_ID}";
-                    var queryResult=sforce.connection.query(query);
-                }catch(error)
-                {
-                    console.log(error);
+                for(var i of territory){     
+                    var query="SELECT Id,Name,STKR__Service__r.STKR__Service_Interval__c,STKR__Due_Date__c,STKR__Days_Overdue__c,STKR__Account_lkp__r.Id,STKR__Service__r.Id,STKR__Fixed_Visit__c, STKR__Service__r.STKR__Last_Scheduled_Visit__c,STKR__Service__r.STKR__Frequency__c, STKR__Service__r.STKR__Contract_End_Date__c,STKR__Service__r.STKR__Fix_all_Visits__c, STKR__Service__r.STKR__Start_Date__c, STKR__Service__r.STKR__Time_Allocation__c, STKR__Service__r.STKR__Service_Owner__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Account_lkp__c in (SELECT Id from Account where STKR__Territory__c in ("+i+")) and STKR__Service__r.STKR__Service_Owner__c in ("+resource.toString()+") and STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000";
+                    //console.log(query);
+                    try{
+                        sforce.connection.sessionId="{!$Api.Session_ID}";
+                        var queryResult=sforce.connection.query(query);
+                        result.push(queryResult);
+                    }catch(error)
+                    {
+                        console.log(error);
+                    }
                 }
-                console.log(queryResult);
-                return queryResult;
+                return result;
             }
             function locationNum(mappingJson,data){
                 /*
@@ -440,25 +470,28 @@
             }
             
             function generateMapJson(data){
-                
-                var mappingJson={};
-                var locations=[];
-                mappingJson.locations=locations;
-                
-                var accountLocation=locationNum(mappingJson,data);
-                
-                console.log("the index of different location or Account:"+accountLocation);
-                
-                //consider about the multiple location
-                if (mappingJson.locations.length <= 24){
-                    mappingJson.options={};
-                    mappingJson.options={"allToAll" :true};
-                    return JSON.stringify(mappingJson)
-                }else{
-                    //need mutiple requests based on the n*n matrix, such as 30*30, 3 request; 45*45
-                    mutipleRequest(mappingJson,mappingJson.locations.length);
-                    return 0;
+                var mappingJsonList=[];
+                console.log(data.length);
+                for(var i=0; i<data.length; i++){
+                    var mappingJson={};
+                    var locations=[];
+                    mappingJson.locations=locations;
+                    var accountLocation=locationNum(mappingJson,data[i]);
+                    
+                    console.log("the index of different location or Account:"+accountLocation);
+                    
+                    //consider about the multiple location
+                    if (accountLocation.length <= 24){
+                        mappingJson.options={};
+                        mappingJson.options={"allToAll" :true};
+                        mappingJsonList.push(JSON.stringify(mappingJson));
+                    }else{
+                        //need mutiple requests based on the n*n matrix, such as 30*30, 3 request; 45*45
+                        mutipleRequest(mappingJson,mappingJson.locations.length);
+                    }
                 }
+                console.log(mappingJsonList);
+                return mappingJsonList;
                 
                 
                 /*
@@ -515,13 +548,12 @@
         <body>
             <apex:pageBlock title="Route Optimisation">
                 
-                <apex:form id="matrixForm">
+                <form id="matrixForm">
                     <div id="date_container">
                         
                         <div>
                             <label>From Date </label>
                             <input type="date" id="fromDate" name="formDate"/>    
-                            <apex:actionFunction action="{!routeOptimisation}" rerender="result" name=""/>
                         </div>
                         <div style='width: 30%;'></div>
                         
@@ -541,10 +573,11 @@
                         
                     </div>
                     <div>
-                        <input type="submit" name="submit" value="Find Nearest Tech"/>    
+                        <input type="submit" onclick="submit;" value="Route Optimisation"/>    
                     </div>
+
                     
-                </apex:form>
+                </form>
                 <div id="result" style="display: none;">
                     <div class="header">
                     </div>

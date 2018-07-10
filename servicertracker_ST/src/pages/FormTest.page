@@ -1,0 +1,15 @@
+<apex:page controller="MapControllertest">
+    <apex:form id="matrixForm">
+        <input type="date" id="fromDate" name="formDate"/>  
+        <input type="date" id="toDate" name="toDate"/>
+        <input type="button" onclick="actionFunction();" name="submit" value="Find Nearest Tech"/>
+        <apex:actionFunction action="{!routeOptimisation}" rerender="result" name="submit">
+            <apex:param name="rawdata" value=""/>
+            <apex:param name="result" value=""/>
+            <apex:param name="resourcedata" value=""/>
+            <apex:param name="visitdata" value=""/>
+        </apex:actionFunction>
+        
+        
+    </apex:form>
+</apex:page>

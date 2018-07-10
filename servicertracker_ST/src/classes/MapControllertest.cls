@@ -73,11 +73,15 @@ public with sharing class MapControllertest {
         
     }
     public PageReference routeOptimisation() {
-        
-        System.debug('kang');
-        
-        return null;
-        
+        String rawdata=ApexPages.CurrentPage().getParameters().get('rawdata');
+        String result=ApexPages.CurrentPage().getParameters().get('result');
+        String resourcedata=ApexPages.CurrentPage().getParameters().get('resourcedata');
+        String visitdata=ApexPages.CurrentPage().getParameters().get('visitdata');
+ 		//generate the json and pass the json to result page
+ 		
+        System.debug('kang'+rawdata);
+        PageReference pr = new PageReference('/apex/redirectTest');
+        return pr;
     }
 
 }
