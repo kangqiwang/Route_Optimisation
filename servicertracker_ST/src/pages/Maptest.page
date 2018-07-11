@@ -7,17 +7,52 @@
             <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.1/mapquest.js"></script>
             <link rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.1/mapquest.css"/>
                 <style>
-                #date_container{
+                #date_container {
             display: flex;
             justify-content: center;
             }
             
-            .header button {
-            	padding: 10px 24px;
-                cursor: pointer;
-                float: left;
+            .result{
+            	display: flex;
+                height: 100%;
+                flex-direction: column;
+            }
+            .header,.footer{
+            	flex:none;
+            }
+            .container{
+            	display: flex;
+                flex: 1 0 auto;
+                flex-direction: colum;
+                padding: 1em;
+            }
+            .main{
+                margin-top: 1em;
+                order:1;
+            }
+            .right{order: 2;}
+            .left{
+            	order: -1;
+            }
+            .left,.right{
+                padding: 1em;
+                border-radius: 3px;
+                background: rgba(147, 128, 108, 0.1);
             }
             
+            @media (min-width: 768px) {
+                .container {
+                    flex-direction: row;
+                }
+                .main {
+                    flex: 1;
+                    padding: 1em;
+                    margin: 0;
+                }
+                .left, .right {
+                    flex: 0 0 12em;
+                }
+            }
             
             </style>
             
@@ -94,19 +129,21 @@
             
             $(document).ready(function(){
                 var status = 0;
-                $("#territoryButton").hide();
+                $("#result").show();
+                
                 //js json Ajax
                 $("#matrixForm").submit(function(event){
                     //getting data from the Form.
                     var rawData=$("#matrixForm").serializeArray();
                     //console.log(rawData);
-
+                    
                     //prevent send request
                     event.preventDefault();
                     var territory=[];
                     var resource=[];
                     //get the visitData
                     var visitData=requestToSforce(rawData);
+                    
                     //console.log(visitData);
                     //get the resourcedata
                     var resourceData=requestResource(rawData);
@@ -115,7 +152,7 @@
                     var generatejson=generateMapJson(visitData);
                     //console.log(generatejson);
                     
-                   	getTravelTime(generatejson,resourceData,visitData,rawData);
+                    getTravelTime(generatejson,resourceData,visitData,rawData);
                     console.log("show result please");
                     generateTerritory(rawData);
                     
@@ -123,6 +160,7 @@
                 });
             });
             function generateTerritory(rawdata){
+                //generate territory button
                 var resource=[];
                 var territory=[];
                 console.log(rawdata);
@@ -133,7 +171,8 @@
                     if (rawdata[i].name=="resource"){
                         resource.push(rawdata[i].value);
                     }
-                } 
+                }
+                
                 console.log(territory);
                 console.log(resource);
                 console.log(territories);
@@ -141,10 +180,22 @@
                 for (var i=0; i<territory.length;i++){
                     for(var j=0; j<territories.length;j++){
                         if(territories[j].id==territory[i]){
-                        var r=$('<button style="width:'++'%" name="'+territory[i]+'" value="'+territories[j].name+'">');
-                        $("#territoryButton").show().append(r);}
+                            var r=$('<button style="width:'+((1/territory.length).toFixed(2)-0.01)*100+'%;" id="'+territory[i]+'">'+territories[j].name+'</button>');
+                            $("#territoryButton").show().append(r);}
                     }
                 }
+                $("#territoryButton").children("button").click(function(event){
+                    alert(event.target.id);
+                });
+                
+            }
+            
+            function generateDayList(rawdata,optimizationday){
+                var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
+                for(var i in days){
+                console.log(i);
+                }
+
             }
             //input : return data by POST. output : show the map
             function renderMap(data){
@@ -182,7 +233,7 @@
             
             //input: data from the mapquest response. output: the time and distance
             function getTravelTime(mappingJson,resourceData,visitData,rawData){
-
+                
                 console.log(resourceData.length);
                 var RouteMatrix=[];
                 var promises=[];
@@ -190,15 +241,15 @@
                     
                     //console.log(visitData.length);
                     //console.log(mappingJson);
-                   var request=$.ajax({
-                       
+                    var request=$.ajax({
+                        
                         type: 'POST',
                         dataType: 'jsonp',
                         contentType: 'json',
                         url: "http://www.mapquestapi.com/directions/v2/routematrix",
                         data: {key: decodeURI("99JBw7RAaWzJmd7nMADgsOdbJseEtVPZ"),
                                json: mappingJson[i]}
-                       /*
+                        /*
                         success: function(data){
                             status++;
                             console.log("iteration success");
@@ -214,7 +265,7 @@
                             
                         },
                         */
-                    });
+                   });
                     promises.push(request);
                     //timelist.push(request.responseJSON);
                     //console.log(timelist);
@@ -225,7 +276,7 @@
                 });
                 console.dir(promises);
                 console.log('final');
-
+                
             }
             function callback(request){
                 for(var i; i<request.length;i++){
@@ -234,10 +285,10 @@
                     console.log(request[i].responseJSON);    
                 }
                 console.log("This is Callback function")
-            
+                
             }
             
-  
+            
             /*
                 return $.when.apply(null, timelist).done(function(timelist){
                     console.log(timelist);
@@ -336,42 +387,42 @@
                     1. first sort based on days
                     2. delete the same elements
                     */
-                    
-                    
-                    notOverdueNotFixVisit.sort(function(a,b){
-                        return a[0]-b[0]
-                    });
-                    //console.log(notOverdueNotFixVisit);
-                    //delete the same element
-                    for (i=0; i<notOverdueNotFixVisit.length-1;i++){
-                        if (notOverdueNotFixVisit[i][0]===notOverdueNotFixVisit[i+1][0]){
-                            //console.log("notOverdueNotFixVisit[i][0]===notOverdueNotFixVisit[i+1][0]");
-                            if (notOverdueNotFixVisit[i][1].length){
-                                notOverdueNotFixVisit[i][1].push(notOverdueNotFixVisit[i+1][1]);
-                                notOverdueNotFixVisit[i][2].push(notOverdueNotFixVisit[i+1][2]);
-                                notOverdueNotFixVisit[i][3].push(notOverdueNotFixVisit[i+1][3]);
-                            }else{
-                                var tem=notOverdueNotFixVisit[i][1];
-                                notOverdueNotFixVisit[i][1]=[];
-                                notOverdueNotFixVisit[i][1].push(tem,notOverdueNotFixVisit[i+1][1]);
-                                var tem =notOverdueNotFixVisit[i][2];
-                                notOverdueNotFixVisit[i][2]=[];
-                                notOverdueNotFixVisit[i][2].push(tem,notOverdueNotFixVisit[i+1][2]);
-                                var tem =notOverdueNotFixVisit[i][3];
-                                notOverdueNotFixVisit[i][3]=[];
-                                notOverdueNotFixVisit[i][3].push(tem+notOverdueNotFixVisit[i+1][3]);
+                        
+                        
+                        notOverdueNotFixVisit.sort(function(a,b){
+                            return a[0]-b[0]
+                        });
+                        //console.log(notOverdueNotFixVisit);
+                        //delete the same element
+                        for (i=0; i<notOverdueNotFixVisit.length-1;i++){
+                            if (notOverdueNotFixVisit[i][0]===notOverdueNotFixVisit[i+1][0]){
+                                //console.log("notOverdueNotFixVisit[i][0]===notOverdueNotFixVisit[i+1][0]");
+                                if (notOverdueNotFixVisit[i][1].length){
+                                    notOverdueNotFixVisit[i][1].push(notOverdueNotFixVisit[i+1][1]);
+                                    notOverdueNotFixVisit[i][2].push(notOverdueNotFixVisit[i+1][2]);
+                                    notOverdueNotFixVisit[i][3].push(notOverdueNotFixVisit[i+1][3]);
+                                }else{
+                                    var tem=notOverdueNotFixVisit[i][1];
+                                    notOverdueNotFixVisit[i][1]=[];
+                                    notOverdueNotFixVisit[i][1].push(tem,notOverdueNotFixVisit[i+1][1]);
+                                    var tem =notOverdueNotFixVisit[i][2];
+                                    notOverdueNotFixVisit[i][2]=[];
+                                    notOverdueNotFixVisit[i][2].push(tem,notOverdueNotFixVisit[i+1][2]);
+                                    var tem =notOverdueNotFixVisit[i][3];
+                                    notOverdueNotFixVisit[i][3]=[];
+                                    notOverdueNotFixVisit[i][3].push(tem+notOverdueNotFixVisit[i+1][3]);
+                                }
+                                notOverdueNotFixVisit.splice(i+1,1);
+                                i--;
                             }
-                            notOverdueNotFixVisit.splice(i+1,1);
-                            i--;
+                            console.log(notOverdueNotFixVisit);
                         }
+                        
+                        
                         console.log(notOverdueNotFixVisit);
+                        NOverdueNFix.push(notOverdueNotFixVisit);
+                        NOverdueFix.push(notOverdueFixVisit);
                     }
-                    
-                    
-                    console.log(notOverdueNotFixVisit);
-                    NOverdueNFix.push(notOverdueNotFixVisit);
-                    NOverdueFix.push(notOverdueFixVisit);
-                }
                     
                     console.log(NOverdueNFix);
                     console.log(NOverdueFix);
@@ -618,21 +669,31 @@
                     <div>
                         <input type="submit" onclick="submit;" value="Route Optimisation"/>    
                     </div>
-
+                    
                     
                 </form>
                 <hr />
-                <div id="result">
+                <div class="body" id="result">
                     <div id="territoryButton" class="header">
                     </div>
                     
-                    <br/>
-                    
-                    <div id="map" style="width: 100%; height: 530px;"></div>
-                    
-                    <div class="individual">
+                    <div class="container">
+                        
+                        <div class="left">
+                        <p>
+                            aksdkhekhdkbcdsb
+                            </p></div>    
+                        <div class="right">
+                            <p>kangasdhfoiasdf
+                            adfsad</p></div>
+                        <div class="main">
+                                <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>  
+
+                            <div id="map"></div>
+                        </div>
                     </div>
-                    <div class="route"></div>
+                    
+                    <div class="footer"></div>
                 </div>
             </apex:pageBlock>
         </body>
