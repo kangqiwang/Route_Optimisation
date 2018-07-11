@@ -12,6 +12,11 @@
             justify-content: center;
             }
             
+            .header button {
+            	padding: 10px 24px;
+                cursor: pointer;
+                float: left;
+            }
             
             
             </style>
@@ -24,7 +29,7 @@
             window.onload = function() {
                 //optimizedwaypoints example can be used
                 //https://developer.mapquest.com/documentation/mapquest-js/v1.3/examples/directions-with-optimized-waypoints/
-                L.mapquest.key = 'iJHqMi80cdsL6r70ePqDTYXHeSoNjx2Y';
+                L.mapquest.key = '99JBw7RAaWzJmd7nMADgsOdbJseEtVPZ';
                 
                 var map = L.mapquest.map('map', {
                     center: [40.7128, -74.0059],
@@ -54,6 +59,7 @@
                 
                 var resource ={
                     name: '{!resource.name}',
+                    id:'{!resource.Id}',
                 };
                 resources.push(resource);
                 
@@ -74,7 +80,8 @@
                 element.appendChild(checkboxResource);
                 
                 var territory ={
-                    name: '{!territory.name}'
+                    name: '{!territory.name}',
+                    id:'{!territory.Id}'
                 };
                 
                 territories.push(territory);
@@ -86,6 +93,8 @@
             
             
             $(document).ready(function(){
+                var status = 0;
+                $("#territoryButton").hide();
                 //js json Ajax
                 $("#matrixForm").submit(function(event){
                     //getting data from the Form.
@@ -105,12 +114,38 @@
                     //get the different Json file
                     var generatejson=generateMapJson(visitData);
                     //console.log(generatejson);
-                    var timeMatrix=getTravelTime(generatejson,resourceData,visitData,rawData);
-                    optimisation(timeMatrix,resourceData,visitData,rawData);
+                    
+                   	getTravelTime(generatejson,resourceData,visitData,rawData);
+                    console.log("show result please");
+                    generateTerritory(rawData);
+                    
                     //var mappingJson=JSON.stringify({locations,options:allToAll});
                 });
             });
-            
+            function generateTerritory(rawdata){
+                var resource=[];
+                var territory=[];
+                console.log(rawdata);
+                for (i=0;i<rawdata.length;i++){
+                    if(rawdata[i].name=="territory"){
+                        territory.push(rawdata[i].value);
+                    }
+                    if (rawdata[i].name=="resource"){
+                        resource.push(rawdata[i].value);
+                    }
+                } 
+                console.log(territory);
+                console.log(resource);
+                console.log(territories);
+                console.log(resources);
+                for (var i=0; i<territory.length;i++){
+                    for(var j=0; j<territories.length;j++){
+                        if(territories[j].id==territory[i]){
+                        var r=$('<button style="width:'++'%" name="'+territory[i]+'" value="'+territories[j].name+'">');
+                        $("#territoryButton").show().append(r);}
+                    }
+                }
+            }
             //input : return data by POST. output : show the map
             function renderMap(data){
                 
@@ -147,52 +182,71 @@
             
             //input: data from the mapquest response. output: the time and distance
             function getTravelTime(mappingJson,resourceData,visitData,rawData){
-                var timelist=[];
-                for(var i=0; i<visitData.length; i++){
+
+                console.log(resourceData.length);
+                var RouteMatrix=[];
+                var promises=[];
+                for(var i=0; i<mappingJson.length;i++){
+                    
                     //console.log(visitData.length);
                     //console.log(mappingJson);
-                    $.ajax({
+                   var request=$.ajax({
+                       
                         type: 'POST',
                         dataType: 'jsonp',
                         contentType: 'json',
                         url: "http://www.mapquestapi.com/directions/v2/routematrix",
-                        data: {key: decodeURI("iJHqMi80cdsL6r70ePqDTYXHeSoNjx2Y"),
-                               json: mappingJson[i]},
-                        
+                        data: {key: decodeURI("99JBw7RAaWzJmd7nMADgsOdbJseEtVPZ"),
+                               json: mappingJson[i]}
+                       /*
                         success: function(data){
-                            //console.log(data);
-                            //console.log('form was submit,' + data.time);
-                            //calculate the optimisation
-                            timelist.push(data);
-                            console.log("successdata"+data);
-                            console.log("success"+timelist);
+                            status++;
+                            console.log("iteration success");
+                            
+                            console.log("successdata"+status);
+                            RouteMatrix.push(data);
                         },
                         error: function(data){
+                            
+                            status++;    
+                            console.log("iteration error" + status);
                             console.log("error");
                             
                         },
-                    });	
+                        */
+                    });
+                    promises.push(request);
+                    //timelist.push(request.responseJSON);
+                    //console.log(timelist);
+                }
+                console.log('about to wait....' + resourceData.length);            
+                $.when.apply($, promises).done(function(jsonp){
+                    //optimisation(arguments,resourceData,visitData,rawData);
+                });
+                console.dir(promises);
+                console.log('final');
 
-                }
-                do{
-                	console.log("I am stupid machine")
-                }
-                while (visitData.length!=timelist.length)
-                return timelist;
             }
+            function callback(request){
+                for(var i; i<request.length;i++){
+                    console.request(i);
+                    console.request(request[i]);
+                    console.log(request[i].responseJSON);    
+                }
+                console.log("This is Callback function")
+            
+            }
+            
+  
+            /*
+                return $.when.apply(null, timelist).done(function(timelist){
+                    console.log(timelist);
+                    return timelist;
+                })
+                 */
             //timeMatrix and resourceData and visitData is array for different territory
             function optimisation(timeMatrix, resourceData,visitData,rawData){
                 
-                //console.log('resource  ' + resourceData);
-                //console.log('visit   ' + visitData);
-                //console.log('timeMatrix   ' + timeMatrix);
-                
-                //var lastVisied=visitData.records[i].STKR__Last_Visit__c;
-                //  if (lastVisied){
-                
-                //}else{
-                //console.log('timeMatrix   ' + timeMatrix[1]);
-                //}
                 //seperate the visitData to resourceData, which means seperate schedule to individuals.
                 for(i=0; i<visitData.length;i++){
                     var resource=resourceData[i];
@@ -203,16 +257,15 @@
                     console.log(resource);
                     console.log(Matrix);
                     
-                    for(j=0;j<resource.length;j++){
-                        console.log(j);
-                        console.log(resource.records[j].Name);
-                        console.log(resource.records[j].STKR__Expiry_Date__c);
-                        console.log(resource.records[j].STKR__Working_Hours__c);
-                        console.log(resource.records[1]);
-                        console.log(resource.records[0]);
+                    console.log(resourceData);
+                    for(j=0;j<resourceData.size;j++){
+                        
+                        //console.log(resourceData.records[j].Name);
+                        console.log(resourceData.records[j].STKR__Expiry_Date__c);
+                        console.log(resourceData.records[j].STKR__Working_Hours__c);
                         var jobSeperated=[];
-                        for(a=0; a<visit.size;a++){
-                            if (visit.records[a].STKR__Service__r.STKR__Service_Owner__c==resource.records[j].Id)
+                        for(a=0; a<visitData.size;a++){
+                            if (visitData.records[a].STKR__Service__r.STKR__Service_Owner__c==resource.records[j].Id)
                             {
                                 jobSeperated.push(a);
                             }
@@ -220,65 +273,65 @@
                         resourceNum.push(jobSeperated);
                     }                	
                     
-                }
-                var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
-
-                console.log(resourceNum);
-                
-                var NOverdueNFix=[];
-                var NOverdueFix=[];
-                //seperated job
-                for(j=0;j<resourceNum.length;j++){
-                    var notOverdueNotFixVisit=[];
-                    var notOverdueFixVisit=[];
-                    for(var i in resourceNum[j]){
-                        if(visitData.records[resourceNum[j][i]].STKR__Fixed_Visit__c=="true"){
-                            //it is fix visit and not overdue visit.
-                            var days=Math.round(Math.abs((new Date(visitData.records[resourceNum[j][i]].STKR__Due_Date__c).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
-                            notOverdueFixVisit.push([days,resourceNum[j][i]]);
-                            //console.log("it is fix visit and not overdue visit");
-                        }else{
-                            //it is not fix visit and not overdue visit
-                            //console.log("it is not fix visit and not overdue visit");
-                            var days=Math.round(Math.abs((new Date(visitData.records[resourceNum[j][i]].STKR__Due_Date__c).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
-                            notOverdueNotFixVisit.push([days,resourceNum[j][i]]);
-                        }
-                        //dayVisit.push([daysNoverdue,resourceNum[j][i]]);
-                        //console.log(daysNoverdue);
-                        
-                        //console.log(notOverdueNotFixVisit);
-                    }
-                    // re-structure the [days] and [visit]
-                    for (var i in notOverdueNotFixVisit){
-                        if (visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Frequency__c=="Weekly"){
-                            //console.log("Weekly");
-                            //request to visit, get all the data from service and visit
-                            notOverdueNotFixVisit[i].push(7/visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Service_Interval__c);
-                            //console.log(visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Service_Interval__c);
-                            //know the total day user chose.
-                        }else if (visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Frequency__c=="Daily"){
-                            notOverdueNotFixVisit[i].push(0);
-                        }else if (visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Frequency__c=="Monthly"){
-                            //may be the number need to be changed
-                            notOverdueNotFixVisit[i].push(30.5/visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Service_Interval__c);
-                            
-                        }else if (visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Frequency__c=="Yearly"){
-                            notOverdueNotFixVisit[i].push(365/visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Service_Interval__c);
-                        }
-                        
-                        notOverdueNotFixVisit[i].push(resourceData.records[j].STKR__Lunch_Break_Minutes__c+visitData.records[notOverdueNotFixVisit[i][1]].STKR__Time_Allocation__c);
-                        notOverdueNotFixVisit[i].push(resourceData.records[j].STKR__Working_Hours__c*60);
-                        
-                    }
                     
-                    // push status -1 for fixvisit and 
-                    if(!notOverdueFixVisit){
-                        for(var i in notOverdueFixVisit){
-                            notOverdueFixVisit[i].push(-1);
+                    var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
+                    
+                    //console.log(resourceNum);
+                    
+                    var NOverdueNFix=[];
+                    var NOverdueFix=[];
+                    //seperated job
+                    for(j=0;j<resourceNum.length;j++){
+                        var notOverdueNotFixVisit=[];
+                        var notOverdueFixVisit=[];
+                        for(var i in resourceNum[j]){
+                            if(visitData.records[resourceNum[j][i]].STKR__Fixed_Visit__c=="true"){
+                                //it is fix visit and not overdue visit.
+                                var days=Math.round(Math.abs((new Date(visitData.records[resourceNum[j][i]].STKR__Due_Date__c).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
+                                notOverdueFixVisit.push([days,resourceNum[j][i]]);
+                                //console.log("it is fix visit and not overdue visit");
+                            }else{
+                                //it is not fix visit and not overdue visit
+                                //console.log("it is not fix visit and not overdue visit");
+                                var days=Math.round(Math.abs((new Date(visitData.records[resourceNum[j][i]].STKR__Due_Date__c).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
+                                notOverdueNotFixVisit.push([days,resourceNum[j][i]]);
+                            }
+                            //dayVisit.push([daysNoverdue,resourceNum[j][i]]);
+                            //console.log(daysNoverdue);
+                            
+                            //console.log(notOverdueNotFixVisit);
                         }
-                        notOverdueNotFixVisit = notOverdueNotFixVisit.concat(notOverdueFixVisit);
-                    }
-                    /*group the array based on the same days, which means map{key:day, value:[visits,grade]}
+                        // re-structure the [days] and [visit]
+                        for (var i in notOverdueNotFixVisit){
+                            if (visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Frequency__c=="Weekly"){
+                                //console.log("Weekly");
+                                //request to visit, get all the data from service and visit
+                                notOverdueNotFixVisit[i].push(7/visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Service_Interval__c);
+                                //console.log(visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Service_Interval__c);
+                                //know the total day user chose.
+                            }else if (visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Frequency__c=="Daily"){
+                                notOverdueNotFixVisit[i].push(0);
+                            }else if (visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Frequency__c=="Monthly"){
+                                //may be the number need to be changed
+                                notOverdueNotFixVisit[i].push(30.5/visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Service_Interval__c);
+                                
+                            }else if (visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Frequency__c=="Yearly"){
+                                notOverdueNotFixVisit[i].push(365/visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Service_Interval__c);
+                            }
+                            
+                            notOverdueNotFixVisit[i].push(resourceData.records[j].STKR__Lunch_Break_Minutes__c+visitData.records[notOverdueNotFixVisit[i][1]].STKR__Time_Allocation__c);
+                            notOverdueNotFixVisit[i].push(resourceData.records[j].STKR__Working_Hours__c*60);
+                            
+                        }
+                        
+                        // push status -1 for fixvisit and 
+                        if(!notOverdueFixVisit){
+                            for(var i in notOverdueFixVisit){
+                                notOverdueFixVisit[i].push(-1);
+                            }
+                            notOverdueNotFixVisit = notOverdueNotFixVisit.concat(notOverdueFixVisit);
+                        }
+                        /*group the array based on the same days, which means map{key:day, value:[visits,grade]}
                     
                     1. first sort based on days
                     2. delete the same elements
@@ -288,11 +341,11 @@
                     notOverdueNotFixVisit.sort(function(a,b){
                         return a[0]-b[0]
                     });
-                    console.log(notOverdueNotFixVisit);
+                    //console.log(notOverdueNotFixVisit);
                     //delete the same element
                     for (i=0; i<notOverdueNotFixVisit.length-1;i++){
                         if (notOverdueNotFixVisit[i][0]===notOverdueNotFixVisit[i+1][0]){
-                            console.log("notOverdueNotFixVisit[i][0]===notOverdueNotFixVisit[i+1][0]");
+                            //console.log("notOverdueNotFixVisit[i][0]===notOverdueNotFixVisit[i+1][0]");
                             if (notOverdueNotFixVisit[i][1].length){
                                 notOverdueNotFixVisit[i][1].push(notOverdueNotFixVisit[i+1][1]);
                                 notOverdueNotFixVisit[i][2].push(notOverdueNotFixVisit[i+1][2]);
@@ -319,13 +372,13 @@
                     NOverdueNFix.push(notOverdueNotFixVisit);
                     NOverdueFix.push(notOverdueFixVisit);
                 }
-                
-                console.log(NOverdueNFix);
-                console.log(NOverdueFix);
-                
-                
-            }     
-            
+                    
+                    console.log(NOverdueNFix);
+                    console.log(NOverdueFix);
+                    
+                    
+                }     
+            }
             /*
             overdue problem
             var OverdueFix=[];
@@ -531,16 +584,6 @@
 
       });
       */
-            //          var xmlhttp= new XMLHttpRequest();
-            //if (this.readyState == 4 && this.status == 200) 
-            //{
-            //            document.getElementById("availablityResults").innerHTML=this.responseText;
-            //}STKR__Period_End__c
-            //xmlhttp.open("POST", "https://www.mapquestapi.com/directions/v2/routematrix?key=XFI9f8gkExRTk58rq7jyxDSMgkgt06KV", true);
-            //xmlhttp.setRequestHeader("Content-Type", "application/json");
-            //xmlhttp.send(JSON.stringify({ "location" : [ "Cardiff, GB", "Caerphilly, GB", "Newport, GB"], "options": { "allToAll": true}}));
-            //console.log(xmlhttp.responseText);
-            //}
             
             </script>
             
@@ -578,13 +621,14 @@
 
                     
                 </form>
-                <div id="result" style="display: none;">
-                    <div class="header">
+                <hr />
+                <div id="result">
+                    <div id="territoryButton" class="header">
                     </div>
                     
                     <br/>
                     
-                    <div id="map" style="width: 100%; height: 530px; display: none;"></div>
+                    <div id="map" style="width: 100%; height: 530px;"></div>
                     
                     <div class="individual">
                     </div>
