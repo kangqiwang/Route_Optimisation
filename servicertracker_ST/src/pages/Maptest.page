@@ -1,4 +1,4 @@
-<apex:page controller="MapControllertest" showHeader="true" sidebar="false">
+<apex:page controller="MapControllertest" showHeader="false" sidebar="false">
     <html>
         <head>    
             <title>Route Optimisation</title>
@@ -13,15 +13,15 @@
             }
             
             .result{
-            	display: flex;
+                display: flex;
                 height: 100%;
                 flex-direction: column;
             }
             .header,.footer{
-            	flex:none;
+                flex:none;
             }
             .container{
-            	display: flex;
+                display: flex;
                 flex: 1 0 auto;
                 flex-direction: colum;
                 padding: 1em;
@@ -32,7 +32,7 @@
             }
             .right{order: 2;}
             .left{
-            	order: -1;
+                order: -1;
             }
             .left,.right{
                 padding: 1em;
@@ -62,6 +62,7 @@
                 var resources = [];
             var territories = [];
             window.onload = function() {
+                console.log("1");
                 //optimizedwaypoints example can be used
                 //https://developer.mapquest.com/documentation/mapquest-js/v1.3/examples/directions-with-optimized-waypoints/
                 L.mapquest.key = '99JBw7RAaWzJmd7nMADgsOdbJseEtVPZ';
@@ -78,7 +79,7 @@
                 });
                 
                 //generate the HTML and add name
-                
+                console.log("2");
                 <apex:repeat value="{!objectResource}" var="resource" id="resources">
                     var pResource=document.createElement("label");
                 var node=document.createTextNode('{!resource.name}');
@@ -90,7 +91,8 @@
                 checkboxResource.value='{!resource.Id}';
                 checkboxResource.setAttribute('type', 'checkbox');
                 element.appendChild(checkboxResource);
-                
+                console.log(element);
+
                 
                 var resource ={
                     name: '{!resource.name}',
@@ -99,6 +101,7 @@
                 resources.push(resource);
                 
                 </apex:repeat>
+                console.log("3");
                 // console.log(resources);
                 //console.log(resources.length);
                 
@@ -113,7 +116,7 @@
                 checkboxResource.name="territory";
                 checkboxResource.value='{!territory.Id}';
                 element.appendChild(checkboxResource);
-                
+
                 var territory ={
                     name: '{!territory.name}',
                     id:'{!territory.Id}'
@@ -122,6 +125,7 @@
                 territories.push(territory);
                 
                 </apex:repeat>
+                console.log("4");
             }
             
             
@@ -192,11 +196,18 @@
             
             function generateDayList(rawdata,optimizationday){
                 var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
-                for(var i in days){
-                console.log(i);
+                for(var i of optimizationday){
+                    
                 }
-
+                for(var i=0;i<days;i++){
+                    var r=$('<div></div>');
+                    $("#dayresult").show().append(r);
+                }
+                $("dayresult").children("div").click(function(event){
+                    alert("cool");
+                })
             }
+            
             //input : return data by POST. output : show the map
             function renderMap(data){
                 
@@ -265,7 +276,7 @@
                             
                         },
                         */
-                   });
+                    });
                     promises.push(request);
                     //timelist.push(request.responseJSON);
                     //console.log(timelist);
@@ -297,7 +308,10 @@
                  */
             //timeMatrix and resourceData and visitData is array for different territory
             function optimisation(timeMatrix, resourceData,visitData,rawData){
-                
+                console.log(timeMatrix);
+                console.log(resourceData);
+                console.log(visitData);
+                console.log(rawData);
                 //seperate the visitData to resourceData, which means seperate schedule to individuals.
                 for(i=0; i<visitData.length;i++){
                     var resource=resourceData[i];
@@ -679,16 +693,16 @@
                     
                     <div class="container">
                         
-                        <div class="left">
-                        <p>
-                            aksdkhekhdkbcdsb
+                        <div id="dayresult" class="left">
+                            <p>
+                                aksdkhekhdkbcdsb
                             </p></div>    
                         <div class="right">
                             <p>kangasdhfoiasdf
-                            adfsad</p></div>
+                                adfsad</p></div>
                         <div class="main">
-                                <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>  
-
+                            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>  
+                            
                             <div id="map"></div>
                         </div>
                     </div>
