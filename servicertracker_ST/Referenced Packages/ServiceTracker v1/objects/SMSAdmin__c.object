@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>Hierarchy</customSettingsType>
+    <description>SMS Settings</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>AccountSid__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>AccountSid</label>
+        <length>120</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Admin_Mobile_Number__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Admin Mobile Number</label>
+        <length>15</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>AuthToken__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>AuthToken</label>
+        <length>120</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>SMSAdmin</label>
+    <visibility>Public</visibility>
+</CustomObject>

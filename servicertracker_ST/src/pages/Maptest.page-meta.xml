@@ -6,7 +6,7 @@
     <label>Maptest</label>
     <packageVersions>
         <majorNumber>1</majorNumber>
-        <minorNumber>407</minorNumber>
+        <minorNumber>409</minorNumber>
         <namespace>STKR</namespace>
     </packageVersions>
 </ApexPage>

@@ -30,7 +30,7 @@ pageblock.firstChild.style.cssText = "background-color: " + color + ";";
                     <apex:inputField id="techRadius" label="Technician Radius (Miles)" value="{!nearestTech.STKR__techRadius__c}"/><br/>
                     <apex:inputField id="mapQuestAPIKey" label="MapQuest Api Key"  value="{!nearestTech.STKR__Mapquest_API_Key__c}"/><br/>
                 </apex:repeat>
-<script>colorPageBlock(document.getElementById("{!$Component.NT}"), "#0A7CB2");</script>
+            <script>colorPageBlock(document.getElementById("{!$Component.NT}"), "#0A7CB2");</script>
             </apex:pageBlockSection>
             <apex:pageBlockSection id="CA" title="Client Attachment Configuration" collapsible="true">
              <apex:repeat id="clientAttachmentSettings" var="clientatt" value="{!ClientAttachmentSettings}">
@@ -38,9 +38,47 @@ pageblock.firstChild.style.cssText = "background-color: " + color + ";";
             </apex:repeat>
             <script>colorPageBlock(document.getElementById("{!$Component.CA}"), "#0A7CB2");</script>
             </apex:pageBlockSection>
-            <apex:pageBlockSection id="Images" title="Mobile Image Settings" collapsible="true">
- Coming soon           <script>colorPageBlock(document.getElementById("{!$Component.Images}"), "#0A7CB2");</script>
+            
+         
+ <apex:pageBlockSection id="VS" title="Show All Nearby Visits on Mobile Configuration" collapsible="true">
+             <apex:repeat id="AllVisitsSettings" var="AllVisits" value="{!AllVisitsSettings}">
+              <apex:inputCheckbox id="Visibility" label="Allow Mobile users to sell all open Nearby Visits on Mobile" value="{!AllVisits.STKR__Visibility__c}"/>
+
+            </apex:repeat>
+            <script>colorPageBlock(document.getElementById("{!$Component.VS}"), "#0A7CB2");</script>
+
             </apex:pageBlockSection>            
+ 
+ 
+ <apex:pageBlockSection id="MS" title="Mobile Image Configuration" collapsible="true">
+             <apex:repeat id="MobileImageSettings" var="mobileimage" value="{!MobileCameraSettings}">
+              <apex:inputCheckbox id="AllowEdit" label="Allow Images to be Edited on Mobile" value="{!mobileimage.STKR__AllowEdit__c}"/>
+              <apex:inputfield id="Height" label="Image Height" value="{!mobileimage.STKR__Height__c}"/>
+              <apex:inputfield id="Quality" label="Image Width" value="{!mobileimage.STKR__Width__c}"/>
+              <apex:inputfield id="Width" label="Image Quality" value="{!mobileimage.STKR__Quality__c}"/>
+
+            </apex:repeat>
+            <script>colorPageBlock(document.getElementById("{!$Component.MS}"), "#0A7CB2");</script>
+
+            </apex:pageBlockSection>            
+
+
+       
+              <apex:pageBlockSection id="SMS" title="SMS Configuration (Twilio)" collapsible="true">
+             <apex:repeat id="SMSSettings" var="s" value="{!SMSSettings}">
+               <apex:inputfield id="AccountSid" label="Account SID" value="{!s.STKR__AccountSid__c}"/>
+              <apex:inputfield id="AdminMobileNumber" label="Admin Mobile Number" value="{!s.STKR__Admin_Mobile_Number__c}"/>
+              <apex:inputfield id="AuthToken" label="Auth Token" value="{!s.STKR__AuthToken__c}"/>
+           
+            </apex:repeat>
+             Visit <a href="https://www.twilio.com/try-twilio">www.twilio.com</a> to register a new account
+             
+            <script>colorPageBlock(document.getElementById("{!$Component.SMS}"), "#0A7CB2");</script>
+
+            </apex:pageBlockSection>     
+ 
+ 
+ 
             <center>
              <apex:commandButton action="{!updateSettings}" value="Save Custom Settings"/><br/><br/>
              </center>
