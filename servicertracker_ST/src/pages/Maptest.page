@@ -240,7 +240,7 @@
             }
             
             //input: data from the mapquest response. output: the time and distance
-            function getTravelTime(mappingJson,resourceData,visitData,rawData){
+            function getTravelTime(mappingJson,resourceData,visitData,rawData,accountLocation){
                 
                 console.log(resourceData.length);
                 var RouteMatrix=[];
@@ -303,8 +303,8 @@
                     return timelist;
                 })
                  */
-            function sendRToV(j){
-                
+            //send your resource location with different location to Mapquest
+            function sendRToV(j, resourceNum){
                 
                 var mappingJson={};
                 var locations=[];
@@ -314,30 +314,46 @@
                 var lat=Number(resource.records[j].STKR__Fixed_Location__latitude__s);
                 var lng=Number(resource.records[j].STKR__Fixed_Location__longitude__s);
                 var latLng=lat+","+lng;
-
+                
                 mappingJson.locations.push(latLng);
-                accountLocation=locationNum(mappingJson,data[i]);
-				
+                for(var b in resourceNum[i]){
+                    lat=Number(visit.records[resourceNum[j][b]].STKR__Account_lkp__r.STKR__location__Latitude__s);
+                    lng=Number(visit.records[resourceNum[j][b]].STKR__Account_lkp__r.STKR__location__Longitude__s);
+                    latLng=lat+","+lng;
+                    mappingJson.locations.push(latLng);
+                }
                 mappingJson.options={};
                 mappingJson.options={"allToAll" :false};
                 mappingJsonList.push(JSON.stringify(mappingJson));
                 
+                var request=$.ajax({
+                    
+                    type: 'POST',
+                    dataType: 'jsonp',
+                    contentType: 'json',
+                    url: "http://www.mapquestapi.com/directions/v2/routematrix",
+                    data: {key: decodeURI("99JBw7RAaWzJmd7nMADgsOdbJseEtVPZ"),
+                           json: mappingJson[i]}
+                });
+                promises.push(request);
                 
-                return mappingJsonList;
-
-
+            $.when.apply($, promises).done(function(jsonp){
+                console.log(arguments);
+            });
             }
             
             
             //timeMatrix and resourceData and visitData is array for different territory
             function optimisation(timeMatrix, resourceData,visitData,rawData,accountLocation){
                 console.log(timeMatrix);
+                console.log(resourceData);
+                console.log(visitData);
                 //different territory in different scheduel
                 for(var i=0; i<visitData.length;i++){
                     var resource=resourceData[i];
                     var visit=visitData[i];
                     var Matrix=timeMatrix[i];
-                    
+                    console.log("my visit data length is"+visitData.length+"this is my"+i+"times");
                     //different resource get different job
                     var resourceNum=[];
                     console.log(visit);
@@ -345,13 +361,16 @@
                     console.log(Matrix[0].time);
                     
                     for(var j=0;j<resource.size;j++){
-                        //console.log(j);
                         var jobSeperated=[];
                         for(var a=0; a<visit.size;a++){
                             //console.log(a);
-                            //console.log(resource.records.length);
                             if(!resource.records.length){
                                 //console.log(resource.records.Id);
+                                //Problem: situation: many visits and resources
+                                //but no output
+                                //reason: visit owner != resource id
+                                //In this territory, we can find the target resource.
+                                //resource and visit are not under the same territory.
                                 if (visit.records[a].STKR__Service__r.STKR__Service_Owner__c==resource.records.Id)
                                 {
                                     jobSeperated.push(a);
@@ -377,11 +396,55 @@
                     var NOverdueNFix=[];
                     var NOverdueFix=[];
                     //seperated job
+                    var promises=[];
                     for(var j=0;j<resourceNum.length;j++){
                         var notOverdueNotFixVisit=[];
                         var notOverdueFixVisit=[];
                         //send the resource location with multiple visit location to mapquest
-                        sendRToV(j);
+                        //sendRToV(j);
+                        var mappingJson={};
+                        var locations=[];
+                        
+                        mappingJson.locations=locations;
+                        console.log(resource);
+                        if(!resource.records.length){                            
+                            //console.log(resource.records[j].STKR__Fixed_Location__Latitude__s );
+                            //console.log(resource.records.STKR__Fixed_Location__Latitude__s);
+                            var lat=Number(resource.records.STKR__Fixed_Location__Latitude__s);
+                            var lng=Number(resource.records.STKR__Fixed_Location__Longitude__s );
+                        }else{
+                            var lat=Number(resource.records[j].STKR__Fixed_Location__Latitude__s);
+                            var lng=Number(resource.records[j].STKR__Fixed_Location__Longitude__s );
+                            
+                            
+                        }
+                        var latLng=lat+","+lng;
+                        console.log(latLng+"this is my"+j+"request");
+                        mappingJson.locations.push(latLng);
+                        for(var b in resourceNum[i]){
+                            lat=Number(visit.records[resourceNum[j][b]].STKR__Account_lkp__r.STKR__location__Latitude__s);
+                            lng=Number(visit.records[resourceNum[j][b]].STKR__Account_lkp__r.STKR__location__Longitude__s);
+                            latLng=lat+","+lng;
+                            mappingJson.locations.push(latLng);
+                        }
+                        mappingJson.options={};
+                        mappingJson.options={"allToAll" :false};
+                        mappingJson=JSON.stringify(mappingJson);
+                        //console.log(mappingJson);
+                        var request=$.ajax({
+                            
+                            type: 'POST',
+                            dataType: 'jsonp',
+                            contentType: 'json',
+                            url: "http://www.mapquestapi.com/directions/v2/routematrix",
+                            data: {key: decodeURI("99JBw7RAaWzJmd7nMADgsOdbJseEtVPZ"),
+                                   json: mappingJson}
+                        });
+                        promises.push(request);
+                        
+                        $.when.apply($, promises).done(function(jsonp){
+                            console.log(arguments);
+                        });
                         for(var b in resourceNum[j]){
                             //console.log(visit.records[resourceNum[j][b]].STKR__Fixed_Visit__c);
                             if(visit.records[resourceNum[j][b]].STKR__Fixed_Visit__c=="true"){
@@ -408,11 +471,11 @@
                        
                         // re-structure the [days] and [visit]
                         for (var c in notOverdueNotFixVisit){
-                            console.log(visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Frequency__c);
+                            //console.log(visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Frequency__c);
                             if (visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Frequency__c=="Weekly"){
                                 //console.log("Weekly");Ian￼Mike￼Kang
                                 //request to visit, get all the data from service and visit
-                                console.log(7/visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Service_Interval__c);
+                                //console.log(7/visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Service_Interval__c);
                                 notOverdueNotFixVisit[c].push(7/visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Service_Interval__c);
                                 //console.log(visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Service_Interval__c);
                                 //know the total day user chose.
@@ -427,9 +490,6 @@
                             }
                             notOverdueNotFixVisit[c].push(Number(resource.records[j].STKR__Lunch_Break_Minutes__c)+Number(visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Time_Allocation__c));
                             notOverdueNotFixVisit[c].push(resource.records[j].STKR__Working_Hours__c*60);
-                            
-                            
-                            
                             
                         }
                         
@@ -676,29 +736,6 @@
                     */
                 
             }
-            
-            /*
-          function getdistance() {
-          var mappingJson='';
-          mappingJson += '{ locations: [ "Denver, CO", "Westminster, CO", "Boulder, CO"], "options": { "allToAll": true }}';
-          $.ajax({
-          url: 'https://www.mapquestapi.com/directions/v2/routematrix',
-          crossDomain: true,
-          dataType: 'jsonp',
-          
-          type: 'POST',
-          data:{
-          	key: decodeURI("XFI9f8gkExRTk58rq7jyxDSMgkgt06KV"),
-          	json: JSON.stringify({ "location" : [ "Cardiff, GB", "Caerphilly, GB", "Newport, GB"], "options": { "allToAll": true}})
-          },
-          success: function(data){ console.log(data);},
-          error: function(data) {
-          	console.log('error occurred -' + data);
-          },
-          beforeSend: setHeader,
-
-      });
-      */
             
             </script>
             
