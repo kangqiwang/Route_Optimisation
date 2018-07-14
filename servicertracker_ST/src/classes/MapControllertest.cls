@@ -6,7 +6,6 @@ public with sharing class MapControllertest {
     public list<STKR__Visit__c> objectVisit{get; set;}
     
     
-    
     public MapControllertest(){
         
         Decimal forecastDays = 0; //default protects against no settings

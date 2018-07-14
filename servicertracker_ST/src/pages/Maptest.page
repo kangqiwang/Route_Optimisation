@@ -140,6 +140,7 @@
                     event.preventDefault();
                     var territory=[];
                     var resource=[];
+                    var accountLocation=[];
                     //get the visitData
                     var visitData=requestToSforce(rawData);
                     
@@ -148,10 +149,10 @@
                     var resourceData=requestResource(rawData);
                     //console.log(resourceData);
                     //get the different Json file
-                    var generatejson=generateMapJson(visitData);
+                    var generatejson=generateMapJson(visitData,accountLocation );
                     //console.log(generatejson);
                     
-                    getTravelTime(generatejson,resourceData,visitData,rawData);
+                    getTravelTime(generatejson,resourceData,visitData,rawData,accountLocation);
                     console.log("show result please");
                     generateTerritory(rawData);
                     
@@ -279,7 +280,7 @@
                 }
                 console.log('about to wait....' + resourceData.length);            
                 $.when.apply($, promises).done(function(jsonp){
-                    optimisation(arguments,resourceData,visitData,rawData);
+                    optimisation(arguments,resourceData,visitData,rawData,accountLocation);
                 });
                 console.dir(promises);
                 console.log('final');
@@ -302,8 +303,35 @@
                     return timelist;
                 })
                  */
+            function sendRToV(j){
+                
+                
+                var mappingJson={};
+                var locations=[];
+                
+                mappingJson.locations=locations;
+                
+                var lat=Number(resource.records[j].STKR__Fixed_Location__latitude__s);
+                var lng=Number(resource.records[j].STKR__Fixed_Location__longitude__s);
+                var latLng=lat+","+lng;
+
+                mappingJson.locations.push(latLng);
+                accountLocation=locationNum(mappingJson,data[i]);
+				
+                mappingJson.options={};
+                mappingJson.options={"allToAll" :false};
+                mappingJsonList.push(JSON.stringify(mappingJson));
+                
+                
+                return mappingJsonList;
+
+
+            }
+            
+            
             //timeMatrix and resourceData and visitData is array for different territory
-            function optimisation(timeMatrix, resourceData,visitData,rawData){
+            function optimisation(timeMatrix, resourceData,visitData,rawData,accountLocation){
+                console.log(timeMatrix);
                 //different territory in different scheduel
                 for(var i=0; i<visitData.length;i++){
                     var resource=resourceData[i];
@@ -352,6 +380,8 @@
                     for(var j=0;j<resourceNum.length;j++){
                         var notOverdueNotFixVisit=[];
                         var notOverdueFixVisit=[];
+                        //send the resource location with multiple visit location to mapquest
+                        sendRToV(j);
                         for(var b in resourceNum[j]){
                             //console.log(visit.records[resourceNum[j][b]].STKR__Fixed_Visit__c);
                             if(visit.records[resourceNum[j][b]].STKR__Fixed_Visit__c=="true"){
@@ -367,6 +397,9 @@
                                 //console.log(day);
                                 //console.log(resourceNum[j][b]);
                                 notOverdueNotFixVisit.push([day,resourceNum[j][b]]);
+                                
+                                
+                                
                             }
                             //dayVisit.push([daysNoverdue,resourceNum[j][i]]);
                             //console.log(daysNoverdue);
@@ -394,6 +427,8 @@
                             }
                             notOverdueNotFixVisit[c].push(Number(resource.records[j].STKR__Lunch_Break_Minutes__c)+Number(visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Time_Allocation__c));
                             notOverdueNotFixVisit[c].push(resource.records[j].STKR__Working_Hours__c*60);
+                            
+                            
                             
                             
                         }
@@ -544,7 +579,7 @@
                 var resource=valueForm(rawdata);
                 var result=[];
                 for(var i of resource[1]){
-                    var query="select Id,Name,STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c from STKR__Resource__c where Id in ("+resource[0].toString()+") and STKR__Territory__c in ("+i+")";
+                    var query="select Id,Name,STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c,STKR__Fixed_Location__longitude__s,STKR__Fixed_Location__latitude__s from STKR__Resource__c where Id in ("+resource[0].toString()+") and STKR__Territory__c in ("+i+")";
                     //console.log(query);
                     try{
                         sforce.connection.sessionId="{!$Api.Session_ID}";
@@ -603,15 +638,14 @@
                 return accountLocation;
             }
             
-            function generateMapJson(data){
+            function generateMapJson(data,accountLocation){
                 var mappingJsonList=[];
                 console.log(data.length);
                 for(var i=0; i<data.length; i++){
                     var mappingJson={};
                     var locations=[];
                     mappingJson.locations=locations;
-                    var accountLocation=locationNum(mappingJson,data[i]);
-                    
+                    accountLocation=locationNum(mappingJson,data[i]);
                     console.log("the index of different location or Account:"+accountLocation);
                     
                     //consider about the multiple location
