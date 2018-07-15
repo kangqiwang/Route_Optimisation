@@ -154,8 +154,8 @@
                     
                     getTravelTime(generatejson,resourceData,visitData,rawData,accountLocation);
                     console.log("show result please");
-                    generateTerritory(rawData);
-                    
+                    //generateTerritory(rawData);
+                    //sameLocation(visitData,accountLocation);
                     //var mappingJson=JSON.stringify({locations,options:allToAll});
                 });
             });
@@ -295,7 +295,54 @@
                 console.log("This is Callback function")
                 
             }
+            //try to cluster the location 
             
+            function sameLocation(visitData,accountLocation,timeMatrix){
+                for(var i=0; i<visitData.length;i++){
+                    var Matrix=timeMatrix[i];
+                    var visit=visitData[i];
+                    console.log(visit);
+                    for(var j=0;j<visit.size;j++){
+                        console.log(visit.records[j]);
+                        for(var a=0; a<accountLocation[i].length; a++){
+                            var samelocation=[];
+                            if(visit.records[j].STKR__Days_Overdue__c!=visit.records[accountLocation[i][a]].STKR__Account_1kp__r.Id){
+                                console.log(visit.records[j].Id);
+                            }
+                        }
+                    }
+                }
+               
+                /*
+            	for(var i=0; i<visitData.length;i++){
+                	var visit=visitData[i];
+                    for(var j in visit){
+                        console.log(visit);
+                    	for(var a in accountLocation[i]){
+                        	console.log(accountLocation[i][a]);
+                        }
+                    }
+                }
+                */
+            }
+            function arrayMin(arrs){
+                if(arrs[0]){
+                    var min=arrs[0];}else{
+                    var min=arrs[1];
+                    }
+                
+                for(var i=1, ilen=arrs.length; i<ilen; i+=1){
+                    if(arrs[i]){
+                        if(arrs[i]<min){
+                            min=arrs[i];
+                        }
+                    }else{
+                    	
+                    }
+                }
+                return min;
+            }
+
             
             /*
                 return $.when.apply(null, timelist).done(function(timelist){
@@ -304,50 +351,15 @@
                 })
                  */
             //send your resource location with different location to Mapquest
-            function sendRToV(j, resourceNum){
-                
-                var mappingJson={};
-                var locations=[];
-                
-                mappingJson.locations=locations;
-                
-                var lat=Number(resource.records[j].STKR__Fixed_Location__latitude__s);
-                var lng=Number(resource.records[j].STKR__Fixed_Location__longitude__s);
-                var latLng=lat+","+lng;
-                
-                mappingJson.locations.push(latLng);
-                for(var b in resourceNum[i]){
-                    lat=Number(visit.records[resourceNum[j][b]].STKR__Account_lkp__r.STKR__location__Latitude__s);
-                    lng=Number(visit.records[resourceNum[j][b]].STKR__Account_lkp__r.STKR__location__Longitude__s);
-                    latLng=lat+","+lng;
-                    mappingJson.locations.push(latLng);
-                }
-                mappingJson.options={};
-                mappingJson.options={"allToAll" :false};
-                mappingJsonList.push(JSON.stringify(mappingJson));
-                
-                var request=$.ajax({
-                    
-                    type: 'POST',
-                    dataType: 'jsonp',
-                    contentType: 'json',
-                    url: "http://www.mapquestapi.com/directions/v2/routematrix",
-                    data: {key: decodeURI("99JBw7RAaWzJmd7nMADgsOdbJseEtVPZ"),
-                           json: mappingJson[i]}
-                });
-                promises.push(request);
-                
-            $.when.apply($, promises).done(function(jsonp){
-                console.log(arguments);
-            });
-            }
             
             
             //timeMatrix and resourceData and visitData is array for different territory
             function optimisation(timeMatrix, resourceData,visitData,rawData,accountLocation){
+                //sameLocation(visitData,accountLocation,timeMatrix);
                 console.log(timeMatrix);
                 console.log(resourceData);
                 console.log(visitData);
+                console.log(accountLocation);
                 //different territory in different scheduel
                 for(var i=0; i<visitData.length;i++){
                     var resource=resourceData[i];
@@ -676,25 +688,30 @@
                 }
                 return result;
             }
-            function locationNum(mappingJson,data){
-                /*
-                latitude=latitude.filter(function(elem, index, self){
-                    return index===self.indexOf(elem)})
-                longitude=longitude.filter(function(elem, index, self){
-                    return index===self.indexOf(elem)})
-                console.log(latitude);
-                console.log(longitude);
-                */
-                var accountLocation=[];
+            function locationNum(mappingJson,data,accountLocation){
+
+                var temLocation=[];
+                var temsame=[];
+                var lat=Number(data.records[0].STKR__Account_lkp__r.STKR__location__Latitude__s);
+                var lng=Number(data.records[0].STKR__Account_lkp__r.STKR__location__Longitude__s);
+                var latLng=lat+","+lng;
+                mappingJson.locations.push(latLng);
+                temLocation.push(data.records[0].STKR__Account_lkp__r.Id);
+
                 for (i=0; i<data.size-1; i++){
                     if(data.records[i].STKR__Account_lkp__r.Id!=data.records[i+1].STKR__Account_lkp__r.Id){
-                        var lat=Number(data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s);
-                        var lng=Number(data.records[i].STKR__Account_lkp__r.STKR__location__Longitude__s);
+                        var lat=Number(data.records[i+1].STKR__Account_lkp__r.STKR__location__Latitude__s);
+                        var lng=Number(data.records[i+1].STKR__Account_lkp__r.STKR__location__Longitude__s);
                         var latLng=lat+","+lng;
                         mappingJson.locations.push(latLng);
-                        accountLocation.push(i);
+                        temLocation.push(data.records[i+1].Name);
+                        
+                    }else{
+                    	console.log(data.records[i].Name);
                     }
+                    
                 }
+                accountLocation.push(temLocation);
                 return accountLocation;
             }
             
@@ -704,12 +721,13 @@
                 for(var i=0; i<data.length; i++){
                     var mappingJson={};
                     var locations=[];
+                    var accountLocationtem=[];
                     mappingJson.locations=locations;
-                    accountLocation=locationNum(mappingJson,data[i]);
-                    console.log("the index of different location or Account:"+accountLocation);
+                    accountLocationtem=locationNum(mappingJson,data[i],accountLocation);
+                    console.log("the index of different location or Account:"+accountLocationtem);
                     
                     //consider about the multiple location
-                    if (accountLocation.length <= 24){
+                    if (accountLocationtem.length <= 24){
                         mappingJson.options={};
                         mappingJson.options={"allToAll" :true};
                         mappingJsonList.push(JSON.stringify(mappingJson));
