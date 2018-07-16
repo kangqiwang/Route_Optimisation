@@ -1,5 +1,5 @@
 <apex:page controller="MapControllertest" showHeader="true" sidebar="false">	
-<html>
+    <html>
         <head>    
             <title>Route Optimisation</title>
             <script src="./../soap/ajax/43.0/connection.js" type="text/javascript"></script>
@@ -13,7 +13,7 @@
             }
             
             .result{
-            	display: flex;
+                display: flex;
                 height: 100%;
                 flex-direction: column;
             }
@@ -141,6 +141,7 @@
                     var territory=[];
                     var resource=[];
                     var accountLocation=[];
+                    var accoutSame=[];
                     //get the visitData
                     var visitData=requestToSforce(rawData);
                     
@@ -149,16 +150,17 @@
                     var resourceData=requestResource(rawData);
                     //console.log(resourceData);
                     //get the different Json file
-                    var generatejson=generateMapJson(visitData,accountLocation );
-                    //console.log(generatejson);
-                    
-                    getTravelTime(generatejson,resourceData,visitData,rawData,accountLocation);
+                    //var terResvisit=seperatevisit(resourceData,visitData,accountLocation);
+                    var generatejson=generateMapJson(visitData,accountLocation,accoutSame);
+
+                    getTravelTime(generatejson,resourceData,visitData,rawData,accountLocation,accoutSame);
                     console.log("show result please");
                     //generateTerritory(rawData);
                     //sameLocation(visitData,accountLocation);
                     //var mappingJson=JSON.stringify({locations,options:allToAll});
                 });
             });
+            
             function generateTerritory(rawdata){
                 //generate territory button
                 var resource=[];
@@ -189,7 +191,7 @@
                 });
                 
             }
-
+            
             function generateDayList(rawdata,optimizationday){
                 var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
                 for(var i of optimizationday){
@@ -204,7 +206,7 @@
                     alert("cool");
                 })
             }
-
+            
             //input : return data by POST. output : show the map
             function renderMap(data){
                 
@@ -235,14 +237,10 @@
             }
             // generate the Json file
             //input :specific date and resource, territory output: the location 
-            function getLocation(data){
-                
-            }
             
             //input: data from the mapquest response. output: the time and distance
-            function getTravelTime(mappingJson,resourceData,visitData,rawData,accountLocation){
+            function getTravelTime(mappingJson,resourceData,visitData,rawData,accountLocation,accoutSame){
                 
-                console.log(resourceData.length);
                 var RouteMatrix=[];
                 var promises=[];
                 for(var i=0; i<mappingJson.length;i++){
@@ -257,35 +255,21 @@
                         url: "http://www.mapquestapi.com/directions/v2/routematrix",
                         data: {key: decodeURI("99JBw7RAaWzJmd7nMADgsOdbJseEtVPZ"),
                                json: mappingJson[i]}
-                        /*
-                        success: function(data){
-                            status++;
-                            console.log("iteration success");
-                            
-                            console.log("successdata"+status);
-                            RouteMatrix.push(data);
-                        },
-                        error: function(data){
-                            
-                            status++;    
-                            console.log("iteration error" + status);
-                            console.log("error");
-                            
-                        },
-                        */
+                        
                     });
                     promises.push(request);
-                    //timelist.push(request.responseJSON);
+
                     //console.log(timelist);
                 }
                 console.log('about to wait....' + resourceData.length);            
                 $.when.apply($, promises).done(function(jsonp){
-                    optimisation(arguments,resourceData,visitData,rawData,accountLocation);
+                    optimisation(arguments,resourceData,visitData,rawData,accountLocation,accoutSame);
                 });
                 console.dir(promises);
                 console.log('final');
                 
             }
+            
             function callback(request){
                 for(var i; i<request.length;i++){
                     console.request(i);
@@ -293,7 +277,6 @@
                     console.log(request[i].responseJSON);    
                 }
                 console.log("This is Callback function")
-                
             }
             //try to cluster the location 
             
@@ -312,7 +295,7 @@
                         }
                     }
                 }
-               
+                
                 /*
             	for(var i=0; i<visitData.length;i++){
                 	var visit=visitData[i];
@@ -325,10 +308,11 @@
                 }
                 */
             }
+            
             function arrayMin(arrs){
                 if(arrs[0]){
                     var min=arrs[0];}else{
-                    var min=arrs[1];
+                        var min=arrs[1];
                     }
                 
                 for(var i=1, ilen=arrs.length; i<ilen; i+=1){
@@ -337,12 +321,12 @@
                             min=arrs[i];
                         }
                     }else{
-                    	
+                        
                     }
                 }
                 return min;
             }
-
+            
             
             /*
                 return $.when.apply(null, timelist).done(function(timelist){
@@ -354,13 +338,52 @@
             
             
             //timeMatrix and resourceData and visitData is array for different territory
-            function optimisation(timeMatrix, resourceData,visitData,rawData,accountLocation){
+            function seperatevisit(resourceData,visitData,accountLocation){
+                //console.log(accountLocation);
                 //sameLocation(visitData,accountLocation,timeMatrix);
-                console.log(timeMatrix);
-                console.log(resourceData);
-                console.log(visitData);
-                console.log(accountLocation);
                 //different territory in different scheduel
+                var terResvisit=[];
+                for(var i=0; i<accountLocation.length;i++){
+                    var resource=resourceData[i];
+                    var visit=visitData[i];
+                    console.log(visit);
+                    console.log(resource);
+                    //var Matrix=timeMatrix[i];
+                    //different resource get different job
+                    var resourceNum=[];
+                    
+                    for(var j=0;j<resource.size;j++){
+                        var jobSeperated=[];
+                        for(var a=0; a<accountLocation[i].length;a++){
+                            if(!resource.records.length){
+                                //console.log(resource.records.Id);
+                                //Problem: situation: many visits and resources
+                                //but no output
+                                //reason: visit owner != resource id
+                                //In this territory, we can find the target resource.
+                                //resource and visit are not under the same territory.
+                                if (visit.records[accountLocation[i][a]].STKR__Service__r.STKR__Service_Owner__c==resource.records.Id)
+                                {
+                                    jobSeperated.push(accountLocation[i][a]);
+                                }
+                            }
+                            else{
+                                if (visit.records[accountLocation[i][a]].STKR__Service__r.STKR__Service_Owner__c==resource.records[j].Id)
+                                {
+                                    jobSeperated.push(accountLocation[i][a]);
+                                }
+                            }
+                            
+                        }
+                        resourceNum.push(jobSeperated);
+                    }                	
+                    terResvisit.push(resourceNum);
+                }
+                //console.log(terResvisit);
+                return terResvisit;
+            }
+            
+            function optimisation(timeMatrix, resourceData,visitData,rawData,accountLocation,accountSame){                
                 for(var i=0; i<visitData.length;i++){
                     var resource=resourceData[i];
                     var visit=visitData[i];
@@ -377,7 +400,6 @@
                         for(var a=0; a<visit.size;a++){
                             //console.log(a);
                             if(!resource.records.length){
-                                //console.log(resource.records.Id);
                                 //Problem: situation: many visits and resources
                                 //but no output
                                 //reason: visit owner != resource id
@@ -418,7 +440,7 @@
                         var locations=[];
                         
                         mappingJson.locations=locations;
-                        console.log(resource);
+                        
                         if(!resource.records.length){                            
                             //console.log(resource.records[j].STKR__Fixed_Location__Latitude__s );
                             //console.log(resource.records.STKR__Fixed_Location__Latitude__s);
@@ -430,33 +452,6 @@
                             
                             
                         }
-                        var latLng=lat+","+lng;
-                        console.log(latLng+"this is my"+j+"request");
-                        mappingJson.locations.push(latLng);
-                        for(var b in resourceNum[i]){
-                            lat=Number(visit.records[resourceNum[j][b]].STKR__Account_lkp__r.STKR__location__Latitude__s);
-                            lng=Number(visit.records[resourceNum[j][b]].STKR__Account_lkp__r.STKR__location__Longitude__s);
-                            latLng=lat+","+lng;
-                            mappingJson.locations.push(latLng);
-                        }
-                        mappingJson.options={};
-                        mappingJson.options={"allToAll" :false};
-                        mappingJson=JSON.stringify(mappingJson);
-                        //console.log(mappingJson);
-                        var request=$.ajax({
-                            
-                            type: 'POST',
-                            dataType: 'jsonp',
-                            contentType: 'json',
-                            url: "http://www.mapquestapi.com/directions/v2/routematrix",
-                            data: {key: decodeURI("99JBw7RAaWzJmd7nMADgsOdbJseEtVPZ"),
-                                   json: mappingJson}
-                        });
-                        promises.push(request);
-                        
-                        $.when.apply($, promises).done(function(jsonp){
-                            console.log(arguments);
-                        });
                         for(var b in resourceNum[j]){
                             //console.log(visit.records[resourceNum[j][b]].STKR__Fixed_Visit__c);
                             if(visit.records[resourceNum[j][b]].STKR__Fixed_Visit__c=="true"){
@@ -480,7 +475,7 @@
                             //console.log(daysNoverdue);
                             
                         }
-                       
+                        
                         // re-structure the [days] and [visit]
                         for (var c in notOverdueNotFixVisit){
                             //console.log(visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Frequency__c);
@@ -518,7 +513,7 @@
                     1. first sort based on days
                     2. delete the same elements
                                         */
-
+                        
                         
                         console.log(notOverdueNotFixVisit); 
                         notOverdueNotFixVisit.sort(function(a,b){
@@ -526,37 +521,7 @@
                         });
                         console.log(notOverdueNotFixVisit);
                         
-                        /*
-                        //delete the same element
-                        for (var c=0; c<notOverdueNotFixVisit.length-1;c++){
-                            if (notOverdueNotFixVisit[c][0]===notOverdueNotFixVisit[c+1][0]){
-                                //console.log("notOverdueNotFixVisit[i][0]===notOverdueNotFixVisit[i+1][0]");
-                                if (notOverdueNotFixVisit[c][1].length){
-                                    notOverdueNotFixVisit[c][1].push(notOverdueNotFixVisit[c+1][1]);
-                                    notOverdueNotFixVisit[c][2].push(notOverdueNotFixVisit[c+1][2]);
-                                    notOverdueNotFixVisit[c][3].push(notOverdueNotFixVisit[c+1][3]);
-                                }else{
-                                    var tem=notOverdueNotFixVisit[c][1];
-                                    notOverdueNotFixVisit[c][1]=[];
-                                    notOverdueNotFixVisit[c][1].push(tem,notOverdueNotFixVisit[c+1][1]);
-                                    var tem =notOverdueNotFixVisit[c][2];
-                                    notOverdueNotFixVisit[c][2]=[];
-                                    notOverdueNotFixVisit[c][2].push(tem,notOverdueNotFixVisit[c+1][2]);
-                                    var tem =notOverdueNotFixVisit[c][3];
-                                    notOverdueNotFixVisit[c][3]=[];
-                                    notOverdueNotFixVisit[c][3].push(tem+notOverdueNotFixVisit[c+1][3]);
-                                }
-                                notOverdueNotFixVisit.splice(c+1,1);
-                                c--;
-                            }
-                            console.log(notOverdueNotFixVisit);
-                        }
-                        */
                         //array has been saved as [day, index, F/I, luch+collect, workhour]
-                        
-                        
-                        
-                        
                         console.log(notOverdueNotFixVisit);
                         NOverdueNFix.push(notOverdueNotFixVisit);
                         NOverdueFix.push(notOverdueFixVisit);
@@ -567,6 +532,7 @@
                     
                 }     
             }
+            
             /*
             overdue problem
             var OverdueFix=[];
@@ -630,8 +596,6 @@
                 
                 */
             
-            function predictDay(overdueNotFixVisit,overdueFixVisit,notOverdueNotFixVisit,notOverdueFixVisit){
-            }
             
             function valueForm (rawdata){
                 var resource=[];
@@ -647,6 +611,7 @@
                 }
                 return [resource,territory];
             }
+            
             function requestResource(rawdata){
                 var resource=valueForm(rawdata);
                 var result=[];
@@ -688,42 +653,48 @@
                 }
                 return result;
             }
-            function locationNum(mappingJson,data,accountLocation){
-
+            
+            function locationNum(mappingJson,data,accountLocation,accoutSame){
+                
                 var temLocation=[];
                 var temsame=[];
+                
                 var lat=Number(data.records[0].STKR__Account_lkp__r.STKR__location__Latitude__s);
                 var lng=Number(data.records[0].STKR__Account_lkp__r.STKR__location__Longitude__s);
                 var latLng=lat+","+lng;
                 mappingJson.locations.push(latLng);
-                temLocation.push(data.records[0].STKR__Account_lkp__r.Id);
-
-                for (i=0; i<data.size-1; i++){
-                    if(data.records[i].STKR__Account_lkp__r.Id!=data.records[i+1].STKR__Account_lkp__r.Id){
-                        var lat=Number(data.records[i+1].STKR__Account_lkp__r.STKR__location__Latitude__s);
-                        var lng=Number(data.records[i+1].STKR__Account_lkp__r.STKR__location__Longitude__s);
+                temLocation.push(0);
+                console.log(temLocation[temLocation.length-1]);
+                for (i=1; i<data.size; i++){
+                    var a=Number(temLocation[temLocation.length-1]);
+                    if(data.records[i].STKR__Account_lkp__r.Id !=data.records[a].STKR__Account_lkp__r.Id){
+                        var lat=Number(data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s);
+                        var lng=Number(data.records[i].STKR__Account_lkp__r.STKR__location__Longitude__s);
                         var latLng=lat+","+lng;
                         mappingJson.locations.push(latLng);
-                        temLocation.push(data.records[i+1].Name);
+                        temLocation.push(i);
                         
                     }else{
-                    	console.log(data.records[i].Name);
-                    }
-                    
+                        temsame.push(i);
+                    }                    
                 }
+                accoutSame.push(temsame);
                 accountLocation.push(temLocation);
+                
                 return accountLocation;
             }
             
-            function generateMapJson(data,accountLocation){
+            function generateMapJson(data,accountLocation,accoutSame){
                 var mappingJsonList=[];
                 console.log(data.length);
                 for(var i=0; i<data.length; i++){
                     var mappingJson={};
                     var locations=[];
                     var accountLocationtem=[];
+                    
                     mappingJson.locations=locations;
-                    accountLocationtem=locationNum(mappingJson,data[i],accountLocation);
+                    accountLocationtem=locationNum(mappingJson,data[i],accountLocation,accoutSame);
+                    
                     console.log("the index of different location or Account:"+accountLocationtem);
                     
                     //consider about the multiple location
@@ -752,8 +723,8 @@
                     //mappingJson.location[i].latLng.lng=lng;
                     }
                     */
-                
-            }
+                    
+                }
             
             </script>
             
