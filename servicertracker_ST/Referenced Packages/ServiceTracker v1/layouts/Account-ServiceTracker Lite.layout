@@ -67,6 +67,10 @@
                 <behavior>Edit</behavior>
                 <field>Territory__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Price_Book__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>

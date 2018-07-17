@@ -62,21 +62,6 @@
                 var resources = [];
             var territories = [];
             window.onload = function() {
-                //optimizedwaypoints example can be used
-                //https://developer.mapquest.com/documentation/mapquest-js/v1.3/examples/directions-with-optimized-waypoints/
-                L.mapquest.key = '99JBw7RAaWzJmd7nMADgsOdbJseEtVPZ';
-                
-                var map = L.mapquest.map('map', {
-                    center: [40.7128, -74.0059],
-                    layers: L.mapquest.tileLayer('map'),
-                    zoom: 13
-                });
-                map.addControl(L.mapquest.control());
-                L.mapquest.directions().route({
-                    start: '350 5th Ave, New York, NY 10118',
-                    end: 'One Liberty Plaza, New York, NY 10006'
-                });
-                
                 //generate the HTML and add name
                 <apex:repeat value="{!objectResource}" var="resource" id="resources">
                     var pResource=document.createElement("label");
@@ -98,30 +83,6 @@
                 resources.push(resource);
                 
                 </apex:repeat>
-                // console.log(resources);
-                //console.log(resources.length);
-                /*
-                <apex:repeat value="{!objectTerritory}" var="territory" id="territories">
-                    var pResource=document.createElement("label");
-                var node=document.createTextNode('{!territory.name}');
-                var element=document.getElementById("territory");
-                pResource.appendChild(node);
-                element.appendChild(pResource);
-                var checkboxResource=document.createElement("input");
-                checkboxResource.setAttribute('type', 'checkbox');
-                checkboxResource.name="territory";
-                checkboxResource.value='{!territory.Id}';
-                element.appendChild(checkboxResource);
-                
-                var territory ={
-                    name: '{!territory.name}',
-                    id:'{!territory.Id}'
-                };
-                
-                territories.push(territory);
-                
-                </apex:repeat>
-                */
             }
             
             
@@ -133,23 +94,25 @@
                 
                 //js json Ajax
                 $("#matrixForm").submit(function(event){
+                    
                     //getting data from the Form.
                     var rawData=$("#matrixForm").serializeArray();
-                    //console.log(rawData);
                     
                     //prevent send request
                     event.preventDefault();
-                    //var territory=[];
                     var resource=[];
                     var accountLocation=[];
                     var accoutSame=[];
                     //get the visitData
                     var visitData=requestToSforce(rawData);
+                    console.log(visitData);
                     
-                    //console.log(visitData);
                     //get the resourcedata
                     var resourceData=requestResource(rawData);
-                    //console.log(resourceData);
+                    console.log(resourceData);
+                    
+                    seperatevisit(visitData,resourceData);
+                    /*
                     //get the different Json file
                     //var terResvisit=seperatevisit(resourceData,visitData,accountLocation);
                     var generatejson=generateMapJson(visitData,accountLocation,accoutSame);
@@ -160,6 +123,7 @@
                     //generateTerritory(rawData);
                     //sameLocation(visitData,accountLocation);
                     //var mappingJson=JSON.stringify({locations,options:allToAll});
+                    */
                 });
             });
             
@@ -520,7 +484,7 @@
                         for (var c in notOverdueNotFixVisit){
                             //console.log(visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Frequency__c);
                             if (visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Frequency__c=="Weekly"){
-                                //console.log("Weekly");Ian￼Mike￼Kang
+                                //console.log("Weekly");Ian?Mike?Kang
                                 //request to visit, get all the data from service and visit
                                 //console.log(7/visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Service_Interval__c);
                                 notOverdueNotFixVisit[c].push(7/visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Service_Interval__c);
@@ -685,70 +649,52 @@
                         lunchBreak.push(resourceData.records[i].STKR__Lunch_Break_Minutes__c);
                         workingHours.push(resourceData.records[i].STKR__Working_Hours__c);
                         
-                    }
-                    
-                //console.log(lunchBreak);
-                    // formulate
-                    
+                    }                    
                     */
                 
                 
                 function valueForm (rawdata){
                     var resource=[];
-                    var territory=[];
                     for (i=0;i<rawdata.length;i++){
-                        if(rawdata[i].name=="territory"){
-                            territory.push("'"+rawdata[i].value+"'");
-                        }
-                        // for example :  STKR__ParentId__c, STKR__Territory__c ,STKR__Resource_Name__c, STKR__Planned_Date__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Planned_Date__c< 2019-06-19T08:26:00.000+0000 and STKR__Planned_Date__c> 2018-07-10T08:00:00.000+0000 and STKR__Resource_Name__c='Kang' and STKR__Account_lkp__r.STKR__Territory__r.Name in ('Cardiff', 'Caerphilly')
                         if (rawdata[i].name=="resource"){
                             resource.push("'"+rawdata[i].value+"'");
                         }
                     }
-                    return [resource,territory];
+                    return resource;
                 }
                 
-                function requestResource(rawdata){
-                    var resource=valueForm(rawdata);
-                    var result=[];
-                    for(var i of resource[1]){
-                        var query="select Id,Name,STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c,STKR__Fixed_Location__longitude__s,STKR__Fixed_Location__latitude__s from STKR__Resource__c where Id in ("+resource[0].toString()+") and STKR__Territory__c in ("+i+")";
-                        //console.log(query);
-                        try{
-                            sforce.connection.sessionId="{!$Api.Session_ID}";
-                            var queryResult=sforce.connection.query(query);
-                            result.push(queryResult);
-                        }catch(error)
-                        {
-                            console.log(error);
-                        }
-                    }
-                    return result;
-                }
+            function requestResource(rawdata){
+                var resource=valueForm(rawdata);
                 
-                //input: the raw data output: filter data using Query
-                function requestToSforce(data){
-                    var resource=valueForm(data);
-                    var territory=resource[1];
-                    var result=[];
-                    resource=resource[0];
-                    // query to find the lantitude and longtitude
-                    // old way is using for loop to send request one by one based on the resource and territory
-                    //best way is use one request get multiple resources and territories.
-              
-                        var query="SELECT Id,Name,STKR__Service__r.STKR__Service_Interval__c,STKR__Due_Date__c,STKR__Days_Overdue__c,STKR__Account_lkp__r.Id,STKR__Service__r.Id,STKR__Fixed_Visit__c, STKR__Service__r.STKR__Last_Scheduled_Visit__c,STKR__Service__r.STKR__Frequency__c, STKR__Service__r.STKR__Contract_End_Date__c,STKR__Service__r.STKR__Fix_all_Visits__c, STKR__Service__r.STKR__Start_Date__c, STKR__Service__r.STKR__Time_Allocation__c, STKR__Service__r.STKR__Service_Owner__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Account_lkp__c in (SELECT Id from Account where STKR__Service__r.STKR__Service_Owner__c in ("+i+")) and STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000";
-                        //console.log(query);
-                        try{
-                            sforce.connection.sessionId="{!$Api.Session_ID}";
-                            var queryResult=sforce.connection.query(query);
-                            result.push(queryResult);
-                        }catch(error)
-                        {
-                            console.log(error);
-                        }
+                var query="select Id,Name,STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c,STKR__Fixed_Location__longitude__s,STKR__Fixed_Location__latitude__s from STKR__Resource__c where Id in ("+resource+")";
+                try{
+                    sforce.connection.sessionId="{!$Api.Session_ID}";
+                    var queryResult=sforce.connection.query(query);
                     
-                    return result;
+                }catch(error)
+                {
+                    console.log(error);
                 }
+                return queryResult;
+            }
+            
+            //input: the raw data output: filter data using Query
+            function requestToSforce(data){
+                var resource=valueForm(data);
+                // query to find the lantitude and longtitude
+                // old way is using for loop to send request one by one based on the resource and territory
+                //best way is use one request get multiple resources and territories.
+                var query="SELECT Id,Name,STKR__Site_Post_Code__c,STKR__Service__r.STKR__Service_Interval__c,STKR__Due_Date__c,STKR__Days_Overdue__c,STKR__Account_lkp__r.Id,STKR__Service__r.Id,STKR__Fixed_Visit__c, STKR__Service__r.STKR__Last_Scheduled_Visit__c,STKR__Service__r.STKR__Frequency__c, STKR__Service__r.STKR__Contract_End_Date__c,STKR__Service__r.STKR__Fix_all_Visits__c, STKR__Service__r.STKR__Start_Date__c, STKR__Service__r.STKR__Time_Allocation__c, STKR__Service__r.STKR__Service_Owner__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Service__r.STKR__Service_Owner__c in ("+resource+") and STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000";
+                console.log(query);
+                try{
+                    sforce.connection.sessionId="{!$Api.Session_ID}";
+                    var queryResult=sforce.connection.query(query);
+                }catch(error)
+                {
+                    console.log(error);
+                }
+                return queryResult;
+            }
                 
                 function locationNum(mappingJson,data,accountLocation,accoutSame){
                     
