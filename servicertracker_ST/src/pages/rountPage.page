@@ -85,9 +85,6 @@
                 </apex:repeat>
             }
             
-            
-            
-            
             $(document).ready(function(){
                 var status = 0;
                 $("#result").show();
@@ -103,6 +100,7 @@
                     var resource=[];
                     var accountLocation=[];
                     var accoutSame=[];
+                    var optimizationday={};
                     //get the visitData
                     var visitData=requestToSforce(rawData);
                     console.log(visitData);
@@ -110,12 +108,13 @@
                     //get the resourcedata
                     var resourceData=requestResource(rawData);
                     console.log(resourceData);
-                    
+                    console.log(visitData.records);
+                    // var generatejson=generateMapJson(visitData,accountLocation,accoutSame);
                     seperatevisit(visitData,resourceData);
+                    generateDayList(rawData,optimizationday);                
                     /*
                     //get the different Json file
                     //var terResvisit=seperatevisit(resourceData,visitData,accountLocation);
-                    var generatejson=generateMapJson(visitData,accountLocation,accoutSame);
                     console.log(rawData);
                     
                     getTravelTime(generatejson,resourceData,visitData,rawData,accountLocation,accoutSame);
@@ -126,42 +125,11 @@
                     */
                 });
             });
-            
-            function generateTerritory(rawdata){
-                //generate territory button
-                var resource=[];
-                var territory=[];
-                console.log(rawdata);
-                for (i=0;i<rawdata.length;i++){
-                    if(rawdata[i].name=="territory"){
-                        territory.push(rawdata[i].value);
-                    }
-                    if (rawdata[i].name=="resource"){
-                        resource.push(rawdata[i].value);
-                    }
-                }
-                
-                /*
-                for (var i=0; i<territory.length;i++){
-                    for(var j=0; j<territories.length;j++){
-                        if(territories[j].id==territory[i]){
-                            var r=$('<button style="width:'+((1/territory.length).toFixed(2)-0.01)*100+'%;" id="'+territory[i]+'">'+territories[j].name+'</button>');
-                            $("#territoryButton").show().append(r);}
-                    }
-                }
-                $("#territoryButton").children("button").click(function(event){
-                    alert(event.target.id);
-                });
-                */
-            }
-            
+                        
             function generateDayList(rawdata,optimizationday){
-                var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
-                for(var i of optimizationday){
-                    
-                }
+                var days = Math.round(Math.abs((new Date(rawdata[1].value).getTime()-new Date(rawdata[0].value).getTime())/(24*60*60*1000)));
                 for(var i=0;i<days;i++){
-                    var r=$('<div></div>');
+                    var r=$('<div>this is result</div>');
                     $("#dayresult").show().append(r);
                 }
                 
@@ -170,34 +138,6 @@
                 })
             }
             
-            //input : return data by POST. output : show the map
-            function renderMap(data){
-                
-            }
-            // find the locations >= 25, need cluster location
-            //it is one of clever way to deal with limitations problems(optimized route with more than 25 stops)
-            function culsterlocation(mappingJson){
-                if (mappingJson.locations.length<=24){
-                    return 0;
-                }else if(mappingJson.locations.length<=99){
-                    return mutipleRequest(mappingJson);
-                }else{
-                    console.log("the location is too much");
-                }
-            }
-            
-            // it is a stupid way to deal with problem.obtain the full distance matrix through the different request.
-            function mutipleRequest(mappingJson){
-                var temMappingJson={};
-                temMappingJson.locations=locations;
-                for(i=0;i<mappingJson.locations.length/25+1;i++){
-                    //splite data for different requests
-                    for(j=0;j<mappingJson.locations.length; j++){
-                        temMappingJson.locations.push(mappingJson.locations[j+i*25]);
-                    }
-                    getTravelTime(temMappingJson)
-                }
-            }
             // generate the Json file
             //input :specific date and resource, territory output: the location 
             
@@ -229,440 +169,85 @@
                 console.log('final');
             }
             
-            function callback(request){
-                for(var i; i<request.length;i++){
-                    console.request(i);
-                    console.request(request[i]);
-                    console.log(request[i].responseJSON);    
+            //send your resource location with different location to Mapquest            
+            function removeDuplicates(arr){
+                let unique_array = []
+                for(let i = 0;i < arr.length; i++){
+                    if(unique_array.indexOf(arr[i]) == -1){
+                        unique_array.push(arr[i])
+                    }
+                }
+                return unique_array
+            }
+            
+            
+            //timeMatrix and resourceData and visitData is array for different territory
+            
+            function generateObject(visit){
+                
+                var output={};
+                for(var i=0; i<visit.size;i++){
+                    var location=visit.records[i].STKR__Account_lkp__r.Id;
+                    
                 }
             }
-            //try to cluster the location 
-            
-            function sameLocation(visitData,accountLocation,timeMatrix){
-                for(var i=0; i<visitData.length;i++){
-                    var Matrix=timeMatrix[i];
-                    var visit=visitData[i];
-                    console.log(visit);
-                    for(var j=0;j<visit.size;j++){
-                        console.log(visit.records[j]);
-                        for(var a=0; a<accountLocation[i].length; a++){
-                            var samelocation=[];
-                            if(visit.records[j].STKR__Days_Overdue__c!=visit.records[accountLocation[i][a]].STKR__Account_1kp__r.Id){
-                                console.log(visit.records[j].Id);
-                            }
-                        }
-                    }
-                }
+            function seperatevisit(visit,resource){
+                //get the post code prefix object and accountId object
+                var groups={};
+                var resourcegroup={};
+                var postcode={};
                 
-                /*
-                    for(var i=0; i<visitData.length;i++){
-                        var visit=visitData[i];
-                        for(var j in visit){
-                            console.log(visit);
-                            for(var a in accountLocation[i]){
-                                console.log(accountLocation[i][a]);
-                            }
-                        }
-                    }
-                    */
-                }
-                
-                function arrayMin(arrs){
-                    if(arrs[0]){
-                        var min=arrs[0];}else{
-                            var min=arrs[1];
-                        }
+                for(var i=0;i<visit.size;i++){
+                    var location=visit.records[i].STKR__Account_lkp__r.Id;
+                    var postcodTem=visit.records[i].STKR__Site_Post_Code__c;
+                    postcodTem=postcodTem.slice(0,4);
                     
-                    for(var i=1, ilen=arrs.length; i<ilen; i+=1){
-                        if(arrs[i]){
-                            if(arrs[i]<min){
-                                min=arrs[i];
-                            }
-                        }else{
-                            
-                        }
+                    if(!postcode[postcodTem]){
+                        postcode[postcodTem]=[];
                     }
-                    return min;
+                    if(!groups[location]){
+                        groups[location]=[];
+                    }
+                    groups[location].push(i);
+                    postcode[postcodTem].push(location);
+                }
+                //delete the duplicate element
+                for(var obj in postcode){
+                    postcode[obj]=removeDuplicates(postcode[obj]);
+                }
+                //if in each postcode location greater than 25-resource.size
+                for(var obj in postcode){
+                    var size=postcode[obj].length;
+                    var resourceSize=resource.size;
+                    if(size+resourceSize<25){
+                        //generate json send request
+                        //generateMapJson(postcode[obj]);
+                        
+                    }else{
+                        //blank
+                    }
                 }
                 
-                
-                /*
-                    return $.when.apply(null, timelist).done(function(timelist){
-                        console.log(timelist);
-                        return timelist;
-                    })
-                     */
-                //send your resource location with different location to Mapquest
-                
-                
-                //timeMatrix and resourceData and visitData is array for different territory
-                function seperatevisit(resource,visit,accountLocation){
-                    //console.log(accountLocation);
-                    //sameLocation(visitData,accountLocation,timeMatrix);
-                    //different territory in different scheduel
-                    var terResvisit=[];
-                    for(var i=0; i<accountLocation.length;i++){
-                        var resource=resourceData[i];
-                        var visit=visitData[i];
-                        console.log(visit);
-                        console.log(resource);
-                        //var Matrix=timeMatrix[i];
+                console.log(postcode);
+                console.log(groups);
+                var myarray=[];
+                for(var postcode in groups){
+                    myarray.push({location:postcode, index:groups[postcode]})
+                }
+                var temLocation=[];
+                var a=Number(temLocation[temLocation.length-1]);
+            }
 
-                        //different resource get different job
-                        var resourceNum=[];
-                        
-                        for(var j=0;j<resource.size;j++){
-                            var jobSeperated=[];
-                            for(var a=0; a<accountLocation[i].length;a++){
-                                if(!resource.records.length){
-                                    //console.log(resource.records.Id);
-                                    //Problem: situation: many visits and resources
-                                    //but no output
-                                    //reason: visit owner != resource id
-                                    //In this territory, we can find the target resource.
-                                    //resource and visit are not under the same territory.
-                                    if (visit.records[accountLocation[i][a]].STKR__Service__r.STKR__Service_Owner__c==resource.records.Id)
-                                    {
-                                        jobSeperated.push(accountLocation[i][a]);
-                                    }
-                                }
-                                else{
-                                    if (visit.records[accountLocation[i][a]].STKR__Service__r.STKR__Service_Owner__c==resource.records[j].Id)
-                                    {
-                                        jobSeperated.push(accountLocation[i][a]);
-                                    }
-                                }
-                                
-                            }
-                            resourceNum.push(jobSeperated);
-                        }                	
-                        terResvisit.push(resourceNum);
+            function valueForm (rawdata){
+                var resource=[];
+                for (i=0;i<rawdata.length;i++){
+                    if (rawdata[i].name=="resource"){
+                        resource.push("'"+rawdata[i].value+"'");
                     }
-                    console.log(terResvisit);
-                    return terResvisit;
                 }
-                
-                function optimisation(timeMatrix, resourceData,visitData,rawData,accountLocation,accountSame){ 
-                    var resultNOverdueNFix=[];
-                    var resultNOverdueFix=[];
-                    var territoryMap=new Map();
-                    var resource=valueForm(rawData);
-                    
-                    for(var j=0;j<resource[1].length;j++){
-                        territoryMap.set(resource[1][j], visitData[j].records);
-                    }
-                    var resourceMap=new Map();
-                    for(var i=0;i<resource[0].length;i++){
-                        //resourceMap.set(resource[][])
-                    }
-                    console.log(resource);
-					
-                    console.log(resourceData);
-                    var visit=visitData[i];
-                    var Matrix=timeMatrix[i];
-                    console.log("my visit data length is"+visitData.length+"this is my"+i+"times");
-                    //different resource get different job
-                    var resourceNum=[];
-                    
-                    for(var value of territoryMap){
-                        for(var j=0;j<resource.size;j++){
-                            var jobSeperated=[];
-                            for(var a=0; a<value.length;a++){
-                                //console.log(a);
-                                if(!resource.records.length){
-                                    //Problem: situation: many visits and resources
-                                    //but no output
-                                    //reason: visit owner != resource id
-                                    //In this territory, we can find the target resource.
-                                    //resource and visit are not under the same territory.
-                                    if (value[a].STKR__Service__r.STKR__Service_Owner__c==resource.records.Id)
-                                    {
-                                        jobSeperated.push(a);
-                                    }
-                                }
-                                else{
-                                    if (visit.records[a].STKR__Service__r.STKR__Service_Owner__c==resource.records[j].Id)
-                                    {
-                                        jobSeperated[resource.records[j].Id]=value[a].Id;
-                                    }
-                                }
-                                
-                            }
-                            resourceNum.push(jobSeperated);
-                        }                	
-                        
-                    }
-                    
-                    return 0;
-                    
-                    console.log(visit);
-                    console.log(resource);
-                    console.log(Matrix[0].time);
-                    
-                    for(var j=0;j<resource.size;j++){
-                        var jobSeperated=[];
-                        for(var a=0; a<visit.size;a++){
-                            //console.log(a);
-                            if(!resource.records.length){
-                                //Problem: situation: many visits and resources
-                                //but no output
-                                //reason: visit owner != resource id
-                                //In this territory, we can find the target resource.
-                                //resource and visit are not under the same territory.
-                                if (visit.records[a].STKR__Service__r.STKR__Service_Owner__c==resource.records.Id)
-                                {
-                                    jobSeperated.push(a);
-                                }
-                            }
-                            else{
-                                if (visit.records[a].STKR__Service__r.STKR__Service_Owner__c==resource.records[j].Id)
-                                {
-                                    jobSeperated.push(a);
-                                }
-                            }
-                            
-                        }
-                        resourceNum.push(jobSeperated);
-                    }                	
-                    
-                    
-                    var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
-                    
-                    
-                    console.log(resourceNum);
-                    
-                    var NOverdueNFix=[];
-                    var NOverdueFix=[];
-                    //seperated job
-                    var promises=[];
-                    for(var j=0;j<resourceNum.length;j++){
-                        var notOverdueNotFixVisit=[];
-                        var notOverdueFixVisit=[];
-                        //send the resource location with multiple visit location to mapquest
-                        //sendRToV(j);
-                        var mappingJson={};
-                        var locations=[];
-                        
-                        mappingJson.locations=locations;
-                        
-                        if(!resource.records.length){                            
-                            //console.log(resource.records[j].STKR__Fixed_Location__Latitude__s );
-                            //console.log(resource.records.STKR__Fixed_Location__Latitude__s);
-                            var lat=Number(resource.records.STKR__Fixed_Location__Latitude__s);
-                            var lng=Number(resource.records.STKR__Fixed_Location__Longitude__s );
-                        }else{
-                            var lat=Number(resource.records[j].STKR__Fixed_Location__Latitude__s);
-                            var lng=Number(resource.records[j].STKR__Fixed_Location__Longitude__s );
-                            
-                            
-                        }
-                        for(var b in resourceNum[j]){
-                            //console.log(visit.records[resourceNum[j][b]].STKR__Fixed_Visit__c);
-                            if(visit.records[resourceNum[j][b]].STKR__Fixed_Visit__c=="true"){
-                                //it is fix visit and not overdue visit.
-                                var day=Math.round(Math.abs((new Date(visit.records[resourceNum[j][b]].STKR__Due_Date__c).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
-                                notOverdueFixVisit.push([day,resourceNum[j][b]]);
-                                //console.log("it is fix visit and not overdue visit");
-                            }else{
-                                //it is not fix visit and not overdue visit
-                                //console.log("it is not fix visit and not overdue visit");
-                                
-                                var day=Math.round(Math.abs((new Date(visit.records[resourceNum[j][b]].STKR__Due_Date__c).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
-                                //console.log(day);
-                                //console.log(resourceNum[j][b]);
-                                notOverdueNotFixVisit.push([day,resourceNum[j][b]]);
-                                
-                                
-                                
-                            }
-                            //dayVisit.push([daysNoverdue,resourceNum[j][i]]);
-                            //console.log(daysNoverdue);
-                            
-                        }
-                        
-                        // re-structure the [days] and [visit]
-                        for (var c in notOverdueNotFixVisit){
-                            //console.log(visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Frequency__c);
-                            if (visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Frequency__c=="Weekly"){
-                                //console.log("Weekly");Ian?Mike?Kang
-                                //request to visit, get all the data from service and visit
-                                //console.log(7/visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Service_Interval__c);
-                                notOverdueNotFixVisit[c].push(7/visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Service_Interval__c);
-                                //console.log(visitData.records[notOverdueNotFixVisit[i][1]].STKR__Service__r.STKR__Service_Interval__c);
-                                //know the total day user chose.
-                            }else if (visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Frequency__c=="Daily"){
-                                notOverdueNotFixVisit[c].push(0);
-                            }else if (visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Frequency__c=="Monthly"){
-                                //may be the number need to be changed
-                                notOverdueNotFixVisit[c].push(30.5/visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Service_Interval__c);
-                                
-                            }else if (visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Frequency__c=="Yearly"){
-                                notOverdueNotFixVisit[c].push(365/visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Service_Interval__c);
-                            }
-                            notOverdueNotFixVisit[c].push(Number(resource.records[j].STKR__Lunch_Break_Minutes__c)+Number(visit.records[notOverdueNotFixVisit[c][1]].STKR__Service__r.STKR__Time_Allocation__c));
-                            notOverdueNotFixVisit[c].push(resource.records[j].STKR__Working_Hours__c*60);
-                            
-                        }
-                        
-                        // push status -1 for fixvisit 
-                        if(!notOverdueFixVisit){
-                            for(var c in notOverdueFixVisit){
-                                notOverdueFixVisit[c].push(-1);
-                            }
-                            notOverdueNotFixVisit = notOverdueNotFixVisit.concat(notOverdueFixVisit);
-                        }
-                        //console.log(notOverdueFixVisit);
-                        /*group the array based on the same days, which means map{key:day, value:[visits,grade]}
-                        
-                        1. first sort based on days
-                        2. delete the same elements
-                                            */
-                        
-                        
-                        //console.log(notOverdueNotFixVisit); 
-                        notOverdueNotFixVisit.sort(function(a,b){
-                            return a[0]-b[0]
-                        });
-                        console.log("this is my data, want to call the function tweetvisit()")
-                        console.log(notOverdueNotFixVisit);
-                        console.log(accountSame[i]);
-                        console.log(accountLocation[i]);
-                        console.log(Matrix[0].time);
-                        //array has been saved as [day, index, F/I, luch+collect, workhour]
-                        console.log(notOverdueNotFixVisit);
-                        NOverdueNFix.push(notOverdueNotFixVisit);
-                        NOverdueFix.push(notOverdueFixVisit);
-                    }
-                    resultNOverdueNFix.push(NOverdueNFix);
-                    resultNOverdueFix.push(NOverdueFix);
-                    // console.log(NOverdueNFix);
-                    //console.log(NOverdueFix);
-                    
-                    
-                    console.log(resultNOverdueNFix);
-                    console.log(resultNOverdueFix);
-                }
-                function tweetvisit(notOverdueNotFixVisit,accountLocation,accountSame,time){
-                    console.log(accountLocation);	
-                    var sameday=[];
-                    //day is same
-                    for(var i=0;i<notOverdueNotFixVisit-1;i++){
-                        
-                        if(notOverdueNotFixVisit[i][0]==notOverdueNotFixVisit[i+1][0]){
-                            sameday.push([notOverdueNotFixVisit[i][1],notOverdueNotFixVisit[i+1][1]]);
-                        }
-                        
-                    }
-                    for(var i=0;i<sameday;i++){
-                        var index=accountSame.indexOf(sameday[i][0]);
-                        var nextelemt=accountSame.indexOf(sameday[i+1][0]);
-                        if(index!=-1 & nextelemt!=-1){
-                            console.log(time[index][nextelemt]);
-                            
-                        }else if(index!=-1 & nextelemt==-1){
-                            for(var j=0;j<accountSame;j++){
-                                if(accountSame[j]>sameday[i+1][0]){
-                                    console.log(time[index][accountSame[j]]);
-                                }
-                            }
-                            
-                        }else if(index==-1 & nextelemt!=-1){
-                            for(var j=0;j<accountSame;j++){
-                                if(accountSame[j]>sameday[i][0]){
-                                    console.log(time[accountSame[j][nextelemt]]);
-                                }
-                            }
-                            alert("There are some problems, we can not find the index")
-                        }else if(index==-1 & nextelemt==-1){
-                            for(var j=0;j<accountSame;j++){
-                                for(var a=0;a<accountSame;a++){
-                                    if(accountSame[j]>sameday[i][0] & accountSame[a]>sameday[i+1][0]){
-                                        console.log(time[accountSame[j][accountSame[a]]]);
-                                        
-                                    }
-                                }
-                                
-                            }
-                        }
-                        
-                    }
-                    
-                }
-                
-                function checkMove(){
-                    
-                }
-                
-                /*
-                overdue problem
-                var OverdueFix=[];
-                var OverdueNFix=[];
-                
-                var overdueNotFixVisit=[];
-                var overdueFixVisit=[];
-                
-                && visitData.records[resourceNum[j][i]].STKR__Days_Overdue__c==0.0
-                
-                 }else if (visitData.records[resourceNum[j][i]].STKR__Fixed_Visit__c!="true" && visitData.records[resourceNum[j][i]].STKR__Days_Overdue__c !=0.0){
-                                //it is fix visit and is overdue visit
-                                
-                                console.log("it is not fix visit and is overdue visit");
-                                overdueNotFixVisit.push(resourceNum[j][i]);
-                            }else{
-                                //it is fix visit and overdue visit
-                                console.log("it is fix visit and overdue visit");
-                                overdueFixVisit.push(resourceNum[j][i]);                        
-                            }
-                            OverdueFix.push(overdueFixVisit);
-                        OverdueNFix.push(overdueNotFixVisit);
-                */
-                
-                /*
-                        schedualId.push(visitData.records[i].STKR__Service__r.Id);
-                        
-                        
-                            // this is not fix_visit
-                            
-                            //for day
-                        }                        if (visitData.records[i].STKR__Service_Owner__c==resourceData.records[j].Id)
-    
-                        
-                        //visitData.records[i].STKR__Service__r.STKR__Frequency__c
-                        
-                   
-                       
-                    console.log();
-                    
-                    for(i=0; i<resourceData.size;i++){
-                        /*
-                        for(j=0; j<visitData.size;j++){
-                            if (visitData.records[j].STKR__Planned_Date__c<resourceData.records[i].STKR__Expiry_Date__c){
-                                if (visitData.record[j].STKR__Resource__c==resourceData.records[i].id){
-                                    
-                                }
-                                //.push(resourceData.records[i].STKR__Working_Hours__c-resourceData.records[i].STKR__Lunch_Break_Minutes__c)
-                               }
-                        }
-                        
-                                                if (visitData.records[i].STKR__Service_Owner__c==resourceData.records[j].Id)
-    
-                        lunchBreak.push(resourceData.records[i].STKR__Lunch_Break_Minutes__c);
-                        workingHours.push(resourceData.records[i].STKR__Working_Hours__c);
-                        
-                    }                    
-                    */
-                
-                
-                function valueForm (rawdata){
-                    var resource=[];
-                    for (i=0;i<rawdata.length;i++){
-                        if (rawdata[i].name=="resource"){
-                            resource.push("'"+rawdata[i].value+"'");
-                        }
-                    }
-                    return resource;
-                }
-                
+                return resource;
+            }
+            
             function requestResource(rawdata){
                 var resource=valueForm(rawdata);
                 
@@ -682,10 +267,8 @@
             function requestToSforce(data){
                 var resource=valueForm(data);
                 // query to find the lantitude and longtitude
-                // old way is using for loop to send request one by one based on the resource and territory
                 //best way is use one request get multiple resources and territories.
                 var query="SELECT Id,Name,STKR__Site_Post_Code__c,STKR__Service__r.STKR__Service_Interval__c,STKR__Due_Date__c,STKR__Days_Overdue__c,STKR__Account_lkp__r.Id,STKR__Service__r.Id,STKR__Fixed_Visit__c, STKR__Service__r.STKR__Last_Scheduled_Visit__c,STKR__Service__r.STKR__Frequency__c, STKR__Service__r.STKR__Contract_End_Date__c,STKR__Service__r.STKR__Fix_all_Visits__c, STKR__Service__r.STKR__Start_Date__c, STKR__Service__r.STKR__Time_Allocation__c, STKR__Service__r.STKR__Service_Owner__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Service__r.STKR__Service_Owner__c in ("+resource+") and STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000";
-                console.log(query);
                 try{
                     sforce.connection.sessionId="{!$Api.Session_ID}";
                     var queryResult=sforce.connection.query(query);
@@ -695,138 +278,153 @@
                 }
                 return queryResult;
             }
-                
-                function locationNum(mappingJson,data,accountLocation,accoutSame){
-                    
-                    var temLocation=[];
-                    var temsame=[];
-                    
-                    var lat=Number(data.records[0].STKR__Account_lkp__r.STKR__location__Latitude__s);
-                    var lng=Number(data.records[0].STKR__Account_lkp__r.STKR__location__Longitude__s);
-                    var latLng=lat+","+lng;
-                    mappingJson.locations.push(latLng);
-                    temLocation.push(0);
-                    console.log(temLocation[temLocation.length-1]);
-                    for (i=1; i<data.size; i++){
-                        var a=Number(temLocation[temLocation.length-1]);
-                        if(data.records[i].STKR__Account_lkp__r.Id !=data.records[a].STKR__Account_lkp__r.Id){
-                            var lat=Number(data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s);
-                            var lng=Number(data.records[i].STKR__Account_lkp__r.STKR__location__Longitude__s);
-                            var latLng=lat+","+lng;
-                            mappingJson.locations.push(latLng);
-                            temLocation.push(i);
-                        }else{
-                            temsame.push(i);
-                        }                    
-                    }
-                    accoutSame.push(temsame);
-                    accountLocation.push(temLocation);
-                    
-                    return accountLocation;
+            
+            function locationNum(mappingJson,data){
+                var temLocation=[];
+                var temsame=[];
+                var temLocation=[];
+                var lat=Number(data.records[0].STKR__Account_lkp__r.STKR__location__Latitude__s);
+                var lng=Number(data.records[0].STKR__Account_lkp__r.STKR__location__Longitude__s);
+                var latLng=lat+","+lng;
+                mappingJson.locations.push(latLng);
+                temLocation.push(0);
+                console.log(temLocation[temLocation.length-1]);
+                for (i=1; i<data.size; i++){
+                    var a=Number(temLocation[temLocation.length-1]);
+                    if(data.records[i].STKR__Account_lkp__r.Id !=data.records[a].STKR__Account_lkp__r.Id){
+                        var lat=Number(data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s);
+                        var lng=Number(data.records[i].STKR__Account_lkp__r.STKR__location__Longitude__s);
+                        var latLng=lat+","+lng;
+                        mappingJson.locations.push(latLng);
+                        temLocation.push(i);
+                    }else{
+                        temsame.push(i);
+                    }                    
                 }
+                accoutSame.push(temsame);
+                accountLocation.push(temLocation);
                 
-                function generateMapJson(data,accountLocation,accoutSame){
-                    var mappingJsonList=[];
-                    console.log(data.length);
-                    for(var i=0; i<data.length; i++){
-                        var mappingJson={};
-                        var locations=[];
-                        var accountLocationtem=[];
-                        
-                        mappingJson.locations=locations;
-                        accountLocationtem=locationNum(mappingJson,data[i],accountLocation,accoutSame);
-                        
-                        console.log("the index of different location or Account:"+accountLocationtem);
-                        
-                        //consider about the multiple location
-                        if (accountLocationtem.length <= 24){
-                            mappingJson.options={};
-                            mappingJson.options={"allToAll" :true};
-                            mappingJsonList.push(JSON.stringify(mappingJson));
-                        }else{
-                            //need mutiple requests based on the n*n matrix, such as 30*30, 3 request; 45*45
-                            mutipleRequest(mappingJson,mappingJson.locations.length);
-                        }
-                    }
-                    console.log(mappingJsonList);
-                    return mappingJsonList;
-                    
-                    
-                    /*
-                    for(i=0;i<=data.size-1;i++){
-                        //mappingJson.location[i].latLng=latLng;
-                        var lat=data.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s;
-                        var lng=data.records[i].STKR__Account_lkp__r.STKR__location__Longitude__s;
-                        latLng={"lat": lat,
-                               "lng": lng}
-                        //mappingJson.location[i].latLng.push(latLng);
-                        //mappingJson.location[i].latLng.lat=lat;
-                        //mappingJson.location[i].latLng.lng=lng;
-                        }
-                        */
+                return accountLocation;
+            }
+            //generate Json for sending request to MapQuest
+            function generateMapJson(data,resource){
+                var mappingJsonList=[];
+                var mappingJson={};
+                var locations=[];
+                var accountLocationtem=[];
+                
+                
+                for(var id in data){
                     
                 }
+                mappingJson.locations=locations;
+                accountLocationtem=locationNum(mappingJson,data);
+                console.log("the index of different location or Account:"+accountLocationtem);
+                //consider about the multiple location
+                mappingJson.options={};
+                mappingJson.options={"allToAll" :true};
+                mappingJsonList.push(JSON.stringify(mappingJson));
+                console.log(mappingJsonList);
                 
-                </script>
+                return mappingJsonList;
+            }
+            
+            //calculate distance based on latitude/longitude
+            function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+                var R = 6371; // Radius of the earth in km
+                var dLat = deg2rad(lat2-lat1);  // deg2rad below
+                var dLon = deg2rad(lon2-lon1); 
+                var a = 
+                    Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+                    Math.sin(dLon/2) * Math.sin(dLon/2)
+                ; 
+                var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+                var d = R * c; // Distance in km
+                return d;
+            }
+            
+            function deg2rad(deg) {
+                return deg * (Math.PI/180)
+            }
+            
+            function middlePoint(lat1, lng1, lat2, lng2) {
                 
-            </head>
-            <body>
-                <apex:pageBlock title="Route Optimisation">
-                    
-                    <form id="matrixForm">
-                        <div id="date_container">
-                            
-                            <div>
-                                <label>From Date </label>
-                                <input type="date" id="fromDate" name="formDate"/>    
-                            </div>
-                            <div style='width: 30%;'></div>
-                            
-                            <div style='float:left;'>
-                                <label>To Date</label>
-                                <input type="date" id="toDate" name="toDate"/>    
-                            </div>
-                        </div>
+                //-- Longitude difference
+                var dLng = (lng2 - lng1);
+                
+                //-- Convert to radians
+                lat1 = lat1;
+                lat2 = lat2;
+                lng1 = lng1;
+                
+                var bX = Math.cos(lat2) * Math.cos(dLng);
+                var bY = Math.cos(lat2) * Math.sin(dLng);
+                var lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + bX) * (Math.cos(lat1) + bX) + bY * bY));
+                var lng3 = lng1 + Math.atan2(bY, Math.cos(lat1) + bX);
+                
+                //-- Return result
+                return [lng3, lat3];
+            }
+
+            
+            </script>
+            
+        </head>
+        <body>
+            <apex:pageBlock title="Route Optimisation">
+                
+                <form id="matrixForm">
+                    <div id="date_container">
                         
-                        
-                        <div id="resource">
-                            
-                        </div>
-                        
-                        
-                        <div id="territory">
-                            
-                        </div>
                         <div>
-                            <input type="submit" onclick="submit;" value="Route Optimisation"/>    
+                            <label>From Date </label>
+                            <input type="date" id="fromDate" name="formDate"/>    
                         </div>
+                        <div style='width: 30%;'></div>
                         
-                        
-                    </form>
-                    <hr />
-                    <div class="body" id="result">
-                        <div id="territoryButton" class="header">
+                        <div style='float:left;'>
+                            <label>To Date</label>
+                            <input type="date" id="toDate" name="toDate"/>    
                         </div>
-                        
-                        <div class="container">
-                            
-                            <div id="dayresult" class="left">
-                                <p>
-                                    aksdkhekhdkbcdsb
-                                </p></div>    
-                            <div class="right">
-                                <p>kangasdhfoiasdf
-                                    adfsad</p></div>
-                            <div class="main">
-                                <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>  
-                                
-                                <div id="map"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="footer"></div>
                     </div>
-                </apex:pageBlock>
-            </body>
-        </html>
+                    
+                    
+                    <div id="resource">
+                        
+                    </div>
+                    
+                    
+                    <div id="territory">
+                        
+                    </div>
+                    <div>
+                        <input type="submit" onclick="submit;" value="Route Optimisation"/>    
+                    </div>
+                    
+                    
+                </form>
+                <hr />
+                <div class="body" id="result">
+                    <div id="territoryButton" class="header">
+                    </div>
+                    
+                    <div class="container">
+                        
+                        <div id="dayresult" class="left">
+                            <p></p></div>    
+                        <div class="right">
+                            <p></p></div>
+                        <div class="main">
+                            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>  
+                            
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="footer"></div>
+                </div>
+            </apex:pageBlock>
+        </body>
+    </html>
 </apex:page>
