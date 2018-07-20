@@ -191,6 +191,7 @@
                     
                 }
             }
+            
             function seperatevisit(visit,resource){
                 //get the post code prefix object and accountId object
                 var groups={};
@@ -198,6 +199,7 @@
                 var postcode={};
                 
                 for(var i=0;i<visit.size;i++){
+                    var latitude=visit.records[i].STKR__Account_lkp__r.
                     var location=visit.records[i].STKR__Account_lkp__r.Id;
                     var postcodTem=visit.records[i].STKR__Site_Post_Code__c;
                     postcodTem=postcodTem.slice(0,4);
@@ -313,10 +315,6 @@
                 var locations=[];
                 var accountLocationtem=[];
                 
-                
-                for(var id in data){
-                    
-                }
                 mappingJson.locations=locations;
                 accountLocationtem=locationNum(mappingJson,data);
                 console.log("the index of different location or Account:"+accountLocationtem);
@@ -330,7 +328,7 @@
             }
             
             //calculate distance based on latitude/longitude
-            function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+            function getDistance(lat1,lon1,lat2,lon2) {
                 var R = 6371; // Radius of the earth in km
                 var dLat = deg2rad(lat2-lat1);  // deg2rad below
                 var dLon = deg2rad(lon2-lon1); 
