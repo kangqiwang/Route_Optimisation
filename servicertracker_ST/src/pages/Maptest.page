@@ -94,30 +94,6 @@
                 resources.push(resource);
                 
                 </apex:repeat>
-                // console.log(resources);
-                //console.log(resources.length);
-                /*
-                <apex:repeat value="{!objectTerritory}" var="territory" id="territories">
-                    var pResource=document.createElement("label");
-                var node=document.createTextNode('{!territory.name}');
-                var element=document.getElementById("territory");
-                pResource.appendChild(node);
-                element.appendChild(pResource);
-                var checkboxResource=document.createElement("input");
-                checkboxResource.setAttribute('type', 'checkbox');
-                checkboxResource.name="territory";
-                checkboxResource.value='{!territory.Id}';
-                element.appendChild(checkboxResource);
-                
-                var territory ={
-                    name: '{!territory.name}',
-                    id:'{!territory.Id}'
-                };
-                
-                territories.push(territory);
-                
-                </apex:repeat>
-                */
             }
             
             
@@ -152,23 +128,43 @@
                 //get the resourcedata
                 var resourceData=requestResource(rawData);
                 //get the different Json file
-                var geolocation=seperatevisit(resourceData,visitData,accountLocation);
-                console.log(geolocation);
-                
+                //console.log(resourceData);
+                var resourGroup=[];
+                var sameLocation=[];
+                var jsonList=[];
+                var sameLocationId=[];
+                var sameList=[];
+                var fixVisit=[];
+                for(var i=0;i<resourceData.length;i++){
+                    var geolocation=seperatevisit(visitData[i]);
+                    var same=groupLocation(visitData[i]);
+                    var fixvisit=seperateFixVisit(visitData[i]);
+                    fixVisit.push(fixvisit);
+                    //add fix location
+                    geolocation=addFixlocation(geolocation,resourceData[i]);
+                    sameList.push(same);
+                    resourGroup.push(geolocation);
+                    var generatejson=generateMapJson(geolocation,sameLocationId);
+                    jsonList.push(generatejson);
+                }
+                console.log(fixVisit);
+                console.log(sameList);
+                console.log(sameLocationId);
+                getTravelTime(jsonList,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData);
                 //distance.push(getDistance(geolocation[keys]);
-                var result=checkLocation(geolocation,resourceData);
-
+                //var result=checkLocation(geolocation,resourceData);
+                
                 //console.log(result);
                 
-                var generatejson=generateMapJson(visitData,result,accountLocation);
-                
-                
-                console.log(geolocation);
-                
-                //getTravelTime(generatejson,resourceData,visitData,rawData,accountLocation,accoutSame);
+                //var generatejson=generateMapJson(rawData,visitData,result);
                 console.log("show result please");
                 
             }
+            function addFixlocation(geolocation,resource){
+            	geolocation[resource.records.Id]=[resource.records.STKR__Fixed_Location__Latitude__s,resource.records.STKR__Fixed_Location__Longitude__s];
+                return geolocation;
+            }
+            
             function groupLocation(geolocation){
                 var result=jQuery.extend(true,{},geolocation);
                 var distanceObj={};
@@ -356,12 +352,9 @@
             //input :specific date and resource, territory output: the location 
             
             //input: data from the mapquest response. output: the time and distance
-            function getTravelTime(mappingJson,resourceData,visitData,rawData,accountLocation,accoutSame){
-                
-                var RouteMatrix=[];
+            function getTravelTime(jsonList,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData){
                 var promises=[];
-                for(var i=0; i<mappingJson.length;i++){
-                    
+                for(var i=0;i<resourGroup.length;i++){
                     var request=$.ajax({
                         
                         type: 'POST',
@@ -369,27 +362,19 @@
                         contentType: 'json',
                         url: "http://www.mapquestapi.com/directions/v2/routematrix",
                         data: {key: decodeURI("99JBw7RAaWzJmd7nMADgsOdbJseEtVPZ"),
-                               json: mappingJson[i]}
+                               json: jsonList[i]}
                     });
                     promises.push(request);
                     
                     //console.log(timelist);
                 }
-                console.log('about to wait....' + resourceData.length);            
+                console.log('about to wait....' );            
                 $.when.apply($, promises).done(function(jsonp){
-                    optimisation(arguments,resourceData,visitData,rawData,accountLocation,accoutSame);
+                    optimisation(arguments,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData);
                 });
-                console.dir(promises);
-                console.log('final');
+                
             }
             
-            function callback(request){
-                for(var i; i<request.length;i++){
-                    console.request(i);
-                    console.request(request[i]);
-                    console.log(request[i].responseJSON);    
-                }
-            }
             //try to cluster the location 
             
             function sameLocation(visitData,accountLocation,timeMatrix){
@@ -421,22 +406,18 @@
                     */
             }
             
-            function arrayMin(arrs){
-                if(arrs[0]){
-                    var min=arrs[0];}else{
-                        var min=arrs[1];
-                    }
-                
-                for(var i=1, ilen=arrs.length; i<ilen; i+=1){
-                    if(arrs[i]){
-                        if(arrs[i]<min){
-                            min=arrs[i];
-                        }
-                    }else{
-                        
+            function arrayMin(arrs,visitIndex,fixVisit,fixlocation){
+                if(visitIndex===arrs.length-1){
+                    
+                    //from fixVisit chose the min
+                	
+                }
+                for(var i=0;i<arrs;i++){
+                	if(!arrs[i]){
+                    	arrs.splice(i,1);
                     }
                 }
-                return min;
+                return Math.min(arrs);
             }
             
             
@@ -450,24 +431,20 @@
             
             
             //timeMatrix and resourceData and visitData is array for different territory
-            function seperatevisit(resource,visit,accountLocation){
+            function groupLocation(visit){
                 var sameLocation={};
-                var resourcegroup={};
-                var geolocation={};
-                for(var j=0;j<resource.size;j++){
-                    for(var a=0; a<visit.size;a++){
-                        var resourceId=resource.records[j].Id;
-                        if (visit.records[a].STKR__Service__r.STKR__Service_Owner__c==resource.records[j].Id)
-                        {
-                            if(!resourcegroup[resourceId]){
-                                resourcegroup[resourceId]=[]
-                            }
-                            resourcegroup[resourceId].push(a);
-                        }
+				for(var i=0;i<visit.size;i++){
+                    var location=visit.records[i].STKR__Account_lkp__r.Id;
+                    if(!sameLocation[location]){
+                        sameLocation[location]=[];
                     }
+                    sameLocation[location].push(i);
                 }
-                console.log(resourcegroup);
-                
+                return sameLocation
+            }
+            function seperatevisit(visit){
+                var geolocation={};
+                                
                 for(var i=0;i<visit.size;i++){
                     var latitude=visit.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s;
                     var location=visit.records[i].STKR__Account_lkp__r.Id;
@@ -476,17 +453,57 @@
                     if(!geolocation[location]){
                         geolocation[location]=[];
                     }
-                    if(!sameLocation[location]){
-                        sameLocation[location]=[];
-                    }
-                    sameLocation[location].push(i);
                     geolocation[location]=[latitude,longitude];
                 }
-                accountLocation=sameLocation;
                 return geolocation;
             }
             
-            function optimisation(timeMatrix, resourceData,visitData,rawData,accountLocation,accountSame){ 
+            function seperateFixVisit(visit){
+                var seperateFixVisit={};
+            	for(var i=0; i<visit.size;i++){
+                    var fixvist=visit.records[i].STKR__Fixed_Visit__c;
+                    if(fixvist=="ture"){
+                        seperateFixVisit[i]=[visit.records[i].STKR__Service__r.STKR__Start_Date__c,visit.records[i].STKR__Service__r.STKR__Time_Allocation__c];  
+                    }
+                }
+                return seperateFixVisit;
+            }
+            function isEmpty(obj) {
+                for(var key in obj) {
+                    if(obj.hasOwnProperty(key))
+                        return false;
+                }
+                return true;
+            }
+
+            function optimisation(arguments,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData){ 
+                console.log(arguments);
+                console.log(resourGroup);
+                console.log(rawData);
+                console.log(sameList);
+                console.log(sameLocationId);
+                console.log(fixVisit);
+                console.log(resourceData);
+                console.log(visitData);
+                var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
+                
+                for(var i=0;i<resourGroup.length;i++){
+                    var result={};
+                    result.starttime=resourceData[i].records.STKR__StartOfDay__c;
+                    result.endtime=resourceData[i].records.STKR__EndOfDay__c;
+                    result.workhour=resourceData[i].records.STKR__Working_Hours__c*60;
+                    result.luch=resourceData[i].records.STKR__Lunch_Break_Minutes__c*60;
+                	if(isEmpty(fixVisit[i])){
+                    	console.log("resource:"+resourceData[i].records.Name+"   in this resource no fixvisit");
+                        var matrixfix=arguments[i][0].time[arguments[i][0].time.length-1];
+                        console.log(arrayMin(arguments[i][0].time));
+                        for(var j=1;j<=days;j++){
+                        	result[j]={};
+                        }
+                    }
+                    console.log(result);
+                }
+                return 0;
                 var resultNOverdueNFix=[];
                 var resultNOverdueFix=[];
                 var territoryMap=new Map();
@@ -811,34 +828,41 @@
             }
             
             function requestResource(rawdata){
+                var result=[];
                 var resource=valueForm(rawdata);
-                
-                var query="select Id,Name,STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c,STKR__Fixed_Location__longitude__s,STKR__Fixed_Location__latitude__s from STKR__Resource__c where Id in ("+resource+")";
-                try{
-                    sforce.connection.sessionId="{!$Api.Session_ID}";
-                    var queryResult=sforce.connection.query(query);
-                    
-                }catch(error)
-                {
-                    console.log(error);
+                for(var i in resource){
+                    var query="select Id,Name,STKR__StartOfDay__c,STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c,STKR__Fixed_Location__longitude__s,STKR__Fixed_Location__latitude__s from STKR__Resource__c where Id in ("+resource[i]+")";
+                    try{
+                        sforce.connection.sessionId="{!$Api.Session_ID}";
+                        var queryResult=sforce.connection.query(query);
+                        result.push(queryResult);
+                    }catch(error)
+                    {
+                        console.log(error);
+                    }
                 }
-                return queryResult;
+                return result;
             }
             
             //input: the raw data output: filter data using Query
             function requestToSforce(data){
                 var resource=valueForm(data);
+                console.log(resource);
                 // query to find the lantitude and longtitude
                 //best way is use one request get multiple resources and territories.
-                var query="SELECT Id,Name,STKR__Site_Post_Code__c,STKR__Service__r.STKR__Service_Interval__c,STKR__Due_Date__c,STKR__Days_Overdue__c,STKR__Account_lkp__r.Id,STKR__Service__r.Id,STKR__Fixed_Visit__c, STKR__Service__r.STKR__Last_Scheduled_Visit__c,STKR__Service__r.STKR__Frequency__c, STKR__Service__r.STKR__Contract_End_Date__c,STKR__Service__r.STKR__Fix_all_Visits__c, STKR__Service__r.STKR__Start_Date__c, STKR__Service__r.STKR__Time_Allocation__c, STKR__Service__r.STKR__Service_Owner__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Service__r.STKR__Service_Owner__c in ("+resource+") and STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000";
-                try{
-                    sforce.connection.sessionId="{!$Api.Session_ID}";
-                    var queryResult=sforce.connection.query(query);
-                }catch(error)
-                {
-                    console.log(error);
+                var result=[];
+                for(var i in resource){
+                    var query="SELECT Id,Name,STKR__Site_Post_Code__c,STKR__Service__r.STKR__Service_Interval__c,STKR__Due_Date__c,STKR__Days_Overdue__c,STKR__Account_lkp__r.Id,STKR__Service__r.Id,STKR__Fixed_Visit__c, STKR__Service__r.STKR__Last_Scheduled_Visit__c,STKR__Service__r.STKR__Frequency__c, STKR__Service__r.STKR__Contract_End_Date__c,STKR__Service__r.STKR__Fix_all_Visits__c, STKR__Service__r.STKR__Start_Date__c, STKR__Service__r.STKR__Time_Allocation__c, STKR__Service__r.STKR__Service_Owner__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Service__r.STKR__Service_Owner__c in ("+resource[i]+") and STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000";
+                    try{
+                        sforce.connection.sessionId="{!$Api.Session_ID}";
+                        var queryResult=sforce.connection.query(query);
+                        result.push(queryResult);
+                    }catch(error)
+                    {
+                        console.log(error);
+                    }
                 }
-                return queryResult;
+                return result;
             }
             
             function locationNum(mappingJson,data,accountLocation,accoutSame){
@@ -870,19 +894,27 @@
                 return accountLocation;
             }
             
-            function generateMapJson(visitData,result,resource){
+            function generateMapJson(result,sameLocationId){
                 var mappingJsonList=[];
                 var mappingJson={};
                 var locations=[];
+                mappingJson.locations=locations;
                 var accountLocationtem=[];
+                values=Object.keys(result).map(key => result[key]);
                 keysSorted=Object.keys(result);
-                console.log(keysSorted);
-                console.log(values);
+                sameLocationId.push(keysSorted);
+                for(var i=0;i<values.length;i++){
+                    var latLng=Number(values[i][0])+","+Number(values[i][1]);
+                    mappingJson.locations.push(latLng);
+                }
+                mappingJson.options={};
+                mappingJson.options={"allToAll":true};
+                return JSON.stringify(mappingJson);
+                /*
                 //console.log(result);
-                for(var i=0;i<resource.size;i++){
                     mappingJson.locations=locations;
-                    values=Object.keys(result).map(key => result[key]);
-                    keysSorted=Object.keys(result);
+                    console.log(keysSorted);
+                    console.log(values);
                     if(keysSorted.length===keysSorted.split(",").length){
                     
                     }
@@ -893,8 +925,8 @@
                     mappingJson.options={};
                     mappingJson.options={"allToAll" :true};
                     mappingJsonList.push(JSON.stringify(mappingJson));
-                }
                 console.log(mappingJsonList);
+                */
                 return mappingJsonList;
             }
             
