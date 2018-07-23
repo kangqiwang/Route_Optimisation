@@ -157,8 +157,10 @@
                 
                 //distance.push(getDistance(geolocation[keys]);
                 var result=checkLocation(geolocation,resourceData);
-                console.log(result);
-                //var generatejson=generateMapJson(visitData,result,accountLocation);
+
+                //console.log(result);
+                
+                var generatejson=generateMapJson(visitData,result,accountLocation);
                 
                 
                 console.log(geolocation);
@@ -531,7 +533,7 @@
                             
                         }
                         resourceNum.push(jobSeperated);
-                    }                	
+                    }
                     
                 }
                 
@@ -873,16 +875,21 @@
                 var mappingJson={};
                 var locations=[];
                 var accountLocationtem=[];
+                keysSorted=Object.keys(result);
+                console.log(keysSorted);
+                console.log(values);
+                //console.log(result);
                 for(var i=0;i<resource.size;i++){
-                    for(var keys in result){
-                    	
+                    mappingJson.locations=locations;
+                    values=Object.keys(result).map(key => result[key]);
+                    keysSorted=Object.keys(result);
+                    if(keysSorted.length===keysSorted.split(",").length){
+                    
                     }
-                mappingJson.locations=locations;
-                accountLocationtem=locationNum(mappingJson,data[i],accountLocation,accoutSame);
-                
-                console.log("the index of different location or Account:"+accountLocationtem);
-                
-                //consider about the multiple location
+                    accountLocationtem=locationNum(mappingJson,values,accountLocation,accoutSame);
+                    
+                    console.log("the index of different location or Account:"+accountLocationtem);
+                    //consider about the multiple location
                     mappingJson.options={};
                     mappingJson.options={"allToAll" :true};
                     mappingJsonList.push(JSON.stringify(mappingJson));
