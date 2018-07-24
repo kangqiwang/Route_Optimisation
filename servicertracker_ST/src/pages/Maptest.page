@@ -406,27 +406,41 @@
                     */
             }
             
-            function arrayMin(arrs,visitIndex,fixVisit,fixlocation){
-                if(visitIndex===arrs.length-1){
-                    
-                    //from fixVisit chose the min
-                	
+            function arrayMin(arrs,index){
+                var min=Math.min(...arrs);
+                if(!min){
+                    index=arrs.indexOf(0);
+                    arrs[index]=999999;
+                    min=Math.min(...arrs);
+                    index=arrs.indexOf(min);
+                    return min;
+                }else{
+                    index=arrs.indexOf(min);
+                    return min;
                 }
-                for(var i=0;i<arrs;i++){
-                	if(!arrs[i]){
-                    	arrs.splice(i,1);
-                    }
-                }
-                return Math.min(arrs);
             }
             
-            
+            function fixlocationIndex(matrix){
+                
+                var indexarr=[];
+                var x=matrix.length;
+                var newarry=matrix[x-1].slice();
+                newarry.sort(function (a,b){return a-b;});
+                for(var i=0; i<matrix[x-1].length;i++){
+                    if(i){
+                        var element=newarry[i];
+                        var index=matrix[x-1].indexOf(element);
+                        indexarr.push(index);            
+                    }
+                }
+                return indexarr;
+            }
             /*
                     return $.when.apply(null, timelist).done(function(timelist){
                         console.log(timelist);
                         return timelist;
                     })
-                     */
+            */
             //send your resource location with different location to Mapquest
             
             
@@ -475,7 +489,40 @@
                 }
                 return true;
             }
-
+            function locationToVisit(index,locationId,sameList){
+                var locationsort={};
+            	for(var i=0;i<index.length;i++){
+                    var location=locationId[index[i]];
+                    if(!locationsort[location]){
+                    	locationsort[location]=[];
+                    }
+                	locationsort[location].push(sameList[locationId[index[i]]]);
+                }
+                
+                return locationsort;
+            }
+            function getvisitNumber(sortlocation){
+                var visitnumber=0;
+                for(a in sortlocation){
+                    visitnumber=visitnumber+sortlocation[a].length;
+                }
+                console.log(sortlocation);
+                return visitnumber;
+            }
+            function generateDay(days,sortlocation){
+                var result={};
+                if(days>getvisitNumber(sortlocation)){
+                    for(var j=1;j<getvisitNumber(sortlocation);j++){
+                        result[j]=[];
+                    }
+                }else{
+                    for(var j=1;j<=days;j++){
+                        result[j]=[];
+                    }
+                }
+                return result;
+            
+            }
             function optimisation(arguments,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData){ 
                 console.log(arguments);
                 console.log(resourGroup);
@@ -496,10 +543,12 @@
                 	if(isEmpty(fixVisit[i])){
                     	console.log("resource:"+resourceData[i].records.Name+"   in this resource no fixvisit");
                         var matrixfix=arguments[i][0].time[arguments[i][0].time.length-1];
-                        console.log(arrayMin(arguments[i][0].time));
-                        for(var j=1;j<=days;j++){
-                        	result[j]={};
-                        }
+                        console.log(arguments[i][0].time);
+                        var index=fixlocationIndex(arguments[i][0].time);
+                        var sortlocation=locationToVisit(index,sameLocationId[i],sameList[i]);
+                        var result=generateDay(days,sortlocation);
+                        moveVisit(visitData[i],sortlocation,result);
+                        
                     }
                     console.log(result);
                 }
@@ -750,9 +799,27 @@
                 
             }
             
-            function checkMove(){
-                
+            function moveVisit(visit,sortlocation,result){
+                console.log(visit);
+                console.log(sortlocation);
+                console.log(result);
+                var visitarr=[]
+                for(var a in sortlocation){
+                    
+                    for(var b=0;b<sortlocation[a];b++){
+                        visitarr.push(sortlocation[a][b]);
+                    }
+                }
             }
+            function checkmove(visit,days){
+            	
+            }
+                /*
+                for(var i=0; i<visit.length;i++){
+                	
+                }
+                */
+            
             /*
                 overdue problem
                 var OverdueFix=[];
