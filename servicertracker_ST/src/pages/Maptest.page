@@ -161,7 +161,7 @@
                 
             }
             function addFixlocation(geolocation,resource){
-            	geolocation[resource.records.Id]=[resource.records.STKR__Fixed_Location__Latitude__s,resource.records.STKR__Fixed_Location__Longitude__s];
+                geolocation[resource.records.Id]=[resource.records.STKR__Fixed_Location__Latitude__s,resource.records.STKR__Fixed_Location__Longitude__s];
                 return geolocation;
             }
             
@@ -447,7 +447,7 @@
             //timeMatrix and resourceData and visitData is array for different territory
             function groupLocation(visit){
                 var sameLocation={};
-				for(var i=0;i<visit.size;i++){
+                for(var i=0;i<visit.size;i++){
                     var location=visit.records[i].STKR__Account_lkp__r.Id;
                     if(!sameLocation[location]){
                         sameLocation[location]=[];
@@ -458,7 +458,7 @@
             }
             function seperatevisit(visit){
                 var geolocation={};
-                                
+                
                 for(var i=0;i<visit.size;i++){
                     var latitude=visit.records[i].STKR__Account_lkp__r.STKR__location__Latitude__s;
                     var location=visit.records[i].STKR__Account_lkp__r.Id;
@@ -474,7 +474,7 @@
             
             function seperateFixVisit(visit){
                 var seperateFixVisit={};
-            	for(var i=0; i<visit.size;i++){
+                for(var i=0; i<visit.size;i++){
                     var fixvist=visit.records[i].STKR__Fixed_Visit__c;
                     if(fixvist=="ture"){
                         seperateFixVisit[i]=[visit.records[i].STKR__Service__r.STKR__Start_Date__c,visit.records[i].STKR__Service__r.STKR__Time_Allocation__c];  
@@ -491,12 +491,12 @@
             }
             function locationToVisit(index,locationId,sameList){
                 var locationsort={};
-            	for(var i=0;i<index.length;i++){
+                for(var i=0;i<index.length;i++){
                     var location=locationId[index[i]];
                     if(!locationsort[location]){
-                    	locationsort[location]=[];
+                        locationsort[location]=[];
                     }
-                	locationsort[location].push(sameList[locationId[index[i]]]);
+                    locationsort[location].push(sameList[locationId[index[i]]]);
                 }
                 
                 return locationsort;
@@ -504,24 +504,48 @@
             function getvisitNumber(sortlocation){
                 var visitnumber=0;
                 for(a in sortlocation){
-                    visitnumber=visitnumber+sortlocation[a].length;
+                    visitnumber=visitnumber+sortlocation[a][0].length;
                 }
-                console.log(sortlocation);
                 return visitnumber;
             }
-            function generateDay(days,sortlocation){
+            //calculate the day+day
+            function addDays(date, days) {
+                var result = new Date(date);
+                result.setDate(result.getDate() + days);
+                return result;
+            }
+            
+            function generateDay(rawdata,days,sortlocation,week){
+                console.log(rawdata);
+                console.log(days);
+                var fromday=new Date(rawdata[0].value);
+                
                 var result={};
+                
                 if(days>getvisitNumber(sortlocation)){
                     for(var j=1;j<getvisitNumber(sortlocation);j++){
                         result[j]=[];
+                        week[j]=addDays(fromday,j);
                     }
                 }else{
                     for(var j=1;j<=days;j++){
                         result[j]=[];
+                        week[j]=addDays(fromday,j);
                     }
                 }
                 return result;
-            
+                
+            }
+            function generateresource(resource){
+                
+                var result={};
+                result.starttime=resource.records.STKR__StartOfDay__c;
+                result.endtime=resource.records.STKR__EndOfDay__c;
+                result.workhour=resource.records.STKR__Working_Hours__c*60;
+                result.lunch=resource.records.STKR__Lunch_Break_Minutes__c*60;
+                result.workday=resource.records.WorkingDay__c;
+                return result;
+                
             }
             function optimisation(arguments,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData){ 
                 console.log(arguments);
@@ -535,19 +559,20 @@
                 var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
                 
                 for(var i=0;i<resourGroup.length;i++){
-                    var result={};
-                    result.starttime=resourceData[i].records.STKR__StartOfDay__c;
-                    result.endtime=resourceData[i].records.STKR__EndOfDay__c;
-                    result.workhour=resourceData[i].records.STKR__Working_Hours__c*60;
-                    result.luch=resourceData[i].records.STKR__Lunch_Break_Minutes__c*60;
-                	if(isEmpty(fixVisit[i])){
-                    	console.log("resource:"+resourceData[i].records.Name+"   in this resource no fixvisit");
+                    if(isEmpty(fixVisit[i])){
+                        
+                        console.log("resource:"+resourceData[i].records.Name+"   in this resource no fixvisit");
                         var matrixfix=arguments[i][0].time[arguments[i][0].time.length-1];
-                        console.log(arguments[i][0].time);
                         var index=fixlocationIndex(arguments[i][0].time);
+                        console.log(index);
                         var sortlocation=locationToVisit(index,sameLocationId[i],sameList[i]);
-                        var result=generateDay(days,sortlocation);
-                        moveVisit(visitData[i],sortlocation,result);
+                        console.log(sortlocation);
+                        var week={};
+                        var result=generateDay(rawData,days,sortlocation,week);
+                        console.log(week);
+                        var resource=generateresource(resourceData[i]);
+                        console.log(result);
+                        moveVisit(visitData[i],sortlocation,result,resource,week);
                         
                     }
                     console.log(result);
@@ -727,31 +752,31 @@
                         1. first sort based on days
                         2. delete the same elements
                                             */
-                            
-                            
-                            //console.log(notOverdueNotFixVisit); 
-                            notOverdueNotFixVisit.sort(function(a,b){
-                                return a[0]-b[0]
-                            });
-                            console.log("this is my data, want to call the function tweetvisit()")
-                            console.log(notOverdueNotFixVisit);
-                            console.log(accountSame[i]);
-                            console.log(accountLocation[i]);
-                            console.log(Matrix[0].time);
-                            //array has been saved as [day, index, F/I, luch+collect, workhour]
-                            console.log(notOverdueNotFixVisit);
-                            NOverdueNFix.push(notOverdueNotFixVisit);
-                            NOverdueFix.push(notOverdueFixVisit);
-                        }
-                        resultNOverdueNFix.push(NOverdueNFix);
-                        resultNOverdueFix.push(NOverdueFix);
-                        // console.log(NOverdueNFix);
-                        //console.log(NOverdueFix);
-                        
-                        
-                        console.log(resultNOverdueNFix);
-                        console.log(resultNOverdueFix);
-                    }
+                    
+                    
+                    //console.log(notOverdueNotFixVisit); 
+                    notOverdueNotFixVisit.sort(function(a,b){
+                        return a[0]-b[0]
+                    });
+                    console.log("this is my data, want to call the function tweetvisit()")
+                    console.log(notOverdueNotFixVisit);
+                    console.log(accountSame[i]);
+                    console.log(accountLocation[i]);
+                    console.log(Matrix[0].time);
+                    //array has been saved as [day, index, F/I, luch+collect, workhour]
+                    console.log(notOverdueNotFixVisit);
+                    NOverdueNFix.push(notOverdueNotFixVisit);
+                    NOverdueFix.push(notOverdueFixVisit);
+                }
+                resultNOverdueNFix.push(NOverdueNFix);
+                resultNOverdueFix.push(NOverdueFix);
+                // console.log(NOverdueNFix);
+                //console.log(NOverdueFix);
+                
+                
+                console.log(resultNOverdueNFix);
+                console.log(resultNOverdueFix);
+            }
             function tweetvisit(notOverdueNotFixVisit,accountLocation,accountSame,time){
                 console.log(accountLocation);	
                 var sameday=[];
@@ -799,22 +824,112 @@
                 
             }
             
-            function moveVisit(visit,sortlocation,result){
+			function moveVisit(result){
+            
+            }
+            
+            function moveVisit(visit,sortlocation,result,resource,week){
                 console.log(visit);
                 console.log(sortlocation);
                 console.log(result);
-                var visitarr=[]
+                var visitarr=[];
+                
+                //sortlocation to one dementional array
                 for(var a in sortlocation){
-                    
-                    for(var b=0;b<sortlocation[a];b++){
-                        visitarr.push(sortlocation[a][b]);
+                    for(var b=0;b<sortlocation[a][0].length;b++){
+                        visitarr.push(sortlocation[a][0][b]);
                     }
                 }
+                
+                console.log(visitarr.reverse());
+                var control=1;
+                var inputvisit=[]
+                for(var a in result){
+                    for(var b=0;b<visitarr.length;b++){
+                        if(checkmove(result,result[a],visitarr[b],visit,inputvisit)){
+                            result[a].splice(control,0,visitarr[b]);
+                            visitarr.splice(visitarr.indexOf(visitarr[b]),1);
+                            inputvisit.push(visitarr[b]);
+                            break;
+                        }
+                    }
+                    
+                    
+                }
+                
+                control++;
+                console.log("finish the first forlooop")
+                for(var a in result){
+                    var stage=true;
+                    for(var b=0;b<visitarr.length;b++){
+                        if(checkmove(result,result[a],visitarr[b],visit,inputvisit,resource,week[a],week)){
+                            result[a].splice(control,0,visitarr[b]);
+                            visitarr.splice(visitarr.indexOf(visitarr[b]),1);
+                            break;
+                        }
+                    }                    
+                }
+                
+                console.log(result);
             }
-            function checkmove(visit,days){
-            	
+            // function for check if it can be moved
+            function checkmove(result,checkvisit,visitarr,visit,inputvisit,resource,week,weeks){
+                console.log(checkvisit);
+                console.log(inputvisit);
+                console.log(week);
+                //the first one
+                if(!inputvisit.length){
+                    return true;
+                }
+                //weekly visit limit (next week,next next week)
+                if (visit.records[visitarr].STKR__Service__r.STKR__Frequency__c=="Weekly"){
+                    for(var i=0;i<inputvisit.length;i++){
+                        console.log("check the Id is same first:"+visit.records[inputvisit[i]].STKR__Service__r.Id);
+                        console.log("check the 2 Id: "+visit.records[visitarr].STKR__Service__r.Id);
+                        if (visit.records[inputvisit[i]].STKR__Service__r.Id==visit.records[visitarr].STKR__Service__r.Id){
+                            console.log(result);
+                            console.log(visitarr);
+                            console.log(inputvisit[i]);
+                            var key1=getKeyByValue(result,inputvisit[i]);
+                            var key2=getKeyByValue(result,inputvisit[inputvisit.length-2]);
+                            key2=key2+1;
+                            var tem=Math.round(7/visit.records[visitarr].STKR__Service__r.STKR__Service_Interval__c);
+                            if(Math.abs(key2-key1)<tem || Math.abs(key2-key1)>tem*2){
+                                return false;
+                            }
+                        }
+                    }
+                }
+                //daily  not allow same schedual in same day
+                if(visit.records[visitarr].STKR__Service__r.STKR__Frequency__c=="Daily"){
+                    if(!checkvisit.length){
+                        return true;
+                    }
+                    for(var i=0; i<checkvisit.length;i++){
+                        if (visit.records[checkvisit[i]].STKR__Service__r.Id==visit.records[visitarr].STKR__Service__r.Id){
+                            return false;
+                        }
+                    }
+                    
+                }
+                
+                
+                return true;
             }
-                /*
+            
+            function getKeyByValue(object, value) {
+                for(var key in object){
+                    console.log(object[key]);
+                    console.log(object[key].indexOf(value));
+                    if(object[key].indexOf(value)!=-1){
+                        console.log(object[key]);
+                        console.log(value);
+                        return key;}
+                }
+                
+            }
+            
+            /*
                 for(var i=0; i<visit.length;i++){
                 	
                 }
@@ -898,7 +1013,7 @@
                 var result=[];
                 var resource=valueForm(rawdata);
                 for(var i in resource){
-                    var query="select Id,Name,STKR__StartOfDay__c,STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c,STKR__Fixed_Location__longitude__s,STKR__Fixed_Location__latitude__s from STKR__Resource__c where Id in ("+resource[i]+")";
+                    var query="select Id,Name,WorkingDay__c,STKR__StartOfDay__c,STKR__Lunch_Break_Minutes__c, STKR__Expiry_Date__c, STKR__EndOfDay__c, STKR__Working_Hours__c,STKR__Fixed_Location__longitude__s,STKR__Fixed_Location__latitude__s from STKR__Resource__c where Id in ("+resource[i]+")";
                     try{
                         sforce.connection.sessionId="{!$Api.Session_ID}";
                         var queryResult=sforce.connection.query(query);
@@ -994,8 +1109,8 @@
                     mappingJsonList.push(JSON.stringify(mappingJson));
                 console.log(mappingJsonList);
                 */
-                return mappingJsonList;
-            }
+                    return mappingJsonList;
+                }
             
             /*
                     for(i=0;i<=data.size-1;i++){
