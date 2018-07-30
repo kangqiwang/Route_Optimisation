@@ -1,7 +1,7 @@
 <apex:page controller="STKR.quickCreateSidebarController" action="{!configureCustomSettings}">
-
+<div style="margin-left:-15px;padding:0px;">
 <b>
-<table style="font-size:13px" width="100%" align="left">
+<table style="font-size:13px;border:0px;margin:0px;padding:0px;" width="100%" align="left">
 <tr style="height:20px">
 <td>
     <apex:image alt="-" value="{!$Resource.STKR__AccountIcon}"/>
@@ -46,4 +46,5 @@
 </tr>
 </table>
 </b>
+</div>
 </apex:page>

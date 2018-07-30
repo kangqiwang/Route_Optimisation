@@ -270,6 +270,13 @@ Last modified date    :  19th Jun 2018
                 $(this).css('z-index', 8);
                 $('.tooltipevent').remove();
             },
+            
+                     eventClick: function(event) {
+          if (event.url) {
+            window.open(event.url);
+          return false;
+        }
+        } ,
             eventRender: function(event, element)
             { 
                 
@@ -288,7 +295,7 @@ Last modified date    :  19th Jun 2018
                         
                 }
             }
-                        
+                       
             
         });
         
@@ -344,6 +351,7 @@ Last modified date    :  19th Jun 2018
         actionOnUserChangeSwimLane();
     }
     
+    
     // CHANGE FULL CALENDER VIEW
     function changeFCView(changedName){
         console.log('changed Name '+changedName);
@@ -367,7 +375,7 @@ Last modified date    :  19th Jun 2018
             showAnim: "slide",
         })
     }
-    // OPEN ANOTHER TAB IN PRINT VIEW
+    // ANOTHER TAB IN PRINT VIEW
     function showPrintableView(selecteduser,isself){
         var view = $('#calendar').fullCalendar('getView');
         var mydate = $('#calendar').fullCalendar('getDate');
@@ -816,7 +824,7 @@ function closeNav() {
                          <div class="resTr">
                             <div class="resTd" style="padding: 8px 0px 0px;">Visit Number</div>
                             <div class="resTd" style="margin-left: 4%;width:initial;padding: 8px 0px 0px;">
-                                <apex:commandLink onclick="window.open('/{!visitRec.id}');return false;" value="{!visitRec.Name}" style="width:100%" /> 
+                                <apex:commandLink onclick="window.open('/{!visitRec.id}','_blank');return false;" value="{!visitRec.Name}" style="width:100%;color:#000" /> 
                             </div> 
                         </div> 
                         <div class="resTr" style="padding: 8px 0px 0px;">
