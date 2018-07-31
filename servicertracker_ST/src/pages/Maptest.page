@@ -64,7 +64,7 @@
             window.onload = function() {
                 //optimizedwaypoints example can be used
                 //https://developer.mapquest.com/documentation/mapquest-js/v1.3/examples/directions-with-optimized-waypoints/
-                L.mapquest.key = '99JBw7RAaWzJmd7nMADgsOdbJseEtVPZ';
+                L.mapquest.key = 'dkPerqzFbKLtC7YWQSG51UlmJuGVuQEc';
                 
                 var map = L.mapquest.map('map', {
                     center: [51.4816, -3.1791],
@@ -313,7 +313,7 @@
                         dataType: 'jsonp',
                         contentType: 'json',
                         url: "http://www.mapquestapi.com/directions/v2/routematrix",
-                        data: {key: decodeURI("99JBw7RAaWzJmd7nMADgsOdbJseEtVPZ"),
+                        data: {key: decodeURI("dkPerqzFbKLtC7YWQSG51UlmJuGVuQEc"),
                                json: jsonList[i]}
                     });
                     promises.push(request);
@@ -508,6 +508,7 @@
                         var workingTime={};
                         var optimisationList=moveVisit(arguments[i][0].time,sameLocationId[i],sameList[i],visitData[i],sortlocation,result,resource,week,workingTime);
                         //moveVisitLast(arguments[i][0].time,optimisationList,sameLocationId[i],sameList[i],visitData[i],resource,week,workingTime);
+                    	console.log(optimisationList);
                     }
                 }
                 return 0;
@@ -621,7 +622,7 @@
                 //console.log(sortlocation);
                 //console.log(locationId);
                 //console.log(sameLocation);
-                //console.log(result);
+                console.log(result);
                 console.log(visit);
                 var visitCopy=visit.records.slice();
                 //sortlocation to one dementional array
@@ -636,17 +637,23 @@
                 var control=1;
                 var inputvisit=[];
                 var temarr=matrix[matrix.length-1].slice();
-                temarr=temarr.sort();
-                //console.log(temarr);
+                
+                temarr=temarr.sort(function (a,b){return a-b;});
+                console.log(temarr);
+                console.log(matrix);
                 var flag;
                 for(var b=0;b<2;b++){
                     flag=1;
                     for(var a in result){
+	
                         for(var i=1;i<temarr.length;i++){
+                            control=false;
                             var visitarry=sameLocation[locationId[matrix[matrix.length-1].indexOf(temarr[i])]];
+                            console.log(visitarry);
                             for(var j=0;j<visitarry.length;j++){
                                 if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource)){
-                                    result[a].splice(flag,0,visit[j]);
+                                    
+                                    result[a].splice(flag,0,visitarry[j]);
                                     control=true;
                                     inputvisit.push(visitarry[j]);
                                     visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
@@ -664,34 +671,59 @@
                 
                 }
                 
+                console.log(visitCopy);
+                var numberVisit;
                 
-                
-                                do{
+                do{
+                    numberVisit=visitCopy.length;
                     for(var a in result){
-                        for(var i=1;i<temarr.length;i++){
-                            var visitarry=sameLocation[locationId[matrix[matrix.length-1].indexOf(temarr[i])]];
-                            for(var j=0;j<visitarry.length;j++){
-                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource)){
-                                    result[a].splice(result[a].length/2,0,visit[j]);
-                                    control=true;
-                                    inputvisit.push(visitarry[j]);
-                                    visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
-                                    break;
+                        var oddGiven=true;
+                        var incrsea=0;
+                        for(var b=0;b<result[a].length;b++){
+                        
+                        var b = result.length;
+                        
+                        for(var b=0;b<matrix.length-1;b++){
+                            control=false;
+                            console.log(matrix.length);
+                            var temarr=matrix[b].slice();
+                            temarr=temarr.sort(function (a,b){return a-b;});
+                            console.log(matrix);
+                            console.log(temarr);
+                            for(var i=1;i<temarr.length;i++){
+                                console.log(temarr[i]);
+                                console.log(matrix[b]);
+                                var visitarry=sameLocation[locationId[matrix[b].indexOf(temarr[i])]];
+                                console.log(visitarry);
+                                for(var j=0;j<visitarry.length;j++){
+                                    if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource)){
+                                        result[a].splice(visitarry[j].length/2,0,visit[j]);
+                                        control=true;
+                                        inputvisit.push(visitarry[j]);
+                                        visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
+                                        break;
+                                    }
                                 }
+                                if(control==true){
+                                    break;
+}
+                                
                             }
                             if(control==true){
                                 break;
                             }
                             
                         }
+                        }
+                        if(numberVisit==visitCopy.length){
+                            break;
+                        }
                     }
-                }while(visitCopy==0);
-
+                }while(visitCopy>0);
                 
                 
                 
                 
-                console.log(result);
                 console.log(visitCopy);
                 /*
 
