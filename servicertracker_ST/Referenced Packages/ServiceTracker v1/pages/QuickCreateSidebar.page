@@ -1,4 +1,4 @@
-<apex:page controller="STKR.quickCreateSidebarController" action="{!configureCustomSettings}">
+<apex:page controller="STKR.quickCreateSidebarController" >
 <div style="margin-left:-15px;padding:0px;">
 <b>
 <table style="font-size:13px;border:0px;margin:0px;padding:0px;" width="100%" align="left">

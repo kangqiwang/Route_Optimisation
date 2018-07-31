@@ -103,7 +103,7 @@ Last modified date    :  19th Jun 2018
          if ($('[id$=date_new]').val() != ''){
              $( "#cal-quickpick" ).datepicker( "setDate", $('[id$=date_new]').val());
          }
-         
+         var firstHour = new Date().getUTCHours() + 1;
          $('#calendar').fullCalendar({
             editable: true,            
             navLinks: true,
@@ -113,7 +113,7 @@ Last modified date    :  19th Jun 2018
             locale : 'en',
             aspectRatio: 1.8,
             groupByResource: true,
-            scrollTime: '09:00',
+            firstHour: firstHour,
             firstDay: 1,              
             header: {
                 left: 'today prev,next',

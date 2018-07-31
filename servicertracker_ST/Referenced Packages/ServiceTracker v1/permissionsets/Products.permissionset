@@ -137,6 +137,10 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>PostInstallClass</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>ScheduleDetailsExt</apexClass>
         <enabled>false</enabled>
     </classAccesses>

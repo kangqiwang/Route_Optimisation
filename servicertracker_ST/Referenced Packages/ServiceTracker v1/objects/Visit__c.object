@@ -830,12 +830,20 @@ FALSE
         <formula>IF ( 
 AND(
 Resource__r.User__c  = $User.Id, 
+
+OR(
+
+AND(
 NOT(ISPICKVAL(Account_lkp__r.Status__c,&apos;Inactive&apos;)),
 NOT(ISPICKVAL(Account_lkp__r.Status__c,&apos;On Stop&apos;)),
 NOT(ISPICKVAL(Account_lkp__r.Status__c,&apos;On Hold&apos;)),
 NOT(ISPICKVAL(Service__r.Status__c,&apos;Inactive&apos;)), 
 NOT(ISPICKVAL(Service__r.Status__c,&apos;On Hold&apos;)), 
-NOT(ISPICKVAL(Service__r.Service_Contract__r.Status__c,&apos;Inactive&apos;)) 
+NOT(ISPICKVAL(Service__r.Service_Contract__r.Status__c,&apos;Inactive&apos;))
+),
+Uplift_Removal_Visit__c = TRUE
+)
+
 ),
 &quot;TRUE&quot;, &quot;FALSE&quot;)</formula>
         <label>Owned By Current User and Active</label>
