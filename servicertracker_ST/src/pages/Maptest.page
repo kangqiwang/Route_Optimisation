@@ -561,8 +561,9 @@
                         console.log(week);
                         var resource=generateresource(resourceData[i]);
                         console.log(result);
-                        var optimisationList=moveVisit(visitData[i],sortlocation,result,resource,week);
-                        moveVisitLast(arguments[i][0].time,optimisationList,sameLocationId[i],sameList[i],visitData[i],resource,week);
+                        var workingTime={}
+                        var optimisationList=moveVisit(visitData[i],sortlocation,result,resource,week,workingTime);
+                        moveVisitLast(arguments[i][0].time,optimisationList,sameLocationId[i],sameList[i],visitData[i],resource,week,workingTime);
                     }
                 }
                 return 0;
@@ -770,7 +771,7 @@
                 return typeof obj === 'number' && obj%1 === 0;                
             }
 
-            function moveVisitLast(matrix,result,locationId,sameLocation,visit,resource,week){
+            function moveVisitLast(matrix,result,locationId,sameLocation,visit,resource,week,workingTime){
                 console.log(matrix);
                 console.log(result);
                 console.log(locationId);
@@ -804,7 +805,10 @@
                 
                 }
                 
+                moveVisitLast(matrix,result,locationId,sameLocation,visit,resource,week,workingTime);
             }
+            
+            //find the key index based on even number or odd number
             function keyIndex(resulti){
                 if(resulti.length % 2==0){
                     return resulti.length/2;
@@ -863,7 +867,7 @@
             }
             
             
-            function moveVisit(visit,sortlocation,result,resource,week){
+            function moveVisit(visit,sortlocation,result,resource,week,workingTime){
                 //console.log(visit);
                 //console.log(sortlocation);
                 //console.log(result);
@@ -878,50 +882,76 @@
                 
                 //console.log(visitarr.reverse());
                 var control=1;
-                var inputvisit=[]
-                var workingTime={};
-                for(var a in result){
-                    workingTime[a]=0;
-                    for(var b=0;b<visitarr.length;b++){
-                        if(checkmove(result,result[a],visitarr[b],visit,inputvisit)){
-                            result[a].splice(control,0,visitarr[b]);
-                            
-                            workingTime[a]+=Number(visit.records[visitarr[b]].STKR__Service__r.STKR__Time_Allocation__c);
-                            visitarr.splice(visitarr.indexOf(visitarr[b]),1);
-                            inputvisit.push(visitarr[b]);
-                            
-                            break;
+                var inputvisit=[];
+                
+                for(var i=0;i<2;i++){
+                    
+                    for(var a in result){
+
+                        if(!workingTime[a]){
+                           workingTime[a]=0;   
+                           }
+                           
+                           for(var b=0;b<visitarr.length;b++){
+                            if(checkmove(result,result[a],visitarr[b],visit,inputvisit,resource,week[a],week,workingTime[a])){
+                                workingTime[a]+=Number(visit.records[visitarr[b]].STKR__Service__r.STKR__Time_Allocation__c);
+                                result[a].splice(control,0,visitarr[b]);
+                                visitarr.splice(visitarr.indexOf(visitarr[b]),1);
+                                inputvisit.push(visitarr[b]);
+                                break;
+                            }
                         }
                     }
+                    control++;
                     
                 }
-                
-                control++;
-                //console.log("finish the first forlooop")
-                for(var a in result){
-                    var stage=true;
-                    for(var b=0;b<visitarr.length;b++){
-                        if(checkmove(result,result[a],visitarr[b],visit,inputvisit,resource,week[a],week)){
-                            result[a].splice(control,0,visitarr[b]);
-                            visitarr.splice(visitarr.indexOf(visitarr[b]),1);
-                            break;
-                        }
-                    }                    
-                }
-                
                 return result;
             }
-            
+            function getTimeMatrix(result,matrix,visit){
+                for(var i in result){
+                    result[i]
+                }
+            }
+            function timecaculate(start, end) {
+                start = start.split(":");
+                end = end.split(":");
+                var startDate = new Date(0, 0, 0, start[0], start[1], 0);
+                var endDate = new Date(0, 0, 0, end[0], end[1], 0);
+                var diff = endDate.getTime() + startDate.getTime();
+                var hours = Math.floor(diff / 1000 / 60 / 60);
+                diff -= hours * 1000 * 60 * 60;
+                var minutes = Math.floor(diff / 1000 / 60);
+                
+                // If using time pickers with 24 hours format, add the below line get exact hours
+                if (hours < 0)
+                    hours = hours + 24;
+                
+                return (hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes;
+            }
+
             
             // function for check if it can be moved
-            function checkmove(result,checkvisit,visitarr,visit,inputvisit,resource,week,weeks){
+            function checkmove(result,checkvisit,visitarr,visit,inputvisit,resource,week,weeks,workingTime){
+                
                 //console.log(checkvisit);
                 //console.log(inputvisit);
                 //console.log(week);
                 //the first one
+                //console.log(resource);
+                //console.log(workingTime);
+                var date1=resource.starttime;
+                var date2=resource.endtime;
+                console.log(date1);
+                console.log(typeof date2);
+                console.log(timecaculate(date1,date2));
                 
+
                 if(!inputvisit.length){
                     return true;
+                }
+                
+                if(workingTime){
+                    
                 }
                 //weekly visit limit (next week,next next week)
                 if (visit.records[visitarr].STKR__Service__r.STKR__Frequency__c=="Weekly"){
