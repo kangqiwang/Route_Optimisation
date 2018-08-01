@@ -645,7 +645,7 @@
                 for(var b=0;b<2;b++){
                     flag=1;
                     for(var a in result){
-	
+                        
                         for(var i=1;i<temarr.length;i++){
                             control=false;
                             var visitarry=sameLocation[locationId[matrix[matrix.length-1].indexOf(temarr[i])]];
@@ -666,55 +666,54 @@
                             
                         }
                     }
-                    flag=-1
-                
-                
+                    flag=-1;                   
                 }
                 
                 console.log(visitCopy);
                 var numberVisit;
+                var nummatrix=matrix.length-1
+                console.log(matrix.length);
+                matrix.splice(nummatrix,1);
+                for(var i=0;i<matrix.length;i++){
+                	matrix[i].splice(nummatrix,1);
+                }
                 
                 do{
+                    var oddGiven=true;
+                    var increase=0;
+                    
                     numberVisit=visitCopy.length;
                     for(var a in result){
-                        var oddGiven=true;
-                        var incrsea=0;
-                        for(var b=0;b<result[a].length;b++){
                         
-                        var b = result.length;
                         
-                        for(var b=0;b<matrix.length-1;b++){
+                        var visitkey=result[a][keyIndex(result[a])];
+                        var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,visitkey))];
+                        var temarr=targetmatrix.slice();
+                        temarr=temarr.sort(function (a,b){return a-b;});
+                        //console.log(targetmatrix);
+                        //console.log(temarr);
+                        for(var i=1;i<temarr.length;i++){
                             control=false;
-                            console.log(matrix.length);
-                            var temarr=matrix[b].slice();
-                            temarr=temarr.sort(function (a,b){return a-b;});
-                            console.log(matrix);
-                            console.log(temarr);
-                            for(var i=1;i<temarr.length;i++){
-                                console.log(temarr[i]);
-                                console.log(matrix[b]);
-                                var visitarry=sameLocation[locationId[matrix[b].indexOf(temarr[i])]];
-                                console.log(visitarry);
-                                for(var j=0;j<visitarry.length;j++){
-                                    if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource)){
-                                        result[a].splice(visitarry[j].length/2,0,visit[j]);
-                                        control=true;
-                                        inputvisit.push(visitarry[j]);
-                                        visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
-                                        break;
-                                    }
-                                }
-                                if(control==true){
+                            
+                            //console.log(temarr[i]);
+                            //console.log(targetmatrix);
+                            var visitarry=sameLocation[locationId[targetmatrix.indexOf(temarr[i])]];
+                            //console.log(visitarry);
+                            for(var j=0;j<visitarry.length;j++){
+                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource)){
+                                    console.log(keyIndex(result[a]));
+                                    result[a].splice(keyIndex(result[a]),0,visitarry[j]);
+                                    control=true;
+                                    inputvisit.push(visitarry[j]);
+                                    visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
                                     break;
-}
-                                
+                                }
                             }
-                            if(control==true){
-                                break;
-                            }
+                          
                             
                         }
-                        }
+                        
+                        
                         if(numberVisit==visitCopy.length){
                             break;
                         }
@@ -725,55 +724,15 @@
                 
                 
                 console.log(visitCopy);
-                /*
-
-                for(var i=0;i<2;i++){
-                    
-                    for(var a in result){
-
-                        if(!workingTime[a]){
-                           workingTime[a]=0;   
-                           }
-                           
-                           for(var b=0;b<visitarr.length;b++){
-                            if(checkmove(result,result[a],visitarr[b],visit,inputvisit,resource,week[a],week,workingTime[a])){
-                                workingTime[a]+=Number(visit.records[visitarr[b]].STKR__Service__r.STKR__Time_Allocation__c);
-                                result[a].splice(control,0,visitarr[b]);
-                                visitarr.splice(visitarr.indexOf(visitarr[b]),1);
-                                inputvisit.push(visitarr[b]);
-                                break;
-                            }
-                        }
-                    }
-                    control++;
-                    
-                }
-                */
                 
                 return result;
             }
+            
             function getTimeMatrix(result,matrix,visit){
                 for(var i in result){
                     result[i]
                 }
             }
-            function diff(start, end) {
-                start = start.split(":");
-                end = end.split(":");
-                var startDate = new Date(0, 0, 0, start[0], start[1], 0);
-                var endDate = new Date(0, 0, 0, end[0], end[1], 0);
-                var diff = endDate.getTime() - startDate.getTime();
-                var hours = Math.floor(diff / 1000 / 60 / 60);
-                diff -= hours * 1000 * 60 * 60;
-                var minutes = Math.floor(diff / 1000 / 60);
-                
-                // If using time pickers with 24 hours format, add the below line get exact hours
-                if (hours < 0)
-                    hours = hours + 24;
-                var result=minutes+hours*60;
-                return result;
-            }
-            
 
             // function for check if it can be moved
             function checkmove(result,checkvisit,visitarr,visit,inputvisit,resource,week,weeks,workingTime){
