@@ -360,6 +360,8 @@
                     start: fixgeolocation,
                     end: fixgeolocation,
                     waypoints: visitgeolocation,
+                    optimizeWaypoints: true
+                    
                 });
                 
                 L.mapquest.control().addTo(map);
@@ -475,6 +477,7 @@
             
             //timeMatrix and resourceData and visitData is array for different territory
             function groupLocation(visit){
+                
                 var sameLocation={};
                 for(var i=0;i<visit.size;i++){
                     var location=visit.records[i].STKR__Account_lkp__r.Id;
@@ -503,15 +506,57 @@
             }
             
             function seperateFixVisit(visit){
+                console.log("sepertefixvisit");
                 var seperateFixVisit={};
                 for(var i=0; i<visit.size;i++){
                     var fixvist=visit.records[i].STKR__Fixed_Visit__c;
-                    if(fixvist=="ture"){
-                        seperateFixVisit[i]=[visit.records[i].STKR__Service__r.STKR__Start_Date__c,visit.records[i].STKR__Service__r.STKR__Time_Allocation__c];  
+                    if(fixvist=="true"){
+                        seperateFixVisit[i]=[visit.records[i].STKR__Due_Date__c,visit.records[i].STKR__Due_Finish__c,visit.records[i].STKR__Service__r.STKR__Time_Allocation__c];
                     }
                 }
                 return seperateFixVisit;
             }
+            
+            function fixvisitDays(rawdata,resource,fixvisit,days,sortlocation,week){
+            	console.log("fixvisitdays");
+                console.log(fixvisit);
+                console.log(days);
+                console.log(sortlocation);
+                console.log(week);
+                console.log(rawdata);
+               
+                console.log(resource);
+                //deal with fixvist
+                for(var i in fixvisit){
+                    for(var j=0;j<fixvisit[i].length;j++){
+                        console.log(fixvisit[i][j]);
+                        var tem=new Date(fixvisit[i][j]);
+                        console.log(tem);
+                        console.log(tem.getMonth());
+                    }
+                    
+                }
+                
+                var fromday=new Date(rawdata[0].value);
+                
+                var result={};
+                
+                if(days>getvisitNumber(sortlocation)){
+                    alert("sorry your visit is less, can not route optimisation");
+                }else{
+                    for(var j=1;j<=days;j++){
+                        var tem=j+','+resource[starttime];
+                        
+                        result[tem]=[];
+                        week[j]=addDays(fromday,j);
+                    }
+                }
+                
+                return result;
+
+            }
+            
+
             
             function isEmpty(obj) {
                 for(var key in obj) {
@@ -555,15 +600,14 @@
                 var result={};
                 
                 if(days>getvisitNumber(sortlocation)){
-                    alert("sorry your visit is less, can not route optimisation")
+                    alert("sorry your visit is less, can not route optimisation");
                 }else{
                     for(var j=1;j<=days;j++){
-                        result[j]=[];
+                        result[addDays(fromday,j)]=[];
                         week[j]=addDays(fromday,j);
                     }
                 }
                 return result;
-                
             }
             
             function generateresource(resource){
@@ -581,13 +625,15 @@
             }
             
             function optimisation(arguments,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData){ 
+                console.log("this is my fixvisit");
+                console.log(fixVisit);
                 var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
                 var output={};
                 for(var i=0;i<resourGroup.length;i++){
                         
                     if(isEmpty(fixVisit[i])){
                         if(arguments[i][0].time==null){
-                        alert("Please check your visit, we can find location");
+                        alert("Please check your visit, we can not find location");
                         }
                         
                         var matrixfix=arguments[i][0].time[arguments[i][0].length-1];
@@ -607,6 +653,21 @@
                         
                         console.log(resource);
                         output[resource.id]=optimisationList;
+                    }else{
+                        console.log("this is fixvisit");
+                        var matrixfix=arguments[i][0].time[arguments[i][0].length-1];
+                        var index=fixlocationIndex(arguments[i][0].time);
+                        console.log(index);
+                        var sortlocation=locationToVisit(index,sameLocationId[i],sameList[i]);
+                        console.log(sortlocation);
+                        var week={};
+                        var resource=generateresource(resourceData[i]);
+                        var result=fixvisitDays(rawData,resource,fixVisit[i],days,sortlocation,week);
+                        var result=generateDay(rawData,days,sortlocation,week);
+
+                        
+
+
                     }
                 }
                 
@@ -709,10 +770,7 @@
                     if(control==true){
                         break;
                     }
-                }
-                
-                
-                
+                }                
                 console.log(resulti);
             }
             
@@ -962,7 +1020,7 @@
                 //best way is use one request get multiple resources and territories.
                 var result=[];
                 for(var i in resource){
-                    var query="SELECT Id,Name,STKR__Site_Post_Code__c,STKR__Service__r.STKR__Service_Interval__c,STKR__Due_Date__c,STKR__Days_Overdue__c,STKR__Account_lkp__r.Id,STKR__Service__r.Id,STKR__Fixed_Visit__c, STKR__Service__r.STKR__Last_Scheduled_Visit__c,STKR__Service__r.STKR__Frequency__c, STKR__Service__r.STKR__Contract_End_Date__c,STKR__Service__r.STKR__Fix_all_Visits__c, STKR__Service__r.STKR__Start_Date__c, STKR__Service__r.STKR__Time_Allocation__c, STKR__Service__r.STKR__Service_Owner__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Service__r.STKR__Service_Owner__c in ("+resource[i]+") and STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000";
+                    var query="SELECT Id,Name,STKR__Site_Post_Code__c,STKR__Service__r.STKR__Service_Interval__c,STKR__Days_Overdue__c,STKR__Account_lkp__r.Id,STKR__Service__r.Id,STKR__Fixed_Visit__c, STKR__Service__r.STKR__Last_Scheduled_Visit__c,STKR__Service__r.STKR__Frequency__c, STKR__Service__r.STKR__Contract_End_Date__c,STKR__Service__r.STKR__Fix_all_Visits__c, STKR__Due_Date__c, STKR__Due_Finish__c, STKR__Service__r.STKR__Time_Allocation__c, STKR__Service__r.STKR__Service_Owner__c, STKR__Account_lkp__r.STKR__Location__longitude__s, STKR__Account_lkp__r.STKR__Location__latitude__s from STKR__Visit__c where STKR__Service__r.STKR__Service_Owner__c in ("+resource[i]+") and STKR__Planned_Date__c< "+data[1].value+"T00:00:00.000+0000 and STKR__Planned_Date__c> "+data[0].value+"T00:00:00.000+0000";
                     try{
                         sforce.connection.sessionId="{!$Api.Session_ID}";
                         var queryResult=sforce.connection.query(query);
