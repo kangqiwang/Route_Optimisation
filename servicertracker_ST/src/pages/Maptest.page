@@ -526,37 +526,52 @@
                 console.log(rawdata);
                
                 console.log(resource);
-                //deal with fixvist
-                for(var i in fixvisit){
-                    for(var j=0;j<fixvisit[i].length;j++){
-                        console.log(fixvisit[i][j]);
-                        var tem=new Date(fixvisit[i][j]);
-                        console.log(tem);
-                        console.log(tem.getMonth());
-                    }
-                    
-                }
-                
                 var fromday=new Date(rawdata[0].value);
                 
                 var result={};
+
+                //deal with fixvist
                 
                 if(days>getvisitNumber(sortlocation)){
                     alert("sorry your visit is less, can not route optimisation");
                 }else{
-                    for(var j=1;j<=days;j++){
-                        var tem=j+','+resource[starttime];
-                        
-                        result[tem]=[];
+                    for(var j=1;j<days;j++){
                         week[j]=addDays(fromday,j);
-                    }
+                        var temsplit=resource.starttime.split(":");
+                        week[j].setHours(temsplit[0],temsplit[1]);
+                        console.log(week[j]);
+                        
+                        for(var i in fixvisit){
+                            var tem=new Date(fixvisit[i][0]);
+                            if(tem.getMonth()==week[j].getMonth() && tem.getDate()==week[j].getDate()){
+                                console.log("we are in same day");
+                                console.log(tem);
+                                console.log(week[j]);
+                                seperateFixvisit(j,fixvisit[i],resource.starttime,week[j]);
+                                break;
+                            }else{
+                                result[j+','+resource.starttime]=[];
+                            }
+                            
+                        }
+                        
                 }
-                
+                }
+                console.log(result);
                 return result;
 
             }
             
 
+            function seperateFixvisit(j,fixvisit,time,day){
+            	console.log("this is seperatefixvisit");
+                console.log(j);
+                console.log(fixvisit);
+                console.log(time);
+                console.log(day);
+                
+                
+            }
             
             function isEmpty(obj) {
                 for(var key in obj) {
@@ -591,10 +606,11 @@
             function addDays(date, days) {
                 var result = new Date(date);
                 result.setDate(result.getDate() + days);
+                
                 return result;
             }
             
-            function generateDay(rawdata,days,sortlocation,week){
+            function generateDay(rawdata,days,sortlocation,week,resource){
                 var fromday=new Date(rawdata[0].value);
                 
                 var result={};
@@ -642,7 +658,7 @@
                         var sortlocation=locationToVisit(index,sameLocationId[i],sameList[i]);
                         console.log(sortlocation);
                         var week={};
-                        var result=generateDay(rawData,days,sortlocation,week);
+                        var result=generateDay(rawData,days,sortlocation,week,resourceData[i]);
                         console.log(week);
                         var resource=generateresource(resourceData[i]);
                         console.log(result);
