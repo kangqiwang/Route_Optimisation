@@ -370,8 +370,6 @@
                 
             }
             
-            
-            
             function generatename(j,optimizationday,resource){
                 for(var i=0;i<resource.length;i++){
                     if(j==resource[i].records.Id){
@@ -511,7 +509,7 @@
                 for(var i=0; i<visit.size;i++){
                     var fixvist=visit.records[i].STKR__Fixed_Visit__c;
                     if(fixvist=="true"){
-                        seperateFixVisit[i]=[visit.records[i].STKR__Due_Date__c,visit.records[i].STKR__Due_Finish__c,visit.records[i].STKR__Service__r.STKR__Time_Allocation__c];
+                        seperateFixVisit[i]=[visit.records[i].STKR__Due_Date__c.slice(0,-1),visit.records[i].STKR__Due_Finish__c.slice(0,-1),visit.records[i].STKR__Service__r.STKR__Time_Allocation__c];
                     }
                 }
                 return seperateFixVisit;
@@ -542,13 +540,17 @@
                         console.log(week[j]);
                         
                         for(var i in fixvisit){
+                            //start time
+                            
                             var tem=new Date(fixvisit[i][0]);
+                            console.log(tem+'thisi is my time');
                             if(tem.getMonth()==week[j].getMonth() && tem.getDate()==week[j].getDate()){
                                 console.log("we are in same day");
-                                console.log(tem);
-                                console.log(week[j]);
-                                seperateFixvisit(j,fixvisit[i],resource.starttime,week[j]);
-                                break;
+                                result[j+','+resource.starttime]=[];
+                                var temtime = ((tem.getMinutes()<10) ? ":0" : ":")+tem.getMinutes();
+                                console.log(temtime);
+                                result[j+','+i+','+tem.getHours()+temtime]=[];
+                                
                             }else{
                                 result[j+','+resource.starttime]=[];
                             }
@@ -564,11 +566,8 @@
             
 
             function seperateFixvisit(j,fixvisit,time,day){
-            	console.log("this is seperatefixvisit");
-                console.log(j);
-                console.log(fixvisit);
-                console.log(time);
-                console.log(day);
+            	result[j+','+resource.star]
+                
                 
                 
             }
@@ -641,50 +640,37 @@
             }
             
             function optimisation(arguments,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData){ 
+                if(arguments[i][0].time==null){
+                    alert("Please check your visit, we can not find location");
+                }
+
                 console.log("this is my fixvisit");
                 console.log(fixVisit);
                 var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
                 var output={};
                 for(var i=0;i<resourGroup.length;i++){
-                        
+                    var matrixfix=arguments[i][0].time[arguments[i][0].length-1];
+                    var index=fixlocationIndex(arguments[i][0].time);
+                    console.log(index);
+                    var sortlocation=locationToVisit(index,sameLocationId[i],sameList[i]);
+                    console.log(sortlocation);
+                    var week={};
+                    var result;
+                    var resource=generateresource(resourceData[i]);
+                    var workingTime={}
+                    
                     if(isEmpty(fixVisit[i])){
-                        if(arguments[i][0].time==null){
-                        alert("Please check your visit, we can not find location");
-                        }
-                        
-                        var matrixfix=arguments[i][0].time[arguments[i][0].length-1];
-                        var index=fixlocationIndex(arguments[i][0].time);
-                        console.log(index);
-                        var sortlocation=locationToVisit(index,sameLocationId[i],sameList[i]);
-                        console.log(sortlocation);
-                        var week={};
-                        var result=generateDay(rawData,days,sortlocation,week,resourceData[i]);
-                        console.log(week);
-                        var resource=generateresource(resourceData[i]);
-                        console.log(result);
-                        var workingTime={};
-                        var optimisationList=moveVisit(arguments[i][0].time,sameLocationId[i],sameList[i],visitData[i],sortlocation,result,resource,week,workingTime);
-                        //moveVisitLast(arguments[i][0].time,optimisationList,sameLocationId[i],sameList[i],visitData[i],resource,week,workingTime);
-                        //console.log(optimisationList);
-                        
-                        console.log(resource);
-                        output[resource.id]=optimisationList;
+                        result=generateDay(rawData,days,sortlocation,week,resourceData[i]);
                     }else{
                         console.log("this is fixvisit");
-                        var matrixfix=arguments[i][0].time[arguments[i][0].length-1];
-                        var index=fixlocationIndex(arguments[i][0].time);
-                        console.log(index);
-                        var sortlocation=locationToVisit(index,sameLocationId[i],sameList[i]);
-                        console.log(sortlocation);
-                        var week={};
-                        var resource=generateresource(resourceData[i]);
-                        var result=fixvisitDays(rawData,resource,fixVisit[i],days,sortlocation,week);
-                        var result=generateDay(rawData,days,sortlocation,week);
-
-                        
-
-
+                        result=fixvisitDays(rawData,resource,fixVisit[i],days,sortlocation,week);
                     }
+                    var optimisationList=moveVisit(arguments[i][0].time,sameLocationId[i],sameList[i],visitData[i],sortlocation,result,resource,week,workingTime);
+                    console.log("this is my result haha");
+                    console.log(result);                    
+                    output[resource.id]=optimisationList;
+
+
                 }
                 
                 console.log(output);
@@ -693,44 +679,6 @@
             
             function isInteger(obj){
                 return typeof obj === 'number' && obj%1 === 0;                
-            }
-
-            function moveVisitLast(matrix,result,locationId,sameLocation,visit,resource,week,workingTime){
-                console.log("this is my time matrix");
-                //console.log(matrix);
-                //console.log(result);
-                //console.log(locationId);
-                //console.log(sameLocation);
-
-                //generateObjMatrix(matrix,locationId);
-                //return 0;
-                
-                var fixlocationRow=matrix.length-1;
-                locationId.splice(fixlocationRow,1);
-                matrix.splice(fixlocationRow,1);
-                for(var i=0;i<matrix.length;i++){
-                	matrix[i].splice(fixlocationRow,1);
-                }
-                var halfdaywork={};
-                var fulldaywork={};
-                for(var i in result){
-                    if(result[i].length==1){
-                        halfdaywork[i]=result[i];
-                    }else{
-                        fulldaywork[i]=result[i];
-                        
-                    }
-                    
-                }
-                for(var i in fulldaywork){
-                    middleInsert(fulldaywork[i],matrix,sameLocation,locationId,result,visit,resource,week);
-                    
-                }
-                for(var i in halfdaywork){
-                
-                }
-                
-                moveVisitLast(matrix,result,locationId,sameLocation,visit,resource,week,workingTime);
             }
             
             //find the key index based on even number or odd number
@@ -742,57 +690,6 @@
                 }
             	
             }
-            
-            function middleInsert(resulti,matrix,sameLocation,locationId,result,visit,resource,week){
-                console.log(resulti);
-                console.log(result);
-                console.log(week);
-                console.log(sameLocation);
-                console.log(locationId);
-                console.log(resulti[resulti.length/2-1]);
-                var key1=getKeyByValue(sameLocation,resulti[keyIndex(resulti)]);
-                console.log(keyIndex(resulti));
-                console.log(resulti[keyIndex(resulti)]);
-                console.log(key1);
-                var index=getKeyByValue(locationId,key1);
-                console.log(index);
-                console.log(matrix[index]);
-                var temarr=matrix[index].slice();
-                temarr.sort();
-                console.log(temarr);
-                console.log(matrix[index]);
-                var inputvisit=[];
-                for(var i in result){
-                    for(var j in result[i]){
-                        inputvisit.push(result[i][j]);
-                    }
-                }
-                console.log(inputvisit);
-                console.log(temarr);
-                for(var j=1;j<temarr.length;j++){
-                    var control=false;
-                    var temvist=sameLocation[locationId[matrix[index].indexOf(temarr[j])]];
-                    console.log(temvist);
-                    for(var i=0;i<temvist.length;i++){
-                        if(checkmove(result,resulti,temvist[i],visit,inputvisit,resource)){
-                            
-                            console.log("insert the data");
-                            resulti.splice(resulti.length/2,0,temvist[i]);
-                            control=true;
-                            //temvist.splice(temvist.indexOf(temvist[i]),1);
-                            break;
-                        }
-                    }
-                    if(control==true){
-                        break;
-                    }
-                }                
-                console.log(resulti);
-            }
-            
-
-            
-            
             
             function moveVisit(matrix,locationId,sameLocation,visit,sortlocation,result,resource,week,workingTime){
                 var visitarr=[];
