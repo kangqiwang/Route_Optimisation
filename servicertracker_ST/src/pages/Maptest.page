@@ -724,7 +724,10 @@
             }
             
             function moveVisit(matrix,locationId,sameLocation,visit,sortlocation,result,resource,week,workingTime,dayfixvist,fixvisit){
-                
+                console.log('this is my moveVisit function');
+                console.log(locationId);
+                console.log(sameLocation);
+                console.log(sortlocation);
                 var visitarr=[];
                 console.log(result);
                 console.log(visit);
@@ -810,7 +813,7 @@
                                         }else{
                                             //find specific day for 
                                             console.log("it is fixvisit not fixlocation");
-                                            moveFixvisit(tema,dayfixvist,a);
+                                            moveFixvisit(tema,dayfixvist,a,matrix);
                                             // based on fixvisit location, find the shortest location push into result
                                             }
                                         break;
