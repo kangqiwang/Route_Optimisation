@@ -555,6 +555,7 @@
                                 result[j+','+resource.starttime]=[];
                                 var temtime = ((tem.getMinutes()<10) ? ":0" : ":")+tem.getMinutes();
                                 console.log(temtime);
+                                //[number day, fixvisit index, time]
                                 result[j+','+i+','+tem.getHours()+temtime+','+(number++)]=[];
                                 
                             }else{
@@ -800,7 +801,7 @@
                                 var visitarry=sameLocation[locationId[matrix[matrix.length-1].indexOf(temarr[i])]];
                                 console.log(visitarry);
                                 for(var j=0;j<visitarry.length;j++){
-                                    if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource)){
+                                    if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,false)){
                                         // if it is fixlocation in object resul
                                          if(checkfixlocation(result,fixvisitresult,tema,a,dayfixvist)){
                                              console.log("it is fixlocation not fixvisit");
@@ -813,7 +814,7 @@
                                         }else{
                                             //find specific day for 
                                             console.log("it is fixvisit not fixlocation");
-                                            moveFixvisit(tema,dayfixvist,a,matrix);
+                                            moveFixvisit(tema,dayfixvist,a,newArray,locationId,sameLocation,visit,inputvisit,result);
                                             // based on fixvisit location, find the shortest location push into result
                                             }
                                         break;
@@ -860,7 +861,7 @@
                             var visitarry=sameLocation[locationId[targetmatrix.indexOf(temarr[i])]];
                             //console.log(visitarry);
                             for(var j=0;j<visitarry.length;j++){
-                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource)){
+                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,false)){
                                     console.log(keyIndex(result[a]));
                                     result[a].splice(keyIndex(result[a]),0,visitarry[j]);
                                     control=true;
@@ -889,7 +890,40 @@
             }
             
             
-            function moveFixvisit(tema,dayfixvist,a){
+            function moveFixvisit(tema,dayfixvist,a,matrix,locationId,sameLocation,visit,inputvisit,result){
+                //get index then get location based on value then get 
+                var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,Number(tema[1])))];
+                var temarr=targetmatrix.slice();
+                temarr=temarr.sort(function (a,b){return a-b;});
+                console.log('this isi s a targetmatrix');
+                console.log(result[a]);
+
+                console.log(targetmatrix);
+                console.log(temarr);
+                for(var i=1;i<temarr.length;i++){
+                    control=false;
+                    
+                    console.log(temarr[i]);
+                    console.log(targetmatrix);
+                    var visitarry=sameLocation[locationId[targetmatrix.indexOf(temarr[i])]];
+                    
+                    console.log(visitarry);
+                    for(var j=0;j<visitarry.length;j++){
+                        if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,true)){
+                            console.log(a);
+                            console.log(result[a]);
+                            console.log(keyIndex(result[a]));
+                            console.log('would like to check keyinde');
+                            result[a].splice(keyIndex(result[a]),0,visitarry[j]);
+                            control=true;
+                            inputvisit.push(visitarry[j]);
+                            visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
+                            break;
+                        }
+                    }
+                    
+                }
+                console.log(targetmatrix);
                 var alist=a.split(",");
                 console.log("this is my a lenght");
                 console.log('this is my a value'+a);
@@ -936,8 +970,12 @@
             }
 
             // function for check if it can be moved
-            function checkmove(result,checkvisit,visitarr,visit,inputvisit,resource,week,weeks,workingTime){
+            function checkmove(result,checkvisit,visitarr,visit,inputvisit,resource,fixvisit){
                 
+                // if the visit is fixvisit
+                if(fixvisit){
+                    return true;
+                }
                 //console.log(checkvisit);
                 //console.log(inputvisit);
                 //console.log(week);
