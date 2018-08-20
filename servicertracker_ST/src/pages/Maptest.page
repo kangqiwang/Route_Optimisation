@@ -532,12 +532,13 @@
                 console.log(rawdata);
                
                 console.log(resource);
+                
                 var fromday=new Date(rawdata[0].value);
                 
                 var result={};
 
                 //deal with fixvist
-                
+                var temarrykey=[];
                 if(days>getvisitNumber(sortlocation)){
                     alert("sorry your visit is less, can not route optimisation");
                 }else{
@@ -547,12 +548,13 @@
                         week[j].setHours(temsplit[0],temsplit[1]);
                         console.log(week[j]);
                         var number=1;
-                        
                         for(var i in fixvisit){
                             //start time
                             var tem=new Date(fixvisit[i][0]);
+                            
                             if(tem.getMonth()==week[j].getMonth() && tem.getDate()==week[j].getDate()){
-                                result[j+','+resource.starttime]=[];
+                                temarrykey.push(j+','+resource.starttime);
+                                result[j+','+i+','+resource.starttime]=[];
                                 var temtime = ((tem.getMinutes()<10) ? ":0" : ":")+tem.getMinutes();
                                 console.log(temtime);
                                 //[number day, fixvisit index, time]
@@ -562,10 +564,15 @@
                                 result[j+','+resource.starttime]=[];
                             }
                             
-                        }
-                        
+                        }  
                     }
                 }
+                for(var i in result){
+                	if(temarrykey.indexOf(i)!=-1){
+                    	delete result[i];
+                    }
+                }
+                
                 console.log("check my result");
                 console.log(result);
                 return result;
@@ -808,16 +815,20 @@
                                              console.log(a);
                                              result[a].splice(flag,0,visitarry[j]);
                                              console.log('this is my result for indivual'+JSON.stringify(result));
-                                             control=true;
                                              inputvisit.push(visitarry[j]);
                                              visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
                                         }else{
                                             //find specific day for 
                                             console.log("it is fixvisit not fixlocation");
+                                            console.log(tema);
+                                            
                                             moveFixvisit(tema,dayfixvist,a,newArray,locationId,sameLocation,visit,inputvisit,result);
                                             // based on fixvisit location, find the shortest location push into result
                                             }
+                                        control=true;
+
                                         break;
+
                                     }
                                 }
                                 if(control==true){
@@ -891,6 +902,18 @@
             
             
             function moveFixvisit(tema,dayfixvist,a,matrix,locationId,sameLocation,visit,inputvisit,result){
+                
+                
+                if(tema.length===3){
+                	console.log('thisi is my time solution '+ tema);
+                    
+                
+                }else{
+                	console.log('thisi my time solution twoo '+ tema);
+                
+                }
+                
+                /*
                 //get index then get location based on value then get 
                 var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,Number(tema[1])))];
                 var temarr=targetmatrix.slice();
@@ -932,7 +955,7 @@
                 console.log('thisi is my dayfixvist a value'+JSON.stringify(dayfixvist[alist[0]]))
                 
                 
-                    /*
+                    
                     
                     */
 
@@ -941,6 +964,8 @@
             }
             
             function checkfixlocation(result,fixvisitresult,tema,a,dayfixvist){
+                console.log('this is my checkfixlocation function');
+                console.log(tema);
                 console.log(JSON.stringify(dayfixvist));
                 console.log(JSON.stringify(fixvisitresult));
                 console.log(JSON.stringify(result));
@@ -948,21 +973,16 @@
                     
                     return true;
                 }else{
-                    console.log('this is my fixlocation'+JSON.stringify(result));
-                    console.log('this is my chcking fixlocation'+tema.length+' a nd '+JSON.stringify(result[a])+' and this is numebr '+result[a].length);
-                    console.log(result[a].length === 0);
-                    if(tema.length ===2 && result[a].length === 0){
-                    	return true
+                    if(Object.keys(fixvisitresult).indexOf(tema[0])!= -1){
+                        console.log('it is in this arry'+ tema[0]);
+                        console.log(tema);
+                        return false;
                     }else{
-                        console.log('any one is fixvisit');
-                    	return false;
+                    	return true;
                     }
-                    //console.log("this is my super test");
-                    //console.log(Object.keys(fixvisitresult));
+                    
                 }
-
             }
-            
             function getTimeMatrix(result,matrix,visit){
                 for(var i in result){
                     result[i]
