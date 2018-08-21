@@ -12,6 +12,7 @@
             justify-content: center;
             }
             
+            
             .result{
                 display: flex;
                 height: 100%;
