@@ -554,7 +554,7 @@
                             if(tem.getMonth()==week[j].getMonth() && tem.getDate()==week[j].getDate()){
                                 var temtime = ((tem.getMinutes()<10) ? ":0" : ":")+tem.getMinutes();
                                 //[number day, fixvisit index, time]
-                                result[j+','+i+','+tem.getHours()+temtime+','+(number++)]=[];
+                                result[j+','+tem.getHours()+temtime+','+(number++)+','+i]=[];
                             }else{
                                 result[j+','+resource.starttime]=[];
                                 //
@@ -673,58 +673,18 @@
                         console.log(result);
                         dayfixvist=samedayFixvisit(result);
                         console.log('thisi si dayfixvist'+JSON.stringify(dayfixvist));
-                        console.log('this is it is my fixitis'+JSON.stringify(result));
-                        result=sortresult(result);
-                        
+                        console.log('this is it is my fixitis'+JSON.stringify(result));                        
                     }
                     var optimisationList=moveVisit(arguments[i][0].time,sameLocationId[i],sameList[i],visitData[i],sortlocation,result,resource,week,workingTime,dayfixvist,fixVisit[i]);
                     console.log("this is my result haha");
                     console.log(result);                    
                     output[resource.id]=optimisationList;
-
-
                 }
                 
                 console.log(output);
                 return output;
             }
-            function sortresult(result){
-                console.log('resultfunction');
-                var newarry=Object.keys(result);
-                var day=[];
-                var found=newarry.find(function(element){
-                	return 
-                });
-                console.log(found);
-                /*
-                for(var i=0;i<newarry.length;i++){
-                	var index=newarry[i].split(',');
-                	day.push(index[0]);
-                }
-                */
-                var lasttime=[];
-                
-                Object.keys(result).forEach(function(key,i){
-                	var temi=key.split(',');
-                    if(temi.length != 2){
-                        if(temi[0]===lasttime[0]){
-                            if(Date.parse(temi[1])>Date.parse(lasttime[0]) && temi[3]){
-                                
-                            }
-                        }
-                    }
-                    
-                })
-                for(var i in result){
-                	var temi=i.split(',');
-                    if(temi.length!=2){
-                        
-                    	var index=day.indexOf(temi[0]);
-                        
-                    }
-                }
-                console.log(newarry);
-            }
+
             
             function isInteger(obj){
                 return typeof obj === 'number' && obj%1 === 0;                
