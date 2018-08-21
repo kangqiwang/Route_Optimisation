@@ -111,10 +111,8 @@
 
                 
             });
-            //main entry from program 
             function start(){
                 //getting data from the Form.
-
                 var rawData=$("#matrixForm").serializeArray();
                 //console.log(rawData);
                 //prevent send request
@@ -705,16 +703,21 @@
                 var temObject={};
             	for(var key in result){
                 	var tem=key.split(',');
-                    if(tem.length==2){
+                    if(tem.length!=2){
+                        if(!temObject[tem[0]]){
+                            temObject[tem[0]]=[];
+                        }
+                        temObject[tem[0]].push(tem[3]);
+                        //temObject[tem[0]].push(tem[0]+','+tem[1]+','+tem[2]+','+tem[3]);
+                        
+                    }else{
+                        
+                        /*
                     	if(!temObject[tem[0]]){
                         	temObject[tem[0]]=[];
                         }
                         temObject[tem[0]].push(tem[0]+','+tem[1]);
-                    }else{
-                        if(!temObject[tem[0]]){
-                            temObject[tem[0]]=[];
-                        }
-                        temObject[tem[0]].push(tem[0]+','+tem[1]+','+tem[2]+','+tem[3]);
+                        */
                     }
                 }
                 return temObject;
@@ -781,6 +784,7 @@
                     flag=1;
                     for(var a in result){
                         var tema=a.split(',');
+                        
                         /*
                         if(Object.keys(fixvisitresult).includes(tema[0])){
                             // means in this day there are fixvisit
@@ -795,23 +799,18 @@
                             for(var i=1;i<temarr.length;i++){
                                 control=false;
                                 var visitarry=sameLocation[locationId[matrix[matrix.length-1].indexOf(temarr[i])]];
-                                console.log(visitarry);
                                 for(var j=0;j<visitarry.length;j++){
                                     if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,false)){
                                         // if it is fixlocation in object resul
                                          if(checkfixlocation(result,fixvisitresult,tema,a,dayfixvist)){
-                                             console.log("it is fixlocation not fixvisit");
-                                             console.log(a);
                                              result[a].splice(flag,0,visitarry[j]);
-                                             console.log('this is my result for indivual'+JSON.stringify(result));
                                              inputvisit.push(visitarry[j]);
                                              visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
                                         }else{
                                             //find specific day for 
                                             console.log("it is fixvisit not fixlocation");
                                             console.log(tema);
-                                            
-                                            moveFixvisit(tema,dayfixvist,a,newArray,locationId,sameLocation,visit,inputvisit,result,fixvisitresult);
+                                            moveFixvisit(tema,dayfixvist,a,newArray,locationId,sameLocation,visit,inputvisit,result,fixvisitresult,b,visitarry[j],inputvisit,visitCopy);
                                             // based on fixvisit location, find the shortest location push into result
                                             }
                                         control=true;
@@ -890,24 +889,79 @@
             }
             
             
-            function moveFixvisit(tema,dayfixvist,a,matrix,locationId,sameLocation,visit,inputvisit,result,fixvisitresult){
-                
-                console.log('movefixvisitdsfa');
-                console.log(fixvisitresult);
+            function moveFixvisit(tema,dayfixvist,a,matrix,locationId,sameLocation,visit,inputvisit,result,fixvisitresult,b,visitarry,inputvisit,visitCopy){
+                console.log('casduirhsdfsfdoidvjnfd');
+                console.log(dayfixvist);
                 
                 if(tema.length===2){
-                	console.log('thisi is my time solution '+ tema);
-                    console.log(fixvisitresult[tema[0]]);
-                    for(var i=0;i<fixvisitresult[tema[0]].length;i++){
-                        console.log('my forloop');
-                    	console.log(fixvisitresult[tema[0]][i][0]);
+                    if(b===0){
+                        result[a].splice(0,0,visitarry);
+                        inputvisit.push(visitarry);
+                        visitCopy.splice(visitCopy.indexOf(visitarry),1);
+                    }else{
+                        var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,Number(dayfixvist[tema[0]][0])))];
+                        var temarr=targetmatrix.slice();
+                        temarr=temarr.sort(function (a,b){return a-b;});
+                        for(var i=1;i<temarr.length;i++){
+                            var visitarry=sameLocation[locationId[targetmatrix.indexOf(temarr[i])]];
+                            for(var j=0;j<visitarry.length;j++){
+                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,true)){
+                                    result[a].splice(keyIndex(result[a]),0,visitarry[j]);
+                                    control=true;
+                                    inputvisit.push(visitarry[j]);
+                                    visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
+                                    
+                                }
+                            }
+                        }
                     }
-                    //search the 
-                }else{
-                	console.log('thisi my time solution twoo '+ tema);
                 }
-                
-                /*
+                else{
+                    var length=dayfixvist[tem[0]].length;
+                    if(b===0){
+                        var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,Number(dayfixvisit[tem[0]][0])))];
+                        var temarr=targetmatrix.slice();
+                        temarr=temarr.sort(function (a,b){return a-b;});
+                        for(var i=1;i<temarr.length;i++){
+                            var visitarry=sameLocation[locationId[targetmatrix.indexOf(temarr[i])]];
+                            for(var j=0;j<visitarry.length;j++){
+                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,true)){
+                                    result[a].splice(keyIndex(result[a]),0,visitarry[j]);
+                                    control=true;
+                                    inputvisit.push(visitarry[j]);
+                                    visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
+                                }
+                            }
+                        }
+                    }else{
+                        if(dayfixvist[tem[0]].indexOf(tem[3])===dayfixvist[tem[0]].length-1){
+                            result[a].splice(-1,0,visitarry);
+                            inputvisit.push(visitarry);
+                            visitCopy.splice(visitCopy.indexOf(visitarry),1);
+
+                        }else{
+                            var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,Number(dayfixvist[dayfixvist[tem[0]].indexOf(tem[3])+1]))))];
+                            var temarr=targetmatrix.slice();
+                            temarr=temarr.sort(function (a,b){return a-b;});
+                            for(var i=1;i<temarr.length;i++){
+                                var visitarry=sameLocation[locationId[targetmatrix.indexOf(temarr[i])]];
+                                for(var j=0;j<visitarry.length;j++){
+                                    if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,true)){
+                                        result[a].splice(keyIndex(result[a]),0,visitarry[j]);
+                                        control=true;
+                                        inputvisit.push(visitarry[j]);
+                                        visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
+                                }
+                            }
+                        }
+
+
+                        }
+                        
+                    }
+                }
+                }
+                            /*
                 //get index then get location based on value then get 
                 var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,Number(tema[1])))];
                 var temarr=targetmatrix.slice();
@@ -951,12 +1005,18 @@
                 
                     
                     
-                    */
-
-            console.log("this is mydaygroup");
-
+                    
+                            
+                            console.log("this is mydaygroup");
+                            
+                        }
+                    }else{
+                        
+                    }
+                }
             }
             
+            */
             function checkfixlocation(result,fixvisitresult,tema,a,dayfixvist){
                 console.log('this is my checkfixlocation function');
                 console.log(tema);
