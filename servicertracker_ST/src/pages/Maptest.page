@@ -538,7 +538,6 @@
                 var result={};
 
                 //deal with fixvist
-                var temarrykey=[];
                 if(days>getvisitNumber(sortlocation)){
                     alert("sorry your visit is less, can not route optimisation");
                 }else{
@@ -553,26 +552,16 @@
                             var tem=new Date(fixvisit[i][0]);
                             
                             if(tem.getMonth()==week[j].getMonth() && tem.getDate()==week[j].getDate()){
-                                temarrykey.push(j+','+resource.starttime);
-                                result[j+','+i+','+resource.starttime]=[];
                                 var temtime = ((tem.getMinutes()<10) ? ":0" : ":")+tem.getMinutes();
-                                console.log(temtime);
                                 //[number day, fixvisit index, time]
                                 result[j+','+i+','+tem.getHours()+temtime+','+(number++)]=[];
-                                
                             }else{
                                 result[j+','+resource.starttime]=[];
+                                //
                             }
-                            
                         }  
                     }
-                }
-                for(var i in result){
-                	if(temarrykey.indexOf(i)!=-1){
-                    	delete result[i];
-                    }
-                }
-                
+                }                
                 console.log("check my result");
                 console.log(result);
                 return result;
@@ -684,7 +673,8 @@
                         console.log(result);
                         dayfixvist=samedayFixvisit(result);
                         console.log('thisi si dayfixvist'+JSON.stringify(dayfixvist));
-                        
+                        console.log('this is it is my fixitis'+JSON.stringify(result));
+                        result=sortresult(result);
                         
                     }
                     var optimisationList=moveVisit(arguments[i][0].time,sameLocationId[i],sameList[i],visitData[i],sortlocation,result,resource,week,workingTime,dayfixvist,fixVisit[i]);
@@ -697,6 +687,43 @@
                 
                 console.log(output);
                 return output;
+            }
+            function sortresult(result){
+                console.log('resultfunction');
+                var newarry=Object.keys(result);
+                var day=[];
+                var found=newarry.find(function(element){
+                	return 
+                });
+                console.log(found);
+                /*
+                for(var i=0;i<newarry.length;i++){
+                	var index=newarry[i].split(',');
+                	day.push(index[0]);
+                }
+                */
+                var lasttime=[];
+                
+                Object.keys(result).forEach(function(key,i){
+                	var temi=key.split(',');
+                    if(temi.length != 2){
+                        if(temi[0]===lasttime[0]){
+                            if(Date.parse(temi[1])>Date.parse(lasttime[0]) && temi[3]){
+                                
+                            }
+                        }
+                    }
+                    
+                })
+                for(var i in result){
+                	var temi=i.split(',');
+                    if(temi.length!=2){
+                        
+                    	var index=day.indexOf(temi[0]);
+                        
+                    }
+                }
+                console.log(newarry);
             }
             
             function isInteger(obj){
@@ -716,7 +743,7 @@
                 var temObject={};
             	for(var key in result){
                 	var tem=key.split(',');
-                    if(tem.length=='2'){
+                    if(tem.length==2){
                     	if(!temObject[tem[0]]){
                         	temObject[tem[0]]=[];
                         }
@@ -822,7 +849,7 @@
                                             console.log("it is fixvisit not fixlocation");
                                             console.log(tema);
                                             
-                                            moveFixvisit(tema,dayfixvist,a,newArray,locationId,sameLocation,visit,inputvisit,result);
+                                            moveFixvisit(tema,dayfixvist,a,newArray,locationId,sameLocation,visit,inputvisit,result,fixvisitresult);
                                             // based on fixvisit location, find the shortest location push into result
                                             }
                                         control=true;
@@ -901,16 +928,21 @@
             }
             
             
-            function moveFixvisit(tema,dayfixvist,a,matrix,locationId,sameLocation,visit,inputvisit,result){
+            function moveFixvisit(tema,dayfixvist,a,matrix,locationId,sameLocation,visit,inputvisit,result,fixvisitresult){
                 
+                console.log('movefixvisitdsfa');
+                console.log(fixvisitresult);
                 
-                if(tema.length===3){
+                if(tema.length===2){
                 	console.log('thisi is my time solution '+ tema);
-                    
-                
+                    console.log(fixvisitresult[tema[0]]);
+                    for(var i=0;i<fixvisitresult[tema[0]].length;i++){
+                        console.log('my forloop');
+                    	console.log(fixvisitresult[tema[0]][i][0]);
+                    }
+                    //search the 
                 }else{
                 	console.log('thisi my time solution twoo '+ tema);
-                
                 }
                 
                 /*
