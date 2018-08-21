@@ -111,8 +111,10 @@
 
                 
             });
+            //main entry from program 
             function start(){
                 //getting data from the Form.
+
                 var rawData=$("#matrixForm").serializeArray();
                 //console.log(rawData);
                 //prevent send request
