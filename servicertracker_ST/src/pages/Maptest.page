@@ -5,6 +5,7 @@
             <script src="./../soap/ajax/43.0/connection.js" type="text/javascript"></script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
             <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.1/mapquest.js"></script>
+            <script src="https://maps.googleapis.com/maps/api/js"></script>
             <link rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.1/mapquest.css"/>
                 <style>
                 #date_container {
@@ -60,7 +61,7 @@
             
             <script type="text/javascript">
                 //distribute the Monday-Starday
-                var resources = [];
+            var resources = [];
             var territories = [];
             window.onload = function() {
                 //optimizedwaypoints example can be used
@@ -102,15 +103,6 @@
                     //sameLocation(visitData,accountLocation);
                     //var mappingJson=JSON.stringify({locations,options:allToAll});
                 });
-                var names = ["5,08:00","5,08:00","5,08:00","5,08:00","5,1,15:02,1","5,1,15:02,1","5,1,15:02,1"];
-                console.log(names);
-                var uniqueNames = [];
-                $.each(names, function(i, el){
-                    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
-                });
-                console.log(uniqueNames);
-
-                
             });
             function start(){
                 //getting data from the Form.
@@ -281,37 +273,67 @@
             /*change the UI show the result on web page
             
             */
-                        
+            
             function generateDayList(rawdata,optimizationday,resource,visit,arguments,sameList,sameLocation){
+                console.log('generateDayList');
                 console.log(optimizationday);
+                console.log(resource);
+                //transform the optimizationday to previous format, it will fit for our previous code.
+                var optimisationdays={}
+                for(var i in optimizationday){
+                    optimisationdays[i]={};
+                    var lastelement;
+                	for(var j in optimizationday[i]){
+                        console.log(optimizationday[i][j]);
+                        console.log('givemesomemagicplea');
+                    	var tem=j.split(',');
+                        if(typeof lastelement==='undefined'){
+                            optimisationdays[i][tem[0]]=optimizationday[i][j];
+                        	lastelement=tem;
+                            continue;
+                        }
+                        if(tem[0]===lastelement[0]){
+                            console.log(optimizationday[i][lastelement.toString()]);
+                            console.log(optimizationday[i])
+                            console.log('comememagic');
+                        	optimisationdays[i][tem[0]]=optimizationday[i][lastelement.toString()].concat(optimizationday[i][j]);
+                        }else{
+                        
+                        	optimisationdays[i][tem[0]]=optimizationday[i][j];
+                        }
+                        lastelement=tem;
+
+                    }
+                }
+                console.log('givememyoptimisationdays');
                 var days = Math.round(Math.abs((new Date(rawdata[1].value).getTime()-new Date(rawdata[0].value).getTime())/(24*60*60*1000)));
                 var startday=new Date(rawdata[0].value);
                 console.log(startday);
                 var index=0;
-                    /*
+                /*
                     if(j==optimizationday[j].records.Id){
                     
                     }
                     */
-                    var startdayCopy=new Date(startday);
+                var startdayCopy=new Date(startday);
                 for(var i=0;i<days;i++){
                     startdayCopy.setDate(startdayCopy.getDate()+(i+1));
                     console.log(startdayCopy);
                     
-                    for(var j in optimizationday){
+                    for(var j in optimisationdays){
                         
                         
-                        var r=$('<div value="'+j+','+(i+1)+'"><button style="width:100%"; >'+Number(startdayCopy.getDate())+'/'+(Number(startdayCopy.getMonth())+1)+' '+generatename(j,optimizationday,resource)+'</button></div>');
+                        var r=$('<div value="'+j+','+(i+1)+'"><button style="width:100%"; >'+Number(startdayCopy.getDate())+'/'+(Number(startdayCopy.getMonth())+1)+' '+generatename(j,optimisationdays,resource)+'</button></div>');
                         $("#dayresult").show().append(r);
                     }
                     startdayCopy=new Date(startday);
-
+                    
                     index++;
                 }
                 $("#dayresult").scroll(function(){
                     console.log("scrolling")
                 });
-                $("#dayresult").children("div").click({param1: optimizationday, param2: resource, param3: visit,param4:arguments,param5:sameList,param6:sameLocation},drawmap);
+                $("#dayresult").children("div").click({param1: optimisationdays, param2: resource, param3: visit,param4:arguments,param5:sameList,param6:sameLocation},drawmap);
             }
             
             var map;
@@ -322,24 +344,25 @@
                 var visit=event.data.param3;
                 var sameList=event.data.param5;
                 var sameLocation=event.data.param6;
-                console.log(value);
+                console.log('thisis myvaluevalue');
                 console.log(event.data.param1);
                 console.log(event.data.param2);
                 console.log(event.data.param3);
                 var arguments=event.data.param4;
-
+                
                 // console.log(visit);
                 
                 var temarr=value.split(',');
                 console.log(temarr[0]);
                 console.log(temarr[1]);
+                console.log('tiisvaluefromtemrr');
                 //console.log(optimisation[temarr[0]]);
                 var fixgeolocation;
                 var index;
                 for(var i=0;i<resource.length;i++){
-                	if(resource[i].records.Id==temarr[0]){
+                    if(resource[i].records.Id==temarr[0]){
                         index=i;
-                    	fixgeolocation=Number(resource[i].records.STKR__Fixed_Location__Latitude__s)+","+Number(resource[i].records.STKR__Fixed_Location__Longitude__s);
+                        fixgeolocation=Number(resource[i].records.STKR__Fixed_Location__Latitude__s)+","+Number(resource[i].records.STKR__Fixed_Location__Longitude__s);
                     }
                 }
                 console.log(fixgeolocation);
@@ -347,19 +370,31 @@
                 console.log(arguments);
                 console.log(sameLocation);
                 console.log(sameList);
+                console.log()
                 console.log(optimisation[temarr[0]][temarr[1]]);
+                console.log(optimisation[temarr[0]][1])
+                console.log(optimisation[temarr[0]]);
                 var visitgeolocation=[];
-                for(var i=0;i<optimisation[temarr[0]][temarr[1]].length;i++){
-                	visitgeolocation.push(Number(visit[index].records[optimisation[temarr[0]][temarr[1]][i]].STKR__Account_lkp__r.STKR__location__Latitude__s)+","+Number(visit[index].records[optimisation[temarr[0]][temarr[1]][i]].STKR__Account_lkp__r.STKR__location__Longitude__s))
+                console.log('this is myoptimisation');
+                console.log(optimisation)
+                for(var i=0;i<optimisation[temarr[0]][Number(temarr[1])].length;i++){
+                    visitgeolocation.push(Number(visit[index].records[optimisation[temarr[0]][temarr[1]][i]].STKR__Account_lkp__r.STKR__location__Latitude__s)+","+Number(visit[index].records[optimisation[temarr[0]][temarr[1]][i]].STKR__Account_lkp__r.STKR__location__Longitude__s))
                 }
                 console.log(visitgeolocation);
+                if(map != undefined || map != null){
+                	map.remove();
+                }
+                map=new google.maps.Map(document.getElementById('map'),{
+                	center:{lat: 51.570767, lng:-3.203604},
+                    zoom:8
+                });
                 L.mapquest.key = 'dkPerqzFbKLtC7YWQSG51UlmJuGVuQEc';
                 if(map != undefined || map != null){
                     map.remove();
                 }
                 
                 
-
+                
                 map = L.mapquest.map('map', {
                     center: [51.570767, -3.203604],
                     layers: L.mapquest.tileLayer('map'),
@@ -376,7 +411,15 @@
                 
                 L.mapquest.control().addTo(map);
                 L.mapquest.geocodingControl().addTo(map);
-
+                
+                
+            }
+            function initMap(){
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: 51.570767, lng: -3.203604},
+                    zoom: 9
+                });
+            
                 
             }
             
@@ -387,7 +430,7 @@
                     }
                 }
             }
-                        
+            
             // generate the Json file
             //input :specific date and resource, territory output: the location 
             
@@ -421,11 +464,11 @@
             function generateLocation(data){
                 console.log(data);
                 var result=[];
-            	for(var i=0;i<data.length;i++){
+                for(var i=0;i<data.length;i++){
                     console.log(data[i]);
-                	if(data[i].size=="1"){
-                    	if(data[i].records.type=="STKR__Resource__c"){
-                        	result.push([Number(data[i].records.STKR__Fixed_Location__Latitude__s),Number(data[i].records.STKR__Fixed_Location__Longitude__s)]);
+                    if(data[i].size=="1"){
+                        if(data[i].records.type=="STKR__Resource__c"){
+                            result.push([Number(data[i].records.STKR__Fixed_Location__Latitude__s),Number(data[i].records.STKR__Fixed_Location__Longitude__s)]);
                         }
                     }
                 }
@@ -448,7 +491,7 @@
                         }
                     }
                 }
-
+                
             }
             
             function arrayMin(arrs,index){
@@ -525,19 +568,19 @@
             }
             
             function fixvisitDays(rawdata,resource,fixvisit,days,sortlocation,week){
-            	console.log("fixvisitdays");
+                console.log("fixvisitdays");
                 console.log(fixvisit);
                 console.log(days);
                 console.log(sortlocation);
                 console.log(week);
                 console.log(rawdata);
-               
+                
                 console.log(resource);
                 
                 var fromday=new Date(rawdata[0].value);
                 
                 var result={};
-
+                
                 //deal with fixvist
                 if(days>getvisitNumber(sortlocation)){
                     alert("sorry your visit is less, can not route optimisation");
@@ -566,12 +609,12 @@
                 console.log("check my result");
                 console.log(result);
                 return result;
-
+                
             }
             
-
+            
             function seperateFixvisit(j,fixvisit,time,day){
-            	result[j+','+resource.star]
+                result[j+','+resource.star]
                 
                 
                 
@@ -645,7 +688,7 @@
             }
             
             function optimisation(arguments,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData){ 
-
+                
                 console.log("this is my fixvisit"+fixVisit);
                 console.log(fixVisit);
                 var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
@@ -654,7 +697,7 @@
                     if(arguments[i][0].time==null){
                         alert("Please check your visit, we can not find location");
                     }
-
+                    
                     var matrixfix=arguments[i][0].time[arguments[i][0].length-1];
                     var index=fixlocationIndex(arguments[i][0].time);
                     console.log(index);
@@ -685,7 +728,7 @@
                 console.log(output);
                 return output;
             }
-
+            
             
             function isInteger(obj){
                 return typeof obj === 'number' && obj%1 === 0;                
@@ -702,8 +745,8 @@
             
             function samedayFixvisit(result){
                 var temObject={};
-            	for(var key in result){
-                	var tem=key.split(',');
+                for(var key in result){
+                    var tem=key.split(',');
                     if(tem.length!=2){
                         if(!temObject[tem[0]]){
                             temObject[tem[0]]=[];
@@ -794,49 +837,48 @@
                             console.log(fixvisitresult[tema[0]].length);
                         }else{
                         */
-                            //otherwise no fixvisit in this day
-                            console.log("cannot find");
-                            console.log(a);
-                            for(var i=1;i<temarr.length;i++){
-                                control=false;
-                                var visitarry=sameLocation[locationId[matrix[matrix.length-1].indexOf(temarr[i])]];
-                                for(var j=0;j<visitarry.length;j++){
-                                    if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,false)){
-                                        // if it is fixlocation in object resul
-                                         if(checkfixlocation(result,fixvisitresult,tema,a,dayfixvist)){
-                                             result[a].splice(flag,0,visitarry[j]);
-                                             inputvisit.push(visitarry[j]);
-                                             visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
-                                        }else{
-                                            //find specific day for 
-                                            console.log("it is fixvisit not fixlocation");
-                                            console.log(tema);
-                                            moveFixvisit(tema,dayfixvist,a,newArray,locationId,sameLocation,visit,inputvisit,result,fixvisitresult,b,visitarry[j],inputvisit,visitCopy);
-                                            // based on fixvisit location, find the shortest location push into result
-                                            }
-                                        control=true;
-
-                                        break;
-
+                        //otherwise no fixvisit in this day
+                        console.log("cannot find");
+                        console.log(a);
+                        for(var i=1;i<temarr.length;i++){
+                            control=false;
+                            var visitarry=sameLocation[locationId[matrix[matrix.length-1].indexOf(temarr[i])]];
+                            for(var j=0;j<visitarry.length;j++){
+                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,false)){
+                                    // if it is fixlocation in object resul
+                                    if(checkfixlocation(result,fixvisitresult,tema,a,dayfixvist)){
+                                        result[a].splice(flag,0,visitarry[j]);
+                                        inputvisit.push(visitarry[j]);
+                                        visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
+                                    }else{
+                                        //find specific day for 
+                                        console.log("it is fixvisit not fixlocation");
+                                        console.log(tema);
+                                        moveFixvisit(tema,dayfixvist,a,newArray,locationId,sameLocation,visit,inputvisit,result,fixvisitresult,b,visitarry[j],inputvisit,visitCopy);
+                                        // based on fixvisit location, find the shortest location push into result
                                     }
-                                }
-                                if(control==true){
+                                    control=true;
+                                    
                                     break;
+                                    
                                 }
                             }
+                            if(control==true){
+                                break;
+                            }
+                        }
                         
                     }
                     flag=-1;                   
                 }
-                console.log("find the result");
-                console.log(result);
+                console.log("find the result"+JSON.stringify(result));
                 console.log(visitCopy);
                 var numberVisit;
                 var nummatrix=matrix.length-1;
                 console.log(matrix.length);
                 matrix.splice(nummatrix,1);
                 for(var i=0;i<matrix.length;i++){
-                	matrix[i].splice(nummatrix,1);
+                    matrix[i].splice(nummatrix,1);
                 }
                 
                 do{
@@ -870,7 +912,7 @@
                                     break;
                                 }
                             }
-                          
+                            
                             
                         }
                         
@@ -890,27 +932,33 @@
             }
             
             
-            function moveFixvisit(tema,dayfixvist,a,matrix,locationId,sameLocation,visit,inputvisit,result,fixvisitresult,b,visitarry,inputvisit,visitCopy){
+            function moveFixvisit(tema,dayfixvist,a,matrix,locationId,sameLocation,visit,inputvisit,result,fixvisitresult,b,visitarryfixlocation,inputvisit,visitCopy){
                 console.log('casduirhsdfsfdoidvjnfd');
                 console.log(dayfixvist);
-                
+                console.log(visitarryfixlocation);
                 if(tema.length===2){
                     if(b===0){
-                        result[a].splice(0,0,visitarry);
-                        inputvisit.push(visitarry);
-                        visitCopy.splice(visitCopy.indexOf(visitarry),1);
+                        console.log('it is frist time'+ tema);
+                        result[a].splice(0,0,visitarryfixlocation);
+                        inputvisit.push(visitarryfixlocation);
+                        visitCopy.splice(visitCopy.indexOf(visitarryfixlocation),1);
+                        return 0;
                     }else{
+                        console.log('it is second time for insert vissit'+tema);
                         var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,Number(dayfixvist[tema[0]][0])))];
                         var temarr=targetmatrix.slice();
                         temarr=temarr.sort(function (a,b){return a-b;});
                         for(var i=1;i<temarr.length;i++){
                             var visitarry=sameLocation[locationId[targetmatrix.indexOf(temarr[i])]];
+                            if(typeof visitarry == 'undefined'){
+                                continue;	
+                            }                            
                             for(var j=0;j<visitarry.length;j++){
                                 if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,true)){
-                                    result[a].splice(keyIndex(result[a]),0,visitarry[j]);
-                                    control=true;
+                                    result[a].splice(-1,0,visitarry[j]);
                                     inputvisit.push(visitarry[j]);
                                     visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
+                                    return 0;
                                     
                                 }
                             }
@@ -918,51 +966,69 @@
                     }
                 }
                 else{
-                    var length=dayfixvist[tem[0]].length;
+                    var length=dayfixvist[tema[0]].length;
                     if(b===0){
-                        var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,Number(dayfixvisit[tem[0]][0])))];
+                        console.log('it is frist time'+ tema);
+                        var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,Number(dayfixvist[tema[0]][0])))];
+                        console.log('shithappend');
+                        console.log(targetmatrix);
                         var temarr=targetmatrix.slice();
+                        
                         temarr=temarr.sort(function (a,b){return a-b;});
                         for(var i=1;i<temarr.length;i++){
                             var visitarry=sameLocation[locationId[targetmatrix.indexOf(temarr[i])]];
+                            console.log(visitarry);
+                            if(typeof visitarry == 'undefined'){
+                                continue;	
+                            } 
+                            console.log(temarr[i]);
                             for(var j=0;j<visitarry.length;j++){
                                 if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,true)){
-                                    result[a].splice(keyIndex(result[a]),0,visitarry[j]);
-                                    control=true;
+                                    result[a].splice(0,0,visitarry[j]);
                                     inputvisit.push(visitarry[j]);
                                     visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
+                                    return 0;
                                 }
                             }
                         }
                     }else{
-                        if(dayfixvist[tem[0]].indexOf(tem[3])===dayfixvist[tem[0]].length-1){
-                            result[a].splice(-1,0,visitarry);
-                            inputvisit.push(visitarry);
-                            visitCopy.splice(visitCopy.indexOf(visitarry),1);
-
+                        console.log('it is second time for insert vissit'+tema);
+                        if(dayfixvist[tema[0]].indexOf(tema[3])===dayfixvist[tema[0]].length-1){
+                            result[a].splice(-1,0,visitarryfixlocation);
+                            inputvisit.push(visitarryfixlocation);
+                            visitCopy.splice(visitCopy.indexOf(visitarryfixlocation),1);
+                            return 0;
+                            
                         }else{
-                            var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,Number(dayfixvist[dayfixvist[tem[0]].indexOf(tem[3])+1]))))];
+                            var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,Number(dayfixvist[tema[0]][dayfixvist[tema[0]].indexOf(tema[3])+1])))];
+                            console.log('problemscannotsolve');
+                            console.log(targetmatrix);
+                            console.log(tema);
+                            console.log(dayfixvist[tema[0]]);
+                            console.log(dayfixvist[tema[0]][dayfixvist[tema[0]].indexOf(tema[3])+1]);
+                            
                             var temarr=targetmatrix.slice();
                             temarr=temarr.sort(function (a,b){return a-b;});
                             for(var i=1;i<temarr.length;i++){
                                 var visitarry=sameLocation[locationId[targetmatrix.indexOf(temarr[i])]];
+                                if(typeof visitarry == 'undefined'){
+                                    continue;	
+                                }                            
+                                
                                 for(var j=0;j<visitarry.length;j++){
                                     if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,true)){
-                                        result[a].splice(keyIndex(result[a]),0,visitarry[j]);
-                                        control=true;
+                                        result[a].splice(-1,0,visitarry[j]);
                                         inputvisit.push(visitarry[j]);
                                         visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
+                                        return 0;
+                                    }
                                 }
                             }
                         }
-
-
-                        }
-                        
                     }
                 }
-                }
-                            /*
+            }
+            /*
                 //get index then get location based on value then get 
                 var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,Number(tema[1])))];
                 var temarr=targetmatrix.slice();
@@ -1033,7 +1099,7 @@
                         console.log(tema);
                         return false;
                     }else{
-                    	return true;
+                        return true;
                     }
                     
                 }
@@ -1043,7 +1109,7 @@
                     result[i]
                 }
             }
-
+            
             // function for check if it can be moved
             function checkmove(result,checkvisit,visitarr,visit,inputvisit,resource,fixvisit){
                 
@@ -1069,7 +1135,7 @@
                     return true;
                 }
                 
-
+                
                 //weekly visit limit (next week,next next week)
                 if (visit.records[visitarr].STKR__Service__r.STKR__Frequency__c=="Weekly"){
                     for(var i=0;i<inputvisit.length;i++){
@@ -1091,7 +1157,7 @@
                 }
                 
                 if(inputvisit.indexOf(visitarr)!=-1){
-                	return false;
+                    return false;
                 }
                 //daily  not allow same schedual in same day
                 if(visit.records[visitarr].STKR__Service__r.STKR__Frequency__c=="Daily"){
@@ -1110,7 +1176,7 @@
                 return true;
             }
             
-
+            
             
             function getKeyByValue(object, value) {
                 for(var key in object){
