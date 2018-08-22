@@ -7,65 +7,63 @@
             <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.1/mapquest.js"></script>
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADm2b2UTMuHGVx30-5JxUDAUXv8Uo7m4E"></script>
             <link rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.1/mapquest.css"/>
-                <style>
+            <style>
                 #date_container {
-            display: flex;
-            justify-content: center;
-            }
-            
-            
-            .result{
+                display: flex;
+                justify-content: center;
+                }
+                
+                
+                .result{
                 display: flex;
                 height: 100%;
                 flex-direction: column;
-            }
-            .header,.footer{
+                }
+                .header,.footer{
                 flex:none;
-            }
-            .container{
+                }
+                .container{
                 display: flex;
                 flex: 1 0 auto;
                 flex-direction: colum;
                 padding: 1em;
-            }
-            .main{
+                }
+                .main{
                 margin-top: 1em;
                 order:1;
-            }
-            .right{order: 2;}
-            .left{
+                }
+                .right{order: 2;}
+                .left{
                 order: -1;
-            }
-            .left,.right{
+                }
+                .left,.right{
                 padding: 1em;
                 border-radius: 3px;
                 background: rgba(147, 128, 108, 0.1);
-            }
-            
-            @media (min-width: 768px) {
+                }
+                
+                @media (min-width: 768px) {
                 .container {
-                    flex-direction: row;
+                flex-direction: row;
                 }
                 .main {
-                    flex: 1;
-                    padding: 1em;
-                    margin: 0;
+                flex: 1;
+                padding: 1em;
+                margin: 0;
                 }
                 .left, .right {
-                    flex: 0 0 12em;
+                flex: 0 0 12em;
                 }
-            }
-            
+                }
+                
             </style>
             
             
             <script type="text/javascript">
-                //distribute the Monday-Starday
+            //distribute the Monday-Starday
             var resources = [];
             var territories = [];
             window.onload = function() {
-                //optimizedwaypoints example can be used
-                //https://developer.mapquest.com/documentation/mapquest-js/v1.3/examples/directions-with-optimized-waypoints/
                 
                 //generate the HTML and add name
                 <apex:repeat value="{!objectResource}" var="resource" id="resources">
@@ -283,26 +281,25 @@
                 for(var i in optimizationday){
                     optimisationdays[i]={};
                     var lastelement;
-                	for(var j in optimizationday[i]){
+                    for(var j in optimizationday[i]){
                         console.log(optimizationday[i][j]);
                         console.log('givemesomemagicplea');
-                    	var tem=j.split(',');
+                        var tem=j.split(',');
                         if(typeof lastelement==='undefined'){
                             optimisationdays[i][tem[0]]=optimizationday[i][j];
-                        	lastelement=tem;
+                            lastelement=tem;
                             continue;
                         }
                         if(tem[0]===lastelement[0]){
                             console.log(optimizationday[i][lastelement.toString()]);
                             console.log(optimizationday[i])
                             console.log('comememagic');
-                        	optimisationdays[i][tem[0]]=optimizationday[i][lastelement.toString()].concat(optimizationday[i][j]);
+                            optimisationdays[i][tem[0]]=optimizationday[i][lastelement.toString()].concat(optimizationday[i][j]);
                         }else{
-                        
-                        	optimisationdays[i][tem[0]]=optimizationday[i][j];
+                            optimisationdays[i][tem[0]]=optimizationday[i][j];
                         }
                         lastelement=tem;
-
+                        
                     }
                 }
                 console.log('givememyoptimisationdays');
@@ -337,7 +334,7 @@
             }
             
             //var map;
-
+            
             function drawmap(event){
                 var value=$(this).attr('value');
                 var optimisation=event.data.param1;
@@ -366,22 +363,13 @@
                         fixgeolocation=Number(resource[i].records.STKR__Fixed_Location__Latitude__s)+","+Number(resource[i].records.STKR__Fixed_Location__Longitude__s);
                     }
                 }
-                console.log(fixgeolocation);
-                console.log(visit);
-                console.log(arguments);
-                console.log(sameLocation);
-                console.log(sameList);
-                console.log()
-                console.log(optimisation[temarr[0]][temarr[1]]);
-                console.log(optimisation[temarr[0]][1])
-                console.log(optimisation[temarr[0]]);
                 var visitgeolocation=[];
                 console.log('this is myoptimisation');
                 console.log(optimisation)
                 for(var i=0;i<optimisation[temarr[0]][Number(temarr[1])].length;i++){
                     visitgeolocation.push({
                         location: Number(visit[index].records[optimisation[temarr[0]][temarr[1]][i]].STKR__Account_lkp__r.STKR__location__Latitude__s)+","+Number(visit[index].records[optimisation[temarr[0]][temarr[1]][i]].STKR__Account_lkp__r.STKR__location__Longitude__s),
-                    	stopover: true
+                        stopover: true
                     });
                 }
                 console.log(visitgeolocation);
@@ -392,68 +380,30 @@
                 
                 var directionsDisplay= new google.maps.DirectionsRenderer;
                 var directionsService = new google.maps.DirectionsService;
-
+                
                 
                 var map=new google.maps.Map(document.getElementById('map'),{
-                	center:{lat: 51.570767, lng:-3.203604},
+                    center:{lat: 51.570767, lng:-3.203604},
                     zoom:8
                 });
                 directionsDisplay.setMap(map);
                 console.log(visitgeolocation);
                 directionsService.route({
-                	origin:fixgeolocation,
+                    origin:fixgeolocation,
                     destination:fixgeolocation,
                     waypoints:visitgeolocation,
                     optimizeWaypoints:true,
                     travelMode:'DRIVING'
                 }, function (response, status){
-                	if(status==='OK'){
+                    if(status==='OK'){
                         directionsDisplay.setDirections(response);
                         var route = response.routes[0];
                         console.log(route);
                     }else{
-                    	window.alert('Directions request failed due to ' + status);
+                        window.alert('Directions request failed due to ' + status);
                     }
-                });
-
-                
-                
-                /*
-                L.mapquest.key = 'dkPerqzFbKLtC7YWQSG51UlmJuGVuQEc';
-                if(map != undefined || map != null){
-                    map.remove();
-                }
-                
-                
-                
-                map = L.mapquest.map('map', {
-                    center: [51.570767, -3.203604],
-                    layers: L.mapquest.tileLayer('map'),
-                    zoom: 9
-                });
-                
-                L.mapquest.directions().route({
-                    start: fixgeolocation,
-                    end: fixgeolocation,
-                    waypoints: visitgeolocation,
-                    optimizeWaypoints: true
-                    
-                });
-                
-                L.mapquest.control().addTo(map);
-                L.mapquest.geocodingControl().addTo(map);
-                */
+                });                
             }
-            /*
-            function initMap(){
-                var map = new google.maps.Map(document.getElementById('map'), {
-                    center: {lat: 51.570767, lng: -3.203604},
-                    zoom: 9
-                });
-            
-                
-            }
-            */
             function generatename(j,optimizationday,resource){
                 for(var i=0;i<resource.length;i++){
                     if(j==resource[i].records.Id){
@@ -461,7 +411,6 @@
                     }
                 }
             }
-            
             // generate the Json file
             //input :specific date and resource, territory output: the location 
             
@@ -646,9 +595,6 @@
             
             function seperateFixvisit(j,fixvisit,time,day){
                 result[j+','+resource.star]
-                
-                
-                
             }
             
             function isEmpty(obj) {
@@ -786,13 +732,6 @@
                         //temObject[tem[0]].push(tem[0]+','+tem[1]+','+tem[2]+','+tem[3]);
                         
                     }else{
-                        
-                        /*
-                    	if(!temObject[tem[0]]){
-                        	temObject[tem[0]]=[];
-                        }
-                        temObject[tem[0]].push(tem[0]+','+tem[1]);
-                        */
                     }
                 }
                 return temObject;
@@ -859,15 +798,6 @@
                     flag=1;
                     for(var a in result){
                         var tema=a.split(',');
-                        
-                        /*
-                        if(Object.keys(fixvisitresult).includes(tema[0])){
-                            // means in this day there are fixvisit
-                        	console.log("this is big fixvisit group,");
-                            console.log(fixvisitresult[tema[0]]);
-                            console.log(fixvisitresult[tema[0]].length);
-                        }else{
-                        */
                         //otherwise no fixvisit in this day
                         console.log("cannot find");
                         console.log(a);
@@ -1059,62 +989,6 @@
                     }
                 }
             }
-            /*
-                //get index then get location based on value then get 
-                var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,Number(tema[1])))];
-                var temarr=targetmatrix.slice();
-                temarr=temarr.sort(function (a,b){return a-b;});
-                console.log('this isi s a targetmatrix');
-                console.log(result[a]);
-
-                console.log(targetmatrix);
-                console.log(temarr);
-                for(var i=1;i<temarr.length;i++){
-                    control=false;
-                    
-                    console.log(temarr[i]);
-                    console.log(targetmatrix);
-                    var visitarry=sameLocation[locationId[targetmatrix.indexOf(temarr[i])]];
-                    
-                    console.log(visitarry);
-                    for(var j=0;j<visitarry.length;j++){
-                        if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,true)){
-                            console.log(a);
-                            console.log(result[a]);
-                            console.log(keyIndex(result[a]));
-                            console.log('would like to check keyinde');
-                            result[a].splice(keyIndex(result[a]),0,visitarry[j]);
-                            control=true;
-                            inputvisit.push(visitarry[j]);
-                            visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
-                            break;
-                        }
-                    }
-                    
-                }
-                console.log(targetmatrix);
-                var alist=a.split(",");
-                console.log("this is my a lenght");
-                console.log('this is my a value'+a);
-                console.log('this is my dayfixvist value'+JSON.stringify(dayfixvist));
-
-                console.log('thisi is my dayfixvist a value'+JSON.stringify(dayfixvist[alist[0]]))
-                
-                
-                    
-                    
-                    
-                            
-                            console.log("this is mydaygroup");
-                            
-                        }
-                    }else{
-                        
-                    }
-                }
-            }
-            
-            */
             function checkfixlocation(result,fixvisitresult,tema,a,dayfixvist){
                 console.log('this is my checkfixlocation function');
                 console.log(tema);
@@ -1200,10 +1074,7 @@
                             return false;
                         }
                     }
-                    
-                }
-                
-                
+                }                
                 return true;
             }
             
