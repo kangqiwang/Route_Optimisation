@@ -13,7 +13,9 @@
                 justify-content: center;
                 }
                 
-                
+                .header h1 {
+                	background-color: #E94578;
+                }
                 .result{
                 display: flex;
                 height: 100%;
@@ -21,6 +23,7 @@
                 }
                 .header,.footer{
                 flex:none;
+                background:#4259f4;
                 }
                 .container{
                 display: flex;
@@ -138,9 +141,6 @@
                     var generatejson=generateMapJson(geolocation,sameLocationId);
                     jsonList.push(generatejson);
                 }
-                console.log(fixVisit);
-                console.log(sameList);
-                console.log(sameLocationId);
                 getTravelTime(jsonList,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData);
                 //distance.push(getDistance(geolocation[keys]);
                 //var result=checkLocation(geolocation,resourceData);
@@ -272,7 +272,7 @@
             
             */
             
-            function generateDayList(rawdata,optimizationday,resource,visit,arguments,sameList,sameLocation){
+            function generateDayList(rawdata,optimizationday,resource,visit,arguments,sameList,sameLocation,fixvisit){
                 console.log('generateDayList');
                 console.log(optimizationday);
                 console.log(resource);
@@ -307,11 +307,6 @@
                 var startday=new Date(rawdata[0].value);
                 console.log(startday);
                 var index=0;
-                /*
-                    if(j==optimizationday[j].records.Id){
-                    
-                    }
-                    */
                 var startdayCopy=new Date(startday);
                 for(var i=0;i<days;i++){
                     startdayCopy.setDate(startdayCopy.getDate()+(i+1));
@@ -320,7 +315,7 @@
                     for(var j in optimisationdays){
                         
                         
-                        var r=$('<div value="'+j+','+(i+1)+'"><button style="width:100%"; >'+Number(startdayCopy.getDate())+'/'+(Number(startdayCopy.getMonth())+1)+' '+generatename(j,optimisationdays,resource)+'</button></div>');
+                        var r=$('<div><button value="'+j+','+(i+1)+'" style="width:100%"; >'+Number(startdayCopy.getDate())+'/'+(Number(startdayCopy.getMonth())+1)+' '+generatename(j,optimisationdays,resource)+'</button></div>');
                         $("#dayresult").show().append(r);
                     }
                     startdayCopy=new Date(startday);
@@ -330,37 +325,60 @@
                 $("#dayresult").scroll(function(){
                     console.log("scrolling")
                 });
-                $("#dayresult").children("div").click({param1: optimisationdays, param2: resource, param3: visit,param4:arguments,param5:sameList,param6:sameLocation},drawmap);
+                
+                
+                $("#dayresult").children("div").click({param1: optimisationdays, param2: resource, param3: visit,param4:arguments,param5:sameList,param6:sameLocation,param7:fixvisit,param8:optimizationday},drawmap);
+                
+                $("#dayresult").children("div").click(function(){
+                    var buttonvalue=$(this).children("button").text();
+                    var info=buttonvalue.split(' ');
+                    $("#information").text('it is schedule for '+info[1]+' in '+info[0]);
+                    console.log('kangqiwnajsdhkzhuzhuzhuz');
+                });
+                
             }
             
-            //var map;
+            function rightdiv(route){
+                console.log(route);
+                
+            }
             
             function drawmap(event){
-                var value=$(this).attr('value');
+                var value=$(this).children("button").attr('value');
                 var optimisation=event.data.param1;
                 var resource=event.data.param2;
                 var visit=event.data.param3;
                 var sameList=event.data.param5;
                 var sameLocation=event.data.param6;
+                var fixvisit=event.data.param7;
+                var initialOptimisation=event.data.param8;
+                console.log(initialOptimisation);
                 console.log('thisis myvaluevalue');
                 console.log(event.data.param1);
                 console.log(event.data.param2);
                 console.log(event.data.param3);
+                console.log('thisfdasdifhisdfixvisit');
+                console.log(fixvisit);
+                console.log(value);
                 var arguments=event.data.param4;
-                
-                // console.log(visit);
                 
                 var temarr=value.split(',');
                 console.log(temarr[0]);
                 console.log(temarr[1]);
-                console.log('tiisvaluefromtemrr');
-                //console.log(optimisation[temarr[0]]);
                 var fixgeolocation;
                 var index;
+                //if there are fixvisit in the day and how many fixvisit in the day
                 for(var i=0;i<resource.length;i++){
                     if(resource[i].records.Id==temarr[0]){
                         index=i;
                         fixgeolocation=Number(resource[i].records.STKR__Fixed_Location__Latitude__s)+","+Number(resource[i].records.STKR__Fixed_Location__Longitude__s);
+                        /*
+                        if(!isEmpty(fixvisit[i])){
+                        for(var i in fixvisit[i]){
+                        	
+                        }
+                        }
+                        */
                     }
                 }
                 var visitgeolocation=[];
@@ -398,11 +416,13 @@
                     if(status==='OK'){
                         directionsDisplay.setDirections(response);
                         var route = response.routes[0];
-                        console.log(route);
+                        rightdiv(route);
                     }else{
                         window.alert('Directions request failed due to ' + status);
                     }
                 });                
+            
+            
             }
             function generatename(j,optimizationday,resource){
                 for(var i=0;i<resource.length;i++){
@@ -434,7 +454,7 @@
                 console.log('about to wait....' );            
                 $.when.apply($, promises).done(function(jsonp){
                     var optimisationarry=optimisation(arguments,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData);
-                    generateDayList(rawData,optimisationarry,resourceData,visitData,arguments,sameList,sameLocationId);
+                    generateDayList(rawData,optimisationarry,resourceData,visitData,arguments,sameList,sameLocationId,fixVisit);
                     
                 });
                 
@@ -592,10 +612,6 @@
                 
             }
             
-            
-            function seperateFixvisit(j,fixvisit,time,day){
-                result[j+','+resource.star]
-            }
             
             function isEmpty(obj) {
                 for(var key in obj) {
@@ -1082,15 +1098,12 @@
             
             function getKeyByValue(object, value) {
                 for(var key in object){
-                    //console.log(object[key]);
-                    //console.log(object[key].indexOf(value));
                     if(object[key].indexOf(value)!=-1){
-                        //console.log(object[key]);
-                        //console.log(value);
-                        return key;}
+                        return key;
+                    }
                 }
-                
             }
+            
             /*
             this function is for get value for rawdata. we get data from user's input, processing data function
             input ： rawdata --form data from users'input
@@ -1204,14 +1217,14 @@
                         
                     </div>
                     <div>
-                        <input type="submit" onclick="submit;" value="Route Optimisation"/>    
+                        <input type="submit" onclick="submit;" value="Route Optimisation"/>
                     </div>
                     
                     
                 </form>
                 <hr />
                 <div class="body" id="result">
-                    <div id="territoryButton" class="header">
+                    <div class="header"><h1 id="information" style="text-align:center;"></h1>
                     </div>
                     
                     <div class="container">
