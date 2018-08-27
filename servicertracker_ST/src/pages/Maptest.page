@@ -1033,7 +1033,12 @@
             
             // function for check if it can be moved
             function checkmove(result,checkvisit,visitarr,visit,inputvisit,resource,fixvisit){
-                
+                console.log('thisss is my checkmove function');
+                console.log('this is it is my fixitis'+JSON.stringify(result));
+                console.log(resource);
+                console.log(checkvisit);
+                console.log('lookingfor something');
+                console.log()
                 // if the visit is fixvisit
                 if(fixvisit){
                     return true;
