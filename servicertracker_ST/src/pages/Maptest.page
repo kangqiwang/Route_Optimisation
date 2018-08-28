@@ -338,11 +338,6 @@
                 
             }
             
-            function rightdiv(route){
-                console.log(route);
-                
-            }
-            
             function drawmap(event){
                 var value=$(this).children("button").attr('value');
                 var optimisation=event.data.param1;
@@ -383,7 +378,7 @@
                 }
                 var visitgeolocation=[];
                 console.log('this is myoptimisation');
-                console.log(optimisation)
+                console.log(optimisation);
                 for(var i=0;i<optimisation[temarr[0]][Number(temarr[1])].length;i++){
                     visitgeolocation.push({
                         location: Number(visit[index].records[optimisation[temarr[0]][temarr[1]][i]].STKR__Account_lkp__r.STKR__location__Latitude__s)+","+Number(visit[index].records[optimisation[temarr[0]][temarr[1]][i]].STKR__Account_lkp__r.STKR__location__Longitude__s),
@@ -416,7 +411,6 @@
                     if(status==='OK'){
                         directionsDisplay.setDirections(response);
                         var route = response.routes[0];
-                        rightdiv(route);
                     }else{
                         window.alert('Directions request failed due to ' + status);
                     }
@@ -712,7 +706,10 @@
                         console.log('thisi si dayfixvist'+JSON.stringify(dayfixvist));
                         console.log('this is it is my fixitis'+JSON.stringify(result));                        
                     }
-                    var optimisationList=moveVisit(arguments[i][0].time,sameLocationId[i],sameList[i],visitData[i],sortlocation,result,resource,week,workingTime,dayfixvist,fixVisit[i]);
+					var resource=changeWorkday(resource);
+                    console.log('change'+resource);
+                    var result=deletebyWeek(week,resource,result);
+                    var optimisationList=moveVisit(arguments[i][0].time,sameLocationId[i],sameList[i],visitData[i],sortlocation,result,resource,week,workingTime,dayfixvist,fixVisit[i],rawData[0]);
                     console.log("this is my result haha");
                     console.log(result);                    
                     output[resource.id]=optimisationList;
@@ -752,9 +749,63 @@
                 }
                 return temObject;
             }
+            function changeWorkday(resource){
+                console.log('changeWorkdat');
+                var day=resource.workday.split(';');
+                for(var i=0;i<day.length;i++){
+                    console.log(day[i]);
+                	if(day[i]==='Monday'){
+                    	day[i]=1;
+                    }else if(day[i]==='Tuesday'){
+                    	day[i]=2
+                    }else if(day[i]==='Wednesday'){
+                    	day[i]=3
+                    }else if(day[i]==='Thursday'){
+                    	day[i]=4
+                    }else if(day[i]==='Friday'){
+                    	day[i]=5
+                    }else if(day[i]==='Saturday'){
+                    	day[i]=6
+                    }else if(day[i]==='Sunday'){
+                    	day[i]=7
+                    }
+                }
+                console.log(day);
+                resource.workday=day.toString();
+                console.log(resource);
+                return resource;
+            }
+            function deletebyWeek(week,resource,result){
+                console.log('deletebywekk');
+                console.log(week);
+                console.log(resource);
+                console.log('this is it is my fixitis'+JSON.stringify(result));                        
+
+                var day=resource.workday.split(',').map(Number);
+                for(var i in result){
+                    var tema=i.split(',');
+                    var weekday=week[Number(tema[0])].getDay();
+                    console.log('deletebbyweektest');
+                    console.log(weekday);
+                    
+                    console.log(day.indexOf(weekday));
+                    if (day.indexOf(weekday) === -1){
+                    	delete result[i];
+                    }
+                    
+                }
+                console.log('testtestdeletebyweek');
+                console.log('this is it is my fixitis'+JSON.stringify(result));                        
+
+                return result;
+                
+            }
             
-            function moveVisit(matrix,locationId,sameLocation,visit,sortlocation,result,resource,week,workingTime,dayfixvist,fixvisit){
+            //move visit function
+            function moveVisit(matrix,locationId,sameLocation,visit,sortlocation,result,resource,week,workingTime,dayfixvist,fixvisit,rawData){
                 console.log('this is my moveVisit function');
+                console.log(week);
+                console.log(workingTime);
                 console.log(locationId);
                 console.log(sameLocation);
                 console.log(sortlocation);
@@ -762,7 +813,6 @@
                 console.log(result);
                 console.log(visit);
                 console.log("this is matrix");
-                
                 var newArray = matrix.map(function(arr) {
                     return arr.slice();
                 });
@@ -820,8 +870,9 @@
                         for(var i=1;i<temarr.length;i++){
                             control=false;
                             var visitarry=sameLocation[locationId[matrix[matrix.length-1].indexOf(temarr[i])]];
+                            console.log('timemanagement');
                             for(var j=0;j<visitarry.length;j++){
-                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,false)){
+                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,tema,temarr[i],false)){
                                     // if it is fixlocation in object resul
                                     if(checkfixlocation(result,fixvisitresult,tema,a,dayfixvist)){
                                         result[a].splice(flag,0,visitarry[j]);
@@ -880,7 +931,7 @@
                             var visitarry=sameLocation[locationId[targetmatrix.indexOf(temarr[i])]];
                             //console.log(visitarry);
                             for(var j=0;j<visitarry.length;j++){
-                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,false)){
+                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,tema,temarr[i],false)){
                                     console.log(keyIndex(result[a]));
                                     result[a].splice(keyIndex(result[a]),0,visitarry[j]);
                                     control=true;
@@ -931,7 +982,7 @@
                                 continue;	
                             }                            
                             for(var j=0;j<visitarry.length;j++){
-                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,true)){
+                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,tema,temarr[i],true)){
                                     result[a].splice(-1,0,visitarry[j]);
                                     inputvisit.push(visitarry[j]);
                                     visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
@@ -960,7 +1011,7 @@
                             } 
                             console.log(temarr[i]);
                             for(var j=0;j<visitarry.length;j++){
-                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,true)){
+                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,tema,temarr[i],true)){
                                     result[a].splice(0,0,visitarry[j]);
                                     inputvisit.push(visitarry[j]);
                                     visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
@@ -993,7 +1044,7 @@
                                 }                            
                                 
                                 for(var j=0;j<visitarry.length;j++){
-                                    if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,true)){
+                                    if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,tema,temarr[i],true)){
                                         result[a].splice(-1,0,visitarry[j]);
                                         inputvisit.push(visitarry[j]);
                                         visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
@@ -1030,38 +1081,68 @@
                     result[i]
                 }
             }
+
+
+            function diff(start, end) {
+                start = start.split(":");
+                end = end.split(":");
+                var startDate = new Date(0, 0, 0, start[0], start[1], 0);
+                var endDate = new Date(0, 0, 0, end[0], end[1], 0);
+                var diff = endDate.getTime() - startDate.getTime();
+                var hours = Math.floor(diff / 1000 / 60 / 60);
+                diff -= hours * (1000 * 60 * 60);
+                var minutes = Math.floor(diff / 1000 / 60);
+                diff -= minutes * (1000 * 60);
+                var seconds = Math.floor(diff / 1000);
+                
+                // If using time pickers with 24 hours format, add the below line get exact hours
+                if (hours < 0)
+                    hours = hours + 24;
+                
+                return (hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes + (seconds<= 9 ? "0" : "") + seconds;
+            }
             
             // function for check if it can be moved
-            function checkmove(result,checkvisit,visitarr,visit,inputvisit,resource,fixvisit){
+            function checkmove(result,checkvisit,visitarr,visit,inputvisit,resource,tema,temarr,fixvisit){
                 console.log('thisss is my checkmove function');
-                console.log('this is it is my fixitis'+JSON.stringify(result));
                 console.log(resource);
+                console.log(temarr);
+                console.log('thisisimyrardata');
+                console.log(resource);
+
+                console.log(tema);
                 console.log(checkvisit);
-                console.log('lookingfor something');
-                console.log()
-                // if the visit is fixvisit
-                if(fixvisit){
-                    return true;
-                }
+                console.log(visitarr);
+                console.log(inputvisit);
+                
                 //console.log(checkvisit);
                 //console.log(inputvisit);
                 //console.log(week);
                 //the first one
-                //console.log(resource);
+
                 //console.log(workingTime);
                 
                 var date1=resource.starttime;
                 var date2=resource.endtime;
                 
                 //console.log(diff(date1,date2));
-                
-                
-                
+                                
                 if(!inputvisit.length){
                     return true;
                 }
-                
-                
+                /// IMPORTANT
+                // if the visit is in fixvisit
+                if(fixvisit){
+                    
+                    //var different=diff()
+                    //in fixvisit, we need consider about the different time
+                    return true;
+                }else{
+                	var different=diff(resource.starttime,resource.endtime)
+                    
+                }
+                //IMPORTANT time management
+                //if()
                 //weekly visit limit (next week,next next week)
                 if (visit.records[visitarr].STKR__Service__r.STKR__Frequency__c=="Weekly"){
                     for(var i=0;i<inputvisit.length;i++){
@@ -1095,7 +1176,10 @@
                             return false;
                         }
                     }
-                }                
+                }  
+                
+                
+                
                 return true;
             }
             
