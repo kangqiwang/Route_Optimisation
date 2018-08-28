@@ -4,9 +4,12 @@
             <title>Route Optimisation</title>
             <script src="./../soap/ajax/43.0/connection.js" type="text/javascript"></script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+            <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
             <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.1/mapquest.js"></script>
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADm2b2UTMuHGVx30-5JxUDAUXv8Uo7m4E"></script>
             <link rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.1/mapquest.css"/>
+
             <style>
                 #date_container {
                 display: flex;
@@ -333,9 +336,8 @@
                     var buttonvalue=$(this).children("button").text();
                     var info=buttonvalue.split(' ');
                     $("#information").text('it is schedule for '+info[1]+' in '+info[0]);
-                    console.log('kangqiwnajsdhkzhuzhuzhuz');
                 });
-                
+                                
             }
             
             function drawmap(event){
@@ -411,12 +413,28 @@
                     if(status==='OK'){
                         directionsDisplay.setDirections(response);
                         var route = response.routes[0];
+                        rightresult(status);
                     }else{
                         window.alert('Directions request failed due to ' + status);
                     }
-                });                
+                });
+            }
             
-            
+            //IMPORTANT
+            //draggable and
+            function rightresult(status){
+                console.log('thisimurightresulr');
+                
+                var r=$('<div id="draggable"><ul id="sortable"><li class="ui-state-default">Item 1</li><li class="ui-state-default">Item 2</li></ul></div>');
+                $(".right").show().append(r);
+                
+                $("#sortable").sortable({
+                	revert: true
+                });
+                $( "#sortable" ).sortable({
+                    revert: true
+                });
+                $( "#draggable" ).draggable();
             }
             function generatename(j,optimizationday,resource){
                 for(var i=0;i<resource.length;i++){
@@ -1133,7 +1151,6 @@
                 /// IMPORTANT
                 // if the visit is in fixvisit
                 if(fixvisit){
-                    
                     //var different=diff()
                     //in fixvisit, we need consider about the different time
                     return true;
