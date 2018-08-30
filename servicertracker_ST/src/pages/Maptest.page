@@ -313,16 +313,20 @@
                 console.log(startday);
                 var index=0;
                 var startdayCopy=new Date(startday);
-                for(var i=0;i<days;i++){
-                    startdayCopy.setDate(startdayCopy.getDate()+(i+1));
+                for(var i=1;i<days+1;i++){
+                    startdayCopy.setDate(startdayCopy.getDate()+(i));
                     console.log(startdayCopy);
                     console.log('damoptimisationdats')
                     console.log(optimisationdays)
                     for(var j in optimisationdays){
-                        if(!optimisationdays[j][i]){
-                        var r=$('<div><button value="'+j+','+(i+1)+'" style="width:100%"; >'+Number(startdayCopy.getDate())+'/'+(Number(startdayCopy.getMonth())+1)+' '+generatename(j,optimisationdays,resource)+'</button></div>');
-                        $("#dayresult").show().append(r);
-                            }
+                        console.log(j)
+                        console.log(i)
+                        console.log(optimisationdays[j][i])
+                        if(typeof optimisationdays[j][i] != 'undefined'){
+                            console.log('insertbutton')
+                            var r=$('<div><button value="'+j+','+i+'" style="width:100%"; >'+Number(startdayCopy.getDate())+'/'+(Number(startdayCopy.getMonth())+1)+' '+generatename(j,optimisationdays,resource)+'</button></div>');
+                            $("#dayresult").show().append(r);
+                        }
                     }
                     startdayCopy=new Date(startday);
                     
@@ -827,8 +831,7 @@
                     }
                     
                 }
-                console.log('testtestdeletebyweek');
-                console.log('this is it is my fixitis'+JSON.stringify(result));                        
+                console.log('this is it is my fixitiskangqi'+JSON.stringify(result));                        
                 
                 return result;
                 
