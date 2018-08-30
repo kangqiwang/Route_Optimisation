@@ -111,7 +111,8 @@
             function start(){
                 //getting data from the Form.
                 var rawData=$("#matrixForm").serializeArray();
-                //console.log(rawData);
+                console.log('rawdata');
+                console.log(rawData);
                 //prevent send request
                 event.preventDefault();
                 var resource=[];
@@ -713,7 +714,7 @@
                         alert("Please check your visit, we can not find location");
                     }
                     
-                    var matrixfix=arguments[i][0].time[arguments[i][0].length-1];
+                    //var matrixfix=arguments[i][0].time[arguments[i][0].length-1];
                     var index=fixlocationIndex(arguments[i][0].time);
                     console.log(index);
                     var sortlocation=locationToVisit(index,sameLocationId[i],sameList[i]);
@@ -743,8 +744,6 @@
                     for(var key in totaltime){
                     	totaltime[key]=0;
                     }
-                    console.log(JSON.stringify(totaltime))
-                    console.log(arguments[i]);
                     var optimisationList=moveVisit(arguments[i][0].time,sameLocationId[i],sameList[i],visitData[i],sortlocation,result,resource,week,workingTime,dayfixvist,fixVisit[i],rawData[0],totaltime);
                     console.log("this is my result haha");
                     console.log(result);
@@ -787,6 +786,7 @@
                 }
                 return temObject;
             }
+            // change the 
             function changeWorkday(resource){
                 console.log('changeWorkdat');
                 var day=resource.workday.split(';');
@@ -874,7 +874,7 @@
                             fixvisitresult[tema[0]]=[]
                         }
                         fixvisitresult[tema[0]].push([tema[1],tema[2]]);
-                        console.log("this is fuckking fixvisit");
+                        console.log("this is fucking fixvisit");
                     }
                 }
                 
@@ -897,6 +897,7 @@
                         console.log(a);
                         for(var i=1;i<temarr.length;i++){
                             control=false;
+                            //find visit in same location based on matrix time
                             var visitarry=sameLocation[locationId[matrix[matrix.length-1].indexOf(temarr[i])]];
                             console.log(temarr[i]);
                             console.log('timemanagement');
@@ -952,8 +953,6 @@
                         var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,visitkey))];
                         var temarr=targetmatrix.slice();
                         temarr=temarr.sort(function (a,b){return a-b;});
-                        //console.log(targetmatrix);
-                        //console.log(temarr);
                         for(var i=1;i<temarr.length;i++){
                             control=false;
                             var visitarry=sameLocation[locationId[targetmatrix.indexOf(temarr[i])]];
@@ -1162,7 +1161,8 @@
                                   key: '2,8:00', value:[some visit index] 
             					  "1,8:00" have time from resource.starttiem(8:00) to fixvisit time(12:00)
                                   '1,12:00,32,1' have time from fixvisit duetime(12:00) to resource.endtime(17:00)
-			2. similar with I mentioned before.                                  
+						  2------- similar with I mentioned before.
+			2. frenquency: Weekly, Daily visit has been considered.
             */
             function checkmove(result,checkvisit,visitarr,visit,inputvisit,resource,tema,temarr,totaltime,dayfixvist,fixvisit){
                 var date1=resource.starttime;
@@ -1282,7 +1282,7 @@
             }
             
             
-            
+            // utility function
             function getKeyByValue(object, value) {
                 for(var key in object){
                     if(object[key].indexOf(value)!=-1){
