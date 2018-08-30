@@ -810,32 +810,28 @@
                 resource.workday=day.toString();
                 return resource;
             }
-            function deletebyWeek(week,resource,result){
-                console.log('deletebywekk');
-                console.log(week);
-                console.log(resource);
-                console.log('this is it is my fixitis'+JSON.stringify(result));                        
-                
+            // delete result because resources cannot work on weekend or other days
+            // return newly result
+            function deletebyWeek(week,resource,result){                
                 var day=resource.workday.split(',').map(Number);
                 for(var i in result){
                     var tema=i.split(',');
                     var weekday=week[Number(tema[0])].getDay();
-                    console.log('deletebbyweektest');
-                    console.log(weekday);
-                    
-                    console.log(day.indexOf(weekday));
                     if (day.indexOf(weekday) === -1){
                         delete result[i];
                     }
-                    
-                }
-                console.log('this is it is my fixitiskangqi'+JSON.stringify(result));                        
-                
+                }                
                 return result;
                 
             }
             
             //move visit function
+            /*
+            separate by two different way to insert. 
+            Firstly, insert the empty result(array).
+            Secondly, insert the result(array), which already had two elements. For example, result : [12,9]. numbers means visit index
+            However, fixvisit not truly insert into result(array), considering about fixvisit as fixlocation.
+            */
             function moveVisit(matrix,locationId,sameLocation,visit,sortlocation,result,resource,week,workingTime,dayfixvist,fixvisit,rawData,totaltime){
                 console.log('this is my moveVisit function');
                 console.log(week);
@@ -883,8 +879,6 @@
                 }
                 
                 console.log('this is fixvisit result'+JSON.stringify(fixvisitresult));
-                //console.log(matrix);
-                //console.log(visitarr.reverse());
                 
                 var control=1;
                 var inputvisit=[];
@@ -996,7 +990,30 @@
                 return result;
             }
             
+            /*
+            move fixvisit,which run in moveVisit function due to special situation
+            two different situation.
             
+            the result gave the result .
+            situation 1:	separate the fixvisit and normal visit
+            situation 2: 
+            
+            For example: 1------- key: "1,8:00",value: [some visit index]
+            					  key: '1,12:00,32,1', value:[some visit index]
+                                  key: '2,8:00', value:[some visit index]
+                                  in this situation, '1,8:00' have half fixlocation and half fixvisit(32)
+                                  '1,12:00,32,1' have half fixvisit(32) and half fixlocation
+                                  
+                         2------- key: '1,8:00', value:[some visit index]
+                         		  key: '1,12:00,32', value:[some visit index]
+                                  key: '1,16:00,56', value:[some visit index]
+                                  key: '2,8:00', value:[some visit index]
+                                  in this situation, '1,8:00' have half fixlocation and half fixvisit(32)
+                                  '1,12:00,32,1' have half fixvisit(32) and half fixvisit(56)
+                                  '1,16:00,56,2' have half fixvisit(56) and half fixlocation
+                                  
+            
+            */
             function moveFixvisit(tema,dayfixvist,a,matrix,locationId,sameLocation,visit,inputvisit,result,fixvisitresult,b,visitarryfixlocation,inputvisit,visitCopy,totaltime,resource,distance){
                 console.log('casduirhsdfsfdoidvjnfd');
                 console.log(dayfixvist);
@@ -1102,15 +1119,9 @@
                 }
             }
             
-            
+            // check wether it is fixvisit, because the two situation which I mentioned
             function checkfixlocation(result,fixvisitresult,tema,a,dayfixvist){
-                console.log('this is my checkfixlocation function');
-                console.log(tema);
-                console.log(JSON.stringify(dayfixvist));
-                console.log(JSON.stringify(fixvisitresult));
-                console.log(JSON.stringify(result));
-                if(Object.keys(fixvisitresult).length === 0 && fixvisitresult.constructor===Object){
-                    
+                if(Object.keys(fixvisitresult).length === 0 && fixvisitresult.constructor===Object){                    
                     return true;
                 }else{
                     if(Object.keys(fixvisitresult).indexOf(tema[0])!= -1){
@@ -1123,13 +1134,14 @@
                     
                 }
             }
+            
             function getTimeMatrix(result,matrix,visit){
                 for(var i in result){
                     result[i]
                 }
             }
             
-            
+            // get time different, calculating the hours and min bewteen two different time
             function diff(start, end) {
                 start = start.split(":");
                 end = end.split(":");
@@ -1139,7 +1151,19 @@
                 return diff/1000;
             }
             
+            
             // function for check if it can be moved
+            /*
+            mentainable function
+            1. time management, check the time, which means there is limited time for resources in each day.
+            
+            For example: 1------- key: "1,8:00",value: [some visit index]
+            					  key: '1,12:00,32,1', value:[some visit index]
+                                  key: '2,8:00', value:[some visit index] 
+            					  "1,8:00" have time from resource.starttiem(8:00) to fixvisit time(12:00)
+                                  '1,12:00,32,1' have time from fixvisit duetime(12:00) to resource.endtime(17:00)
+			2. similar with I mentioned before.                                  
+            */
             function checkmove(result,checkvisit,visitarr,visit,inputvisit,resource,tema,temarr,totaltime,dayfixvist,fixvisit){
                 var date1=resource.starttime;
                 var date2=resource.endtime;
@@ -1149,7 +1173,7 @@
                 }
                 /// IMPORTANT
                 // time management
-                if(!dayfixvist){
+                if(!dayfixvist && Object.keys(dayfixvist).indexOf(tema[0])!=-1){
                     if(dayfixvist[tema[0]].indexOf(tema[3])===dayfixvist[tema[0]].length-1){
                         console.log('last fixvisit');
                         var different=diff(new Date(visit.records[tema[3]].STKR__Due_Date__c).getHours()+':'+new Date(visit.records[tema[3]].STKR__Due_Date__c).getMinutes(),resource.endtime);
@@ -1167,7 +1191,7 @@
                                 return false;
                             }
                         }
-                    }else{
+                    }else if(tema.length != 2){
                         console.log('no last fixvisit');
                         var different=diff(new Date(visit.records[tema[3]].STKR__Due_Date__c).getHours()+':'+new Date(visit.records[tema[3]].STKR__Due_Date__c).getMinutes(),new Date(visit.records[dayfixvist[tema[0]][dayfixvist[tema[0]].indexOf(tema[3])+1]].STKR__Due_Date__c).getHours()+':'+new Date(visit.records[dayfixvist[tema[0]][dayfixvist[tema[0]].indexOf(tema[3])+1]].STKR__Due_Date__c).getMinutes());
 
@@ -1182,7 +1206,21 @@
                             }
 
                     }
+                        }else{
+                            var different=diff(resource.starttime,new Date(visit.records[tema[3]].STKR__Due_Date__c).getHours()+':'+new Date(visit.records[tema[3]].STKR__Due_Date__c).getMinutes());
+                            if(checkvisit.length != 0){
+                                var total=0;
+                                for(var i=0; i<checkvisit.length; i++){
+                                    total += 2*Number(temarr)+Number(visit.records[checkvisit[i]].STKR__Service__r.STKR__Time_Allocation__c)*60;
+                                }
+                                total += Number(resource.lunch)
+                                if(total+totaltime>different){
+                                    return false;
+                                }
+
+                        
                         }
+                            }
                     //in fixvisit, we need consider about the different time
                 }else{
                     console.log('no fixvisit');
