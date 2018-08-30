@@ -275,14 +275,16 @@
             
             */
             
-            function generateDayList(rawdata,optimizationday,resource,visit,arguments,sameList,sameLocation,fixvisit){
+            function generateDayList(rawdata,optimizationday,resource,visit,arguments,sameList,sameLocation,fixvisit,resourceNum,dayfixvist){
                 console.log('generateDayList');
                 console.log(optimizationday);
                 console.log(resource);
+                console.log(fixvisit);
+                console.log(resourceNum);
                 //transform the optimizationday to previous format, it will fit for our previous code.
                 var optimisationdays={}
                 for(var i in optimizationday){
-                    optimisationdays[i]={};
+                    optimisationdays[i]={};                    
                     var lastelement;
                     for(var j in optimizationday[i]){
                         console.log(optimizationday[i][j]);
@@ -314,12 +316,13 @@
                 for(var i=0;i<days;i++){
                     startdayCopy.setDate(startdayCopy.getDate()+(i+1));
                     console.log(startdayCopy);
-                    
+                    console.log('damoptimisationdats')
+                    console.log(optimisationdays)
                     for(var j in optimisationdays){
-                        
-                        
+                        if(!optimisationdays[j][i]){
                         var r=$('<div><button value="'+j+','+(i+1)+'" style="width:100%"; >'+Number(startdayCopy.getDate())+'/'+(Number(startdayCopy.getMonth())+1)+' '+generatename(j,optimisationdays,resource)+'</button></div>');
                         $("#dayresult").show().append(r);
+                            }
                     }
                     startdayCopy=new Date(startday);
                     
@@ -458,7 +461,7 @@
                         dataType: 'jsonp',
                         contentType: 'json',
                         url: "http://www.mapquestapi.com/directions/v2/routematrix",
-                        data: {key: decodeURI("dkPerqzFbKLtC7YWQSG51UlmJuGVuQEc"),
+                        data: {key: decodeURI("9OPZGbOK3RgIGasHYyqClBVt4IPbIpks"),
                                json: jsonList[i]}
                     });
                     promises.push(request);
@@ -467,8 +470,10 @@
                 }
                 console.log('about to wait....' );            
                 $.when.apply($, promises).done(function(jsonp){
-                    var optimisationarry=optimisation(arguments,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData);
-                    generateDayList(rawData,optimisationarry,resourceData,visitData,arguments,sameList,sameLocationId,fixVisit);
+                    var resourceNum={};
+                    var dayfixvistGroup={};
+                    var optimisationarry=optimisation(arguments,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData,resourceNum,dayfixvistGroup);
+                    generateDayList(rawData,optimisationarry,resourceData,visitData,arguments,sameList,sameLocationId,fixVisit,resourceNum,dayfixvistGroup);
                     
                 });
                 
@@ -694,12 +699,13 @@
                 
             }
             
-            function optimisation(arguments,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData){ 
+            function optimisation(arguments,resourGroup,rawData,sameList,sameLocationId,fixVisit,resourceData,visitData,resourceNum,dayfixvistGroup){ 
                 
                 console.log("this is my fixvisit"+fixVisit);
                 console.log(fixVisit);
                 var days = Math.round(Math.abs((new Date(rawData[1].value).getTime()-new Date(rawData[0].value).getTime())/(24*60*60*1000)));
                 var output={};
+                console.log(resourGroup)
                 for(var i=0;i<resourGroup.length;i++){
                     if(arguments[i][0].time==null){
                         alert("Please check your visit, we can not find location");
@@ -726,15 +732,23 @@
                         console.log('thisi si dayfixvist'+JSON.stringify(dayfixvist));
                         console.log('this is it is my fixitis'+JSON.stringify(result));                        
                     }
-                    var totaltime=Object.assign({},result);
+                    
                     var resource=changeWorkday(resource);
                     console.log('change'+resource);
                     var result=deletebyWeek(week,resource,result);
+                    var totaltime=Object.assign({},result);
                     
+                    for(var key in totaltime){
+                    	totaltime[key]=0;
+                    }
+                    console.log(JSON.stringify(totaltime))
+                    console.log(arguments[i]);
                     var optimisationList=moveVisit(arguments[i][0].time,sameLocationId[i],sameList[i],visitData[i],sortlocation,result,resource,week,workingTime,dayfixvist,fixVisit[i],rawData[0],totaltime);
                     console.log("this is my result haha");
-                    console.log(result);                    
+                    console.log(result);
+                    resourceNum[i]=resource.id;
                     output[resource.id]=optimisationList;
+                    dayfixvistGroup[i]=dayfixvist;
                 }
                 
                 console.log(output);
@@ -775,7 +789,6 @@
                 console.log('changeWorkdat');
                 var day=resource.workday.split(';');
                 for(var i=0;i<day.length;i++){
-                    console.log(day[i]);
                     if(day[i]==='Monday'){
                         day[i]=1;
                     }else if(day[i]==='Tuesday'){
@@ -792,9 +805,7 @@
                         day[i]=7
                     }
                 }
-                console.log(day);
                 resource.workday=day.toString();
-                console.log(resource);
                 return resource;
             }
             function deletebyWeek(week,resource,result){
@@ -892,23 +903,26 @@
                         for(var i=1;i<temarr.length;i++){
                             control=false;
                             var visitarry=sameLocation[locationId[matrix[matrix.length-1].indexOf(temarr[i])]];
+                            console.log(temarr[i]);
                             console.log('timemanagement');
                             for(var j=0;j<visitarry.length;j++){
                                 if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,tema,temarr[i],totaltime[a],dayfixvist,false)){
                                     // if it is fixlocation in object result
                                     if(checkfixlocation(result,fixvisitresult,tema,a,dayfixvist)){
+                                        
                                         result[a].splice(flag,0,visitarry[j]);
                                         totaltime[a]+=Number(temarr[i]);
+                                        console.log(JSON.stringify(totaltime));
                                         inputvisit.push(visitarry[j]);
                                         visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
                                     }else{
                                         //find specific day for 
                                         console.log("it is fixvisit not fixlocation");
-                                        moveFixvisit(tema,dayfixvist,a,newArray,locationId,sameLocation,visit,inputvisit,result,fixvisitresult,b,visitarry[j],inputvisit,visitCopy,totaltime);
+                                        moveFixvisit(tema,dayfixvist,a,newArray,locationId,sameLocation,visit,inputvisit,result,fixvisitresult,b,visitarry[j],inputvisit,visitCopy,totaltime,resource);
                                         // based on fixvisit location, find the shortest location push into result
                                     }
                                     control=true;
-                                    
+                                    console.log(JSON.stringify(result))
                                     break;
                                     
                                 }
@@ -938,7 +952,7 @@
                     numberVisit=visitCopy.length;
                     for(var a in result){
                         
-                        
+                        var tema=a.split(',');
                         var visitkey=result[a][keyIndex(result[a])];
                         var targetmatrix=matrix[getKeyByValue(locationId,getKeyByValue(sameLocation,visitkey))];
                         var temarr=targetmatrix.slice();
@@ -979,7 +993,7 @@
             }
             
             
-            function moveFixvisit(tema,dayfixvist,a,matrix,locationId,sameLocation,visit,inputvisit,result,fixvisitresult,b,visitarryfixlocation,inputvisit,visitCopy,totaltime){
+            function moveFixvisit(tema,dayfixvist,a,matrix,locationId,sameLocation,visit,inputvisit,result,fixvisitresult,b,visitarryfixlocation,inputvisit,visitCopy,totaltime,resource){
                 console.log('casduirhsdfsfdoidvjnfd');
                 console.log(dayfixvist);
                 console.log(visitarryfixlocation);
@@ -1001,13 +1015,12 @@
                                 continue;	
                             }                            
                             for(var j=0;j<visitarry.length;j++){
-                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,tema,temarr[i],totaltime[a],dayfixvist,true)){
+                                if(checkmove(result,result[a],visitarry[j],visit,inputvisit,resource,tema,temarr[i],totaltime[a],dayfixvist,false)){
                                     result[a].splice(-1,0,visitarry[j]);
                                     inputvisit.push(visitarry[j]);
                                     visitCopy.splice(visitCopy.indexOf(visitarry[j]),1);
                                     totaltime[a]+=Number(temarr[i]);
                                     return 0;
-                                    
                                 }
                             }
                         }
@@ -1119,26 +1132,6 @@
             
             // function for check if it can be moved
             function checkmove(result,checkvisit,visitarr,visit,inputvisit,resource,tema,temarr,totaltime,dayfixvist,fixvisit){
-                console.log('thisss is my checkmove function');
-                console.log(temarr);
-                console.log('thisisimyrardata');
-                console.log(resource);
-                console.log('this is my totaltime');
-                console.log(totaltime);
-                
-                console.log(tema);
-                console.log(checkvisit);
-                console.log(visitarr);
-                console.log(inputvisit);
-                console.log(visit);
-                
-                //console.log(checkvisit);
-                //console.log(inputvisit);
-                //console.log(week);
-                //the first one
-                
-                //console.log(workingTime);
-                
                 var date1=resource.starttime;
                 var date2=resource.endtime;
                 
@@ -1149,45 +1142,61 @@
                 // time management
                 if(fixvisit){
                     if(dayfixvist[tema[0]].indexOf(tema[3])===dayfixvist[tema[0]].length-1){
-                        var different=diff(new Date(visit.records[dayfixvist[tema[0]][dayfixvist[tema[0]].indexOf(tema[3])]].STKR__Due_Date__c).getTime().toString(),resource.endtime);
-                        
+                        console.log('last fixvisit');
+                        var different=diff(new Date(visit.records[tema[3]].STKR__Due_Date__c).getHours()+':'+new Date(visit.records[tema[3]].STKR__Due_Date__c).getMinutes(),resource.endtime);
+                        console.log(different);
+                        console.log(checkvisit);
+                        console.log(checkvisit.length)
                         if(checkvisit.length != 0){
-                            var total;
+                            var total=0;
                             for(var i=0; i<checkvisit.length; i++){
-                                console.log('timeforgoandcollect');
+
                                 total += 2*Number(temarr)+Number(visit.records[checkvisit[i]].STKR__Service__r.STKR__Time_Allocation__c)*60;
                             }
+                            total += Number(resource.lunch)
+                            console.log(total+'+'+totaltime)
+                            console.log(different)
+
                             if(total+totaltime>different){
                                 return false;
                             }
-                            
                         }
-                        
                     }else{
-                        var different=diff(new Date(visit.records[dayfixvist[tema[0]][dayfixvist[tema[0]].indexOf(tema[3])]].STKR__Due_Date__c).getTime().toString(),new Date(visit.records[dayfixvist[tema[0]][dayfixvist[tema[0]].indexOf(tema[3])+1]].STKR__Due_Date__c).getTime().toString());
+                        console.log('no last fixvisit');
+                        console.log(new Date(visit.records[tema[3]].STKR__Due_Date__c).getHours()+':'+new Date(visit.records[tema[3]].STKR__Due_Date__c).getMinutes());
+                        console.log(new Date(visit.records[dayfixvist[tema[0]][dayfixvist[tema[0]].indexOf(tema[3])+1]].STKR__Due_Date__c).getHours()+':'+new Date(visit.records[dayfixvist[tema[0]][dayfixvist[tema[0]].indexOf(tema[3])+1]].STKR__Due_Date__c).getMinutes());
+                        var different=diff(new Date(visit.records[tema[3]].STKR__Due_Date__c).getHours()+':'+new Date(visit.records[tema[3]].STKR__Due_Date__c).getMinutes(),new Date(visit.records[dayfixvist[tema[0]][dayfixvist[tema[0]].indexOf(tema[3])+1]].STKR__Due_Date__c).getHours()+':'+new Date(visit.records[dayfixvist[tema[0]][dayfixvist[tema[0]].indexOf(tema[3])+1]].STKR__Due_Date__c).getMinutes());
+                        console.log(different)
                         if(checkvisit.length != 0){
-                            var total;
+                            var total=0;
                             for(var i=0; i<checkvisit.length; i++){
                                 console.log('timeforgoandcollect');
                                 total += 2*Number(temarr)+Number(visit.records[checkvisit[i]].STKR__Service__r.STKR__Time_Allocation__c)*60;
                             }
+                            total += Number(resource.lunch)
+                            console.log(total+'+'+totaltime)
+                            console.log(different)
                             if(total+totaltime>different){
                                 return false;
                             }
 
                     }
                         }
-                    //var different=diff()
                     //in fixvisit, we need consider about the different time
                 }else{
+                    console.log('no fixvisit');
                     var different=diff(resource.starttime,resource.endtime);
+                    console.log(different)
                     if(checkvisit.length != 0){
-                        var total;
+                        var total=0;
                         for(var i=0; i<checkvisit.length; i++){
                             console.log('timeforgoandcollect');
-                        	total += 2*Number(temarr)+Number(visit.records[checkvisit[i]].STKR__Service__r.STKR__Time_Allocation__c)*60;
+                        	total += Number(temarr)+Number(visit.records[checkvisit[i]].STKR__Service__r.STKR__Time_Allocation__c)*60;
                         }
-                        
+                        total += Number(resource.lunch)
+                        console.log(total+'+'+totaltime)
+                        console.log(different)
+
                         if(total+totaltime>different){
                         return false;
                         }
@@ -1196,7 +1205,6 @@
                     
                 }
                 //IMPORTANT time management
-                //if()
                 //weekly visit limit (next week,next next week)
                 if (visit.records[visitarr].STKR__Service__r.STKR__Frequency__c=="Weekly"){
                     for(var i=0;i<inputvisit.length;i++){
