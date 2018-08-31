@@ -15,24 +15,21 @@
                 display: flex;
                 justify-content: center;
                 }
-                
-                .header h1 {
-                background-color: #E94578;
-                }
                 .result{
                 display: flex;
-                height: 100%;
                 flex-direction: column;
                 }
-                .header,.footer{
+                .header .footer{
                 flex:none;
-                background:#4259f4;
+                text-align: center;
+                width: 100%;
                 }
                 .container{
                 display: flex;
                 flex: 1 0 auto;
                 flex-direction: colum;
                 padding: 1em;
+                height:60vh;
                 }
                 .main{
                 margin-top: 1em;
@@ -42,10 +39,14 @@
                 .left{
                 order: -1;
                 }
-                .left,.right{
+                .left .right{
                 padding: 1em;
                 border-radius: 3px;
                 background: rgba(147, 128, 108, 0.1);
+                width:20vw;
+                }
+                .left{
+                   overflow:auto;
                 }
                 
                 @media (min-width: 768px) {
@@ -57,7 +58,7 @@
                 padding: 1em;
                 margin: 0;
                 }
-                .left, .right {
+                .left .right {
                 flex: 0 0 12em;
                 }
                 }
@@ -321,7 +322,7 @@
                     console.log(optimisationdays)
                     for(var j in optimisationdays){
                         if(typeof optimisationdays[j][i] != 'undefined'){
-                            var r=$('<div><button value="'+j+','+i+'" style="width:100%"; >'+Number(startdayCopy.getDate())+'/'+(Number(startdayCopy.getMonth())+1)+' '+generatename(j,optimisationdays,resource)+'</button></div>');
+                            var r=$('<div><button value="'+j+','+i+'" style="width:100px"; >'+Number(startdayCopy.getDate())+'/'+(Number(startdayCopy.getMonth())+1)+' '+generatename(j,optimisationdays,resource)+'</button></div>');
                             $("#dayresult").show().append(r);
                         }
                     }
@@ -1378,7 +1379,10 @@
             
         </head>
         <body>
-            <apex:pageBlock title="Route Optimisation">
+
+                
+
+            <apex:pageBlock title="Route Optimisation" >
                 
                 <form id="matrixForm">
                     <div id="date_container">
@@ -1412,9 +1416,9 @@
                 </form>
                 <hr />
                 <div class="body" id="result">
-                    <div class="header"><h1 id="information" style="text-align:center;"></h1>
+                    <div class="header" id="information">
                     </div>
-                    
+            <div id="kang">                    
                     <div class="container">
                         
                         <div id="dayresult" class="left">
@@ -1422,13 +1426,15 @@
                         </div>
                         <div class="right"><div id="visitorder"></div><div id="result"><p>Time:<strong id="resultTime"></strong> </p><p>Cost:<strong id="resultCost"></strong> </p><p>Distance:<strong id="resultDistance"></strong> </p><p>Capability: <strong id="resultCapability"></strong></p></div></div>
                         <div class="main">
-                            <div id="map" style="width: 100%; height: 600px;"></div>
+                            <div id="map" style="width: 100%;height:100%;"></div>
                         </div>
                     </div>
-                    
+                                </div>
                     <div class="footer"></div>
                 </div>
             </apex:pageBlock>
+                
+
         </body>
     </html>
 </apex:page>
